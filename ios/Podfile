@@ -8,6 +8,12 @@ target 'KLTN' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
+
   target 'KLTNTests' do
     inherit! :complete
     # Pods for testing
