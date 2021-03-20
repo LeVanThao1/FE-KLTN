@@ -5,6 +5,7 @@ const _navigator = {
   cart: 'Cart',
   notification: 'Notification',
   profile: 'Profile',
+  register: 'Register',
 };
 
 export {_navigator};

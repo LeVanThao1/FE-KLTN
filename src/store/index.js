@@ -1,9 +1,9 @@
-// import {Auth} from './auth';
+import {Auth} from './auth';
 
-// export const stores = {
-//   auth: new Auth(),
-// };
+export const stores = {
+  auth: new Auth(false),
+};
 
-// export const storeInstance = stores;
+export const storeInstance = stores;
 
-// export {Auth};
+export {Auth};

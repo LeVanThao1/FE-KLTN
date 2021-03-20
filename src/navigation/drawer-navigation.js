@@ -2,9 +2,10 @@ import React from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import {HomeStack, ContactStack} from './stack-navigation';
+import {HomeStack, ContactStack, AuthStack} from './stack-navigation';
 import TabNavigator from './tab-navigation';
 import Loading from '../screens/loading';
+import {createSwitchNavigator} from 'react-navigation';
 
 const Drawer = createDrawerNavigator();
 
@@ -18,3 +19,14 @@ const DrawerNavigator = () => {
 };
 
 export default DrawerNavigator;
+
+// const Switch = createSwitchNavigator();
+
+// export const createRootNavigator = (signedIn = false) => {
+//   return (
+//     <Switch.Navigator initialRouteName={signedIn ? 'Home' : 'Auth'}>
+//       <Switch.Screen name="Auth" component={AuthStack} />
+//       <Switch.Screen name="Home" component={DrawerNavigator} />
+//     </Switch.Navigator>
+//   );
+// };

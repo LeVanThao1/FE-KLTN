@@ -1,16 +1,14 @@
-// /* eslint-disable */
-// import {observable, action} from 'mobx';
+import {observable, action, makeObservable} from 'mobx';
 
-// export class Auth {
-//   constructor(isAuth) {
-//     this.isAuth = isAuth;
-//   }
-
-//   @observable
-//   isAuth = false;
-
-//   @action.bound
-//   setIsAuth = (value) => {
-//     this.isAuth = value;
-//   };
-// }
+export class Auth {
+  @observable
+  isAuth = false;
+  constructor(isAuth) {
+    this.isAuth = isAuth;
+    makeObservable(this);
+  }
+  @action
+  setIsAuth = (value) => {
+    this.isAuth = value;
+  };
+}
