@@ -18,7 +18,6 @@ const Login = ({navigation}) => {
             info
             onPress={() => {
               auth.setIsAuth(true);
-              console.log(auth);
             }}>
             <Text> Login </Text>
           </Button>
