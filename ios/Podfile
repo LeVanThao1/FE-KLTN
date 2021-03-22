@@ -14,6 +14,8 @@ target 'KLTN' do
 
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
   target 'KLTNTests' do
     inherit! :complete
     # Pods for testing
