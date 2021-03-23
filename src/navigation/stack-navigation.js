@@ -10,11 +10,20 @@ import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
 
 const Stack = createStackNavigator();
-
-const HomeStack = () => {
+import HeaderStack from '../header';
+const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerTitle: () => <HeaderStack navigation={navigation} />,
+          headerStyle: {
+            backgroundColor: '#f4511e',
+          },
+        }}
+      />
       <Stack.Screen name="About" component={About} />
     </Stack.Navigator>
   );
