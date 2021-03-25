@@ -13,7 +13,10 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator AuthLoading={Loading} initialRouteName={'AuthLoading'}>
       <Drawer.Screen name="Home" component={TabNavigator} />
+      <Drawer.Screen name="Category" component={ContactStack} />
+      <Drawer.Screen name="Your Favourite" component={ContactStack} />
       <Drawer.Screen name="Contact" component={ContactStack} />
+      <Drawer.Screen name="About" component={ContactStack} />
     </Drawer.Navigator>
   );
 };
