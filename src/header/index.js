@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     // paddingLeft: 20
   },
   search: {
-    borderWidth: 0.4,
     height: 35,
     width: '70%',
     color: '#111',
@@ -56,13 +55,14 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     fontSize: 17,
     padding: 0,
-    borderRadius: 50,
+    borderRadius: 6,
   },
   searchIcon: {
     position: 'absolute',
     left: 70,
     zIndex: 1,
     opacity: 0.4,
+    fontSize: 24,
   },
   message: {
     color: '#fff',

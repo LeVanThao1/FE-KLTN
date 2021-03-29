@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     marginVertical: 20,
-    backgroundColor: '#eed',
   },
   category__row: {
     flexDirection: 'row',
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    color: 'purple',
+    color: 'rgba(68, 108, 179, 1)',
     transform: [{scaleX: 1}],
   },
 });

@@ -20,7 +20,7 @@ const HomeStack = ({navigation}) => {
         options={{
           headerTitle: () => <HeaderStack navigation={navigation} />,
           headerStyle: {
-            backgroundColor: '#f4511e',
+            backgroundColor: 'rgba(68, 108, 179, 1)',
           },
         }}
       />
