@@ -1,9 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'native-base';
 import Images from '../../assets/images/images';
 
 const CommonList = () => {
+  const navigation = useNavigation();
+
   const listItem1 = [
     {
       id: 1,
@@ -45,9 +48,11 @@ const CommonList = () => {
   const ProductHandler = () => {
     console.log('buy book');
   };
-
   const renderItem = ({item}) => (
-    <View style={styles.list_product} onPress={() => ProductHandler()}>
+    <View
+      style={styles.list_product}
+      onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+      onPress={() => ProductHandler()}>
       <Image
         source={item.image}
         style={{width: 100, height: 150}}
