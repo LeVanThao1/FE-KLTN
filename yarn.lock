@@ -1845,6 +1845,13 @@ accepts@~1.3.5, accepts@~1.3.7:
     mime-types "~2.1.24"
     negotiator "0.6.2"
 
+accordion-collapse-react-native@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/accordion-collapse-react-native/-/accordion-collapse-react-native-1.0.0.tgz"
+  integrity sha512-WIGfznOVux+Y3rDljzxc9rEL4mMEB54io6/GVsw7EWmA041JDNYmPj4HSBRSqHqW/YZ+iK3eG0v5WG2Wz1SvSg==
+  dependencies:
+    lodash.get "4.4.2"
+
 acorn-globals@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/acorn-globals/-/acorn-globals-6.0.0.tgz"
@@ -2946,7 +2953,7 @@ big-integer@^1.6.44:
 
 bindings@^1.5.0:
   version "1.5.0"
-  resolved "https://registry.npmjs.org/bindings/-/bindings-1.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
   dependencies:
     file-uri-to-path "1.0.0"
@@ -3411,7 +3418,7 @@ core-js-compat@^3.8.1, core-js-compat@^3.9.0:
 
 core-js@^1.0.0:
   version "1.2.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
   integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
 
 core-js@^2.4.0, core-js@^2.4.1:
@@ -4186,7 +4193,7 @@ fbjs-scripts@^1.1.0:
 
 fbjs@^0.8.4:
   version "0.8.17"
-  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
+  resolved "https://registry.npmjs.org/fbjs/-/fbjs-0.8.17.tgz"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
   dependencies:
     core-js "^1.0.0"
@@ -4240,7 +4247,7 @@ file-entry-cache@^6.0.1:
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
   integrity sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==
 
 fill-range@^4.0.0:
@@ -4379,7 +4386,7 @@ fs.realpath@^1.0.0:
 
 fsevents@^1.2.7:
   version "1.2.13"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-1.2.13.tgz"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.13.tgz#f325cb0455592428bcf11b383370ef70e3bfcc38"
   integrity sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==
   dependencies:
     bindings "^1.5.0"
@@ -4387,7 +4394,7 @@ fsevents@^1.2.7:
 
 fsevents@^2.1.2:
   version "2.3.2"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
@@ -5824,6 +5831,11 @@ lodash.frompairs@^4.0.1:
   resolved "https://registry.npmjs.org/lodash.frompairs/-/lodash.frompairs-4.0.1.tgz"
   integrity sha1-vE5SB/onV8E25XNhTpZkUGsrG9I=
 
+lodash.get@4.4.2:
+  version "4.4.2"
+  resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz"
+  integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
+
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
@@ -6366,7 +6378,7 @@ mute-stream@0.0.7:
 
 nan@^2.12.1:
   version "2.14.2"
-  resolved "https://registry.npmjs.org/nan/-/nan-2.14.2.tgz"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
 
 nanoid@^3.1.15:
@@ -7065,7 +7077,7 @@ range-parser@~1.2.1:
 
 react-addons-shallow-compare@15.6.2:
   version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz#198a00b91fc37623db64a28fd17b596ba362702f"
+  resolved "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz"
   integrity sha1-GYoAuR/DdiPbZKKP0XtZa6NicC8=
   dependencies:
     fbjs "^0.8.4"
@@ -7093,6 +7105,13 @@ react-is@^17.0.1:
   version "17.0.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.1.tgz"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
+
+react-native-collapsible@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.npmjs.org/react-native-collapsible/-/react-native-collapsible-1.5.3.tgz"
+  integrity sha512-Ciuy3yF8wcHeLxXFtx9vxoyrq8l+9EJqLM/ADw54gVwzTQc1/e2ojhQbVFPlxhDA+Pba2qezkaKfv5ifxg8hoQ==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-drawer@2.5.1:
   version "2.5.1"
@@ -7127,7 +7146,7 @@ react-native-gesture-handler@^1.10.3:
 
 react-native-image-slider-box@^1.0.12:
   version "1.0.12"
-  resolved "https://registry.yarnpkg.com/react-native-image-slider-box/-/react-native-image-slider-box-1.0.12.tgz#4abb7b6d26f12859ac059d4fe7555c72a201e23a"
+  resolved "https://registry.npmjs.org/react-native-image-slider-box/-/react-native-image-slider-box-1.0.12.tgz"
   integrity sha512-Yq7xLmrAxNWjSAZJ78ZQkg13/30UJc17yvBwRFAidGrMaVo2Go9glRdRJ2U212APsQVHskAhSgW6YHinuTLoIA==
   dependencies:
     react-native-snap-carousel "*"
@@ -7163,11 +7182,18 @@ react-native-screens@^2.18.1:
 
 react-native-snap-carousel@*:
   version "3.9.1"
-  resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz#6fd9bd8839546c2c6043a41d2035afbc6fe0443e"
+  resolved "https://registry.npmjs.org/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz"
   integrity sha512-xWEGusacIgK1YaDXLi7Gao2+ISLoGPVEBR8fcMf4tOOJQufutlNwkoLu0l6B8Qgsrre0nTxoVZikRgGRDWlLaQ==
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
+
+react-native-textarea@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-textarea/-/react-native-textarea-1.0.4.tgz#c250e3c03234adfb82ca9da490fac3db29c06e63"
+  integrity sha512-XM78hqlpUom+YOtjZn69sPZn3ReRXsJfjV0t790k/qNPuc7NG8akfU7vSeKsuRSRH2zVaqk5FbxdkITkeh+3jw==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-vector-icons@^7.0.0:
   version "7.1.0"

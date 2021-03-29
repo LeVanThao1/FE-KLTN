@@ -1,27 +1,29 @@
 import React from 'react';
 
 import {Accordion, Icon, Row} from 'native-base';
-import {TextInput, Text, View, StyleSheet} from 'react-native';
+import {TextInput, Text, View, StyleSheet, SafeAreaView} from 'react-native';
 
 const HeaderStack = ({navigation}) => {
   const openMenu = () => {};
 
   return (
-    <View style={styles.container__header}>
-      {/* <View style={styles.header__text}>
+    <SafeAreaView>
+      <View style={styles.container__header}>
+        {/* <View style={styles.header__text}>
         <Text>PoobStore</Text>
       </View> */}
-      <View style={styles.header__menu}>
-        <Icon
-          name="menu"
-          onPress={() => navigation.openDrawer()}
-          style={styles.icon}
-        />
-        <Icon name="search" style={styles.searchIcon} />
-        <TextInput style={styles.search} placeholder="search book" />
-        <Icon name="message1" style={styles.message} type="AntDesign" />
+        <View style={styles.header__menu}>
+          <Icon
+            name="menu"
+            onPress={() => navigation.openDrawer()}
+            style={styles.icon}
+          />
+          <Icon name="search" style={styles.searchIcon} />
+          <TextInput style={styles.search} placeholder="search book" />
+          <Icon name="message1" style={styles.message} type="AntDesign" />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

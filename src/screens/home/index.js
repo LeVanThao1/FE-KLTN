@@ -1,6 +1,6 @@
 import {useLazyQuery} from '@apollo/client';
 import {Button} from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {StyleSheet, ScrollView, Text, View} from 'react-native';
 import {GET_USER} from '../../query/user';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -28,7 +28,7 @@ const Home = ({navigation}) => {
   return (
     <View style={styles.home__container}>
       <ScrollView>
-        <SliderBox images={images} autoplay={true} />
+        <SliderBox images={images} autoplay={true} circleLoop={true} />
         <View style={styles.category__icon}>
           <CategoryIcon />
         </View>
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 });
-export default Home;
+export default memo(Home);

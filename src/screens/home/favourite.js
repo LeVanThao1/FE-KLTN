@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import Images from '../../assets/images/images';
 
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-export default MangaList;
+export default memo(MangaList);

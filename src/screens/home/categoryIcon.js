@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {Icon} from 'native-base';
 
@@ -125,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryIcon;
+export default memo(CategoryIcon);

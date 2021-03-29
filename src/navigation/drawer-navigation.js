@@ -2,7 +2,15 @@ import React from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import {HomeStack, ContactStack, AuthStack} from './stack-navigation';
+import {
+  HomeStack,
+  ContactStack,
+  AboutStack,
+  AuthStack,
+  Payment,
+  PaymentStack,
+  StoreStack,
+} from './stack-navigation';
 import TabNavigator from './tab-navigation';
 import Loading from '../screens/loading';
 import {createSwitchNavigator} from 'react-navigation';
@@ -12,11 +20,14 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator AuthLoading={Loading} initialRouteName={'AuthLoading'}>
-      <Drawer.Screen name="Home" component={TabNavigator} />
+      <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Category" component={ContactStack} />
       <Drawer.Screen name="Your Favourite" component={ContactStack} />
       <Drawer.Screen name="Contact" component={ContactStack} />
-      <Drawer.Screen name="About" component={ContactStack} />
+      <Drawer.Screen name="Payment" component={PaymentStack} />
+      <Drawer.Screen name="Store" component={StoreStack} />
+
+      <Drawer.Screen name="About" component={AboutStack} />
     </Drawer.Navigator>
   );
 };
