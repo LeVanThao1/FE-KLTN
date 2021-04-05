@@ -9,39 +9,56 @@ import {
   Image,
   Button,
 } from 'react-native';
+// import RNPickerSelect from 'react-native-picker-select';
+import sub from 'sub-vn';
 
 const Address = () => {
+  const [value, setValue] = useState('');
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         <Text>Họ và tên</Text>
-        <TextInput placeholder="Điền họ & tên" />
+        <TextInput placeholder="Nhập họ & tên" />
       </View>
       <View>
         <Text>Số điện thoại</Text>
-        <TextInput placeholder="Điền SĐT" />
+        <TextInput placeholder="Nhập SĐT" />
       </View>
       <View>
-        <Text>Số điện thoại</Text>
-        <TextInput placeholder="Điền SĐT" />
+        {/* <RNPickerSelect
+          // onValueChange={(value) => console.log(value)}
+          items={[
+            {label: 'Football', value: 'football'},
+            {label: 'Baseball', value: 'baseball'},
+            {label: 'Hockey', value: 'hockey'},
+          ]}
+        /> */}
+        {/* <Text>Tỉnh/TP</Text>
+        <TextInput placeholder="Nhập SĐT" /> */}
       </View>
       <View>
-        <Text>Số điện thoại</Text>
-        <TextInput placeholder="Điền SĐT" />
+        <Text>Quận/Huyện</Text>
+        <TextInput placeholder="Nhập SĐT" />
       </View>
       <View>
-        <Text>Số điện thoại</Text>
-        <TextInput placeholder="Điền SĐT" />
+        <Text>Thị xã/Thôn</Text>
+        <TextInput placeholder="Nhập SĐT" />
       </View>
       <View>
         <Text>Địa chỉ cụ thể</Text>
         <TextInput placeholder="Nhập địa chỉ cụ thể" />
       </View>
       <View>
-        <Button title="Chọn" />
+        <Button title="Xác nhận" />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 10,
+  },
+});
 
 export default memo(Address);

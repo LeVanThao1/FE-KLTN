@@ -1,4 +1,4 @@
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useQuery} from '@apollo/client';
 import {Button} from 'native-base';
 import React, {useState, memo} from 'react';
 import {StyleSheet, ScrollView, Text, View} from 'react-native';
@@ -9,16 +9,21 @@ import CategoryIcon from './categoryIcon';
 import CommonList from './commonList';
 import Favourite from './favourite';
 import MangaList from './manga';
+import {GET_BOOK} from '../../query/user';
 
 const Home = ({navigation}) => {
-  const [getUser, {called, loading, data, error}] = useLazyQuery(GET_USER, {
-    onCompleted: (data) => {
-      console.log(data);
-    },
-    onError: (err) => {
-      console.log(err);
-    },
-  });
+  // const [getUser, {called, loading, data, error}] = useLazyQuery(GET_USER, {
+  //   onCompleted: (data) => {
+  //     console.log(data);
+  //   },
+  //   onError: (err) => {
+  //     console.log(err);
+  //   },
+  // });
+
+  console.log('haha', useQuery(GET_BOOK));
+  // console.log('data bôk', data);
+
   const [images, setImages] = useState([
     Images.slider1,
     Images.slider2,

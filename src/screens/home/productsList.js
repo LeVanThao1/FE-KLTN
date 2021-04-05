@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: 'purple',
+    backgroundColor: 'rgba(68, 108, 179, 1)',
   },
   header_text: {
     fontSize: 17,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'right',
-    color: 'purple',
+    color: 'rgba(68, 108, 179, 1)',
   },
 });
 

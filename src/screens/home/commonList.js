@@ -54,11 +54,13 @@ const CommonList = () => {
         onPress={() => ProductHandler()}
       />
       <View>
-        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.name} numberOfLines={1}>
+          {item.name}
+        </Text>
         <View style={styles.content}>
           <Text style={styles.price}>{item.price}</Text>
           <View style={styles.selled}>
-            <Text>Selled:</Text>
+            <Text>Còn lại: </Text>
             <Text>{item.selled}</Text>
           </View>
         </View>
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: 'purple',
+    backgroundColor: 'rgba(68, 108, 179, 1)',
   },
   header_text: {
     fontSize: 17,
@@ -108,14 +110,17 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   list_product: {
+    width: 150,
+    height: 225,
     padding: 5,
     margin: 4,
     alignItems: 'center',
-    borderWidth: 0.6,
-    borderRadius: 5,
+    borderWidth: 0.2,
+    borderRadius: 6,
   },
 
   name: {
+    paddingVertical: 8,
     fontSize: 15,
     textShadowColor: 'red',
   },
@@ -129,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: 'purple',
+    color: 'rgba(68, 108, 179, 1)',
   },
   selled: {
     flexDirection: 'row',

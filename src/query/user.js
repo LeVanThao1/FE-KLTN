@@ -24,3 +24,18 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_BOOK = gql`
+  query books {
+    books {
+      id
+      book
+      store
+      amount
+      price
+      createAt
+      updatedAt
+      deleteAt
+    }
+  }
+`;

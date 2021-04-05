@@ -19,14 +19,13 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator AuthLoading={Loading} initialRouteName={'AuthLoading'}>
+    <Drawer.Navigator AuthLoading={Loading} initialRouteName={'Home'}>
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Category" component={ContactStack} />
       <Drawer.Screen name="Your Favourite" component={ContactStack} />
       <Drawer.Screen name="Contact" component={ContactStack} />
       <Drawer.Screen name="Payment" component={PaymentStack} />
       <Drawer.Screen name="Store" component={StoreStack} />
-
       <Drawer.Screen name="About" component={AboutStack} />
     </Drawer.Navigator>
   );

@@ -30,10 +30,13 @@ const Payment = ({navigation}) => {
       <ScrollView>
         <View style={styles.container_payment}>
           {/* address */}
+
           <View style={styles.address}>
             <View style={styles.location}>
               <Icon name="location" style={styles.icon} />
-              <Text style={styles.text}>
+              <Text
+                style={styles.text}
+                onPress={() => navigation.navigate('Địa chỉ')}>
                 Địa chỉ nhận hàng {add ? ' - Vui lòng chọn địa chỉ' : ''}
               </Text>
             </View>
@@ -41,7 +44,7 @@ const Payment = ({navigation}) => {
               <Icon
                 name="keyboard-arrow-right"
                 type="MaterialIcons"
-                onPress={() => navigation.navigate(<Address />)}
+                onPress={() => navigation.navigate('Địa chỉ')}
               />
             </View>
           </View>
