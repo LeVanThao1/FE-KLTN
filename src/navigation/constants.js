@@ -6,6 +6,10 @@ const _navigator = {
   notification: 'Notification',
   profile: 'Profile',
   register: 'Register',
+  //
+  store: 'Store',
+  payment: 'Payment',
+  //
 };
 
 export {_navigator};
