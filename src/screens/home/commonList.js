@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Icon} from 'native-base';
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommonList;
+export default memo(CommonList);
