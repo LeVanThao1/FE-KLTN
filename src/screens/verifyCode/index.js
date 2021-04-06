@@ -19,13 +19,11 @@ export default function VerifyCode() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{width: '100%'}}>
-        <Text style={{color: '#000'}}>Back</Text>
+        <Text style={{color: '#000'}}>Trở lại</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Verify Code</Text>
+      <Text style={styles.title}>Mã xác thực</Text>
       <View style={{width: '100%'}}>
-        <Text style={styles.text}>
-          Enter your verify code to go to next step!
-        </Text>
+        <Text style={styles.text}>Nhập mã xác thực để qua bước tiếp theo!</Text>
       </View>
       <View style={{width: '100%', marginVertical: 12}}>
         <TextInput
@@ -36,7 +34,7 @@ export default function VerifyCode() {
       </View>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Next</Text>
+        <Text style={styles.buttonText}>Tiếp theo</Text>
       </TouchableOpacity>
     </View>
   );

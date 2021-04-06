@@ -14,11 +14,11 @@ export default function Register({navigation}) {
       <TouchableOpacity
         style={{width: '100%'}}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: '#000'}}>Back</Text>
+        <Text style={{color: '#000'}}>Trở lại</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Registry</Text>
+      <Text style={styles.title}>Đăng ký</Text>
       <View style={{width: '100%'}}>
-        <Text style={styles.text}>Welcome back!</Text>
+        <Text style={styles.text}>Chào mừng bạn quay trở lại!</Text>
       </View>
       <TextInput style={styles.textInput} placeholder="Email"></TextInput>
       <TextInput
@@ -26,10 +26,10 @@ export default function Register({navigation}) {
         placeholder="Password"
         secureTextEntry></TextInput>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Registry</Text>
+        <Text style={styles.buttonText}>Đăng ký</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.text}>Have an account? Login</Text>
+        <Text style={styles.text}>Đã có tài khoản? Đăng nhập.</Text>
       </TouchableOpacity>
     </View>
   );

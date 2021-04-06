@@ -58,9 +58,9 @@ const Login = ({navigation}) => {
         {/* <TouchableOpacity style={{width: '100%'}}>
           <Text style={{color: '#000'}}>Back</Text>
         </TouchableOpacity> */}
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Đặng nhập</Text>
         <View style={{width: '100%'}}>
-          <Text style={styles.text}>Welcome back!</Text>
+          <Text style={styles.text}>Chào mừng quay trở lại!</Text>
         </View>
         <View style={{width: '100%', marginVertical: 12}}>
           <TextInput
@@ -99,11 +99,11 @@ const Login = ({navigation}) => {
         </View>
 
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>Forgot password?</Text>
+        <Text style={styles.text}>Quên mật khẩu?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.text}>Registry now</Text>
+          <Text style={styles.text}>Đăng ký ngay</Text>
         </TouchableOpacity>
       </View>
     );
