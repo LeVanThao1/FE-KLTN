@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Home from '../screens/home';
 import About from '../screens/about';
+import DetailProduct from '../screens/detail-product';
 import Contact from '../screens/contact';
 import Payment from '../screens/payment';
 import Login from '../screens/login';
@@ -64,6 +65,7 @@ const AboutStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="Detail-Product" component={DetailProduct} />
     </Stack.Navigator>
   );
 };

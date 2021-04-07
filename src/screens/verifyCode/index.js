@@ -4,32 +4,37 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   TouchableOpacity,
+  Button,
 } from 'react-native';
+import {Icon} from 'native-base';
 
-export default function Register({navigation}) {
+export default function VerifyCode() {
+  const [code, setCode] = React.useState('');
+
+  React.useEffect(() => {
+    console.log(code);
+  }, [code]);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={{width: '100%'}}
-        onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity style={{width: '100%'}}>
         <Text style={{color: '#000'}}>Trở lại</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Đăng ký</Text>
+      <Text style={styles.title}>Mã xác thực</Text>
       <View style={{width: '100%'}}>
-        <Text style={styles.text}>Chào mừng bạn quay trở lại!</Text>
+        <Text style={styles.text}>Nhập mã xác thực để qua bước tiếp theo!</Text>
       </View>
-      <TextInput style={styles.textInput} placeholder="Email"></TextInput>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Password"
-        secureTextEntry></TextInput>
+      <View style={{width: '100%', marginVertical: 12}}>
+        <TextInput
+          style={styles.textInput}
+          value={code}
+          onChangeText={(value) => setCode(value)}
+        />
+      </View>
+
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Đăng ký</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.text}>Đã có tài khoản? Đăng nhập.</Text>
+        <Text style={styles.buttonText}>Tiếp theo</Text>
       </TouchableOpacity>
     </View>
   );
@@ -58,9 +63,9 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     paddingHorizontal: 16,
-    marginVertical: 16,
-    borderRadius: 4,
-    borderWidth: 0.5,
+    textAlign: 'center',
+    borderRadius: 5,
+    borderWidth: 0.2,
     borderColor: '#696969',
     letterSpacing: 0.75,
   },
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,
-    borderRadius: 4,
+    borderRadius: 5,
     marginVertical: 24,
     width: '100%',
   },

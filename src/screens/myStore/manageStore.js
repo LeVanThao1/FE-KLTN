@@ -30,6 +30,7 @@ const CreateProduct = () => {
             >
               <Picker.Item label="item 1" value="item" />
               <Picker.Item label="item 2" value="item" />
+              <Picker.Item label="jav" value="java" />
             </Picker>
           </View>
 
