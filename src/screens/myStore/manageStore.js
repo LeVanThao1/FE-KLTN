@@ -27,7 +27,7 @@ const CreateProduct = () => {
               //   setSelectedValue(itemValue)
               // }>
             >
-              <Picker.Item label="javhprossssssss" value="java" />
+              <Picker.Item label="jav" value="java" />
             </Picker>
           </View>
 
