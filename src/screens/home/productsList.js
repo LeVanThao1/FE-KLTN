@@ -7,7 +7,7 @@ const ProductList = () => {
   const listItem1 = [
     {
       id: 1,
-      name: 'How to become richer',
+      name: 'How',
       price: 108000,
       image: Images.rich,
     },
