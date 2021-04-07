@@ -1,5 +1,5 @@
 import {Button, Text, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {
   TextInput,
   StyleSheet,
@@ -119,4 +119,4 @@ const ViewAll = () => {
   );
 };
 
-export default ViewAll;
+export default memo(ViewAll);

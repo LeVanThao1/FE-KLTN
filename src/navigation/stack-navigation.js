@@ -42,7 +42,7 @@ const PaymentStack = () => {
   return (
     <Stack.Navigator initialRouteName="Thanh toán">
       <Stack.Screen name="Thanh toán" component={Payment} />
-      <Stack.Screen name="Địa chỉ" component={Address} />
+      {/* <Stack.Screen name="Địa chỉ" component={Address} /> */}
     </Stack.Navigator>
   );
 };

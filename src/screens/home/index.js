@@ -21,8 +21,8 @@ const Home = ({navigation}) => {
   //   },
   // });
 
-  console.log('haha', useQuery(GET_BOOK));
-  // console.log('data bôk', data);
+  const {loading, error, data} = useQuery(GET_USER);
+  console.log('data userrr', error);
 
   const [images, setImages] = useState([
     Images.slider1,
@@ -32,36 +32,22 @@ const Home = ({navigation}) => {
   ]);
   return (
     <View style={styles.home__container}>
-      <ScrollView>
-        <SliderBox images={images} autoplay={true} circleLoop={true} />
-        <View style={styles.category__icon}>
-          <CategoryIcon />
-        </View>
-        <View style={styles.category__icon}>
-          <CommonList />
-        </View>
-        <View style={styles.category__icon}>
-          <MangaList />
-        </View>
-        <View style={styles.category__icon}>
-          <Favourite />
-        </View>
-        {/* <View style={styles.center}>
-      <Text>This is the home screen</Text>
-      <Button
-        onPress={() => {
-          navigation.navigate('About');
-        }}>
-        <Text>Go to About Screen</Text>
-      </Button>
-      <Button
-        onPress={() => {
-          getUser();
-        }}>
-        <Text>get User</Text>
-      </Button>
-    </View> */}
-      </ScrollView>
+      {/* <ScrollView> */}
+      <SliderBox images={images} autoplay={true} circleLoop={true} />
+      <View style={styles.category__icon}>
+        <CategoryIcon />
+      </View>
+      <View style={styles.category__icon}>
+        <CommonList />
+      </View>
+      <View style={styles.category__icon}>
+        <MangaList />
+      </View>
+      <View style={styles.category__icon}>
+        <Favourite />
+      </View>
+      {/* </ScrollView> */}
+      {/* <BottomTabNavigator /> */}
     </View>
   );
 };
@@ -70,6 +56,7 @@ const styles = StyleSheet.create({
   home__container: {
     flex: 1,
     height: '100%',
+    width: '100%',
   },
 });
 export default memo(Home);

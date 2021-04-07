@@ -1,10 +1,11 @@
 import {Text, View} from 'native-base';
-import React from 'react';
+import React, {memo} from 'react';
 import {TextInput, StyleSheet, Image, Picker, Button} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 // import {Container, Header, Content, Icon, Picker, Form} from 'native-base';
 import Images from '../../assets/images/images';
+// import RNPickerSelect from 'react-native-picker-select';
 
 const CreateProduct = () => {
   return (
@@ -27,7 +28,8 @@ const CreateProduct = () => {
               //   setSelectedValue(itemValue)
               // }>
             >
-              <Picker.Item label="javhprossssssss" value="java" />
+              <Picker.Item label="item 1" value="item" />
+              <Picker.Item label="item 2" value="item" />
             </Picker>
           </View>
 
@@ -157,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateProduct;
+export default memo(CreateProduct);

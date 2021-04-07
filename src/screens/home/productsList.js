@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {Icon} from 'native-base';
 import Images from '../../assets/images/images';
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductList;
+export default memo(ProductList);
