@@ -1,8 +1,35 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {Icon} from 'native-base';
+import {GET_CATEGORIES} from '../../query/category';
+import {useLazyQuery} from '@apollo/client';
 
 const CategoryIcon = () => {
+  const [categories, setCategories] = useState([]);
+  const [listItem, setListItem] = useState(null);
+  const [getCategories, {called, loading, data, error}] = useLazyQuery(
+    GET_CATEGORIES,
+    {
+      onCompleted: async (data) => {
+        setCategories(data.categories);
+        setListItem(
+          data.categories.map((ct, i) => ({
+            id: ct.id,
+            name: 'database',
+            type: 'AntDesign',
+            description: ct.name,
+          })),
+        );
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    },
+  );
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   const listItem1 = [
     {
       id: 1,
@@ -71,11 +98,13 @@ const CategoryIcon = () => {
     <View
       style={styles.flat_list}
       onPress={() => {
-        console.log('sadasdads');
+        // navigator
       }}>
       <Icon name={item.name} type={item.type} style={styles.icon} />
       <View>
-        <Text>{item.description}</Text>
+        <Text numberOfLines={2} style={{textAlign: 'center'}}>
+          {item.description}
+        </Text>
       </View>
     </View>
   );
@@ -83,18 +112,18 @@ const CategoryIcon = () => {
   return (
     <View style={styles.category__container}>
       <View style={styles.category__row}>
-        <FlatList
+        {/* <FlatList
           //   style={styles.flat_list}
           data={listItem1}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal={true}
-        />
+        /> */}
       </View>
       <View style={styles.category__row}>
         <FlatList
           //   style={styles.flat_list}
-          data={listItem2}
+          data={listItem && listItem}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal={true}
@@ -117,6 +146,7 @@ const styles = StyleSheet.create({
     padding: 4,
     margin: 4,
     alignItems: 'center',
+    width: 100,
   },
   icon: {
     color: 'rgba(68, 108, 179, 1)',

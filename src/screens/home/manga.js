@@ -1,5 +1,12 @@
 import React, {memo, useMemo} from 'react';
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../../assets/images/images';
 
@@ -45,17 +52,18 @@ const MangaList = () => {
 
   const ProductHandler = () => {
     console.log('buy book');
+    navigation.navigate('Detail-Product');
   };
 
   const renderItem = ({item}) => (
-    <View
+    <TouchableOpacity
       style={styles.list_product}
-      onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+      // onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
       onPress={() => ProductHandler()}>
       <Image
         source={item.image}
         style={{width: 100, height: 150}}
-        onPress={() => ProductHandler()}
+        // onPress={() => ProductHandler()}
       />
       <View>
         <Text style={styles.name} numberOfLines={1}>
@@ -69,7 +77,7 @@ const MangaList = () => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -79,7 +87,7 @@ const MangaList = () => {
       </View>
       <View style={styles.category__row}>
         <FlatList
-          onPress={() => ProductHandler()}
+          // onPress={() => ProductHandler()}
           //   style={styles.flat_list}
           data={listItem1}
           renderItem={renderItem}
