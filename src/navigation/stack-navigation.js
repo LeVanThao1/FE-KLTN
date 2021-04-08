@@ -21,6 +21,8 @@ import Statistics from '../screens/myStore/finance/statistics';
 import Revenue from '../screens/myStore/finance/revenue';
 import CreateProduct from '../screens/myStore/manageStore';
 import Address from '../screens/payment/address';
+import BottomTabNavigator from './tab-navigation';
+import VerifyCode from '../screens/verifyCode';
 const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
@@ -35,6 +37,8 @@ const HomeStack = ({navigation}) => {
           },
         }}
       />
+      <Stack.Screen name="Detail-Product" component={DetailProduct} />
+      <Stack.Screen name="tab" component={BottomTabNavigator} />
     </Stack.Navigator>
   );
 };
@@ -65,7 +69,6 @@ const AboutStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="About" component={About} />
-      <Stack.Screen name="Detail-Product" component={DetailProduct} />
     </Stack.Navigator>
   );
 };
@@ -87,6 +90,7 @@ const AuthStack = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="SignUp" component={Register} />
+      <Stack.Screen name="Verify" component={VerifyCode} />
     </Stack.Navigator>
   );
 };

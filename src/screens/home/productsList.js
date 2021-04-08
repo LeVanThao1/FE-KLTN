@@ -51,7 +51,7 @@ const ProductList = () => {
           <Image
             source={listItem1.image}
             style={{width: 100, height: 150}}
-            onPress={() => ProductHandler()}
+            // onPress={() => ProductHandler()}
           />
           <View>
             <Text style={styles.name}>{listItem1.name}</Text>

@@ -14,13 +14,14 @@ import {
 import TabNavigator from './tab-navigation';
 import Loading from '../screens/loading';
 import {createSwitchNavigator} from 'react-navigation';
+import BottomTabNavigator from './tab-navigation';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator AuthLoading={Loading} initialRouteName={'Home'}>
-      <Drawer.Screen name="Home" component={HomeStack} />
+      <Drawer.Screen name="Home" component={BottomTabNavigator} />
       <Drawer.Screen name="Category" component={ContactStack} />
       <Drawer.Screen name="Your Favourite" component={ContactStack} />
       <Drawer.Screen name="Contact" component={ContactStack} />
