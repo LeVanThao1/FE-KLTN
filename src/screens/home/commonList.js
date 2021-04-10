@@ -51,7 +51,7 @@ const CommonList = () => {
   const renderItem = ({item}) => (
     <View
       style={styles.list_product}
-      onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+      // onStartShouldSetResponder={}
       onPress={() => ProductHandler()}>
       <Image
         source={item.image}

@@ -32,21 +32,22 @@ const Home = ({navigation}) => {
   ]);
   return (
     <View style={styles.home__container}>
-      {/* <ScrollView> */}
-      <SliderBox images={images} autoplay={true} circleLoop={true} />
-      <View style={styles.category__icon}>
-        <CategoryIcon />
-      </View>
-      <View style={styles.category__icon}>
-        <CommonList />
-      </View>
-      <View style={styles.category__icon}>
-        <MangaList />
-      </View>
-      <View style={styles.category__icon}>
-        <Favourite />
-      </View>
-      {/* </ScrollView> */}
+      <ScrollView>
+        <SliderBox images={images} autoplay={true} circleLoop={true} />
+        <View style={styles.category__icon}>
+          <CategoryIcon />
+        </View>
+        <View style={styles.category__icon}>
+          <CommonList />
+        </View>
+        <View style={styles.category__icon}>
+          <MangaList />
+        </View>
+        <View style={styles.category__icon}>
+          <Favourite />
+          <View></View>
+        </View>
+      </ScrollView>
       {/* <BottomTabNavigator /> */}
     </View>
   );

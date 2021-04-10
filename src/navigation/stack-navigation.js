@@ -1,11 +1,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import Home from '../screens/home';
 import About from '../screens/about';
 import DetailProduct from '../screens/detail-product';
 import Contact from '../screens/contact';
-import Payment from '../screens/payment';
+import Payment from '../screens/payment/payment';
 import Login from '../screens/login';
 import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
@@ -21,6 +20,7 @@ import Statistics from '../screens/myStore/finance/statistics';
 import Revenue from '../screens/myStore/finance/revenue';
 import CreateProduct from '../screens/myStore/manageStore';
 import Address from '../screens/payment/address';
+import test from '../screens/payment/test';
 const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
@@ -35,6 +35,17 @@ const HomeStack = ({navigation}) => {
           },
         }}
       />
+      <Stack.Screen name="Detail-Product" component={DetailProduct} />
+    </Stack.Navigator>
+  );
+};
+
+const ProductStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Detail-Product">
+      <Stack.Screen name="Detail-Product" component={test} />
+      <Stack.Screen name="Payment" component={Payment} />
+      <Stack.Screen name="Địa chỉ" component={Address} />
     </Stack.Navigator>
   );
 };
@@ -43,7 +54,7 @@ const PaymentStack = () => {
   return (
     <Stack.Navigator initialRouteName="Thanh toán">
       <Stack.Screen name="Thanh toán" component={Payment} />
-      {/* <Stack.Screen name="Địa chỉ" component={Address} /> */}
+      <Stack.Screen name="Địa chỉ" component={Address} />
     </Stack.Navigator>
   );
 };
@@ -98,4 +109,5 @@ export {
   AboutStack,
   PaymentStack,
   StoreStack,
+  ProductStack,
 };

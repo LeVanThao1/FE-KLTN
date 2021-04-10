@@ -13,8 +13,8 @@ import {Button, Icon, Text as TextNT} from 'native-base';
 import {TextInput} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const DetailProduct = () => {
-  const navigation = useNavigation();
+const DetailProduct = ({navigation}) => {
+  // const navigation = useNavigation();
   const [quantity, setQuantity] = React.useState(0);
   const [comment, onChangeComment] = React.useState('');
   const images = [Images.onepiece1, Images.onepiece2];
@@ -58,7 +58,7 @@ const DetailProduct = () => {
   const renderProduct = ({item}) => (
     <View
       style={styles.list_product}
-      onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+      // onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
       onPress={() => ProductHandler()}>
       <Image
         source={item.image}
@@ -193,7 +193,11 @@ const DetailProduct = () => {
                   Thêm vào giỏ hàng
                 </TextNT>
               </Button>
-              <Button style={styles.store__btn} bordered warning>
+              <Button
+                style={styles.store__btn}
+                bordered
+                primary
+                onPress={() => navigation.navigate('Payment')}>
                 <TextNT style={styles.buy__action_text}>Mua ngay</TextNT>
               </Button>
             </View>
@@ -215,7 +219,8 @@ const DetailProduct = () => {
                   style={styles.btn__view_store}
                   bordered
                   warning
-                  onPress={() => navigation.navigate('/')}>
+                  // onPress={() => navigation.navigate('/')}
+                >
                   <TextNT style={styles.buy__action_text}>Xem Shop</TextNT>
                 </Button>
               </View>
@@ -323,7 +328,8 @@ const DetailProduct = () => {
                 style={[styles.btn__view_store, styles.btn_comment]}
                 rounded
                 warning
-                onPress={() => navigation.navigate('/')}>
+                // onPress={() => navigation.navigate('/')}
+              >
                 <TextNT style={styles.btn_comment_text}>Bình luận</TextNT>
               </Button>
             </View>
