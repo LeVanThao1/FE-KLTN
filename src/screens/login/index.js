@@ -1,8 +1,8 @@
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Button, Spinner} from 'native-base';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Icon} from 'native-base';
 
 import {
@@ -12,12 +12,25 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {LOGIN} from '../../query/user';
-
+import {LOGIN, REGISTER} from '../../query/user';
+import {
+  emailValidator,
+  passwordValidator,
+  phoneNumberValidator,
+} from '../../utils/validations';
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 const Login = ({navigation}) => {
-  const [userID, setUserID] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [userID, setUserID] = React.useState({
+    value: '',
+    error: '',
+  });
+  const [password, setPassword] = React.useState({
+    value: '',
+    error: '',
+  });
   const [displayPassword, setDisplayPassword] = React.useState(false);
+  const [typeLogin, setTypeLogin] = useState(false);
+
   return useObserver(() => {
     const {
       stores: {auth, user},
@@ -31,58 +44,117 @@ const Login = ({navigation}) => {
         await AsyncStorage.setItem('refreshToken', token);
         auth.setLogin(token, refreshToken);
       },
+      onError: (err) => {
+        console.log(err);
+      },
     });
-
+    const validateUserId = () => {
+      if (!userID.value) {
+        setUserID({
+          ...userID,
+          error: 'Enter email or phone number',
+        });
+        return false;
+      }
+      if (typeLogin) {
+        if (!phoneNumberValidator(deFormatPhone(userID.value))) {
+          setUserID({
+            ...userID,
+            error: 'Incorrect phone number',
+          });
+          return false;
+        }
+      } else {
+        if (!emailValidator(userID.value)) {
+          setUserID({
+            ...userID,
+            error: 'Incorrect email address',
+          });
+          return false;
+        }
+      }
+      return true;
+    };
+    const validatePassword = () => {
+      if (!password.value.trim()) {
+        setPassword((cur) => ({...cur, error: 'Enter password'}));
+        return false;
+      }
+      // if (!passwordValidator(password.value) && password.value) {
+      //   setPassword((cur) => ({
+      //     ...cur,
+      //     error:
+      //       'The password must contain at least 1 digit, 1 uppercase character, 1 lowercase character and at least 8 characters',
+      //   }));
+      //   return false;
+      // }
+      return true;
+    };
     const onPress = () => {
+      if (validatePassword() + validateUserId() !== 2) return;
+      let variables = {
+        password: password.value,
+        type: typeLogin,
+      };
+      if (typeLogin) variables.phone = deFormatPhone(userID.value.trim());
+      else variables.email = userID.value.trim().toLowerCase();
+      console.log(variables);
       login({
         variables: {
-          phone: '0964555151',
-          password: 'ta210402',
+          ...variables,
         },
       });
     };
-
     return (
-      // <View style={styles.center}>
-      //   <Text>This is the login screen</Text>
-      //   <View style={styles.button}>
-      //     <Button info onPress={onPress}>
-      //       <Text> Login </Text>
-      //     </Button>
-      //   </View>
-
-      //   {error && <Text>{error.message}</Text>}
-      //   {loading && <Spinner color="green" />}
-      // </View>
       <View style={styles.container}>
-        {/* <TouchableOpacity style={{width: '100%'}}>
-          <Text style={{color: '#000'}}>Back</Text>
-        </TouchableOpacity> */}
         <Text style={styles.title}>Đặng nhập</Text>
         <View style={{width: '100%'}}>
           <Text style={styles.text}>Chào mừng quay trở lại!</Text>
         </View>
-        <View style={{width: '100%', marginVertical: 12}}>
+        <View style={{width: '100%', marginTop: 12, marginBottom: 5}}>
           <TextInput
-            style={styles.textInput}
+            style={{
+              ...styles.textInput,
+              borderColor: !!userID.error ? 'red' : '#696969',
+            }}
             placeholder="Email or phone number"
-            value={userID}
-            onChangeText={(value) => setUserID(value)}
+            value={userID.value}
+            onFocus={() => {
+              setUserID({...userID, error: ''});
+            }}
+            onChangeText={(value) => {
+              setUserID({
+                ...userID,
+                value: typeLogin ? formatPhone(value) : value,
+              });
+              if (value.length === 1) {
+                setTypeLogin(Number.isInteger(parseInt(value)));
+              }
+            }}
           />
         </View>
+
+        <Text style={styles.err}>{userID.error}</Text>
         <View
           style={{
             width: '100%',
             position: 'relative',
-            marginVertical: 12,
+            marginTop: 12,
+            marginBottom: 5,
             justifyContent: 'center',
           }}>
           <TextInput
-            style={styles.textInput}
+            style={{
+              ...styles.textInput,
+              borderColor: !!password.error ? 'red' : '#696969',
+            }}
+            onFocus={() => {
+              setPassword({...password, error: ''});
+            }}
             placeholder="Password"
             secureTextEntry={!displayPassword}
-            value={password}
-            onChangeText={(value) => setPassword(value)}
+            value={password.value}
+            onChangeText={(value) => setPassword({...password, value: value})}
           />
           <Icon
             name={displayPassword ? 'eye-off-outline' : 'eye-outline'}
@@ -98,35 +170,33 @@ const Login = ({navigation}) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <Text style={styles.err}>{password.error}</Text>
+
+        <TouchableOpacity style={styles.button} onPress={onPress}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>Quên mật khẩu?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.text}>Đăng ký ngay</Text>
-        </TouchableOpacity>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ForgotPassword');
+            }}>
+            <Text style={styles.text}>Quên mật khẩu?</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={styles.text}>Đăng ký ngay</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   });
 };
 
 const styles = StyleSheet.create({
-  // center: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   textAlign: 'center',
-  // },
-  // button: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   container: {
     flex: 1,
     padding: 20,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   title: {
     fontSize: 32,
@@ -140,7 +210,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.75,
   },
   textInput: {
-    fontSize: 16,
+    fontSize: 14,
     backgroundColor: '#f0f0f0',
     width: '100%',
     padding: 10,
@@ -164,6 +234,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     letterSpacing: 0.75,
+  },
+  err: {
+    fontSize: 10,
+    color: 'red',
   },
 });
 

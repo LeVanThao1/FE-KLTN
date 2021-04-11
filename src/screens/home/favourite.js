@@ -44,19 +44,20 @@ const MangaList = () => {
     },
   ];
 
-  const ProductHandler = () => {
+  const productHandler = () => {
     console.log('buy book');
+    navigation.navigate('Detail-Product');
   };
 
   const renderItem = ({item}) => (
     <View
       style={styles.list_product}
-      onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
-      onPress={() => ProductHandler()}>
+      // onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+      onPress={() => productHandler()}>
       <Image
         source={item.image}
         style={{width: 100, height: 150}}
-        onPress={() => ProductHandler()}
+        // onPress={() => productHandler()}
       />
       <View>
         <Text style={styles.name} numberOfLines={1}>
@@ -80,7 +81,7 @@ const MangaList = () => {
       </View>
       <View style={styles.category__row}>
         <FlatList
-          onPress={() => ProductHandler()}
+          // onPress={() => productHandler()}
           //   style={styles.flat_list}
           data={listItem1}
           renderItem={renderItem}

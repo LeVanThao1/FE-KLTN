@@ -8,14 +8,51 @@ import {
   Button,
 } from 'react-native';
 import {Icon} from 'native-base';
-
-export default function VerifyCode() {
-  const [code, setCode] = React.useState('');
-
-  React.useEffect(() => {
-    console.log(code);
-  }, [code]);
-
+import {useLazyQuery, useQuery} from '@apollo/client';
+import {VERIFY} from '../../query/user';
+import {codeValidator} from '../../utils/validations';
+import {deFormatPhone} from '../../utils/support/phoneFormat';
+export default function VerifyCode({route, navigation}) {
+  const [verify, {called, loading, data, error}] = useLazyQuery(VERIFY, {
+    onCompleted: async (data) => {
+      console.log(data);
+      navigation.navigate('Login');
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const [code, setCode] = React.useState({
+    value: '',
+    error: '',
+  });
+  const {type, userId} = route.params;
+  console.log(type, userId);
+  const validationCode = () => {
+    if (!code.value.trim()) {
+      setCode((cur) => ({...cur, error: 'Enter code'}));
+      return false;
+    }
+    if (code.value.length !== 6 && code.value) {
+      setCode((cur) => ({
+        ...cur,
+        error: 'The code at least 6 characters',
+      }));
+      return false;
+    }
+    return true;
+  };
+  const onPress = () => {
+    if (!validationCode()) return;
+    verify({
+      variables: {
+        email: userId,
+        phone: type ? deFormatPhone(userId) : userId,
+        type,
+        otp: code.value,
+      },
+    });
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{width: '100%'}}>
@@ -27,13 +64,22 @@ export default function VerifyCode() {
       </View>
       <View style={{width: '100%', marginVertical: 12}}>
         <TextInput
-          style={styles.textInput}
-          value={code}
-          onChangeText={(value) => setCode(value)}
+          style={{
+            ...styles.textInput,
+            borderColor: !!code.error ? 'red' : '#696969',
+          }}
+          value={code.value}
+          onChangeText={(value) => setCode({...code, value: value})}
+          onFocus={() => {
+            setCode({...code, error: ''});
+          }}
+          onEndEditing={() => {
+            !!code.value && validationCode();
+          }}
         />
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>Tiếp theo</Text>
       </TouchableOpacity>
     </View>

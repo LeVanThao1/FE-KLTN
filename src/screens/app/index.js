@@ -18,10 +18,8 @@ const App = () => {
     const {isAuth} = auth;
     return (
       <NavigationContainer>
-        
-        <DrawerNavigator />
-        {/* <BottomTabNavigator /> */}
-        {/* {!isAuth ? <AuthStack /> : <DrawerNavigator />} */}
+        {/* <DrawerNavigator /> */}
+        {!isAuth ? <AuthStack /> : <DrawerNavigator />}
       </NavigationContainer>
     );
   });
