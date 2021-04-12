@@ -20,7 +20,6 @@ export const LOGIN = gql`
           id
           name
           avatar
-          background
           description
           books {
             id
