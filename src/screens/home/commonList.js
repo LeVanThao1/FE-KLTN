@@ -28,9 +28,9 @@ const CommonList = () => {
         setListItem(
           books?.map((ct, i) => ({
             id: ct.id,
-            name: ct.book.name,
+            name: ct.book? ct.book.name: ct.name,
             price: ct.price,
-            image: ct.book.images[0],
+            image: ct.book ? ct.book.images[0] : ct.images[0],
             selled: ct.amount,
           })),
         );
