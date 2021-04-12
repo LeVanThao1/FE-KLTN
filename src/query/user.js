@@ -16,146 +16,6 @@ export const LOGIN = gql`
         avatar
         email
         address
-        store {
-          id
-          name
-          avatar
-          background
-          description
-          books {
-            id
-            price
-            amount
-            book {
-              id
-              name
-              description
-              images
-              category {
-                id
-                name
-              }
-              year
-              publisher
-            }
-            createdAt
-          }
-        }
-        notifications {
-          order {
-            id
-            title
-            description
-            order {
-              id
-              user {
-                name
-                phone
-                avatar
-                email
-                address
-              }
-              detail {
-                book {
-                  id
-                  price
-                  amount
-                  book {
-                    id
-                    name
-                    description
-                    images
-                    category {
-                      id
-                      name
-                    }
-                    year
-                    publisher
-                  }
-                  createdAt
-                }
-                price
-                amount
-              }
-              address
-              phone
-              status
-              receivedDate
-              deliveryDate
-              createdAt
-            }
-            seen
-            createdAt
-          }
-          book {
-            id
-            title
-            description
-            commentBook {
-              id
-              content
-              book {
-                id
-              }
-              author {
-                id
-                name
-              }
-              type
-              createdAt
-            }
-            seen
-            createdAt
-          }
-          post {
-            id
-            title
-            description
-            commentPost {
-              id
-              content
-              post {
-                id
-              }
-              author {
-                id
-                name
-              }
-              type
-              createdAt
-            }
-            seen
-            createdAt
-          }
-        }
-        interests {
-          id
-          name
-        }
-        cart {
-          book {
-            id
-            price
-            amount
-            book {
-              id
-              name
-              description
-              images
-              category {
-                id
-                name
-              }
-              year
-              publisher
-            }
-            store {
-              id
-              name
-              avatar
-            }
-          }
-        }
       }
       token
       refreshToken
@@ -179,9 +39,13 @@ export const VERIFY = gql`
 export const GET_USER = gql`
   query profile {
     profile {
+      id
       name
       phone
       role
+      avatar
+      email
+      address
     }
   }
 `;

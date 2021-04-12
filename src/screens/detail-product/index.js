@@ -25,9 +25,9 @@ const DetailProduct = ({navigation, route}) => {
       setListItem(
         data.book.store.books.map((ct, i) => ({
           id: ct.id,
-          name: ct.book.name,
+          name: ct.book? ct.book?.name: ct?.name,
           price: ct.price,
-          image: ct.book.images[0],
+          image: ct.book? ct.book.images[0] : ct?.images[0],
           selled: ct.amount,
         })),
       );
@@ -36,6 +36,7 @@ const DetailProduct = ({navigation, route}) => {
       console.log(err);
     },
   });
+  // const {name, images, publisher, year, description} = book ? book.book ? book.book : {name: null,} : book
   // const [getBookOfStore, {loading2, data2, error2}] = useLazyQuery(
   //   GET_BOOKS_STORE,
   //   {
@@ -70,9 +71,10 @@ const DetailProduct = ({navigation, route}) => {
   //       },
   //     });
   // }, [book]);
+  console.log(book)
   const [quantity, setQuantity] = React.useState(0);
   const [comment, onChangeComment] = React.useState('');
-  const images = [Images.onepiece1, Images.onepiece2];
+  // const images = [Images.onepiece1, Images.onepiece2];
   const listItem1 = [
     {
       id: 1,
@@ -110,25 +112,28 @@ const DetailProduct = ({navigation, route}) => {
       selled: 11,
     },
   ];
-  const renderProduct = ({item}) => (
-    <TouchableOpacity
-      style={styles.list_product}
-      onPress={() => navigation.push('Detail-Product', {productId: item.id})}>
-      <Image
-        source={{uri: item.image}}
-        style={{width: 80, height: 100}}
-        // onPress={() => ProductHandler()}
-      />
-      <View>
-        <Text style={styles.name} numberOfLines={1}>
-          {item.name}
-        </Text>
-        <View style={styles.content}>
-          <Text style={{color: '#f57f1a', fontSize: 12}}>{item.price}đ</Text>
+  const renderProduct = ({item}) => {
+    console.log(item)
+    return (
+      <TouchableOpacity
+        style={styles.list_product}
+        onPress={() => navigation.push('Detail-Product', {productId: item.id})}>
+        <Image
+          source={{uri: item.image}}
+          style={{width: 80, height: 100}}
+          // onPress={() => ProductHandler()}
+        />
+        <View>
+          <Text style={styles.name} numberOfLines={1}>
+            {item.name}
+          </Text>
+          <View style={styles.content}>
+            <Text style={{color: '#f57f1a', fontSize: 12}}>{item.price}đ</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    )
+  };
   return (
     <View style={styles.container}>
       {!loading && book && (
@@ -136,13 +141,13 @@ const DetailProduct = ({navigation, route}) => {
           <View style={styles.slide__image_wrap}>
             <SliderBox
               style={styles.slide__image}
-              images={book ? [...book?.book?.images, ...images] : images}
+              images={[...(book.images ? book.images : book.book.images),Images.onepiece1]}
               autoplay={true}
             />
           </View>
           <View style={styles.detail__content}>
             <View style={styles.detail__information}>
-              <Text style={styles.detail__content_name}>{book.book.name}</Text>
+              <Text style={styles.detail__content_name}>{book.name ? book.name : book.book.name}</Text>
               <View style={styles.detail__content_price}>
                 <Text style={styles.current__price}>{book.price}đ</Text>
                 <Text style={styles.old__price}>500.000đ</Text>
@@ -314,18 +319,18 @@ const DetailProduct = ({navigation, route}) => {
               </Text>
               <View style={styles.detail__book_description_wrap}>
                 <Text style={styles.book_description_text}>Nhà xuất bản</Text>
-                <Text>{book.book.publisher}</Text>
+                <Text>{book.publisher ? book.publisher : book.book.publisher}</Text>
               </View>
               <View style={styles.detail__book_description_wrap}>
                 <Text style={styles.book_description_text}>Tác giả</Text>
-                <Text>{book.book.publisher}</Text>
+                <Text>{book.publisher ? book.publisher : book.book.publisher}</Text>
               </View>
               <View style={styles.detail__book_description_wrap}>
                 <Text style={styles.book_description_text}>Năm xuất bản</Text>
-                <Text>{book.book.year}</Text>
+                <Text>{book.year ? book.year : book.book.year}</Text>
               </View>
               <Text style={styles.book_description}>
-                {book.book.description}
+                {book.description ? book.description : book.book.description}
               </Text>
             </View>
             <View style={styles.detail__book_rate}>

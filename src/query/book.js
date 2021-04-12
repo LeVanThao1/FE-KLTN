@@ -4,6 +4,15 @@ export const GET_BOOKS = gql`
   query books {
     books {
       id
+      name
+      images
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
       book {
         id
         name
@@ -90,6 +99,15 @@ export const GET_BOOK = gql`
               id
               name
             }
+          }
+          name
+          images
+          year
+          numberOfReprint
+          publisher
+          category {
+            id
+            name
           }
           amount
           price
