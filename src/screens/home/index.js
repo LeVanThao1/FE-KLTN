@@ -19,7 +19,6 @@ const Home = ({navigation}) => {
       stores: {book, user},
     } = useContext(MobXProviderContext);
     const {books, setBooks} = book;
-    console.log(user.info);
     const [getBooks, {called, loading, data, error}] = useLazyQuery(GET_BOOKS, {
       onCompleted: async (data) => {
         setBooks(data.books);

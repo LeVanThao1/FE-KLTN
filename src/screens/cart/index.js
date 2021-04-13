@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,25 @@ import {
 } from 'react-native';
 import {Icon, Button} from 'native-base';
 import CartDetail from './CartDetail';
+import { useObserver } from 'mobx-react-lite';
+import { MobXProviderContext } from 'mobx-react';
 
 export default function Cart() {
+  return useObserver(() => {
+    const {
+      stores: {user},
+    } = useContext(MobXProviderContext);
+    const {cart} = user
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    if(cart.length > 0) {
+      setTotal(cart.reduce((a,b) => {
+        return a + b.book.price
+      },0))
+    }
+  }, [cart])
+  console.log("cartIndex", cart)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -22,24 +39,33 @@ export default function Cart() {
 
         <Text style={styles.headerTitle}>Giỏ Hàng</Text>
       </View>
-      <ScrollView style={styles.body}>
+      {cart && cart.length > 0 ? 
+        <ScrollView style={styles.body}>
+          {cart.map((ct, i) => 
+            <CartDetail data={ct}/>
+          )}
+        {/* <CartDetail />
         <CartDetail />
-        <CartDetail />
-        <CartDetail />
-      </ScrollView>
-      <View style={styles.footer}>
-        <View style={styles.footerTotal}>
-          <Text style={styles.footerTotalText}>
-            Tổng tiền: <Text style={styles.footerTotalPrice}>100.000đ</Text>
-          </Text>
-        </View>
+        <CartDetail /> */}
+        </ScrollView> : 
+      <Text style={{marginTop: 20, fontSize: 18}}>Giỏ hàng trống</Text>
+      }
+      {cart.length > 0 && 
+        <View style={styles.footer}>
+          <View style={styles.footerTotal}>
+            <Text style={styles.footerTotalText}>
+              Tổng tiền: <Text style={styles.footerTotalPrice}>{total}</Text>
+            </Text>
+          </View>
 
-        <TouchableOpacity style={styles.footerPayment}>
-          <Text style={styles.footerPaymentText}>Mua hàng</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.footerPayment}>
+            <Text style={styles.footerPaymentText}>Mua hàng</Text>
+          </TouchableOpacity>
+        </View>
+      }
     </View>
   );
+  })
 }
 
 const styles = StyleSheet.create({
