@@ -3,8 +3,9 @@ import {observable, action, makeObservable} from 'mobx';
 export class User {
   @observable
   info = undefined;
-
-  constructor(info) {
+  cart = undefined
+  constructor(info, cart) {
+    this.cart = cart;
     this.info = info;
     makeObservable(this);
   }
@@ -13,4 +14,9 @@ export class User {
   setInfo = (value) => {
     this.info = value;
   };
+
+  @action
+  setCart = (cart) => {
+    this.cart = cart
+  }
 }
