@@ -1,4 +1,4 @@
-import {useMutation} from '@apollo/client';
+import {fromError, useMutation} from '@apollo/client';
 import React, {useState} from 'react';
 import {
   View,
@@ -8,25 +8,46 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'native-base';
-
 import {passwordValidator} from '../../utils/validations';
 export default function ForgotPassword({navigation}) {
   const onPress = () => {
-    if (validateConfirmPassword(true) + validatePassword(true) !== 2) return;
+    if (validateConfirmPassword(true) + validatePassword(true) !== 3) return;
     //handle here
   };
+
+  const [currentPassword, setCurrentPassword] = useState({
+    value: '',
+    error: '',
+    display: false,
+  });
   const [newPassword, setNewPassword] = useState({
     value: '',
     error: '',
     display: false,
   });
-  const [confirmPassword, setConfirmPassword] = useState({
+  const [confirmNewPassword, setConfirmNewPassword] = useState({
     value: '',
     error: '',
     display: false,
   });
 
-  const validatePassword = (type) => {
+  const validateCurrentPassword = (type) => {
+    if (!currentPassword.value.trim() && type) {
+      setCurrentPassword((cur) => ({...cur, error: 'Enter password'}));
+      return false;
+    }
+    if (!passwordValidator(currentPassword.value) && currentPassword.value) {
+      setCurrentPassword((cur) => ({
+        ...cur,
+        error:
+          'The password must contain at least 1 digit, 1 uppercase character, 1 lowercase character and at least 8 characters',
+      }));
+      return false;
+    }
+    return true;
+  };
+
+  const validateNewPassword = (type) => {
     if (!newPassword.value.trim() && type) {
       setNewPassword((cur) => ({...cur, error: 'Enter password'}));
       return false;
@@ -41,25 +62,27 @@ export default function ForgotPassword({navigation}) {
     }
     return true;
   };
-
-  const validateConfirmPassword = (type) => {
-    if (!confirmPassword.value.trim() && type) {
-      setConfirmPassword((cur) => ({
+  const validateConfirmNewPassword = (type) => {
+    if (!confirmNewPassword.value.trim() && type) {
+      setConfirmNewPassword((cur) => ({
         ...cur,
-        error: 'Enter confirm new password',
+        error: 'Enter confirm password',
       }));
       return false;
     }
-    if (newPassword.value.trim() !== confirmPassword.value.trim()) {
-      setConfirmPassword((cur) => ({
+    if (password.value.trim() !== confirmNewPassword.value.trim()) {
+      setConfirmNewPassword((cur) => ({
         ...cur,
         error: 'Password must match',
       }));
       return false;
     }
 
-    if (!passwordValidator(confirmPassword.value) && confirmPassword.value) {
-      setConfirmPassword((cur) => ({
+    if (
+      !passwordValidator(confirmNewPassword.value) &&
+      confirmNewPassword.value
+    ) {
+      setConfirmNewPassword((cur) => ({
         ...cur,
         error:
           'The password must contain at least 1 digit, 1 uppercase character, 1 lowercase character and at least 8 characters',
@@ -77,7 +100,7 @@ export default function ForgotPassword({navigation}) {
           {'Trở lại'}
         </Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Lấy lại mật khẩu</Text>
+      <Text style={styles.title}>Thay đổi mật khẩu</Text>
       <View style={{width: '100%'}}>
         <Text style={styles.text}>Chào mừng bạn quay trở lại!</Text>
       </View>
@@ -85,9 +108,45 @@ export default function ForgotPassword({navigation}) {
         <TextInput
           style={{
             ...styles.textInput,
+            borderColor: !!currentPassword.error ? 'red' : '#696969',
+          }}
+          placeholder="Current Password"
+          secureTextEntry={!currentPassword.display}
+          value={currentPassword.value}
+          onFocus={() => {
+            setCurrentPassword({...currentPassword, error: ''});
+          }}
+          onChangeText={(value) => {
+            setCurrentPassword({
+              ...currentPassword,
+              value: value,
+            });
+          }}
+          onEndEditing={() => {
+            !!currentPassword.value && validateCurrentPassword();
+          }}
+        />
+        <Icon
+          name={newPassword.display ? 'eye-off-outline' : 'eye-outline'}
+          style={styles.icon}
+          type="Ionicons"
+          onPress={() =>
+            setCurrentPassword({
+              ...currentPassword,
+              display: !currentPassword.display,
+            })
+          }
+        />
+      </View>
+
+      <Text style={styles.err}>{currentPassword.error}</Text>
+      <View style={styles.containerText}>
+        <TextInput
+          style={{
+            ...styles.textInput,
             borderColor: !!newPassword.error ? 'red' : '#696969',
           }}
-          placeholder="Password"
+          placeholder="New Password"
           secureTextEntry={!newPassword.display}
           value={newPassword.value}
           onFocus={() => {
@@ -100,7 +159,7 @@ export default function ForgotPassword({navigation}) {
             });
           }}
           onEndEditing={() => {
-            !!newPassword.value && validatePassword();
+            !!newPassword.value && validateNewPassword();
           }}
         />
         <Icon
@@ -108,48 +167,50 @@ export default function ForgotPassword({navigation}) {
           style={styles.icon}
           type="Ionicons"
           onPress={() =>
-            setNewPassword({...newPassword, display: !newPassword.display})
+            setNewPassword({
+              ...newPassword,
+              display: !newPassword.display,
+            })
           }
         />
       </View>
-
       <Text style={styles.err}>{newPassword.error}</Text>
       <View style={styles.containerText}>
         <TextInput
           style={{
             ...styles.textInput,
-            borderColor: !!confirmPassword.error ? 'red' : '#696969',
+            borderColor: !!confirmNewPassword.error ? 'red' : '#696969',
           }}
-          placeholder="Confirm password"
-          secureTextEntry={!confirmPassword.display}
-          value={confirmPassword.value}
+          placeholder="Confirm new password"
+          secureTextEntry={!confirmNewPassword.display}
+          value={confirmNewPassword.value}
           onFocus={() => {
-            setConfirmPassword({...confirmPassword, error: ''});
+            setConfirmNewPassword({...confirmNewPassword, error: ''});
           }}
           onChangeText={(value) => {
-            setConfirmPassword({
-              ...confirmPassword,
+            setConfirmNewPassword({
+              ...confirmNewPassword,
               value: value,
             });
           }}
           onEndEditing={() => {
-            !!confirmPassword.value && validateConfirmPassword();
+            !!confirmNewPassword.value && validateConfirmNewPassword();
           }}
         />
         <Icon
-          name={confirmPassword.display ? 'eye-off-outline' : 'eye-outline'}
+          name={confirmNewPassword.display ? 'eye-off-outline' : 'eye-outline'}
           style={styles.icon}
           type="Ionicons"
           onPress={() =>
-            setConfirmPassword({
-              ...confirmPassword,
-              display: !confirmPassword.display,
+            setConfirmNewPassword({
+              ...confirmNewPassword,
+              display: !confirmNewPassword.display,
             })
           }
         />
       </View>
 
-      <Text style={styles.err}>{confirmPassword.error}</Text>
+      <Text style={styles.err}>{confirmNewPassword.error}</Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>Xác nhận</Text>
       </TouchableOpacity>

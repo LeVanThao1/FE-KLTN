@@ -5,9 +5,9 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   TouchableOpacity,
 } from 'react-native';
+import {Icon} from 'native-base';
 import {REGISTER} from '../../query/user';
 import {
   emailValidator,
@@ -206,49 +206,72 @@ export default function Register({navigation}) {
         }}
       />
       <Text style={styles.err}>{name.error}</Text>
-      <TextInput
-        style={{
-          ...styles.textInput,
-          borderColor: !!password.error ? 'red' : '#696969',
-        }}
-        placeholder="Password"
-        secureTextEntry
-        value={password.value}
-        onFocus={() => {
-          setPassword({...password, error: ''});
-        }}
-        onChangeText={(value) => {
-          setPassword({
-            ...password,
-            value: value,
-          });
-        }}
-        onEndEditing={() => {
-          !!password.value && validatePassword();
-        }}
-      />
+      <View style={styles.containerText}>
+        <TextInput
+          style={{
+            ...styles.textInput,
+            borderColor: !!password.error ? 'red' : '#696969',
+          }}
+          placeholder="Password"
+          secureTextEntry={!password.display}
+          value={password.value}
+          onFocus={() => {
+            setPassword({...password, error: ''});
+          }}
+          onChangeText={(value) => {
+            setPassword({
+              ...password,
+              value: value,
+            });
+          }}
+          onEndEditing={() => {
+            !!password.value && validatePassword();
+          }}
+        />
+        <Icon
+          name={password.display ? 'eye-off-outline' : 'eye-outline'}
+          style={styles.icon}
+          type="Ionicons"
+          onPress={() => setPassword({...password, display: !password.display})}
+        />
+      </View>
+
       <Text style={styles.err}>{password.error}</Text>
-      <TextInput
-        style={{
-          ...styles.textInput,
-          borderColor: !!confirmPassword.error ? 'red' : '#696969',
-        }}
-        placeholder="Confirm password"
-        secureTextEntry
-        value={confirmPassword.value}
-        onFocus={() => {
-          setConfirmPassword({...confirmPassword, error: ''});
-        }}
-        onChangeText={(value) => {
-          setConfirmPassword({
-            ...confirmPassword,
-            value: value,
-          });
-        }}
-        onEndEditing={() => {
-          !!confirmPassword.value && validateConfirmPassword();
-        }}
-      />
+      <View style={styles.containerText}>
+        <TextInput
+          style={{
+            ...styles.textInput,
+            borderColor: !!confirmPassword.error ? 'red' : '#696969',
+          }}
+          placeholder="Confirm new password"
+          secureTextEntry={!confirmPassword.display}
+          value={confirmPassword.value}
+          onFocus={() => {
+            setConfirmPassword({...confirmPassword, error: ''});
+          }}
+          onChangeText={(value) => {
+            setConfirmPassword({
+              ...confirmPassword,
+              value: value,
+            });
+          }}
+          onEndEditing={() => {
+            !!confirmPassword.value && validateConfirmPassword();
+          }}
+        />
+        <Icon
+          name={confirmPassword.display ? 'eye-off-outline' : 'eye-outline'}
+          style={styles.icon}
+          type="Ionicons"
+          onPress={() =>
+            setConfirmPassword({
+              ...confirmPassword,
+              display: !confirmPassword.display,
+            })
+          }
+        />
+      </View>
+
       <Text style={styles.err}>{confirmPassword.error}</Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>Đăng ký</Text>
@@ -287,17 +310,30 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     letterSpacing: 0.75,
   },
+  containerText: {
+    width: '100%',
+    position: 'relative',
+    marginTop: 12,
+    marginBottom: 5,
+    justifyContent: 'center',
+  },
   textInput: {
     fontSize: 14,
     backgroundColor: '#f0f0f0',
     width: '100%',
     padding: 10,
     paddingHorizontal: 16,
-    marginVertical: 8,
-    borderRadius: 4,
-    borderWidth: 0.5,
+    borderRadius: 5,
+    borderWidth: 0.2,
     borderColor: '#696969',
     letterSpacing: 0.75,
+  },
+  icon: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 1,
+    fontSize: 24,
+    color: '#696969',
   },
   button: {
     backgroundColor: 'rgba(68, 108, 179, 1)',
