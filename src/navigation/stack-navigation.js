@@ -27,7 +27,7 @@ import { useObserver } from 'mobx-react-lite';
 import { MobXProviderContext } from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { GET_USER } from '../query/user';
+import { GET_USER, REFRESH_TOKEN } from '../query/user';
 import { Spinner, View } from 'native-base';
 const HomeStack = ({navigation}) => {
   return (
@@ -93,18 +93,29 @@ const AuthStack = () => {
       stores: {auth, user},
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(true)
+    const [refreshToken, {dt,err}] = useLazyQuery(REFRESH_TOKEN, {
+      onCompleted: async (data) => {
+        user.setInfo(data.refreshToken.user)
+        user.setCart(data.refreshToken.cart)
+        auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
+        setLoading(false)
+      },
+      onError: (err) => {
+        console.log(err)
+      },
+    })
     const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
       onCompleted: async (data) => {
-        console.log(data)
         user.setInfo(data.profile)
         user.setCart(data.profile.cart)
         auth.setIsAuth(true)
         setLoading(false)
       },
       onError: (err) => {
-        console.log(err);
+        refreshToken()
       },
     });
+    
     useEffect(() => {
       AsyncStorage.getItem("token").then((data) => {
         AsyncStorage.getItem("refreshToken").then((dt) => {

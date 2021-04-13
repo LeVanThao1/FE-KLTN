@@ -87,3 +87,33 @@ export const UPDATE_CART = gql`
     }
   }
 `
+export const REFRESH_TOKEN = gql`
+  query refreshToken {
+    user {
+      id
+      name
+      phone
+      role
+      avatar
+      email
+      address
+      cart {
+        book {
+          id
+          amount
+          price
+          images
+          book {
+            name
+            images
+          }
+          name
+        }
+        amount
+        price
+      }
+    }
+    token
+    refreshToken
+  }
+`
