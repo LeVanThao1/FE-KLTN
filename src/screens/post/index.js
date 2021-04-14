@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 // import {styles, stylesTable} from './styles';
 
-import Images from '../../../assets/images/images';
+import Images from '../../assets/images/images';
 import {stylesPost} from './stylePost';
 
-const All = () => {
+const Post = () => {
   const [data, setData] = useState({
     tableHead: [
       'ID',
@@ -95,4 +95,4 @@ const All = () => {
   );
 };
 
-export default All;
+export default Post;

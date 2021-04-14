@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import Contact from '../screens/contact';
+import Feed from '../screens/feed';
 import Cart from '../screens/cart';
 import Notication from '../screens/notification';
 import {HomeStack} from './stack-navigation';
@@ -24,7 +24,7 @@ const BottomTabNavigator = () => {
               name: 'user',
               type: 'AntDesign',
             },
-            Contact: {
+            Feed: {
               name: 'contacts',
               type: 'AntDesign',
             },
@@ -49,7 +49,7 @@ const BottomTabNavigator = () => {
         },
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Contact" component={Contact} />
+      <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="Cart" component={Cart} />
       <Tab.Screen name="Notication" component={Notication} />

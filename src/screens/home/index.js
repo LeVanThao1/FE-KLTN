@@ -13,6 +13,7 @@ import {MobXProviderContext} from 'mobx-react';
 import Novel from './novel';
 import Science from './science';
 import Literary from './literary';
+import History from './history';
 
 const Home = ({navigation}) => {
   return useObserver(() => {

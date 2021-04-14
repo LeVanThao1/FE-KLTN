@@ -1,5 +1,5 @@
 import {Button, Icon, Text, View} from 'native-base';
-import React, {useState, memo} from 'react';
+import React, {memo, useState} from 'react';
 import {Image} from 'react-native';
 import {
   TextInput,
@@ -13,16 +13,17 @@ import {
 import Images from '../../assets/images/images';
 import {stylesPost} from './stylePost';
 
-const Feed = () => {
+const NewPost = () => {
+  const element = (data, index) => (
+    <TouchableOpacity onPress={() => this._alertIndex(index)}>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>button</Text>
+      </View>
+    </TouchableOpacity>
+  );
   return (
-    <ScrollView>
-      <View style={{flex: 1}}>
-        {/* <View style={stylesPost.post}>
-        <View style={stylesPost.info}>
-          <Image source={Images.onepiece1} style={stylesPost.avt} />
-          <Text style={stylesPost.name}>Monkey D Luffy dd</Text>
-        </View>
-      </View> */}
+    <ScrollView horizontal={false}>
+      <View>
         <View style={stylesPost.person}>
           <View style={stylesPost.info}>
             <Image source={Images.onepiece1} style={stylesPost.avt} />
@@ -32,6 +33,7 @@ const Feed = () => {
         </View>
         <Image source={Images.onepiece1} style={stylesPost.post} />
         <Text>Vài giây trước</Text>
+
         <View style={stylesPost.content}>
           <View style={stylesPost.action}>
             <View style={stylesPost.heart_cmt}>
@@ -74,4 +76,4 @@ const Feed = () => {
   );
 };
 
-export default memo(Feed);
+export default memo(NewPost);

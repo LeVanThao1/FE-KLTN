@@ -29,6 +29,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_USER, REFRESH_TOKEN} from '../query/user';
 import {Spinner, View} from 'native-base';
+import Post from '../screens/post';
+import newPost from '../screens/post/newPost';
 const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
@@ -72,10 +74,11 @@ const StoreStack = () => {
     // </NavigationContainer>
   );
 };
-const AboutStack = () => {
+const PostStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="Bài viết của bạn" component={Post} />
+      <Stack.Screen name="Thêm bài viết" component={newPost} />
     </Stack.Navigator>
   );
 };
@@ -170,8 +173,8 @@ export {
   HomeStack,
   ContactStack,
   AuthStack,
-  AboutStack,
   PaymentStack,
   StoreStack,
+  PostStack,
   // ProductStack,
 };

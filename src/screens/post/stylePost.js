@@ -1,3 +1,4 @@
+import {StyleSheet} from 'react-native';
 export const stylesPost = StyleSheet.create({
   person: {
     flexDirection: 'row',
