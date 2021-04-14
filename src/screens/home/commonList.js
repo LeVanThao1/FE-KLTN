@@ -28,50 +28,13 @@ const CommonList = () => {
         setListItem(
           books?.map((ct, i) => ({
             id: ct.id,
-            name: ct.book.name,
+            name: ct.book ? ct.book.name : ct.name,
             price: ct.price,
-            image: ct.book.images[0],
+            image: ct.book ? ct.book.images[0] : ct.images[0],
             selled: ct.amount,
           })),
         );
     }, [books]);
-    const listItem1 = [
-      {
-        id: 1,
-        name: 'How to become richer',
-        price: 108000,
-        image: Images.rich,
-        selled: 11,
-      },
-      {
-        id: 2,
-        name: 'How to become pooer',
-        price: 108000,
-        image: Images.poor,
-        selled: 11,
-      },
-      {
-        id: 3,
-        name: 'OnePiece vs Teech',
-        price: 108000,
-        image: Images.onepiece1,
-        selled: 11,
-      },
-      {
-        id: 4,
-        name: 'OnePiece vs Kaido',
-        price: 108000,
-        image: Images.onepiece2,
-        selled: 11,
-      },
-      {
-        id: 5,
-        name: 'OnePiece vs BigMom',
-        price: 108000,
-        image: Images.onepiece1,
-        selled: 11,
-      },
-    ];
 
     const productHandler = () => {
       console.log('buy book');
