@@ -10,6 +10,7 @@ import {
   Payment,
   PaymentStack,
   StoreStack,
+  PostStack,
 } from './stack-navigation';
 import TabNavigator from './tab-navigation';
 import Loading from '../screens/loading';
@@ -27,20 +28,9 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Contact" component={ContactStack} />
       <Drawer.Screen name="Payment" component={PaymentStack} />
       <Drawer.Screen name="Store" component={StoreStack} />
-      <Drawer.Screen name="About" component={AboutStack} />
+      <Drawer.Screen name="Posts" component={PostStack} />
     </Drawer.Navigator>
   );
 };
 
 export default DrawerNavigator;
-
-// const Switch = createSwitchNavigator();
-
-// export const createRootNavigator = (signedIn = false) => {
-//   return (
-//     <Switch.Navigator initialRouteName={signedIn ? 'Home' : 'Auth'}>
-//       <Switch.Screen name="Auth" component={AuthStack} />
-//       <Switch.Screen name="Home" component={DrawerNavigator} />
-//     </Switch.Navigator>
-//   );
-// };

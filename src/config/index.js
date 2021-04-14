@@ -7,7 +7,7 @@ import {
 } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const url = 'http://192.168.1.10:3000';
+const url = 'http://192.168.0.103:3000';
 
 const httpLink = new HttpLink({uri: `${url}/graphql`});
 
