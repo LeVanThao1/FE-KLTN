@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {StyleSheet} from 'react-native';
 import Home from '../screens/home';
 import About from '../screens/about';
 import DetailProduct from '../screens/detail-product';
@@ -22,6 +23,12 @@ import CreateProduct from '../screens/myStore/manageStore';
 import Address from '../screens/payment/address';
 import BottomTabNavigator from './tab-navigation';
 import VerifyCode from '../screens/verifyCode';
+import {useObserver} from 'mobx-react-lite';
+import {MobXProviderContext} from 'mobx-react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLazyQuery, useQuery} from '@apollo/client';
+import {GET_USER, REFRESH_TOKEN} from '../query/user';
+import {Spinner, View} from 'native-base';
 const HomeStack = ({navigation}) => {
   return (
     <Stack.Navigator>
@@ -82,19 +89,82 @@ const ContactStack = () => {
 };
 
 const AuthStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="Login" component={Login} />
-      {/* <Stack.Screen name="Home" component={Home} /> */}
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="SignUp" component={Register} />
-      <Stack.Screen name="Verify" component={VerifyCode} />
-    </Stack.Navigator>
-  );
+  return useObserver(() => {
+    const {
+      stores: {auth, user},
+    } = useContext(MobXProviderContext);
+    const [loading, setLoading] = useState(true);
+    const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
+      onCompleted: async (data) => {
+        user.setInfo(data.refreshToken.user);
+        user.setCart(data.refreshToken.cart);
+        auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
+        setLoading(false);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+    const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
+      onCompleted: async (data) => {
+        user.setInfo(data.profile);
+        user.setCart(data.profile.cart);
+        auth.setIsAuth(true);
+        setLoading(false);
+      },
+      onError: (err) => {
+        refreshToken();
+      },
+    });
+
+    useEffect(() => {
+      AsyncStorage.getItem('token').then((data) => {
+        AsyncStorage.getItem('refreshToken').then((dt) => {
+          if (data && dt) {
+            // auth.setLogin(data,dt)
+            auth.setToken(data);
+            auth.setRefreshToken(dt);
+          } else {
+            setLoading(false);
+          }
+        });
+      });
+    }, []);
+    useEffect(() => {
+      if (auth) {
+        getProfile();
+      }
+    }, [auth]);
+    return (
+      <>
+        {!loading ? (
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="Login" component={Login} />
+            {/* <Stack.Screen name="Home" component={Home} /> */}
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="SignUp" component={Register} />
+            <Stack.Screen name="Verify" component={VerifyCode} />
+          </Stack.Navigator>
+        ) : (
+          <View style={styles.container}>
+            <Spinner color="blue" />
+          </View>
+        )}
+      </>
+    );
+  });
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export {
   HomeStack,

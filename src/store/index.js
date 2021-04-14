@@ -4,7 +4,7 @@ import {User} from './user';
 
 export const stores = {
   auth: new Auth(false, '', ''),
-  user: new User(undefined),
+  user: new User(undefined, undefined),
   book: new Book(undefined),
 };
 

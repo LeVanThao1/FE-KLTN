@@ -40,6 +40,7 @@ const Login = ({navigation}) => {
       onCompleted: async (data) => {
         const {token, refreshToken} = data?.login;
         user.setInfo(data?.login.user);
+        user.setCart(data.login.user.cart)
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', token);
         auth.setLogin(token, refreshToken);
@@ -98,7 +99,6 @@ const Login = ({navigation}) => {
       };
       if (typeLogin) variables.phone = deFormatPhone(userID.value.trim());
       else variables.email = userID.value.trim().toLowerCase();
-      console.log(variables);
       login({
         variables: {
           ...variables,
@@ -135,14 +135,7 @@ const Login = ({navigation}) => {
         </View>
 
         <Text style={styles.err}>{userID.error}</Text>
-        <View
-          style={{
-            width: '100%',
-            position: 'relative',
-            marginTop: 12,
-            marginBottom: 5,
-            justifyContent: 'center',
-          }}>
+        <View style={styles.containerText}>
           <TextInput
             style={{
               ...styles.textInput,
@@ -158,13 +151,7 @@ const Login = ({navigation}) => {
           />
           <Icon
             name={displayPassword ? 'eye-off-outline' : 'eye-outline'}
-            style={{
-              position: 'absolute',
-              right: 12,
-              zIndex: 1,
-              fontSize: 24,
-              color: '#696969',
-            }}
+            style={styles.icon}
             type="Ionicons"
             onPress={() => setDisplayPassword(!displayPassword)}
           />
@@ -209,17 +196,30 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     letterSpacing: 0.75,
   },
+  containerText: {
+    width: '100%',
+    position: 'relative',
+    marginTop: 12,
+    marginBottom: 5,
+    justifyContent: 'center',
+  },
   textInput: {
     fontSize: 14,
     backgroundColor: '#f0f0f0',
     width: '100%',
     padding: 10,
     paddingHorizontal: 16,
-
     borderRadius: 5,
     borderWidth: 0.2,
     borderColor: '#696969',
     letterSpacing: 0.75,
+  },
+  icon: {
+    position: 'absolute',
+    right: 12,
+    zIndex: 1,
+    fontSize: 24,
+    color: '#696969',
   },
   button: {
     backgroundColor: 'rgba(68, 108, 179, 1)',
