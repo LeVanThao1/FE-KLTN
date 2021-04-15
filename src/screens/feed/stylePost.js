@@ -27,7 +27,7 @@ export const stylesPost = StyleSheet.create({
   },
   post: {
     width: '100%',
-    height: '60%',
+    // height: '60%',
   },
 
   content: {

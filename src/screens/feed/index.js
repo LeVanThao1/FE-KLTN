@@ -1,5 +1,5 @@
 import {Button, Icon, Text, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {Image} from 'react-native';
 import {
   TextInput,
@@ -13,36 +13,16 @@ import {
 import Images from '../../assets/images/images';
 import {stylesPost} from './stylePost';
 
-const Post = () => {
-  const [data, setData] = useState({
-    tableHead: [
-      'ID',
-      'Tên sách',
-      'Danh mục',
-      'Giá(VND)',
-      'Nhà xuất bản',
-      'Năm xuất bản',
-      'Số lần tái bản',
-      'Hành động',
-    ],
-    tableData: [
-      [1, 'One piece Hawai', 'Truyện tranh', 4000, '5', 2010, 5, '2'],
-      [2, 'One piece', 'Sách dạy học', 4000, '5', 2010, 5, '2'],
-      [3, 'One piece Hawai 2', 'Sách hướng dẫn', 4000, '5', 2010, 5, '2'],
-      [4, 'One piece Hawai 1', 'Sách', 4000, '5', 2010, 5, '2'],
-    ],
-  });
-
-  const element = (data, index) => (
-    <TouchableOpacity onPress={() => this._alertIndex(index)}>
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>button</Text>
-      </View>
-    </TouchableOpacity>
-  );
+const Feed = () => {
   return (
-    <ScrollView horizontal={false}>
-      <View>
+    <ScrollView>
+      <View style={{flex: 1}}>
+        {/* <View style={stylesPost.post}>
+        <View style={stylesPost.info}>
+          <Image source={Images.onepiece1} style={stylesPost.avt} />
+          <Text style={stylesPost.name}>Monkey D Luffy dd</Text>
+        </View>
+      </View> */}
         <View style={stylesPost.person}>
           <View style={stylesPost.info}>
             <Image source={Images.onepiece1} style={stylesPost.avt} />
@@ -52,7 +32,6 @@ const Post = () => {
         </View>
         <Image source={Images.onepiece1} style={stylesPost.post} />
         <Text>Vài giây trước</Text>
-
         <View style={stylesPost.content}>
           <View style={stylesPost.action}>
             <View style={stylesPost.heart_cmt}>
@@ -95,4 +74,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default memo(Feed);

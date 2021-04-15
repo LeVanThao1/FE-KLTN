@@ -14,7 +14,7 @@ import {MobXProviderContext} from 'mobx-react';
 import {useLazyQuery} from '@apollo/client';
 import {GET_BOOKS_CATEGORIES} from '../../query/category';
 
-const MangaList = () => {
+const History = () => {
   const navigation = useNavigation();
   const [category, setCategory] = useState(null);
   const [listItem, setListItem] = useState(null);
@@ -42,7 +42,7 @@ const MangaList = () => {
   useEffect(() => {
     booksByCategory({
       variables: {
-        id: '6058c9586ab4ad3740deedc9',
+        id: '60581fd0b9f43e3e70f27880',
       },
     });
   }, []);
@@ -74,11 +74,10 @@ const MangaList = () => {
       </View>
     </TouchableOpacity>
   );
-
   return (
     <View style={styles.category__container}>
       <View style={styles.category_header}>
-        <Text style={styles.header_text}>Truyện tranh</Text>
+        <Text style={styles.header_text}>Xã hội - Lịch sử</Text>
       </View>
       <View style={styles.category__row}>
         <FlatList
@@ -147,4 +146,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-export default memo(MangaList);
+export default memo(History);
