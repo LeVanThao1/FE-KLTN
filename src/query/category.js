@@ -47,3 +47,27 @@ export const GET_BOOKS_CATEGORIES = gql`
     }
   }
 `;
+
+export const CREATE_CATEGORY = gql`
+  query createCategory($name: String!) {
+    createCategory(name: $name) {
+      message
+    }
+  }
+`;
+
+export const UPDATE_CATEGORY = gql`
+  query createCategory($id: ID!, $name: String) {
+    createCategory(id: $id, name: $name) {
+      message
+    }
+  }
+`;
+
+export const DELETE_CATEGORY = gql`
+  query deleteCategory($id: ID!) {
+    deleteCategory {
+      message
+    }
+  }
+`;

@@ -1,19 +1,45 @@
+import {useLazyQuery} from '@apollo/client';
 import {Button, Icon, Text, View} from 'native-base';
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-// import {styles, stylesTable} from './styles';
+import {TextInput, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 
 import Images from '../../assets/images/images';
+import {GET_POSTS} from '../../query/post';
 import {stylesPost} from './stylePost';
 
 const Feed = () => {
+  const [post, setPost] = useState(null);
+  const [listPost, setListPost] = useState(null);
+  const [posts, {called, loading, data, error}] = useLazyQuery(GET_POSTS, {
+    onCompleted: async (data) => {
+      setPost(data?.posts);
+      setListPost(
+        data.posts.map((ct, i) => ({
+          id: ct.id,
+          image: ct.images[0],
+          title: ct.title,
+          description: ct.description,
+          name: ct.name ? ct.name : ct.author.name,
+          avatar: ct.author.avatar,
+        })),
+      );
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
+  useEffect(() => {
+    posts({
+      variables: {
+        id: null,
+      },
+    });
+  }, []);
+
+  console.log('post.......', listPost);
+
   return (
     <ScrollView>
       <View style={{flex: 1}}>
@@ -26,11 +52,13 @@ const Feed = () => {
         <View style={stylesPost.person}>
           <View style={stylesPost.info}>
             <Image source={Images.onepiece1} style={stylesPost.avt} />
-            <Text style={stylesPost.name}>Monkey D Luffy</Text>
+            <Text style={stylesPost.name}>{listPost.name}</Text>
           </View>
           <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
         </View>
-        <Image source={Images.onepiece1} style={stylesPost.post} />
+        {/* <Image source={{uri: listPost.image}} style={stylesPost.post} /> */}
+        <Image source={Images.onepiece2} style={stylesPost.post} />
+
         <Text>Vài giây trước</Text>
         <View style={stylesPost.content}>
           <View style={stylesPost.action}>
@@ -51,9 +79,9 @@ const Feed = () => {
             />
           </View>
           <View style={stylesPost.text}>
-            <Text style={{fontWeight: 'bold'}}>MonkeLuffy</Text>
+            <Text style={{fontWeight: 'bold'}}>{listPost.name}</Text>
             <Text style={stylesPost.textContent}>
-              chào em anh đưunsg đây từ chiều chào em anh đưunsg đây từ chiều
+              {listPost.description + 'ádasd'}
             </Text>
           </View>
           <View style={stylesPost.addCmt}>
