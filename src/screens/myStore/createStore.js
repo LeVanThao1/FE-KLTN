@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, memo} from 'react';
 import {
   Image,
   ImageBackground,
@@ -234,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateStore;
+export default memo(CreateStore);

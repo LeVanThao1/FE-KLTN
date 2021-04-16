@@ -1,58 +1,65 @@
+import {useLazyQuery} from '@apollo/client';
 import {Button, Icon, Text, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-// import {styles, stylesTable} from './styles';
+import {TextInput, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 
 import Images from '../../assets/images/images';
+import {GET_POSTS} from '../../query/post';
 import {stylesPost} from './stylePost';
 
-const Post = () => {
-  const [data, setData] = useState({
-    tableHead: [
-      'ID',
-      'Tên sách',
-      'Danh mục',
-      'Giá(VND)',
-      'Nhà xuất bản',
-      'Năm xuất bản',
-      'Số lần tái bản',
-      'Hành động',
-    ],
-    tableData: [
-      [1, 'One piece Hawai', 'Truyện tranh', 4000, '5', 2010, 5, '2'],
-      [2, 'One piece', 'Sách dạy học', 4000, '5', 2010, 5, '2'],
-      [3, 'One piece Hawai 2', 'Sách hướng dẫn', 4000, '5', 2010, 5, '2'],
-      [4, 'One piece Hawai 1', 'Sách', 4000, '5', 2010, 5, '2'],
-    ],
+const Feed = () => {
+  const [post, setPost] = useState(null);
+  const [listPost, setListPost] = useState(null);
+  const [posts, {called, loading, data, error}] = useLazyQuery(GET_POSTS, {
+    onCompleted: async (data) => {
+      setPost(data?.posts);
+      setListPost(
+        data.posts.map((ct, i) => ({
+          id: ct.id,
+          image: ct.images[0],
+          title: ct.title,
+          description: ct.description,
+          name: ct.name ? ct.name : ct.author.name,
+          avatar: ct.author.avatar,
+        })),
+      );
+    },
+    onError: (err) => {
+      console.log(err);
+    },
   });
 
-  const element = (data, index) => (
-    <TouchableOpacity onPress={() => this._alertIndex(index)}>
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>button</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  useEffect(() => {
+    posts({
+      variables: {
+        id: null,
+      },
+    });
+  }, []);
+
+  console.log('post.......', listPost);
+
   return (
-    <ScrollView horizontal={false}>
-      <View>
+    <ScrollView>
+      <View style={{flex: 1}}>
+        {/* <View style={stylesPost.post}>
+        <View style={stylesPost.info}>
+          <Image source={Images.onepiece1} style={stylesPost.avt} />
+          <Text style={stylesPost.name}>Monkey D Luffy dd</Text>
+        </View>
+      </View> */}
         <View style={stylesPost.person}>
           <View style={stylesPost.info}>
             <Image source={Images.onepiece1} style={stylesPost.avt} />
-            <Text style={stylesPost.name}>Monkey D Luffy</Text>
+            <Text style={stylesPost.name}>{listPost.name}</Text>
           </View>
           <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
         </View>
-        <Image source={Images.onepiece1} style={stylesPost.post} />
-        <Text>Vài giây trước</Text>
+        {/* <Image source={{uri: listPost.image}} style={stylesPost.post} /> */}
+        <Image source={Images.onepiece2} style={stylesPost.post} />
 
+        <Text>Vài giây trước</Text>
         <View style={stylesPost.content}>
           <View style={stylesPost.action}>
             <View style={stylesPost.heart_cmt}>
@@ -72,9 +79,9 @@ const Post = () => {
             />
           </View>
           <View style={stylesPost.text}>
-            <Text style={{fontWeight: 'bold'}}>MonkeLuffy</Text>
+            <Text style={{fontWeight: 'bold'}}>{listPost.name}</Text>
             <Text style={stylesPost.textContent}>
-              chào em anh đưunsg đây từ chiều chào em anh đưunsg đây từ chiều
+              {listPost.description + 'ádasd'}
             </Text>
           </View>
           <View style={stylesPost.addCmt}>
@@ -95,4 +102,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default memo(Feed);

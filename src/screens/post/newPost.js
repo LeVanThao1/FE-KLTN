@@ -1,5 +1,5 @@
 import {Button, Icon, Text, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {Image} from 'react-native';
 import {
   TextInput,
@@ -13,26 +13,7 @@ import {
 import Images from '../../assets/images/images';
 import {stylesPost} from './stylePost';
 
-const Post = () => {
-  const [data, setData] = useState({
-    tableHead: [
-      'ID',
-      'Tên sách',
-      'Danh mục',
-      'Giá(VND)',
-      'Nhà xuất bản',
-      'Năm xuất bản',
-      'Số lần tái bản',
-      'Hành động',
-    ],
-    tableData: [
-      [1, 'One piece Hawai', 'Truyện tranh', 4000, '5', 2010, 5, '2'],
-      [2, 'One piece', 'Sách dạy học', 4000, '5', 2010, 5, '2'],
-      [3, 'One piece Hawai 2', 'Sách hướng dẫn', 4000, '5', 2010, 5, '2'],
-      [4, 'One piece Hawai 1', 'Sách', 4000, '5', 2010, 5, '2'],
-    ],
-  });
-
+const NewPost = () => {
   const element = (data, index) => (
     <TouchableOpacity onPress={() => this._alertIndex(index)}>
       <View style={styles.btn}>
@@ -95,4 +76,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default memo(NewPost);

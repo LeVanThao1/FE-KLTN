@@ -1,48 +1,12 @@
-import React, {memo} from 'react';
+import React, {memo, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../../assets/images/images';
 
 const MangaList = () => {
   const navigation = useNavigation();
-
-  const listItem1 = [
-    {
-      id: 1,
-      name: 'How to become richer',
-      price: 108000,
-      image: Images.rich,
-      selled: 11,
-    },
-    {
-      id: 2,
-      name: 'How to become pooer',
-      price: 108000,
-      image: Images.poor,
-      selled: 11,
-    },
-    {
-      id: 3,
-      name: 'OnePiece vs Teech',
-      price: 108000,
-      image: Images.onepiece1,
-      selled: 11,
-    },
-    {
-      id: 4,
-      name: 'OnePiece vs Kaido',
-      price: 108000,
-      image: Images.onepiece2,
-      selled: 11,
-    },
-    {
-      id: 5,
-      name: 'OnePiece vs BigMom',
-      price: 108000,
-      image: Images.onepiece1,
-      selled: 11,
-    },
-  ];
+  const [listItem, setListItem] = useState(null);
+  const [novel, setNovel] = useState([]);
 
   const productHandler = () => {
     console.log('buy book');
@@ -83,7 +47,7 @@ const MangaList = () => {
         <FlatList
           // onPress={() => productHandler()}
           //   style={styles.flat_list}
-          data={listItem1}
+          data={listItem}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           horizontal={true}
