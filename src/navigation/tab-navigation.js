@@ -6,6 +6,8 @@ import Cart from '../screens/cart';
 import Notication from '../screens/notification';
 import {HomeStack} from './stack-navigation';
 import Profile from '../screens/profile';
+import AccountManager from '../screens/account-manager';
+
 import {Icon} from 'native-base';
 
 const Tab = createBottomTabNavigator();
@@ -50,7 +52,7 @@ const BottomTabNavigator = () => {
       })}>
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={AccountManager} />
       <Tab.Screen name="Cart" component={Cart} />
       <Tab.Screen name="Notication" component={Notication} />
     </Tab.Navigator>
