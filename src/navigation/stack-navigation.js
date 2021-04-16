@@ -105,7 +105,7 @@ const AuthStack = () => {
         setLoading(false);
       },
       onError: (err) => {
-        console.log(err);
+        setLoading(false);
       },
     });
     const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {

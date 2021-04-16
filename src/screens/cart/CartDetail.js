@@ -48,7 +48,6 @@ export default function CartDetail({data}) {
     useEffect(() => {
       setAmount(data.amount)
     }, [data])
-    console.log("cart", cart)
     const changeAmount = (type) => {
       const dataCart = cart.map((ct) => {
         let tamp = {
