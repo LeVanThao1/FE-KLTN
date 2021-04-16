@@ -41,7 +41,7 @@ export default function Register({navigation}) {
       email: userId.value.trim().toLowerCase(),
       name: name.value,
       password: password.value.trim(),
-      phone: typeRegister ? deFormatPhone(userId.value) : userId.value,
+      phone: typeRegister ? deFormatPhone(userId.value) : ""
     };
     register({
       variables: {
@@ -188,7 +188,7 @@ export default function Register({navigation}) {
       <TextInput
         style={{
           ...styles.textInput,
-          borderColor: !!password.error ? 'red' : '#696969',
+          borderColor: !!name.error ? 'red' : '#696969',
         }}
         placeholder="Name"
         value={name.value}

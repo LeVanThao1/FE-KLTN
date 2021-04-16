@@ -81,12 +81,12 @@ export const GET_USER = gql`
 `;
 
 export const UPDATE_CART = gql`
-  mutation updateCart($dataCart:[DetailUpdate!]!) {
+  mutation updateCart($dataCart: [DetailUpdate!]!) {
     updateCart(dataCart: $dataCart) {
       message
     }
   }
-`
+`;
 export const REFRESH_TOKEN = gql`
   query refreshToken {
     user {
@@ -104,6 +104,7 @@ export const REFRESH_TOKEN = gql`
           price
           images
           book {
+            id
             name
             images
           }
@@ -116,4 +117,4 @@ export const REFRESH_TOKEN = gql`
     token
     refreshToken
   }
-`
+`;
