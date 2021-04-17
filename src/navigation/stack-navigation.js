@@ -10,7 +10,6 @@ import Login from '../screens/login';
 import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
 import Store from '../screens/myStore/index';
-const Stack = createStackNavigator();
 import HeaderStack from '../header';
 import CreateStore from '../screens/myStore/createStore';
 import ManageStore from '../screens/myStore/manageStore';
@@ -30,10 +29,16 @@ import {useLazyQuery, useQuery} from '@apollo/client';
 import {GET_USER, REFRESH_TOKEN} from '../query/user';
 import {Spinner, View} from 'native-base';
 import Post from '../screens/post';
-import newPost from '../screens/post/newPost';
-const HomeStack = ({navigation}) => {
+import NewPost from '../screens/post/newPost';
+import AccountManager from '../screens/account-manager';
+import Profile from '../screens/profile'
+import Cart from '../screens/cart'
+import Feed from '../screens/feed'
+const Stack = createStackNavigator();
+
+const HomeStack = ({navigation, initialRoute}) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={initialRoute || "Home"}>
       <Stack.Screen
         name="Home"
         component={Home}
@@ -47,49 +52,74 @@ const HomeStack = ({navigation}) => {
       />
       {/* <Stack.Screen name="Login" component={Login} /> */}
       <Stack.Screen name="Detail-Product" component={DetailProduct} />
-      <Stack.Screen name="tab" component={BottomTabNavigator} />
-    </Stack.Navigator>
-  );
-};
-
-const PaymentStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Thanh toán">
-      <Stack.Screen name="Thanh toán" component={Payment} />
-      <Stack.Screen name="Địa chỉ" component={Address} />
-    </Stack.Navigator>
-  );
-};
-const StoreStack = () => {
-  return (
-    // <NavigationContainer>
-    <Stack.Navigator initialRouteName="Store">
+      {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
       <Stack.Screen name="Store" component={CreateStore} />
       <Stack.Screen name="CreateProduct" component={CreateProduct} />
+      <Stack.Screen name="CreateStore" component={CreateStore} />
       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
       <Stack.Screen name="ManageOrder" component={ViewAllOrder} />
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Revenue" component={Revenue} />
-    </Stack.Navigator>
-    // </NavigationContainer>
-  );
-};
-const PostStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Bài viết của bạn" component={Post} />
-      <Stack.Screen name="Thêm bài viết" component={newPost} />
+      <Stack.Screen name="Payment" component={Payment} />
+      <Stack.Screen name="Andress" component={Address} />
+      <Stack.Screen name="PostUser" component={Post}/>
+      <Stack.Screen name="AddPost" component={NewPost} />
+      <Stack.Screen name="Personal" component={AccountManager} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Contact" component={Contact} />
+      <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="Feed" component={Feed} />
     </Stack.Navigator>
   );
 };
 
-const ContactStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Contact" component={Contact} />
-    </Stack.Navigator>
-  );
-};
+// const PaymentStack = () => {
+//   return (
+//     <Stack.Navigator initialRouteName="Thanh toán">
+//       <Stack.Screen name="Thanh toán" component={Payment} />
+//       <Stack.Screen name="Địa chỉ" component={Address} />
+//     </Stack.Navigator>
+//   );
+// };
+// const StoreStack = () => {
+//   return (
+//     // <NavigationContainer>
+//     <Stack.Navigator initialRouteName="Store">
+//       <Stack.Screen name="Store" component={CreateStore} />
+//       <Stack.Screen name="CreateProduct" component={CreateProduct} />
+//       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
+//       <Stack.Screen name="ManageOrder" component={ViewAllOrder} />
+//       <Stack.Screen name="Statistics" component={Statistics} />
+//       <Stack.Screen name="Revenue" component={Revenue} />
+//     </Stack.Navigator>
+//     // </NavigationContainer>
+//   );
+// };
+// const PostStack = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="" component={Post}  tilte={"tasadsa"} />
+//       <Stack.Screen name="Thêm bài viết" component={newPost} />
+//     </Stack.Navigator>
+//   );
+// };
+
+// const StackPersonal = () => {
+//   return (
+//     <Stack.Navigator initialRouteName="Personal">
+//       <Stack.Screen name="Personal" component={Profile} />
+//       {/* <Stack.Screen name="Thêm bài viết" component={newPost} /> */}
+//     </Stack.Navigator>
+//   );
+// };
+
+// const ContactStack = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Contact" component={Contact} />
+//     </Stack.Navigator>
+//   );
+// };
 
 const AuthStack = () => {
   return useObserver(() => {
@@ -102,14 +132,17 @@ const AuthStack = () => {
         user.setInfo(data.refreshToken.user);
         user.setCart(data.refreshToken.cart);
         auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
+        await AsyncStorage.setItem('token', data.refreshToken.token);
+        await AsyncStorage.setItem('refreshToken', data.refreshToken.refreshToken);
         setLoading(false);
       },
       onError: (err) => {
-        console.log(err);
+        setLoading(false);
       },
     });
     const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
       onCompleted: async (data) => {
+        console.log(1)
         user.setInfo(data.profile);
         user.setCart(data.profile.cart);
         auth.setIsAuth(true);
@@ -117,6 +150,11 @@ const AuthStack = () => {
       },
       onError: (err) => {
         refreshToken();
+        // AsyncStorage.clear().then(() => {
+        //   auth.setLogout();
+        //   setLoading(false);
+        // });
+        
       },
     });
 
@@ -171,10 +209,10 @@ const styles = StyleSheet.create({
 
 export {
   HomeStack,
-  ContactStack,
+  // ContactStack,
   AuthStack,
-  PaymentStack,
-  StoreStack,
-  PostStack,
+  // PaymentStack,
+  // StoreStack,
+  // PostStack,
   // ProductStack,
 };

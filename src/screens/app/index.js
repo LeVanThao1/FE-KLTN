@@ -5,7 +5,7 @@ import {View} from 'native-base';
 import React, {useContext} from 'react';
 import 'react-native-gesture-handler';
 import {Client} from '../../config';
-import {AuthStack} from '../../navigation';
+import {AuthStack, HomeStack} from '../../navigation';
 import DrawerNavigator from '../../navigation/drawer-navigation';
 import BottomTabNavigator from '../../navigation/tab-navigation';
 import {stores} from '../../store';
@@ -18,7 +18,8 @@ const App = () => {
     const {isAuth} = auth;
     return (
       <NavigationContainer>
-        {!isAuth ? <AuthStack /> : <DrawerNavigator />}
+        {/* <DrawerNavigator /> */}
+        {!isAuth ? <AuthStack /> : <BottomTabNavigator />}
       </NavigationContainer>
     );
   });

@@ -1,12 +1,12 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import Feed from '../screens/feed';
-import Cart from '../screens/cart';
-import Notication from '../screens/notification';
+// import Feed from '../screens/feed';
+// import Cart from '../screens/cart';
+// import Notication from '../screens/notification';
 import {HomeStack} from './stack-navigation';
-import Profile from '../screens/profile';
-import AccountManager from '../screens/account-manager';
+// import Profile from '../screens/profile';
+// import AccountManager from '../screens/account-manager';
 
 import {Icon} from 'native-base';
 
@@ -22,7 +22,7 @@ const BottomTabNavigator = () => {
               name: 'home',
               type: 'AntDesign',
             },
-            Profile: {
+            Personal: {
               name: 'user',
               type: 'AntDesign',
             },
@@ -50,11 +50,11 @@ const BottomTabNavigator = () => {
           );
         },
       })}>
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="Profile" component={AccountManager} />
-      <Tab.Screen name="Cart" component={Cart} />
-      <Tab.Screen name="Notication" component={Notication} />
+      <Tab.Screen name="Home" component={() => <HomeStack initialRoute="Home"/>} />
+      <Tab.Screen name="Feed" component={() => <HomeStack initialRoute="Feed"/>} />
+      <Tab.Screen name="Personal" component={() => <HomeStack initialRoute="Personal"/>} />
+      <Tab.Screen name="Cart" component={() => <HomeStack initialRoute="Cart"/>}  />
+      <Tab.Screen name="Notication" component={() => <HomeStack initialRoute="Home"/>}  />
     </Tab.Navigator>
   );
 };

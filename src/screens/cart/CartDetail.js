@@ -48,7 +48,6 @@ export default function CartDetail({data}) {
     useEffect(() => {
       setAmount(data.amount)
     }, [data])
-    console.log("cart", cart)
     const changeAmount = (type) => {
       const dataCart = cart.map((ct) => {
         let tamp = {
@@ -76,7 +75,7 @@ export default function CartDetail({data}) {
             }
             return tamp;
           })
-          setCart(datat)
+          setCart([...datat])
         }
       }
       else {
@@ -95,7 +94,7 @@ export default function CartDetail({data}) {
             }
             return tamp;
           })
-          setCart(datat)
+          setCart([...datat])
         }
         else {
           typeRef.current = false
@@ -113,7 +112,7 @@ export default function CartDetail({data}) {
             }
           })
           const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
-          setCart(datat)
+          setCart([...datat])
         } 
       }
     };

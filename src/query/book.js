@@ -95,19 +95,11 @@ export const GET_BOOK = gql`
             year
             numberOfReprint
             publisher
+            description
             category {
               id
               name
             }
-          }
-          name
-          images
-          year
-          numberOfReprint
-          publisher
-          category {
-            id
-            name
           }
           amount
           price
@@ -115,6 +107,16 @@ export const GET_BOOK = gql`
           createdAt
         }
       }
+      name
+      images
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      description
       amount
       price
       sold
