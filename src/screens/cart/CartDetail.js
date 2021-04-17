@@ -75,7 +75,7 @@ export default function CartDetail({data}) {
             }
             return tamp;
           })
-          setCart(datat)
+          setCart([...datat])
         }
       }
       else {
@@ -94,7 +94,7 @@ export default function CartDetail({data}) {
             }
             return tamp;
           })
-          setCart(datat)
+          setCart([...datat])
         }
         else {
           typeRef.current = false
@@ -112,7 +112,7 @@ export default function CartDetail({data}) {
             }
           })
           const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
-          setCart(datat)
+          setCart([...datat])
         } 
       }
     };

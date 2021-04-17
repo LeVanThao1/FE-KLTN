@@ -42,7 +42,7 @@ const Login = ({navigation}) => {
         user.setInfo(data?.login.user);
         user.setCart(data.login.user.cart)
         await AsyncStorage.setItem('token', token);
-        await AsyncStorage.setItem('refreshToken', token);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);
       },
       onError: (err) => {
