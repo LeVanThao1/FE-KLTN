@@ -33,14 +33,17 @@ const Login = ({navigation}) => {
 
   return useObserver(() => {
     const {
-      stores: {auth, user},
+      stores: {auth, user, shop},
     } = useContext(MobXProviderContext);
 
     const [login, {called, loading, data, error}] = useLazyQuery(LOGIN, {
       onCompleted: async (data) => {
         const {token, refreshToken} = data?.login;
-        user.setInfo(data?.login.user);
+        shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
+        delete data.login.user.store;
+        delete data.login.user.cart;
+        user.setInfo(data?.login.user);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);

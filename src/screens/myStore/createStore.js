@@ -27,17 +27,17 @@ import {introspectionFromSchema} from 'graphql';
 const CreateStore = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user},
+      stores: {shop},
     } = useContext(MobXProviderContext);
-    const {info} = user;
+    const {info} = shop;
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState(null);
     const [text, setText] = useState('');
     const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
       onCompleted: async (data) => {
         setListInfo({
-          id: info.store.id,
-          name: info.store.name,
+          id: info.id,
+          name: info.name,
         });
       },
       onError: (err) => {
@@ -47,7 +47,7 @@ const CreateStore = ({navigation}) => {
     useEffect(() => {
       store({
         variables: {
-          id: info.store.id,
+          id: info.id,
         },
       });
     }, [info]);
