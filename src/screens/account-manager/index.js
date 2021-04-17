@@ -58,7 +58,7 @@ export default function AccountManager({navigation}) {
           <View style={styles.manager_wrapp}>
             <ManagerItem label="Thông tin cá nhân" icon="user" url="Profile" />
             <ManagerItem label="Tạo cửa hàng" icon="book" url="CreateStore" />
-            {/* <ManagerItem
+            <ManagerItem
               label="Quản lý đơn hàng mua"
               icon="gift"
               url="manager-order"
@@ -74,7 +74,7 @@ export default function AccountManager({navigation}) {
               icon="logout"
               isLogout={true}
               url=""
-            /> */}
+            />
           </View>
         </View>
       </ScrollView>

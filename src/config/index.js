@@ -6,7 +6,7 @@ import {
   concat,
 } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import IP from '../../ip'
+import IP from '../../ip';
 
 const url = `${IP}:3000`;
 const httpLink = new HttpLink({uri: `${url}/graphql`});
