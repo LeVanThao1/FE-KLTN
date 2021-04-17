@@ -6,9 +6,9 @@ import {
   concat,
 } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import IP from '../../ip'
 
-const url = 'http://192.168.0.102:3000';
-
+const url = `${IP}:3000`;
 const httpLink = new HttpLink({uri: `${url}/graphql`});
 
 const authMiddleware = new ApolloLink(async (operation, forward) => {

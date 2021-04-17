@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -14,8 +14,16 @@ import {Button, Icon, Text as TextNT} from 'native-base';
 import {TextInput} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {GET_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
+import { MobXProviderContext, useObserver } from 'mobx-react';
+import { UPDATE_CART } from '../../query/user';
+
 const DetailProduct = ({navigation, route}) => {
+  return useObserver(() => {
+    const {
+      stores: {user},
+    } = useContext(MobXProviderContext);
+    const {cart, setCart} = user
   const {productId} = route.params;
   const [book, setBook] = useState(null);
   const [listItem, setListItem] = useState(null);
@@ -44,14 +52,90 @@ const DetailProduct = ({navigation, route}) => {
       },
     });
   }, [productId]);
-
-  console.log(book);
+  const [updateCart, {load}] = useMutation(UPDATE_CART, {
+    onCompleted: async (dt) => {
+      const found = cart.some((ct) => ct.book.id + "" === productId +"")
+      if(found) {
+        setCart([...cart].map(() => {
+          let tamp = {...ct}
+          if(ct.book.id +"" === productId + "") {
+            tamp.amount = ct.amount + quantity
+          }
+          return tamp;
+        }))
+      }
+      else {
+        setCart([...cart].map((ct) => {
+          let tamp = {...ct}
+          if(ct.book.id + "" === productId + "") {
+            tamp.amount = ct.amount
+          }
+          return tamp;
+        }))
+      }
+      // if(typeRef.current) {
+      //   const datat = [...cart].map((ct) => {
+      //     let tamp = {...ct}
+      //     if(ct.book.id === data.book.id) {
+      //       tamp.amount = typeRef.current === "i" ? ct.amount + 1 :  ct.amount - 1
+      //     }
+      //     return tamp;
+      //   })
+      //   setCart(datat)
+      // }
+      // else {
+      //   const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
+      //   setCart(datat)
+      //   setAmount(0)
+      // }
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  })
   const [quantity, setQuantity] = React.useState(0);
   const [comment, onChangeComment] = React.useState('');
   // const images = [Images.onepiece1, Images.onepiece2];
-
+  const addToCart = () => {
+    const found = cart.some((ct) => ct.book.id + "" === productId +"")
+    if(found) {
+      const dataCart = [...cart].map((ct) => {
+        let tamp = {...ct};
+        if( ct.book.id +"" === productId+"") {
+          tamp.amount = ct.amount + quantity
+        }
+        else {
+          tamp.amount = ct.amount
+        }
+        return tamp
+      })
+      updateCart({
+        variables: {
+          dataCart
+        }
+      })
+    }
+    else {
+      const newBook = {
+        book: productId,
+        price: book.price,
+        amount: quantity
+      };
+      const cartData = [...cart].map((ct) => {
+        return ({
+          book: productId,
+          price: ct.price,
+          amount: ct.amount
+        })
+      })
+      updateCart({
+        variables : {
+          dataCart: [...cartData, newBook]
+        }
+      })
+    }
+  }
   const renderProduct = ({item}) => {
-    console.log(item);
     return (
       <TouchableOpacity
         style={styles.list_product}
@@ -80,7 +164,7 @@ const DetailProduct = ({navigation, route}) => {
             <SliderBox
               style={styles.slide__image}
               images={[
-                ...(book.images ? book.images : book.book.images),
+                ...(book.book ? book.book.images : book.images ),
                 Images.onepiece1,
               ]}
               autoplay={true}
@@ -189,7 +273,7 @@ const DetailProduct = ({navigation, route}) => {
                 </View>
               </View>
               <View style={styles.control__buy_action}>
-                <Button style={styles.store__btn} bordered warning>
+                <Button style={styles.store__btn} bordered warning onPress={addToCart}>
                   <TextNT style={styles.buy__action_text}>
                     Thêm vào giỏ hàng
                   </TextNT>
@@ -386,6 +470,7 @@ const DetailProduct = ({navigation, route}) => {
       )}
     </View>
   );
+  })
 };
 
 const styles = StyleSheet.create({

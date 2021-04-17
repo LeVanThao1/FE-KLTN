@@ -17,6 +17,6 @@ export class User {
 
   @action
   setCart = (cart) => {
-    this.cart = cart
+    this.cart = [...cart]
   }
 }
