@@ -18,7 +18,6 @@ const App = () => {
     const {isAuth} = auth;
     return (
       <NavigationContainer>
-        {/* <DrawerNavigator /> */}
         {!isAuth ? <AuthStack /> : <DrawerNavigator />}
       </NavigationContainer>
     );

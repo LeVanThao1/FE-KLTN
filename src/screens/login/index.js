@@ -40,7 +40,7 @@ const Login = ({navigation}) => {
       onCompleted: async (data) => {
         const {token, refreshToken} = data?.login;
         user.setInfo(data?.login.user);
-        user.setCart(data.login.user.cart)
+        user.setCart(data.login.user.cart);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', token);
         auth.setLogin(token, refreshToken);
