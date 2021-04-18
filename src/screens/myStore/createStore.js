@@ -51,7 +51,7 @@ const CreateStore = ({navigation}) => {
         },
       });
     }, [info]);
-    console.log('List info ...', listInfo);
+    // console.log('List info ...', listInfo);
     console.log('Store info ...', info);
 
     return (
@@ -76,7 +76,7 @@ const CreateStore = ({navigation}) => {
                   width: '100%',
                 })
               }
-              value={info.store.name}
+              value={info.name}
             />
           </View>
           <View style={styles.des}>
@@ -90,7 +90,7 @@ const CreateStore = ({navigation}) => {
               placeholder={'Description'}
               placeholderTextColor={'#c7c7c7'}
               underlineColorAndroid={'transparent'}
-              value={info.store.description}
+              value={info.description}
             />
           </View>
           <View style={styles.evalue}>
