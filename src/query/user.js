@@ -140,3 +140,11 @@ export const REFRESH_TOKEN = gql`
     refreshToken
   }
 `;
+
+export const UPDATE_USER_INFO = gql`
+  mutation updateUserInfo($userUpdate: UserUpdate!) {
+    updateUserInfo(userUpdate: $userUpdate) {
+      message
+    }
+  }
+`;
