@@ -16,6 +16,11 @@ export const LOGIN = gql`
         avatar
         email
         address
+        store {
+          id
+          name
+          description
+        }
         cart {
           book {
             id
@@ -61,6 +66,11 @@ export const GET_USER = gql`
       avatar
       email
       address
+      store {
+        id
+        name
+        description
+      }
       cart {
         book {
           id

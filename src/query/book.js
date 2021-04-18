@@ -126,58 +126,16 @@ export const GET_BOOK = gql`
 `;
 
 export const CREATE_BOOK = gql`
-  query createBook(
-    $amount: Float
-    $price: Float
-    $name: String
-    $images: [String!]
-    $year: String
-    $numberOfRePrint: int
-    $publisher: String
-    $category: ID
-    $description: String
-  ) {
-    createBook(
-      amount: $amount
-      price: $price
-      name: $name
-      images: $images
-      year: $year
-      numberOfRePrint: $numberOfRePrint
-      publisher: $publisher
-      category: $cateogy
-      description: $description
-    ) {
+  mutation createBook($dataBook: BookCreate!) {
+    createBook(dataBook: $dataBook) {
       message
     }
   }
 `;
 
 export const UPDATE_BOOK = gql`
-  query updateBook(
-    $id: ID!
-    $amount: Float
-    $price: Float
-    $name: String
-    $images: [String!]
-    $year: String
-    $numberOfRePrint: int
-    $publisher: String
-    $category: ID
-    $description: String
-  ) {
-    updateBook(
-      id: $id
-      amount: $amount
-      price: $price
-      name: $name
-      images: $images
-      year: $year
-      numberOfRePrint: $numberOfRePrint
-      publisher: $publisher
-      category: $cateogy
-      description: $description
-    ) {
+  mutation updateBook($dataBook: BookUpdate!, $id: ID!) {
+    updateBook(dataBook: $dataBook, id: $id) {
       message
     }
   }

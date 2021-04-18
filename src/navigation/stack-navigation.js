@@ -31,14 +31,14 @@ import {Spinner, View} from 'native-base';
 import Post from '../screens/post';
 import NewPost from '../screens/post/newPost';
 import AccountManager from '../screens/account-manager';
-import Profile from '../screens/profile'
-import Cart from '../screens/cart'
-import Feed from '../screens/feed'
+import Profile from '../screens/profile';
+import Cart from '../screens/cart';
+import Feed from '../screens/feed';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
   return (
-    <Stack.Navigator initialRouteName={initialRoute || "Home"}>
+    <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
       <Stack.Screen
         name="Home"
         component={Home}
@@ -62,7 +62,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Revenue" component={Revenue} />
       <Stack.Screen name="Payment" component={Payment} />
       <Stack.Screen name="Andress" component={Address} />
-      <Stack.Screen name="PostUser" component={Post}/>
+      <Stack.Screen name="PostUser" component={Post} />
       <Stack.Screen name="AddPost" component={NewPost} />
       <Stack.Screen name="Personal" component={AccountManager} />
       <Stack.Screen name="Profile" component={Profile} />
@@ -124,16 +124,22 @@ const HomeStack = ({navigation, initialRoute}) => {
 const AuthStack = () => {
   return useObserver(() => {
     const {
-      stores: {auth, user},
+      stores: {auth, user, shop},
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(true);
     const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
       onCompleted: async (data) => {
+        shop.setInfo(data.refreshToken.user.store);
+        user.setCart(data.refreshToken.user.cart);
+        delete data.refreshToken.user.store;
+        delete data.refreshToken.user.cart;
         user.setInfo(data.refreshToken.user);
-        user.setCart(data.refreshToken.cart);
         auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
         await AsyncStorage.setItem('token', data.refreshToken.token);
-        await AsyncStorage.setItem('refreshToken', data.refreshToken.refreshToken);
+        await AsyncStorage.setItem(
+          'refreshToken',
+          data.refreshToken.refreshToken,
+        );
         setLoading(false);
       },
       onError: (err) => {
@@ -142,9 +148,11 @@ const AuthStack = () => {
     });
     const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
       onCompleted: async (data) => {
-        console.log(1)
-        user.setInfo(data.profile);
+        shop.setInfo(data.profile.store);
         user.setCart(data.profile.cart);
+        delete data.profile.store;
+        delete data.profile.cart;
+        user.setInfo(data.profile);
         auth.setIsAuth(true);
         setLoading(false);
       },
@@ -154,7 +162,6 @@ const AuthStack = () => {
         //   auth.setLogout();
         //   setLoading(false);
         // });
-        
       },
     });
 

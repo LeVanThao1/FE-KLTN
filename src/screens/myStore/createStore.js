@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useContext, useEffect} from 'react';
 import {
   Image,
   ImageBackground,
@@ -17,147 +17,186 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import Images from '../../assets/images/images';
+import {useObserver} from 'mobx-react-lite';
+import {MobXProviderContext} from 'mobx-react';
+import {useNavigation} from '@react-navigation/native';
+import {useLazyQuery} from '@apollo/client';
+import {GET_STORE} from '../../query/store';
+import {introspectionFromSchema} from 'graphql';
 
 const CreateStore = ({navigation}) => {
-  const [text, setText] = useState('');
-  return (
-    <ScrollView>
-      <View style={styles.images}>
-        <ImageBackground source={Images.slider1} style={styles.image}>
-          <Image source={Images.onepiece1} style={styles.avatar} />
-        </ImageBackground>
-      </View>
-      <View style={styles.container_store}>
-        <View style={styles.content}>
-          <Text>Tên shop: </Text>
-          <TextInput
-            style={
-              (styles.text,
-              {
-                color: '#333',
-                borderBottomWidth: 0.5,
-                borderBottomColor: '#111',
-                padding: 0,
-                marginLeft: 10,
-                width: '100%',
-              })
-            }
-          />
+  return useObserver(() => {
+    const {
+      stores: {shop},
+    } = useContext(MobXProviderContext);
+    const {info} = shop;
+    const navigation = useNavigation();
+    const [listInfo, setListInfo] = useState(null);
+    const [text, setText] = useState('');
+    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+      onCompleted: async (data) => {
+        setListInfo({
+          id: info.id,
+          name: info.name,
+        });
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+    useEffect(() => {
+      store({
+        variables: {
+          id: info.id,
+        },
+      });
+    }, [info]);
+    // console.log('List info ...', listInfo);
+    console.log('Store info ...', info);
+
+    return (
+      <ScrollView>
+        <View style={styles.images}>
+          <ImageBackground source={Images.slider1} style={styles.image}>
+            <Image source={{uri: info.avatar}} style={styles.avatar} />
+          </ImageBackground>
         </View>
-        <View style={styles.des}>
-          <Text>Mô tả shop: </Text>
-          <Textarea
-            containerStyle={styles.textareacont}
-            style={styles.textarea}
-            // onChangeText={this.onChange}
-            // defaultValue={this.state.text}
-            maxLength={120}
-            placeholder={'Description'}
-            placeholderTextColor={'#c7c7c7'}
-            underlineColorAndroid={'transparent'}
-          />
-        </View>
-        <View style={styles.evalue}>
-          <Text>Đánh giá shop: </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text>4.5/5 </Text>
-            <View style={{flexDirection: 'row'}}>
-              <Icon name="star" type="MaterialIcons" />
-              <Icon name="star" type="MaterialIcons" />
-              <Icon name="star" type="MaterialIcons" />
-              <Icon name="star-half" type="MaterialIcons" />
-              <Icon name="star-border" type="MaterialIcons" />
+        <View style={styles.container_store}>
+          <View style={styles.content}>
+            <Text>Tên shop: </Text>
+            <TextInput
+              style={
+                (styles.text,
+                {
+                  color: '#333',
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: '#111',
+                  padding: 0,
+                  marginLeft: 10,
+                  width: '100%',
+                })
+              }
+              value={info.name}
+            />
+          </View>
+          <View style={styles.des}>
+            <Text>Mô tả shop: </Text>
+            <Textarea
+              containerStyle={styles.textareacont}
+              style={styles.textarea}
+              // onChangeText={this.onChange}
+              // defaultValue={this.state.text}
+              maxLength={120}
+              placeholder={'Description'}
+              placeholderTextColor={'#c7c7c7'}
+              underlineColorAndroid={'transparent'}
+              value={info.description}
+            />
+          </View>
+          <View style={styles.evalue}>
+            <Text>Đánh giá shop: </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text>4.5/5 </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Icon name="star" type="MaterialIcons" />
+                <Icon name="star" type="MaterialIcons" />
+                <Icon name="star" type="MaterialIcons" />
+                <Icon name="star-half" type="MaterialIcons" />
+                <Icon name="star-border" type="MaterialIcons" />
+              </View>
             </View>
           </View>
-        </View>
-        {/* <View style={styles.product}></View> */}
-        <View style={styles.product}>
-          <View>
-            <Collapse>
-              <CollapseHeader>
-                <Separator
-                  bordered
-                  style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
-                  <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
-                  {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
-                </Separator>
-              </CollapseHeader>
-              <CollapseBody>
-                <ListItem onPress={() => navigation.navigate('CreateProduct')}>
-                  <Text>Thêm sản phẩm</Text>
-                </ListItem>
-                <ListItem onPress={() => navigation.navigate('ViewAllProduct')}>
-                  <Text>Tất cả sản phẩm</Text>
-                </ListItem>
-              </CollapseBody>
-            </Collapse>
+          {/* <View style={styles.product}></View> */}
+          <View style={styles.product}>
+            <View>
+              <Collapse>
+                <CollapseHeader>
+                  <Separator
+                    bordered
+                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                    <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
+                    {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
+                  </Separator>
+                </CollapseHeader>
+                <CollapseBody>
+                  <ListItem
+                    onPress={() => navigation.navigate('CreateProduct')}>
+                    <Text>Thêm sản phẩm</Text>
+                  </ListItem>
+                  <ListItem
+                    onPress={() => navigation.navigate('ViewAllProduct')}>
+                    <Text>Tất cả sản phẩm</Text>
+                  </ListItem>
+                </CollapseBody>
+              </Collapse>
+            </View>
           </View>
-        </View>
-        {/*  manage order */}
-        <View style={styles.order}>
-          <View>
-            <Collapse>
-              <CollapseHeader>
-                <Separator
-                  bordered
-                  style={{
-                    backgroundColor: 'rgba(68, 108, 179, 1)',
-                  }}>
-                  <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
-                </Separator>
-              </CollapseHeader>
-              <CollapseBody>
-                <ListItem onPress={() => navigation.navigate('ManageOrder')}>
-                  <Text>Tất cả sản phẩm</Text>
-                </ListItem>
-                {/* <ListItem>
-                <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                  Tất cả sản phẩm
-                </Text>
-              </ListItem> */}
-              </CollapseBody>
-            </Collapse>
+          {/*  manage order */}
+          <View style={styles.order}>
+            <View>
+              <Collapse>
+                <CollapseHeader>
+                  <Separator
+                    bordered
+                    style={{
+                      backgroundColor: 'rgba(68, 108, 179, 1)',
+                    }}>
+                    <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
+                  </Separator>
+                </CollapseHeader>
+                <CollapseBody>
+                  <ListItem onPress={() => navigation.navigate('ManageOrder')}>
+                    <Text>Tất cả sản phẩm</Text>
+                  </ListItem>
+                  {/* <ListItem>
+                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
+                    Tất cả sản phẩm
+                  </Text>
+                </ListItem> */}
+                </CollapseBody>
+              </Collapse>
+            </View>
           </View>
-        </View>
-        {/*  manage order */}
-        {/* money */}
-        <View style={styles.order}>
-          <View>
-            <Collapse>
-              <CollapseHeader>
-                <Separator
-                  bordered
-                  style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
-                  <Text style={{color: '#fff'}}>+ Tài chính</Text>
-                </Separator>
-              </CollapseHeader>
-              <CollapseBody>
-                <ListItem onPress={() => navigation.navigate('Revenue')}>
-                  <Text>Doanh thu</Text>
-                </ListItem>
-                <ListItem onPress={() => navigation.navigate('Statistics')}>
-                  <Text>Thống kê</Text>
-                </ListItem>
-                {/* <ListItem>
-                <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                  Tất cả sản phẩm
-                </Text>
-              </ListItem> */}
-              </CollapseBody>
-            </Collapse>
+          {/*  manage order */}
+          {/* money */}
+          <View style={styles.order}>
+            <View>
+              <Collapse>
+                <CollapseHeader>
+                  <Separator
+                    bordered
+                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                    <Text style={{color: '#fff'}}>+ Tài chính</Text>
+                  </Separator>
+                </CollapseHeader>
+                <CollapseBody>
+                  <ListItem onPress={() => navigation.navigate('Revenue')}>
+                    <Text>Doanh thu</Text>
+                  </ListItem>
+                  <ListItem onPress={() => navigation.navigate('Statistics')}>
+                    <Text>Thống kê</Text>
+                  </ListItem>
+                  {/* <ListItem>
+                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
+                    Tất cả sản phẩm
+                  </Text>
+                </ListItem> */}
+                </CollapseBody>
+              </Collapse>
+            </View>
           </View>
+          {/* money */}
+          {/* test */}
+          {/* tét */}
         </View>
-        {/* money */}
-        {/* test */}
-        {/* tét */}
-      </View>
-    </ScrollView>
-  );
+      </ScrollView>
+    );
+  });
 };
 
 const styles = StyleSheet.create({
