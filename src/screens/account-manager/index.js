@@ -11,7 +11,7 @@ import {Icon} from 'native-base';
 
 export default function AccountManager({navigation}) {
   const ManagerItem = ({label, icon, url, isLogout}) => {
-    return isLogout ? (
+    return !url ? (
       <TouchableOpacity
         style={styles.manager_item}
         onPress={() => console.log(`logout`)}>
@@ -57,8 +57,13 @@ export default function AccountManager({navigation}) {
           </View>
           <View style={styles.manager_wrapp}>
             <ManagerItem label="Thông tin cá nhân" icon="user" url="Profile" />
+            <ManagerItem
+              label="Bài viết cá nhân"
+              icon="logout"
+              url="PostUser"
+            />
             <ManagerItem label="Tạo cửa hàng" icon="book" url="CreateStore" />
-            {/* <ManagerItem
+            <ManagerItem
               label="Quản lý đơn hàng mua"
               icon="gift"
               url="manager-order"
@@ -66,15 +71,19 @@ export default function AccountManager({navigation}) {
             <ManagerItem
               label="Quản lý giỏ hàng"
               icon="shoppingcart"
-              url="manager-cart"
+              url="Cart"
+            />
+            <ManagerItem
+              label="Đăng xuất"
+              icon="logout"
+              url=""
             />
             <ManagerItem label="Wishlist" icon="hearto" url="wishlist" />
             <ManagerItem
               label="Đăng xuất"
               icon="logout"
-              isLogout={true}
               url=""
-            /> */}
+            />
           </View>
         </View>
       </ScrollView>

@@ -1,17 +1,27 @@
-import client from '../config'
+import {Client} from '../config';
 
-export const queryData = async (inputQuery, variables = {}) => {
-    const data = await client.query({
-        inputQuery,
-        variables,
-    })
-    return data
-  }
-  
-export const mutateData = async (inputQuery, variables = {}) => {
-    const data = await client.mutate({
-        inputQuery,
-        variables
-    })
-    return data
-}
+export const queryData = async (
+  inputQuery,
+  variables = {},
+  fetchPolicy = 'no-cache',
+) => {
+  const data = await Client.query({
+    query: inputQuery,
+    variables,
+    fetchPolicy,
+  });
+  return data;
+};
+
+export const mutateData = async (
+  inputQuery,
+  variables = {},
+  fetchPolicy = 'no-cache',
+) => {
+  const data = await Client.mutate({
+    query: inputQuery,
+    variables,
+    fetchPolicy,
+  });
+  return data;
+};

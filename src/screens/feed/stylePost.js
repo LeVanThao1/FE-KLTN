@@ -54,8 +54,8 @@ export const stylesPost = StyleSheet.create({
     marginLeft: 10,
   },
   text: {
-    // width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: '100%',
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
   },
 });
