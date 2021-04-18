@@ -1,14 +1,20 @@
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
-import {TextInput, StyleSheet, Image, Button} from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK} from '../../query/book';
-// import RNPickerSelect from 'react-native-picker-select';
+import ImagePicker from 'react-native-image-picker';
 
 const CreateProduct = () => {
   return useObserver(() => {
@@ -33,12 +39,12 @@ const CreateProduct = () => {
       value: '',
       error: '',
     });
-    const [publiser, setPublisher] = useState({
+    const [publisher, setPublisher] = useState({
       value: '',
       error: '',
     });
     const [numPrint, setNumPrint] = useState({
-      value: '',
+      value: 0,
       error: '',
     });
     const [description, setDescription] = useState({
@@ -47,22 +53,108 @@ const CreateProduct = () => {
     });
 
     const [price, setPrice] = useState({
-      value: '',
+      value: 0,
       error: '',
     });
 
-    // const [categori, setCategori] = useState(null);
-    // useEffect(() => {
-    //   setCategori({});
-    // });
-    // const [createBook, {called, loading, data, error}] = useLazyQuery(
-    //   CREATE_BOOK,
-    //   {
-    //     onCompleted: async (data) => {
-    //       setProduct({});
-    //     },
-    //   },
-    // );
+    const [amount, setAmount] = useState({
+      value: 0,
+      error: '',
+    });
+
+    const [categori, setCategori] = useState({
+      value: '',
+    });
+
+    const onChange = (value) => {
+      setCategori({
+        value: value,
+      });
+    };
+
+    const [photo, setPhoto] = useState(null);
+
+    const handleChoosePhoto = () => {
+      const options = {
+        noData: true,
+      };
+      ImagePicker.launchImageLibrary(options, (response) => {
+        if (response.uri) {
+          setPhoto({photo: response});
+        }
+      });
+    };
+
+    const [createBook, {called, loading, data, error}] = useMutation(
+      CREATE_BOOK,
+      {
+        onCompleted: async (data) => {
+          // setBookStore()
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      },
+    );
+
+    const onPress = () => {
+      let dataBook = {
+        name: name.value,
+        description: description.value,
+        year: year.value,
+        numberOfReprint: numPrint.value,
+        publisher: publisher.value,
+        category: categori,
+        images: ['https://picsum.photos/200/300'],
+        amount: amount.value,
+        price: price.value,
+      };
+      createBook({
+        variables: {
+          dataBook,
+        },
+      });
+    };
+
+    //
+
+    const [filePath, setFilePath] = useState({});
+
+    const chooseFile = () => {
+      let options = {
+        title: 'Select Image',
+        customButtons: [
+          {
+            name: 'customOptionKey',
+            title: 'Choose Photo from Custom Option',
+          },
+        ],
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+          alert(response.customButton);
+        } else {
+          // let source = response;
+          // You can also display the image using data:
+          let source = {
+            uri: 'data:image/jpeg;base64,' + response.data,
+          };
+          setFilePath(source);
+        }
+      });
+    };
+    //
 
     return (
       <ScrollView>
@@ -77,6 +169,12 @@ const CreateProduct = () => {
                 style={styles.input}
                 placeholder="Nhập tên sản phẩm"
                 value={name.value}
+                onFocus={() => {
+                  setName({
+                    ...name,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setName({
                     ...name,
@@ -97,9 +195,8 @@ const CreateProduct = () => {
                     placeholder="Select your SIM"
                     placeholderStyle={{color: '#bfc6ea'}}
                     placeholderIconColor="#007aff"
-                    // selectedValue={this.state.selected2}
-                    // onValueChange={this.onValueChange2.bind(this)}
-                  >
+                    selectedValue={categori}
+                    onValueChange={onChange}>
                     {category.categories.map((ct, i) => (
                       <Picker.Item label={ct.name} value={ct.id} />
                     ))}
@@ -116,6 +213,12 @@ const CreateProduct = () => {
                 style={styles.input}
                 placeholder="Nhập tên tác giả"
                 value={author.value}
+                onFocus={() => {
+                  setAuthor({
+                    ...author,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setAuthor({
                     ...author,
@@ -131,6 +234,12 @@ const CreateProduct = () => {
                 style={styles.input}
                 placeholder="Nhập năm phát hành"
                 value={year.value}
+                onFocus={() => {
+                  setYear({
+                    ...year,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setYear({
                     ...year,
@@ -145,10 +254,16 @@ const CreateProduct = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Nhập tên nhà xuất bản"
-                value={publiser.value}
+                value={publisher.value}
+                onFocus={() => {
+                  setPublisher({
+                    ...publisher,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setPublisher({
-                    ...publiser,
+                    ...publisher,
                     value: value,
                   });
                 }}
@@ -161,18 +276,58 @@ const CreateProduct = () => {
                 style={styles.input}
                 placeholder="Nhập số lần xuất bản"
                 value={numPrint.value}
+                onFocus={() => {
+                  setNumPrint({
+                    ...numPrint,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setNumPrint({
                     ...numPrint,
-                    value: value,
+                    value: Number(value),
                   });
                 }}
               />
             </View>
             {/* Image */}
-            <View style={styles.image}>
-              <Image source={Images.onepiece2} />
+            <View style={styles.container}>
+              {/*<Image 
+          source={{ uri: filePath.path}} 
+          style={{width: 100, height: 100}} />*/}
+              <Image
+                source={{
+                  uri: 'data:image/jpeg;base64,' + filePath.data,
+                }}
+                style={styles.imageStyle}
+              />
+              <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
+              <Text style={styles.textStyle}>{filePath.uri}</Text>
+              {/*
+          <Button
+            title="Choose File"
+            onPress={chooseFile} />
+        */}
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.buttonStyle}
+                onPress={chooseFile}>
+                <Text style={styles.textStyle}>Choose Image</Text>
+              </TouchableOpacity>
             </View>
+            {/* <View style={styles.image}>
+              <Image source={Images.onepiece2} />
+            </View> */}
+            {/* <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              {photo && (
+                <Image
+                  source={{uri: photo.uri}}
+                  style={{width: 300, height: 300}}
+                />
+              )}
+              <Button title="Choose Photo" onPress={handleChoosePhoto} />
+            </View> */}
             {/* des */}
             <View style={styles.des}>
               <Text>Mô tả sản phẩm *</Text>
@@ -186,6 +341,12 @@ const CreateProduct = () => {
                 placeholderTextColor={'#c7c7c7'}
                 underlineColorAndroid={'transparent'}
                 value={description.value}
+                onFocus={() => {
+                  setDescription({
+                    ...description,
+                    error: '',
+                  });
+                }}
                 onChangeText={(value) => {
                   setDescription({
                     ...description,
@@ -195,6 +356,34 @@ const CreateProduct = () => {
               />
             </View>
             {/* price */}
+            <View style={styles.price}>
+              <Text>Số lượng *</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Nhập số lượng sách"
+                  value={amount.value}
+                  onFocus={() => {
+                    setAmount({
+                      ...amount,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setAmount({
+                      ...amount,
+                      value: Number(value),
+                    });
+                  }}
+                />
+                <Text>Quyển</Text>
+              </View>
+            </View>
             <View style={styles.price}>
               <Text>Giá sách *</Text>
               <View
@@ -207,10 +396,16 @@ const CreateProduct = () => {
                   style={styles.input}
                   placeholder="Nhập giá sách"
                   value={price.value}
+                  onFocus={() => {
+                    setPrice({
+                      ...price,
+                      error: '',
+                    });
+                  }}
                   onChangeText={(value) => {
                     setPrice({
                       ...price,
-                      value: value,
+                      value: Number(value),
                     });
                   }}
                 />
@@ -225,7 +420,13 @@ const CreateProduct = () => {
               <Text>%</Text>
             </View>
           </View> */}
-            <Button color="rgba(68, 108, 179, 1)" title="Xác nhận"></Button>
+            {/* <Button
+              color="rgba(68, 108, 179, 1)"
+              title="Xác nhận"
+              onPress={onPress}></Button> */}
+            <TouchableOpacity onPress={onPress}>
+              <Text>Xac nhan</Text>
+            </TouchableOpacity>
           </View>
           {/* des */}
         </View>
