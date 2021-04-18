@@ -93,7 +93,19 @@ export const GET_USER = gql`
 export const UPDATE_CART = gql`
   mutation updateCart($dataCart: [DetailUpdate!]!) {
     updateCart(dataCart: $dataCart) {
-      message
+      book {
+        id
+        amount
+        price
+        images
+        book {
+          name
+          images
+        }
+        name
+      }
+      amount
+      price
     }
   }
 `;

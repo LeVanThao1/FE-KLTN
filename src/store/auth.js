@@ -3,7 +3,11 @@ import {observable, action, makeObservable} from 'mobx';
 export class Auth {
   @observable
   isAuth = false;
+
+  @observable
   token = '';
+  
+  @observable
   refreshToken = '';
 
   constructor(isAuth, token, refreshToken) {

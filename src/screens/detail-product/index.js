@@ -15,462 +15,446 @@ import {TextInput} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {GET_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
 import {useLazyQuery, useMutation} from '@apollo/client';
-import { MobXProviderContext, useObserver } from 'mobx-react';
-import { UPDATE_CART } from '../../query/user';
+import {MobXProviderContext, useObserver} from 'mobx-react';
+import {UPDATE_CART} from '../../query/user';
 
 const DetailProduct = ({navigation, route}) => {
   return useObserver(() => {
     const {
       stores: {user},
     } = useContext(MobXProviderContext);
-    const {cart, setCart} = user
-  const {productId} = route.params;
-  const [book, setBook] = useState(null);
-  const [listItem, setListItem] = useState(null);
-  const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
-    onCompleted: async (data) => {
-      setBook(data.book);
-      setListItem(
-        data.book.store.books.map((ct, i) => ({
-          id: ct.id,
-          name: ct.book ? ct.book?.name : ct.name,
-          price: ct.price,
-          image: ct.book ? ct.book.images[0] : ct.images[0],
-          selled: ct.amount,
-        })),
-      );
-    },
-    onError: (err) => {
-      console.log(err);
-    },
-  });
+    const {cart, setCart} = user;
+    const {productId} = route.params;
+    const [book, setBook] = useState(null);
+    const [listItem, setListItem] = useState(null);
 
-  useEffect(() => {
-    getBook({
-      variables: {
-        id: productId,
+    const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
+      onCompleted: async (data) => {
+        setBook(data.book);
+        setListItem(
+          data.book.store.books.map((ct, i) => ({
+            id: ct.id,
+            name: ct.book ? ct.book?.name : ct.name,
+            price: ct.price,
+            image: ct.book ? ct.book.images[0] : ct.images[0],
+            selled: ct.amount,
+          })),
+        );
+      },
+      onError: (err) => {
+        console.log(err);
       },
     });
-  }, [productId]);
-  const [updateCart, {load}] = useMutation(UPDATE_CART, {
-    onCompleted: async (dt) => {
-      const found = cart.some((ct) => ct.book.id + "" === productId +"")
-      if(found) {
-        setCart([...cart].map(() => {
-          let tamp = {...ct}
-          if(ct.book.id +"" === productId + "") {
-            tamp.amount = ct.amount + quantity
-          }
-          return tamp;
-        }))
-      }
-      else {
-        setCart([...cart].map((ct) => {
-          let tamp = {...ct}
-          if(ct.book.id + "" === productId + "") {
-            tamp.amount = ct.amount
-          }
-          return tamp;
-        }))
-      }
-      // if(typeRef.current) {
-      //   const datat = [...cart].map((ct) => {
-      //     let tamp = {...ct}
-      //     if(ct.book.id === data.book.id) {
-      //       tamp.amount = typeRef.current === "i" ? ct.amount + 1 :  ct.amount - 1
-      //     }
-      //     return tamp;
-      //   })
-      //   setCart(datat)
-      // }
-      // else {
-      //   const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
-      //   setCart(datat)
-      //   setAmount(0)
-      // }
-    },
-    onError: (err) => {
-      console.log(err);
-    },
-  })
-  const [quantity, setQuantity] = React.useState(0);
-  const [comment, onChangeComment] = React.useState('');
-  // const images = [Images.onepiece1, Images.onepiece2];
-  const addToCart = () => {
-    const found = cart.some((ct) => ct.book.id + "" === productId +"")
-    if(found) {
-      const dataCart = [...cart].map((ct) => {
-        let tamp = {...ct};
-        if( ct.book.id +"" === productId+"") {
-          tamp.amount = ct.amount + quantity
-        }
-        else {
-          tamp.amount = ct.amount
-        }
-        return tamp
-      })
-      updateCart({
+
+    useEffect(() => {
+      getBook({
         variables: {
-          dataCart
-        }
-      })
-    }
-    else {
-      const newBook = {
-        book: productId,
-        price: book.price,
-        amount: quantity
-      };
-      const cartData = [...cart].map((ct) => {
-        return ({
+          id: productId,
+        },
+      });
+    }, [productId]);
+
+    const [updateCart, {load}] = useMutation(UPDATE_CART, {
+      onCompleted: async (dt) => {
+        console.log('dt', dt);
+        setCart(dt.updateCart);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+    const [quantity, setQuantity] = React.useState(1);
+    const [comment, onChangeComment] = React.useState('');
+    const addToCart = () => {
+      const found = cart.some((ct) => ct.book.id + '' === productId + '');
+      if (found) {
+        const dataCart = [...cart].map((ct) => {
+          let tamp = {
+            book: productId,
+            price: book.price,
+            amount: ct.amount,
+          };
+          // tamp
+          if (ct.book.id + '' === productId + '') {
+            tamp.amount = ct.amount + quantity;
+          }
+          return tamp;
+        });
+        console.log('data cart found', dataCart);
+        updateCart({
+          variables: {
+            dataCart,
+          },
+        });
+      } else {
+        const newBook = {
           book: productId,
-          price: ct.price,
-          amount: ct.amount
-        })
-      })
-      updateCart({
-        variables : {
-          dataCart: [...cartData, newBook]
-        }
-      })
-    }
-  }
-  const renderProduct = ({item}) => {
-    return (
-      <TouchableOpacity
-        style={styles.list_product}
-        onPress={() => navigation.push('Detail-Product', {productId: item.id})}>
-        <Image
-          source={{uri: item.image}}
-          style={{width: 80, height: 100}}
-          // onPress={() => ProductHandler()}
-        />
-        <View>
-          <Text style={styles.name} numberOfLines={1}>
-            {item.name}
-          </Text>
-          <View style={styles.content}>
-            <Text style={{color: '#f57f1a', fontSize: 12}}>{item.price}đ</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  return (
-    <View style={styles.container}>
-      {!loading && book && (
-        <ScrollView>
-          <View style={styles.slide__image_wrap}>
-            <SliderBox
-              style={styles.slide__image}
-              images={[
-                ...(book.book ? book.book.images : book.images ),
-                Images.onepiece1,
-              ]}
-              autoplay={true}
-            />
-          </View>
-          <View style={styles.detail__content}>
-            <View style={styles.detail__information}>
-              <Text style={styles.detail__content_name}>
-                {book.name ? book.name : book.book.name}
+          price: book.price,
+          amount: quantity,
+        };
+        const cartData = [...cart].map((ct) => {
+          return {
+            book: ct.book.id,
+            price: ct.price,
+            amount: ct.amount,
+          };
+        });
+        console.log('data cart not found', cartData);
+        updateCart({
+          variables: {
+            dataCart: [newBook, ...cartData],
+          },
+        });
+      }
+    };
+    const renderProduct = ({item}) => {
+      return (
+        <TouchableOpacity
+          style={styles.list_product}
+          onPress={() =>
+            navigation.push('Detail-Product', {productId: item.id})
+          }>
+          <Image
+            source={{uri: item.image}}
+            style={{width: 80, height: 100}}
+            // onPress={() => ProductHandler()}
+          />
+          <View>
+            <Text style={styles.name} numberOfLines={1}>
+              {item.name}
+            </Text>
+            <View style={styles.content}>
+              <Text style={{color: '#f57f1a', fontSize: 12}}>
+                {item.price}đ
               </Text>
-              <View style={styles.detail__content_price}>
-                <Text style={styles.current__price}>{book.price}đ</Text>
-                <Text style={styles.old__price}>500.000đ</Text>
-              </View>
-              <View style={styles.detail__content_rate}>
-                <View style={styles.rate}>
-                  <View style={styles.rate_start}>
-                    <Icon
-                      style={styles.icon__start}
-                      name="star"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="star"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="star"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="star"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="star"
-                      type="AntDesign"
-                    />
-                  </View>
-                  <Text style={styles.rate_text}>4.8</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <View style={styles.container}>
+        {!loading && book && (
+          <ScrollView>
+            <View style={styles.slide__image_wrap}>
+              <SliderBox
+                style={styles.slide__image}
+                images={[
+                  ...(book.book ? book.book.images : book.images),
+                  Images.onepiece1,
+                ]}
+                autoplay={true}
+              />
+            </View>
+            <View style={styles.detail__content}>
+              <View style={styles.detail__information}>
+                <Text style={styles.detail__content_name}>
+                  {book.name ? book.name : book.book.name}
+                </Text>
+                <View style={styles.detail__content_price}>
+                  <Text style={styles.current__price}>{book.price}đ</Text>
+                  <Text style={styles.old__price}>500.000đ</Text>
                 </View>
-                <View style={styles.quantity_sold}>
-                  <Text style={styles.quantity__sold_text}>{book.sold}</Text>
-                  {/* sản phẩm được yêu thích */}
-                  <Icon
-                    style={[styles.icon__heart, styles.icon__heart_active]}
-                    name="heart"
-                    type="AntDesign"
-                  />
-                  {/* sản phẩm chưa được yêu thích */}
-                  {/* <Icon
+                <View style={styles.detail__content_rate}>
+                  <View style={styles.rate}>
+                    <View style={styles.rate_start}>
+                      <Icon
+                        style={styles.icon__start}
+                        name="star"
+                        type="AntDesign"
+                      />
+                      <Icon
+                        style={styles.icon__start}
+                        name="star"
+                        type="AntDesign"
+                      />
+                      <Icon
+                        style={styles.icon__start}
+                        name="star"
+                        type="AntDesign"
+                      />
+                      <Icon
+                        style={styles.icon__start}
+                        name="star"
+                        type="AntDesign"
+                      />
+                      <Icon
+                        style={styles.icon__start}
+                        name="star"
+                        type="AntDesign"
+                      />
+                    </View>
+                    <Text style={styles.rate_text}>4.8</Text>
+                  </View>
+                  <View style={styles.quantity_sold}>
+                    <Text style={styles.quantity__sold_text}>{book.sold}</Text>
+                    {/* sản phẩm được yêu thích */}
+                    <Icon
+                      style={[styles.icon__heart, styles.icon__heart_active]}
+                      name="heart"
+                      type="AntDesign"
+                    />
+                    {/* sản phẩm chưa được yêu thích */}
+                    {/* <Icon
                   style={styles.icon__heart}
                   name="hearto"
                   type="AntDesign"
                 /> */}
-                </View>
-              </View>
-            </View>
-            <View style={styles.detail__content_delivery}>
-              <View style={styles.delivery__wrap}>
-                <Icon
-                  style={styles.delivery__icon}
-                  name="rocket1"
-                  type="AntDesign"
-                />
-                <Text>Phí vận chuyển : {0}đ</Text>
-              </View>
-              <View style={styles.delivery__wrap}>
-                <Icon
-                  style={styles.delivery__icon}
-                  name="book"
-                  type="AntDesign"
-                />
-                <Text>Trả hàng / Hoàn tiền trong 3 ngày</Text>
-              </View>
-            </View>
-            <View style={styles.detail__buy_control}>
-              <View style={styles.detail__buying}>
-                <Text>Số lượng sẵn có : {book.amount}</Text>
-                <View style={styles.product__quantity}>
-                  <Button
-                    style={styles.btn_quantity}
-                    rounded
-                    warning
-                    onPress={() => setQuantity(quantity - 1)}>
-                    <TextNT style={styles.btn__quantity_text}>-</TextNT>
-                  </Button>
-                  <TextInput
-                    style={styles.input__quantity}
-                    keyboardType="numeric"
-                    value={quantity + ''}
-                    // editable={false}
-                    onChangeText={setQuantity}
-                  />
-                  <Button
-                    style={styles.btn_quantity}
-                    rounded
-                    warning
-                    onPress={() => setQuantity(quantity + 1)}>
-                    <TextNT style={styles.btn__quantity_text}>+</TextNT>
-                  </Button>
-                </View>
-              </View>
-              <View style={styles.control__buy_action}>
-                <Button style={styles.store__btn} bordered warning onPress={addToCart}>
-                  <TextNT style={styles.buy__action_text}>
-                    Thêm vào giỏ hàng
-                  </TextNT>
-                </Button>
-                <Button style={styles.store__btn} bordered warning>
-                  <TextNT style={styles.buy__action_text}>Mua ngay</TextNT>
-                </Button>
-              </View>
-            </View>
-            <View style={styles.detail__store}>
-              <View style={styles.detail__store_info}>
-                <View style={styles.store__header}>
-                  <View style={styles.store__wrapper}>
-                    <Image
-                      style={styles.store__avatar}
-                      source={{
-                        uri: book.store.avatar,
-                      }}
-                    />
-                    <Text style={styles.store__name}>{'AppStore'}</Text>
                   </View>
+                </View>
+              </View>
+              <View style={styles.detail__content_delivery}>
+                <View style={styles.delivery__wrap}>
+                  <Icon
+                    style={styles.delivery__icon}
+                    name="rocket1"
+                    type="AntDesign"
+                  />
+                  <Text>Phí vận chuyển : {0}đ</Text>
+                </View>
+                <View style={styles.delivery__wrap}>
+                  <Icon
+                    style={styles.delivery__icon}
+                    name="book"
+                    type="AntDesign"
+                  />
+                  <Text>Trả hàng / Hoàn tiền trong 3 ngày</Text>
+                </View>
+              </View>
+              <View style={styles.detail__buy_control}>
+                <View style={styles.detail__buying}>
+                  <Text>Số lượng sẵn có : {book.amount}</Text>
+                  <View style={styles.product__quantity}>
+                    <Button
+                      style={styles.btn_quantity}
+                      rounded
+                      warning
+                      onPress={() => setQuantity(quantity - 1)}>
+                      <TextNT style={styles.btn__quantity_text}>-</TextNT>
+                    </Button>
+                    <TextInput
+                      style={styles.input__quantity}
+                      keyboardType="numeric"
+                      value={quantity + ''}
+                      // editable={false}
+                      onChangeText={setQuantity}
+                    />
+                    <Button
+                      style={styles.btn_quantity}
+                      rounded
+                      warning
+                      onPress={() => setQuantity(quantity + 1)}>
+                      <TextNT style={styles.btn__quantity_text}>+</TextNT>
+                    </Button>
+                  </View>
+                </View>
+                <View style={styles.control__buy_action}>
                   <Button
-                    style={styles.btn__view_store}
+                    style={styles.store__btn}
                     bordered
                     warning
-                    onPress={() => navigation.navigate('/')}>
-                    <TextNT style={styles.buy__action_text}>Xem Shop</TextNT>
+                    onPress={addToCart}>
+                    <TextNT style={styles.buy__action_text}>
+                      Thêm vào giỏ hàng
+                    </TextNT>
+                  </Button>
+                  <Button style={styles.store__btn} bordered warning>
+                    <TextNT style={styles.buy__action_text}>Mua ngay</TextNT>
                   </Button>
                 </View>
-                <View style={styles.store__statistical}>
-                  <View style={styles.store__statistical_wrap}>
-                    <Text style={styles.store__statistical_text}>
-                      {book.store.books.length}
-                    </Text>
-                    <Text style={styles.store__statistical_code}>Sản phẩm</Text>
+              </View>
+              <View style={styles.detail__store}>
+                <View style={styles.detail__store_info}>
+                  <View style={styles.store__header}>
+                    <View style={styles.store__wrapper}>
+                      <Image
+                        style={styles.store__avatar}
+                        source={{
+                          uri: book.store.avatar,
+                        }}
+                      />
+                      <Text style={styles.store__name}>{'AppStore'}</Text>
+                    </View>
+                    <Button
+                      style={styles.btn__view_store}
+                      bordered
+                      warning
+                      onPress={() => navigation.navigate('/')}>
+                      <TextNT style={styles.buy__action_text}>Xem Shop</TextNT>
+                    </Button>
                   </View>
-                  <Text style={styles.separator}>|</Text>
-                  <View style={styles.store__statistical_wrap}>
-                    <Text style={styles.store__statistical_text}>4.7</Text>
-                    <Text style={styles.store__statistical_code}>Đánh giá</Text>
+                  <View style={styles.store__statistical}>
+                    <View style={styles.store__statistical_wrap}>
+                      <Text style={styles.store__statistical_text}>
+                        {book.store.books.length}
+                      </Text>
+                      <Text style={styles.store__statistical_code}>
+                        Sản phẩm
+                      </Text>
+                    </View>
+                    <Text style={styles.separator}>|</Text>
+                    <View style={styles.store__statistical_wrap}>
+                      <Text style={styles.store__statistical_text}>4.7</Text>
+                      <Text style={styles.store__statistical_code}>
+                        Đánh giá
+                      </Text>
+                    </View>
+                    <Text style={styles.separator}>|</Text>
+                    <View style={styles.store__statistical_wrap}>
+                      <Text style={styles.store__statistical_text}>91%</Text>
+                      <Text style={styles.store__statistical_code}>
+                        Phản hồi chat
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={styles.separator}>|</Text>
-                  <View style={styles.store__statistical_wrap}>
-                    <Text style={styles.store__statistical_text}>91%</Text>
-                    <Text style={styles.store__statistical_code}>
-                      Phản hồi chat
-                    </Text>
+                </View>
+                <View style={styles.store__products}>
+                  <View style={styles.store__products_header}>
+                    <Text>Các sản phẩm khác của shop</Text>
+                    <Text style={styles.buy__action_text}>Xem tất cả</Text>
+                  </View>
+                  <View style={styles.store__products_list}>
+                    <FlatList
+                      //   style={styles.flat_list}
+                      data={listItem && listItem}
+                      renderItem={renderProduct}
+                      keyExtractor={(item) => item.id}
+                      horizontal={true}
+                    />
                   </View>
                 </View>
               </View>
-              <View style={styles.store__products}>
-                <View style={styles.store__products_header}>
-                  <Text>Các sản phẩm khác của shop</Text>
-                  <Text style={styles.buy__action_text}>Xem tất cả</Text>
+              <View style={styles.detail__book_description}>
+                <Text style={styles.detail__book_description_title}>
+                  Chi tiết sản phẩm
+                </Text>
+                <View style={styles.detail__book_description_wrap}>
+                  <Text style={styles.book_description_text}>Nhà xuất bản</Text>
+                  <Text>
+                    {book.publisher ? book.publisher : book.book.publisher}
+                  </Text>
                 </View>
-                <View style={styles.store__products_list}>
-                  <FlatList
-                    //   style={styles.flat_list}
-                    data={listItem && listItem}
-                    renderItem={renderProduct}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                  />
+                <View style={styles.detail__book_description_wrap}>
+                  <Text style={styles.book_description_text}>Tác giả</Text>
+                  <Text>
+                    {book.publisher ? book.publisher : book.book.publisher}
+                  </Text>
                 </View>
-              </View>
-            </View>
-            <View style={styles.detail__book_description}>
-              <Text style={styles.detail__book_description_title}>
-                Chi tiết sản phẩm
-              </Text>
-              <View style={styles.detail__book_description_wrap}>
-                <Text style={styles.book_description_text}>Nhà xuất bản</Text>
-                <Text>
-                  {book.publisher ? book.publisher : book.book.publisher}
+                <View style={styles.detail__book_description_wrap}>
+                  <Text style={styles.book_description_text}>Năm xuất bản</Text>
+                  <Text>{book.year ? book.year : book.book.year}</Text>
+                </View>
+                <Text style={styles.book_description}>
+                  {book.description ? book.description : book.book.description}
                 </Text>
               </View>
-              <View style={styles.detail__book_description_wrap}>
-                <Text style={styles.book_description_text}>Tác giả</Text>
-                <Text>
-                  {book.publisher ? book.publisher : book.book.publisher}
+              <View style={styles.detail__book_rate}>
+                <Text style={styles.detail__book_description_title}>
+                  Đánh giá sản phẩm
                 </Text>
-              </View>
-              <View style={styles.detail__book_description_wrap}>
-                <Text style={styles.book_description_text}>Năm xuất bản</Text>
-                <Text>{book.year ? book.year : book.book.year}</Text>
-              </View>
-              <Text style={styles.book_description}>
-                {book.description ? book.description : book.book.description}
-              </Text>
-            </View>
-            <View style={styles.detail__book_rate}>
-              <Text style={styles.detail__book_description_title}>
-                Đánh giá sản phẩm
-              </Text>
-              <View style={[styles.rate, styles.rate__start_wrap]}>
-                <View style={styles.rate_start}>
-                  <Icon
-                    style={styles.icon__start}
-                    name="staro"
-                    type="AntDesign"
-                  />
-                  <Icon
-                    style={styles.icon__start}
-                    name="staro"
-                    type="AntDesign"
-                  />
-                  <Icon
-                    style={styles.icon__start}
-                    name="staro"
-                    type="AntDesign"
-                  />
-                  <Icon
-                    style={styles.icon__start}
-                    name="staro"
-                    type="AntDesign"
-                  />
-                  <Icon
-                    style={styles.icon__start}
-                    name="staro"
-                    type="AntDesign"
-                  />
-                </View>
-                <Text>Đánh giá của bạn</Text>
-              </View>
-              <View style={styles.detail__book_commnet}>
-                <TextInput
-                  style={styles.comment}
-                  value={comment}
-                  // editable={false}
-                  placeholder="Nhập bình luận của bạn"
-                  onChangeText={onChangeComment}
-                />
-                <Button
-                  style={[styles.btn__view_store, styles.btn_comment]}
-                  rounded
-                  warning
-                  onPress={() => navigation.navigate('/')}>
-                  <TextNT style={styles.btn_comment_text}>Bình luận</TextNT>
-                </Button>
-              </View>
-              <View style={styles.book__comment_wrap}>
-                <View style={styles.comment__user}>
-                  <View style={styles.store__wrapper}>
-                    <Image
-                      style={styles.user__avatar}
-                      source={{
-                        uri:
-                          'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                      }}
+                <View style={[styles.rate, styles.rate__start_wrap]}>
+                  <View style={styles.rate_start}>
+                    <Icon
+                      style={styles.icon__start}
+                      name="staro"
+                      type="AntDesign"
                     />
-                    <Text style={styles.user__name}>{'AppStore'}</Text>
-                  </View>
-                  <Text style={styles.comment__user_content}>
-                    Sách hay lắm bạn
-                  </Text>
-                  <Text style={styles.comment__user_date}>05/04/2021</Text>
-                </View>
-                <View style={styles.comment__user}>
-                  <View style={styles.store__wrapper}>
-                    <Image
-                      style={styles.user__avatar}
-                      source={{
-                        uri:
-                          'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                      }}
+                    <Icon
+                      style={styles.icon__start}
+                      name="staro"
+                      type="AntDesign"
                     />
-                    <Text style={styles.user__name}>{'AppStore'}</Text>
-                  </View>
-                  <Text style={styles.comment__user_content}>
-                    Sách hay lắm bạn
-                  </Text>
-                  <Text style={styles.comment__user_date}>05/04/2021</Text>
-                </View>
-                <View style={styles.comment__user}>
-                  <View style={styles.store__wrapper}>
-                    <Image
-                      style={styles.user__avatar}
-                      source={{
-                        uri:
-                          'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                      }}
+                    <Icon
+                      style={styles.icon__start}
+                      name="staro"
+                      type="AntDesign"
                     />
-                    <Text style={styles.user__name}>{'AppStore'}</Text>
+                    <Icon
+                      style={styles.icon__start}
+                      name="staro"
+                      type="AntDesign"
+                    />
+                    <Icon
+                      style={styles.icon__start}
+                      name="staro"
+                      type="AntDesign"
+                    />
                   </View>
-                  <Text style={styles.comment__user_content}>
-                    Sách hay lắm bạn
-                  </Text>
-                  <Text style={styles.comment__user_date}>05/04/2021</Text>
+                  <Text>Đánh giá của bạn</Text>
+                </View>
+                <View style={styles.detail__book_commnet}>
+                  <TextInput
+                    style={styles.comment}
+                    value={comment}
+                    // editable={false}
+                    placeholder="Nhập bình luận của bạn"
+                    onChangeText={onChangeComment}
+                  />
+                  <Button
+                    style={[styles.btn__view_store, styles.btn_comment]}
+                    rounded
+                    warning
+                    onPress={() => navigation.navigate('/')}>
+                    <TextNT style={styles.btn_comment_text}>Bình luận</TextNT>
+                  </Button>
+                </View>
+                <View style={styles.book__comment_wrap}>
+                  <View style={styles.comment__user}>
+                    <View style={styles.store__wrapper}>
+                      <Image
+                        style={styles.user__avatar}
+                        source={{
+                          uri:
+                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
+                        }}
+                      />
+                      <Text style={styles.user__name}>{'AppStore'}</Text>
+                    </View>
+                    <Text style={styles.comment__user_content}>
+                      Sách hay lắm bạn
+                    </Text>
+                    <Text style={styles.comment__user_date}>05/04/2021</Text>
+                  </View>
+                  <View style={styles.comment__user}>
+                    <View style={styles.store__wrapper}>
+                      <Image
+                        style={styles.user__avatar}
+                        source={{
+                          uri:
+                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
+                        }}
+                      />
+                      <Text style={styles.user__name}>{'AppStore'}</Text>
+                    </View>
+                    <Text style={styles.comment__user_content}>
+                      Sách hay lắm bạn
+                    </Text>
+                    <Text style={styles.comment__user_date}>05/04/2021</Text>
+                  </View>
+                  <View style={styles.comment__user}>
+                    <View style={styles.store__wrapper}>
+                      <Image
+                        style={styles.user__avatar}
+                        source={{
+                          uri:
+                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
+                        }}
+                      />
+                      <Text style={styles.user__name}>{'AppStore'}</Text>
+                    </View>
+                    <Text style={styles.comment__user_content}>
+                      Sách hay lắm bạn
+                    </Text>
+                    <Text style={styles.comment__user_date}>05/04/2021</Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
-      )}
-    </View>
-  );
-  })
+          </ScrollView>
+        )}
+      </View>
+    );
+  });
 };
 
 const styles = StyleSheet.create({

@@ -1,71 +1,68 @@
-import React, { useContext, useEffect, useState } from 'react';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
   ScrollView,
-  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon, Button} from 'native-base';
 import CartDetail from './CartDetail';
-import { useObserver } from 'mobx-react-lite';
-import { MobXProviderContext } from 'mobx-react';
 
 export default function Cart() {
   return useObserver(() => {
     const {
       stores: {user},
     } = useContext(MobXProviderContext);
-    const {cart} = user
-  const [total, setTotal] = useState(0)
+    const {cart} = user;
+    const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    if(cart.length > 0) {
-      setTotal(cart.reduce((a,b) => {
-        return a + b.book.price
-      },0))
-    }
-  }, [cart])
-  console.log("cartIndex", cart)
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity>
-          <Icon name="arrow-back" type="Ionicons" style={styles.headerIcon} />
-        </TouchableOpacity>
-
-        <Text style={styles.headerTitle}>Giỏ Hàng</Text>
-      </View>
-      {cart && cart.length > 0 ? 
-        <ScrollView style={styles.body}>
-          {cart.map((ct, i) => 
-            <CartDetail data={ct}/>
-          )}
-        {/* <CartDetail />
-        <CartDetail />
-        <CartDetail /> */}
-        </ScrollView> : 
-      <Text style={{marginTop: 20, fontSize: 18}}>Giỏ hàng trống</Text>
+    useEffect(() => {
+      if (cart.length > 0) {
+        setTotal(
+          cart.reduce((a, b) => {
+            return a + b.book.price * b.amount;
+          }, 0),
+        );
       }
-      {cart.length > 0 && 
-        <View style={styles.footer}>
-          <View style={styles.footerTotal}>
-            <Text style={styles.footerTotalText}>
-              Tổng tiền: <Text style={styles.footerTotalPrice}>{total}</Text>
-            </Text>
-          </View>
+    }, [cart]);
 
-          <TouchableOpacity style={styles.footerPayment}>
-            <Text style={styles.footerPaymentText}>Mua hàng</Text>
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <Icon name="arrow-back" type="Ionicons" style={styles.headerIcon} />
           </TouchableOpacity>
+
+          <Text style={styles.headerTitle}>Giỏ Hàng</Text>
         </View>
-      }
-    </View>
-  );
-  })
+        {cart && cart.length > 0 ? (
+          <ScrollView style={styles.body}>
+            {cart.map((ct, i) => (
+              <CartDetail data={ct} />
+            ))}
+          </ScrollView>
+        ) : (
+          <Text style={{marginTop: 20, fontSize: 18}}>Giỏ hàng trống</Text>
+        )}
+        {cart.length > 0 && (
+          <View style={styles.footer}>
+            <View style={styles.footerTotal}>
+              <Text style={styles.footerTotalText}>
+                Tổng tiền: <Text style={styles.footerTotalPrice}>{total}</Text>
+              </Text>
+            </View>
+
+            <TouchableOpacity style={styles.footerPayment}>
+              <Text style={styles.footerPaymentText}>Mua hàng</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  });
 }
 
 const styles = StyleSheet.create({

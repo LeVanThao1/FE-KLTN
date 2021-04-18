@@ -12,32 +12,49 @@ export const GET_POSTS = gql`
       publisher
       bookWanna
       images
+      category {
+        id
+        name
+      }
       author {
         id
         name
         avatar
-        phone
       }
+      createdAt
     }
   }
 `;
 
-export const GET_POST = gql`
-  query postByUser($id: ID!) {
-    postByUser(id: $id) {
+export const GET_POSTS_USER= gql`
+  query postByUser($userId: ID) {
+    posts(userId: $userId) {
       id
       title
-      uniqueBook {
+      description
+      images
+      author {
         id
         name
-        images
-        year
-        number
-        numberOfRePrint
-        publisher
-        category
-        percent
+        avatar
       }
+      name
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      bookWanna
+    }
+  }
+`;
+export const GET_POST = gql`
+  query post($id: ID!) {
+    post(id: $id) {
+      id
+      title
       description
       images
       author {
@@ -49,14 +66,16 @@ export const GET_POST = gql`
       }
       name
       year
-      numberOfRePrint
+      numberOfReprint
       publisher
-      category
+      category {
+        id
+        name
+      }
       bookWanna
     }
   }
 `;
-
 export const CREATE_POST = gql`
   query createPostByUser(
     $id: ID!
@@ -78,7 +97,7 @@ export const CREATE_POST = gql`
       author: $author
       name: $name
       year: $year
-      numberOfRePrint: $numberOfRePrint
+      numberOfReprint: $numberOfRePrint
       publisher: $publisher
       bookWanna: $bookWanna
     ) {
@@ -107,7 +126,7 @@ export const UPDATE_POST = gql`
       author: $author
       name: $name
       year: $year
-      numberOfRePrint: $numberOfRePrint
+      numberOfReprint: $numberOfRePrint
       publisher: $publisher
       bookWanna: $bookWanna
     ) {

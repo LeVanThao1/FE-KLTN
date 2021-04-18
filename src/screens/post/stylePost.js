@@ -25,9 +25,16 @@ export const stylesPost = StyleSheet.create({
     borderRadius: 50,
     paddingLeft: 20,
   },
+  containerImage: {
+    marginHorizontal: "2%",
+    flexDirection: 'row',
+    marginVertical: 10,
+    justifyContent: "space-between"
+  },
   post: {
-    width: '100%',
-    height: '60%',
+    width: "45%",
+    height: 200,
+    resizeMode: "cover"
   },
 
   content: {
@@ -50,12 +57,13 @@ export const stylesPost = StyleSheet.create({
     paddingLeft: 10,
   },
   textContent: {
-    width: '75%',
+    width: '100%',
     marginLeft: 10,
   },
   text: {
+    paddingLeft: 10
     // width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
   },
 });
