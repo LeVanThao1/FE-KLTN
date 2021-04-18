@@ -72,18 +72,18 @@ const CreateProduct = () => {
       });
     };
 
-    const [photo, setPhoto] = useState(null);
+    // const [photo, setPhoto] = useState(null);
 
-    const handleChoosePhoto = () => {
-      const options = {
-        noData: true,
-      };
-      ImagePicker.launchImageLibrary(options, (response) => {
-        if (response.uri) {
-          setPhoto({photo: response});
-        }
-      });
-    };
+    // const handleChoosePhoto = () => {
+    //   const options = {
+    //     noData: true,
+    //   };
+    //   ImagePicker.launchImageLibrary(options, (response) => {
+    //     if (response.uri) {
+    //       setPhoto({photo: response});
+    //     }
+    //   });
+    // };
 
     const [createBook, {called, loading, data, error}] = useMutation(
       CREATE_BOOK,
