@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
 import {
   View,
   Text,
@@ -10,85 +13,97 @@ import {
 import {Icon} from 'native-base';
 
 export default function AccountManager({navigation}) {
-  const ManagerItem = ({label, icon, url, isLogout}) => {
-    return !url ? (
-      <TouchableOpacity
-        style={styles.manager_item}
-        onPress={() => console.log(`logout`)}>
-        <View style={styles.manager_item_wrap}>
-          <Icon style={styles.manager_item_icon} name={icon} type="AntDesign" />
-          <Text style={styles.manager_item_text}>{label}</Text>
-        </View>
-      </TouchableOpacity>
-    ) : (
-      <TouchableOpacity
-        style={styles.manager_item}
-        onPress={() => navigation.navigate(url)}>
-        <View style={styles.manager_item_wrap}>
-          <Icon style={styles.manager_item_icon} name={icon} type="AntDesign" />
-          <Text style={styles.manager_item_text}>{label}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  return (
-    <View style={styles.container}>
-      <View style={styles.header_wrap}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrow-back-sharp"
-            type="Ionicons"
-            style={styles.headerIcon}
-          />
+  return useObserver(() => {
+    const {
+      stores: {auth, user},
+    } = useContext(MobXProviderContext);
+    const ManagerItem = ({label, icon, url, isLogout}) => {
+      return !url ? (
+        <TouchableOpacity
+          style={styles.manager_item}
+          onPress={() => {
+            AsyncStorage.clear().then(() => {
+              auth.setLogout();
+            });
+          }}>
+          <View style={styles.manager_item_wrap}>
+            <Icon
+              style={styles.manager_item_icon}
+              name={icon}
+              type="AntDesign"
+            />
+            <Text style={styles.manager_item_text}>{label}</Text>
+          </View>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Account</Text>
-      </View>
-      <ScrollView>
-        <View style={styles.content_wrap}>
-          <View style={styles.user_wrap}>
-            <Image
-              style={styles.user__avatar}
-              source={{
-                uri:
-                  'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-              }}
+      ) : (
+        <TouchableOpacity
+          style={styles.manager_item}
+          onPress={() => navigation.navigate(url)}>
+          <View style={styles.manager_item_wrap}>
+            <Icon
+              style={styles.manager_item_icon}
+              name={icon}
+              type="AntDesign"
             />
-            <Text style={styles.user_name}>Anh Lâm</Text>
+            <Text style={styles.manager_item_text}>{label}</Text>
           </View>
-          <View style={styles.manager_wrapp}>
-            <ManagerItem label="Thông tin cá nhân" icon="user" url="Profile" />
-            <ManagerItem
-              label="Bài viết cá nhân"
-              icon="logout"
-              url="PostUser"
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <View style={styles.container}>
+        <View style={styles.header_wrap}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon
+              name="arrow-back-sharp"
+              type="Ionicons"
+              style={styles.headerIcon}
             />
-            <ManagerItem label="Tạo cửa hàng" icon="book" url="CreateStore" />
-            <ManagerItem
-              label="Quản lý đơn hàng mua"
-              icon="gift"
-              url="manager-order"
-            />
-            <ManagerItem
-              label="Quản lý giỏ hàng"
-              icon="shoppingcart"
-              url="Cart"
-            />
-            <ManagerItem
-              label="Đăng xuất"
-              icon="logout"
-              url=""
-            />
-            <ManagerItem label="Wishlist" icon="hearto" url="wishlist" />
-            <ManagerItem
-              label="Đăng xuất"
-              icon="logout"
-              url=""
-            />
-          </View>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Account</Text>
         </View>
-      </ScrollView>
-    </View>
-  );
+        <ScrollView>
+          <View style={styles.content_wrap}>
+            <View style={styles.user_wrap}>
+              <Image
+                style={styles.user__avatar}
+                source={{
+                  uri:
+                    'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
+                }}
+              />
+              <Text style={styles.user_name}>Anh Lâm</Text>
+            </View>
+            <View style={styles.manager_wrapp}>
+              <ManagerItem
+                label="Thông tin cá nhân"
+                icon="user"
+                url="Profile"
+              />
+              <ManagerItem
+                label="Bài viết cá nhân"
+                icon="logout"
+                url="PostUser"
+              />
+              <ManagerItem label="Tạo cửa hàng" icon="book" url="CreateStore" />
+              <ManagerItem
+                label="Quản lý đơn hàng mua"
+                icon="gift"
+                url="manager-order"
+              />
+              <ManagerItem
+                label="Quản lý giỏ hàng"
+                icon="shoppingcart"
+                url="Cart"
+              />
+              <ManagerItem label="Wishlist" icon="hearto" url="wishlist" />
+              <ManagerItem label="Đăng xuất" icon="logout" url="" />
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  });
 }
 
 const styles = StyleSheet.create({

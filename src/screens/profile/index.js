@@ -12,6 +12,8 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import {useMutation} from '@apollo/client';
+import {UPDATE_USER_INFO} from '../../query/user';
 
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
@@ -21,7 +23,7 @@ const Profile = ({navigation}) => {
       stores: {
         auth,
         user: {
-          info: {name, avatar, phone, address, email},
+          info: {name, avatar, phone, address, email, interests},
         },
       },
     } = useContext(MobXProviderContext);
@@ -39,6 +41,12 @@ const Profile = ({navigation}) => {
         address != userAddress
       );
     };
+    const [updateUser, {}] = useMutation(UPDATE_USER_INFO, {
+      onCompleted: (data) => {
+        // set laij info user
+      },
+      onError: (err) => console.log(err),
+    });
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>
@@ -109,7 +117,20 @@ const Profile = ({navigation}) => {
             </TouchableOpacity>
             <Hr />
             {checkEdit ? (
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  updateUser({
+                    variables: {
+                      userUpdate: {
+                        name: userName,
+                        avatar: userAvatar,
+                        address: userAddress,
+                        interests: interests,
+                      },
+                    },
+                  })
+                }>
                 <Text style={styles.buttonText}>Xác nhận thay đổi</Text>
               </TouchableOpacity>
             ) : null}
