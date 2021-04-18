@@ -118,42 +118,42 @@ const CreateProduct = () => {
 
     //
 
-    const [filePath, setFilePath] = useState({});
+    // const [filePath, setFilePath] = useState({});
 
-    const chooseFile = () => {
-      let options = {
-        title: 'Select Image',
-        customButtons: [
-          {
-            name: 'customOptionKey',
-            title: 'Choose Photo from Custom Option',
-          },
-        ],
-        storageOptions: {
-          skipBackup: true,
-          path: 'images',
-        },
-      };
-      ImagePicker.showImagePicker(options, (response) => {
-        console.log('Response = ', response);
+    // const chooseFile = () => {
+    //   let options = {
+    //     title: 'Select Image',
+    //     customButtons: [
+    //       {
+    //         name: 'customOptionKey',
+    //         title: 'Choose Photo from Custom Option',
+    //       },
+    //     ],
+    //     storageOptions: {
+    //       skipBackup: true,
+    //       path: 'images',
+    //     },
+    //   };
+    //   ImagePicker.showImagePicker(options, (response) => {
+    //     console.log('Response = ', response);
 
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
-          alert(response.customButton);
-        } else {
-          // let source = response;
-          // You can also display the image using data:
-          let source = {
-            uri: 'data:image/jpeg;base64,' + response.data,
-          };
-          setFilePath(source);
-        }
-      });
-    };
+    //     if (response.didCancel) {
+    //       console.log('User cancelled image picker');
+    //     } else if (response.error) {
+    //       console.log('ImagePicker Error: ', response.error);
+    //     } else if (response.customButton) {
+    //       console.log('User tapped custom button: ', response.customButton);
+    //       alert(response.customButton);
+    //     } else {
+    //       // let source = response;
+    //       // You can also display the image using data:
+    //       let source = {
+    //         uri: 'data:image/jpeg;base64,' + response.data,
+    //       };
+    //       setFilePath(source);
+    //     }
+    //   });
+    // };
     //
 
     return (
@@ -192,7 +192,7 @@ const CreateProduct = () => {
                     mode="dropdown"
                     // iosIcon={<Icon name="arrow-down" />}
                     style={{width: undefined}}
-                    placeholder="Select your SIM"
+                    placeholder="Chọn danh mục"
                     placeholderStyle={{color: '#bfc6ea'}}
                     placeholderIconColor="#007aff"
                     selectedValue={categori}
@@ -295,25 +295,25 @@ const CreateProduct = () => {
               {/*<Image 
           source={{ uri: filePath.path}} 
           style={{width: 100, height: 100}} />*/}
-              <Image
+              {/* <Image
                 source={{
                   uri: 'data:image/jpeg;base64,' + filePath.data,
                 }}
                 style={styles.imageStyle}
               />
               <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
-              <Text style={styles.textStyle}>{filePath.uri}</Text>
+              <Text style={styles.textStyle}>{filePath.uri}</Text> */}
               {/*
           <Button
             title="Choose File"
             onPress={chooseFile} />
         */}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.buttonStyle}
                 onPress={chooseFile}>
                 <Text style={styles.textStyle}>Choose Image</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {/* <View style={styles.image}>
               <Image source={Images.onepiece2} />
