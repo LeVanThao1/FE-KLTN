@@ -209,7 +209,6 @@ export default function ForgotPassword({navigation}) {
           }
         />
       </View>
-
       <Text style={styles.err}>{confirmNewPassword.error}</Text>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>Xác nhận</Text>
