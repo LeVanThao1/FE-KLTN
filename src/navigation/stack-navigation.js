@@ -34,6 +34,7 @@ import AccountManager from '../screens/account-manager';
 import Profile from '../screens/profile';
 import Cart from '../screens/cart';
 import Feed from '../screens/feed';
+import ChangePassword from '../screens/change-password';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -69,6 +70,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 };
