@@ -93,9 +93,6 @@ const NewPost = () => {
       category: categori.value,
       year: year.value,
       price: price.value,
-      author: {
-        id: user.info.id,
-      }
     };
     createPost({
       variables: {
