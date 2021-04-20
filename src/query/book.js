@@ -161,7 +161,19 @@ export const GET_BOOK = gql`
 export const CREATE_BOOK = gql`
   mutation createBook($dataBook: BookCreate!) {
     createBook(dataBook: $dataBook) {
-      message
+      id
+      name
+      description
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      images
+      amount
+      price
     }
   }
 `;
