@@ -35,9 +35,11 @@ import Profile from '../screens/profile';
 import Cart from '../screens/cart';
 import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
+import { useNotification } from '../hooks';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
+  const notification = useNotification();
   return (
     <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
       <Stack.Screen
@@ -142,7 +144,6 @@ const AuthStack = () => {
           'refreshToken',
           data.refreshToken.refreshToken,
         );
-        setLoading(false);
       },
       onError: (err) => {
         setLoading(false);

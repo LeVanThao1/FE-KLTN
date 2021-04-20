@@ -21,6 +21,17 @@ export const GET_POSTS = gql`
         name
         avatar
       }
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       createdAt
     }
   }
@@ -30,6 +41,17 @@ export const GET_POSTS_USER= gql`
   query postByUser($userId: ID) {
     posts(userId: $userId) {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       title
       description
       images
@@ -54,6 +76,17 @@ export const GET_POST = gql`
   query post($id: ID!) {
     post(id: $id) {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       title
       description
       images

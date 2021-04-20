@@ -4,6 +4,17 @@ export const GET_BOOKS = gql`
   query books {
     books {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       name
       images
       year
@@ -41,6 +52,17 @@ export const GET_BOOKS_STORE = gql`
   query books($store: ID!) {
     books(store: $store) {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       book {
         id
         name
@@ -69,6 +91,17 @@ export const GET_BOOK = gql`
   query book($id: ID!) {
     book(id: $id) {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       book {
         id
         name
