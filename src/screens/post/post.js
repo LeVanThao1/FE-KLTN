@@ -1,13 +1,19 @@
+import { useNavigation } from '@react-navigation/native';
 import {Icon, Text, View} from 'native-base';
 import React, {useState} from 'react';
-import {Image, TextInput, TouchableHighlight} from 'react-native';
+import {Image, TextInput, TouchableHighlight, TouchableOpacity} from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {stylesPost} from './stylePost';
-const PostOne = ({navigation, route, post, info, type}) => {
+const PostOne = ({route, post, info, type}) => {
   const [visible, setIsVisible] = useState(false);
-
+  const navigation = useNavigation();
   return (
     <View>
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate('AddPost')}>
+          <Text>Thêm bài viết</Text>
+        </TouchableOpacity>
+      </View>
       <View style={stylesPost.person}>
         <View style={stylesPost.info}>
           <Image
