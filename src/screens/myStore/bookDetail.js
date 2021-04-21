@@ -17,7 +17,6 @@ import Images from '../../assets/images/images';
 import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
 import { button } from '../style';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const BookDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -25,18 +24,16 @@ const BookDetail = ({navigation, route}) => {
       stores: {category},
     } = useContext(MobXProviderContext);
 
-    const {bookId, bookName,bookCategory,bookPublisher, 
+    const {bookId, bookName,bookCategoryId, bookCategoryName,bookPublisher, 
         bookYear, bookPrint, bookPrice, bookAmount, bookDescription, bookImg} = route.params;
 
-        console.log("parammm....",bookId, bookName,bookCategory,bookPublisher, 
-        bookYear, bookPrint, bookPrice, bookAmount, bookDescription, bookImg)
     const [name, setName] = useState({
       value: bookName,
       error: '',
     });
 
     const [author, setAuthor] = useState({
-      value: 'Bao',
+      value: 'Aliba',
       error: '',
     });
     const [year, setYear] = useState({
@@ -44,11 +41,11 @@ const BookDetail = ({navigation, route}) => {
       error: '',
     });
     const [publisher, setPublisher] = useState({
-      value: bookPublisher?bookPublisher: '',
+      value:bookPublisher?bookPublisher: '',
       error: '',
     });
     const [numPrint, setNumPrint] = useState({
-      value: bookPrint?Number(bookPrint): 0,
+      value: bookPrint?bookPrint.toString(): '0',
       error: '',
     });
     const [description, setDescription] = useState({
@@ -57,17 +54,17 @@ const BookDetail = ({navigation, route}) => {
     });
 
     const [price, setPrice] = useState({
-      value: bookPrice?bookPrice: 0,
+      value: bookPrice?bookPrice.toString(): '0',
       error: '',
     });
 
     const [amount, setAmount] = useState({
-      value: bookAmount?Number(bookAmount):0,
+      value: bookAmount?bookAmount.toString():'0',
       error: '',
     });
 
     const [categori, setCategori] = useState({
-      value: bookCategory,
+      value: bookCategoryId,
     });
     const [images, setImages] = useState([])
     const onChange = (value) => {
@@ -86,41 +83,18 @@ const BookDetail = ({navigation, route}) => {
             },
         }
     );
-    
-    // useEffect(() => {
-    //     let dataBook= {
-    //         name: name.value,
-    //         description: description.value,
-    //         year: year.value,
-    //         numberOfReprint: numPrint.value,
-    //         publisher: publisher.value,
-    //         category: categori,
-    //         images: ['https://picsum.photos/200/300'],
-    //         amount: amount.value,
-    //         price: price.value,
-    //     };
-    //     updateBook({
-    //       variables: {
-    //         dataBook,
-    //         id: bookId
-    //       }
-    //     })
-    //   }, [bookId]);
-
-
-
-
+  
     const onPress = () => {
       let dataBook = {
         name: name.value,
         description: description.value,
         year: year.value,
-        numberOfReprint: numPrint.value,
+        numberOfReprint: Number(numPrint.value),
         publisher: publisher.value,
-        category: categori,
-        images: ['https://picsum.photos/200/300'],
-        amount: amount.value,
-        price: price.value,
+        category: categori.value,
+        // images: ['https://picsum.photos/200/300'],
+        amount: Number(amount.value),
+        price: Number(price.value),
       };
       updateBook({
         variables: {
@@ -152,7 +126,7 @@ const BookDetail = ({navigation, route}) => {
                 onFocus={() => {
                   setName({
                     ...name,
-                    error: '',
+                    error: '',                 
                   });
                 }}
                 onChangeText={(value) => {
@@ -175,7 +149,7 @@ const BookDetail = ({navigation, route}) => {
                     placeholder="Chọn danh mục"
                     placeholderStyle={{color: '#bfc6ea'}}
                     placeholderIconColor="#007aff"
-                    selectedValue={categori}
+                    selectedValue={categori.value}
                     onValueChange={onChange}>
                     {category.categories.map((ct, i) => (
                       <Picker.Item label={ct.name} value={ct.id} />
@@ -265,7 +239,7 @@ const BookDetail = ({navigation, route}) => {
                 onChangeText={(value) => {
                   setNumPrint({
                     ...numPrint,
-                    value: Number(value),
+                    value: value,
                   });
                 }}
               />
@@ -286,8 +260,6 @@ const BookDetail = ({navigation, route}) => {
               <Textarea
                 containerStyle={styles.textareacont}
                 style={styles.textarea}
-                // onChangeText={this.onChange}
-                // defaultValue={this.state.text}
                 maxLength={120}
                 placeholder={'Nhập mô tả sách'}
                 placeholderTextColor={'#c7c7c7'}
@@ -329,7 +301,7 @@ const BookDetail = ({navigation, route}) => {
                   onChangeText={(value) => {
                     setAmount({
                       ...amount,
-                      value: Number(value),
+                      value: value,
                     });
                   }}
                 />
@@ -347,8 +319,7 @@ const BookDetail = ({navigation, route}) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Nhập giá sách"
-                  value={bookPrice}
-                  defaultValue={bookPrice}
+                  value={price.value}
                   onFocus={() => {
                     setPrice({
                       ...price,
@@ -358,7 +329,7 @@ const BookDetail = ({navigation, route}) => {
                   onChangeText={(value) => {
                     setPrice({
                       ...price,
-                      value: Number(value),
+                      value: value,
                     });
                   }}
                 />

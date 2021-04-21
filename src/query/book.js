@@ -52,6 +52,11 @@ export const GET_BOOKS_STORE = gql`
   query books($store: ID!) {
     books(store: $store) {
       id
+      name
+      year
+      publisher
+      numberOfReprint
+      description
       comment {
         id
         content

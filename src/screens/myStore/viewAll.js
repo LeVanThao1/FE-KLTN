@@ -33,14 +33,15 @@ const ViewAll = () => {
           data?.books.map((ct, i) => ({
             id: ct.id,
             name: ct.name,
-            category: ct.category.name,
+            categoryId: ct.category.id,
+            categoryName: ct.category.name,
             price: ct.price,
             publisher: ct.publisher,
             numberOfReprint: ct.numberOfReprint,
             year: ct.year,
             amount: ct.amount,
             sold: ct.sold,
-            // description: ct.description,
+            description: ct.description,
             // images: ct.images? ct.img : [],
             // comment: ct.comment ? ct.comment : ''
           }))
@@ -81,7 +82,9 @@ const ViewAll = () => {
     <TouchableOpacity onPress={() => navigation.navigate('BookDetail', 
     { bookId: item.id,
       bookName: item.name,
-      bookCategory: item.category,
+      bookCategoryId: item.categoryId,
+      bookCategoryName: item.categoryName,
+
       bookPublisher: item.publisher,
       bookYear: item.year,
       bookPrint: item.numberOfReprint,
@@ -110,6 +113,9 @@ const ViewAll = () => {
       </View>
       <View style={stylesTable.column}>
         <Text>{item.numberOfReprint}</Text>
+      </View>
+      <View style={stylesTable.column}>
+        <Text>{item.description}</Text>
       </View>
       <View style={stylesTable.column}>
         <Text>{item.price}</Text>
@@ -169,6 +175,9 @@ const ViewAll = () => {
                 </View>
                 <View style={stylesTable.column}>
                   <Text>Số lần tái bản</Text>
+                </View>
+                <View style={stylesTable.column} numberOfLines={1}>
+                  <Text>Mô tả</Text>
                 </View>
                 <View style={stylesTable.column}>
                   <Text>Giá</Text>
