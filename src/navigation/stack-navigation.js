@@ -88,54 +88,6 @@ const HomeStack = ({navigation, initialRoute}) => {
   );
 };
 
-// const PaymentStack = () => {
-//   return (
-//     <Stack.Navigator initialRouteName="Thanh toán">
-//       <Stack.Screen name="Thanh toán" component={Payment} />
-//       <Stack.Screen name="Địa chỉ" component={Address} />
-//     </Stack.Navigator>
-//   );
-// };
-// const StoreStack = () => {
-//   return (
-//     // <NavigationContainer>
-//     <Stack.Navigator initialRouteName="Store">
-//       <Stack.Screen name="Store" component={CreateStore} />
-//       <Stack.Screen name="CreateProduct" component={CreateProduct} />
-//       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
-//       <Stack.Screen name="ManageOrder" component={ViewAllOrder} />
-//       <Stack.Screen name="Statistics" component={Statistics} />
-//       <Stack.Screen name="Revenue" component={Revenue} />
-//     </Stack.Navigator>
-//     // </NavigationContainer>
-//   );
-// };
-// const PostStack = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="" component={Post}  tilte={"tasadsa"} />
-//       <Stack.Screen name="Thêm bài viết" component={newPost} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const StackPersonal = () => {
-//   return (
-//     <Stack.Navigator initialRouteName="Personal">
-//       <Stack.Screen name="Personal" component={Profile} />
-//       {/* <Stack.Screen name="Thêm bài viết" component={newPost} /> */}
-//     </Stack.Navigator>
-//   );
-// };
-
-// const ContactStack = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Contact" component={Contact} />
-//     </Stack.Navigator>
-//   );
-// };
-
 const AuthStack = () => {
   return useObserver(() => {
     const {
