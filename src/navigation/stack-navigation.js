@@ -37,9 +37,12 @@ import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
 import ManageOrder from '../screens/manage-order';
 import OrderDetail from '../screens/order-detail';
+import {useNotification} from '../hooks';
+import BookDetail from '../screens/myStore/bookDetail';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
+  const notification = useNotification();
   return (
     <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
       <Stack.Screen
@@ -72,6 +75,8 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="BookDetail" component={BookDetail} />
+
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="ManageOrder" component={ManageOrder} />
       <Stack.Screen name="OrderDetail" component={OrderDetail} />
@@ -130,13 +135,15 @@ const HomeStack = ({navigation, initialRoute}) => {
 const AuthStack = () => {
   return useObserver(() => {
     const {
-      stores: {auth, user, shop},
+      stores: {auth, user, shop, notification},
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(true);
     const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
       onCompleted: async (data) => {
         shop.setInfo(data.refreshToken.user.store);
         user.setCart(data.refreshToken.user.cart);
+        notification.setAllNotification(data.refreshToken.user.notifications);
+        delete data.refreshToken.user.notifications;
         delete data.refreshToken.user.store;
         delete data.refreshToken.user.cart;
         user.setInfo(data.refreshToken.user);
@@ -146,7 +153,6 @@ const AuthStack = () => {
           'refreshToken',
           data.refreshToken.refreshToken,
         );
-        setLoading(false);
       },
       onError: (err) => {
         setLoading(false);
@@ -156,6 +162,8 @@ const AuthStack = () => {
       onCompleted: async (data) => {
         shop.setInfo(data.profile.store);
         user.setCart(data.profile.cart);
+        notification.setAllNotification(data.profile.notifications);
+        delete data.profile.notifications;
         delete data.profile.store;
         delete data.profile.cart;
         user.setInfo(data.profile);
@@ -170,7 +178,7 @@ const AuthStack = () => {
         // });
       },
     });
-
+    console.log(notification.book, notification.post);
     useEffect(() => {
       AsyncStorage.getItem('token').then((data) => {
         AsyncStorage.getItem('refreshToken').then((dt) => {

@@ -17,7 +17,7 @@ import Images from '../../assets/images/images';
 import { CREATE_POST } from '../../query/post';
 import {stylesPost} from './stylePost';
 
-const NewPost = () => {
+const PostDetail = () => {
   return useObserver(() => {
     const {
       stores: {user, category},
@@ -290,4 +290,4 @@ const NewPost = () => {
           });
 };
 
-export default memo(NewPost);
+export default memo(PostDetail);

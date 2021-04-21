@@ -4,6 +4,17 @@ export const GET_BOOKS = gql`
   query books {
     books {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       name
       images
       year
@@ -41,27 +52,35 @@ export const GET_BOOKS_STORE = gql`
   query books($store: ID!) {
     books(store: $store) {
       id
+      name
+      year
+      publisher
+      numberOfReprint
+      description
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       book {
         id
         name
-        images
-        year
-        numberOfReprint
-        publisher
-        category {
-          id
-          name
-        }
       }
-      store {
+      category{
         id
         name
-        avatar
       }
       amount
       price
       sold
       createdAt
+    	updatedAt
     }
   }
 `;
@@ -69,6 +88,17 @@ export const GET_BOOK = gql`
   query book($id: ID!) {
     book(id: $id) {
       id
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
       book {
         id
         name
@@ -128,7 +158,19 @@ export const GET_BOOK = gql`
 export const CREATE_BOOK = gql`
   mutation createBook($dataBook: BookCreate!) {
     createBook(dataBook: $dataBook) {
-      message
+      id
+      name
+      description
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      images
+      amount
+      price
     }
   }
 `;
@@ -142,7 +184,7 @@ export const UPDATE_BOOK = gql`
 `;
 
 export const DELETE_BOOK = gql`
-  query deleteBook($id: ID!) {
+  mutation deleteBook($id: ID!) {
     deleteBook(id: $id) {
       message
     }
