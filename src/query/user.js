@@ -36,6 +36,57 @@ export const LOGIN = gql`
           amount
           price
         }
+        notifications {
+          order {
+            id
+            title
+            description
+            order {
+              id
+            }
+            seen
+            createdAt
+            updatedAt
+          }
+          book {
+            id
+            title
+            description
+            commentBook {
+              id
+              content
+              book {
+                  id
+              }
+              author {
+                  name
+              }
+              type
+              createdAt
+            }
+            seen
+            createdAt
+          }
+          post {
+            id
+            title
+            description
+            commentPost {
+                id
+                content
+                post {
+                    id
+                }
+                author {
+                    name
+                }
+                type
+                createdAt
+            }
+            seen
+            createdAt
+          }
+        }
       }
       token
       refreshToken
@@ -86,6 +137,57 @@ export const GET_USER = gql`
         amount
         price
       }
+      notifications {
+        order {
+          id
+          title
+          description
+          order {
+            id
+          }
+          seen
+          createdAt
+          updatedAt
+        }
+        book {
+          id
+          title
+          description
+          commentBook {
+            id
+            content
+            book {
+                id
+            }
+            author {
+                name
+            }
+            type
+            createdAt
+          }
+          seen
+          createdAt
+        }
+        post {
+          id
+          title
+          description
+          commentPost {
+              id
+              content
+              post {
+                  id
+              }
+              author {
+                  name
+              }
+              type
+              createdAt
+          }
+          seen
+          createdAt
+        }
+      }
     }
   }
 `;
@@ -134,6 +236,57 @@ export const REFRESH_TOKEN = gql`
         }
         amount
         price
+      }
+      notifications {
+        order {
+          id
+          title
+          description
+          order {
+            id
+          }
+          seen
+          createdAt
+          updatedAt
+        }
+        book {
+          id
+          title
+          description
+          commentBook {
+            id
+            content
+            book {
+                id
+            }
+            author {
+                name
+            }
+            type
+            createdAt
+          }
+          seen
+          createdAt
+        }
+        post {
+          id
+          title
+          description
+          commentPost {
+              id
+              content
+              post {
+                  id
+              }
+              author {
+                  name
+              }
+              type
+              createdAt
+          }
+          seen
+          createdAt
+        }
       }
     }
     token

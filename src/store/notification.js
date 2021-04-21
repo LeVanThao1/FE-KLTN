@@ -28,6 +28,13 @@ export class Notification {
   };
   @action
   setOrder = (value) => {
-    this.book = value;
+    this.order = value;
   };
+
+  @action
+  setAllNotification = ({order, book, post}) => {
+    this.post = post;
+    this.book = book;
+    this.order = order;
+  }
 }

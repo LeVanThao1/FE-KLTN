@@ -33,7 +33,7 @@ const Login = ({navigation}) => {
 
   return useObserver(() => {
     const {
-      stores: {auth, user, shop},
+      stores: {auth, user, shop, notification},
     } = useContext(MobXProviderContext);
 
     const [login, {called, loading, data, error}] = useLazyQuery(LOGIN, {
@@ -41,6 +41,8 @@ const Login = ({navigation}) => {
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
+        notification.setAllNotification(data.login.user.notifications)
+        delete data.login.user.notifications;
         delete data.login.user.store;
         delete data.login.user.cart;
         user.setInfo(data?.login.user);
