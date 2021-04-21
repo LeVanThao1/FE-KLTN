@@ -9,12 +9,14 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
+import ImageView from 'react-native-image-viewing'
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK} from '../../query/book';
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
+// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const CreateProduct = () => {
   return useObserver(() => {
@@ -65,7 +67,7 @@ const CreateProduct = () => {
     const [categori, setCategori] = useState({
       value: '',
     });
-
+    const [images, setImages] = useState([])
     const onChange = (value) => {
       setCategori({
         value: value,
@@ -74,16 +76,16 @@ const CreateProduct = () => {
 
     // const [photo, setPhoto] = useState(null);
 
-    // const handleChoosePhoto = () => {
-    //   const options = {
-    //     noData: true,
-    //   };
-    //   ImagePicker.launchImageLibrary(options, (response) => {
-    //     if (response.uri) {
-    //       setPhoto({photo: response});
-    //     }
-    //   });
-    // };
+    const handleChoosePhoto = () => {
+      const options = {
+        noData: true,
+      };
+      ImagePicker.launchImageLibrary(options, (response) => {
+        if (response.uri) {
+          setPhoto({photo: response});
+        }
+      });
+    };
 
     const [createBook, {called, loading, data, error}] = useMutation(
       CREATE_BOOK,
@@ -329,6 +331,13 @@ const CreateProduct = () => {
               <Button title="Choose Photo" onPress={handleChoosePhoto} />
             </View> */}
             {/* des */}
+            <Button title="Choose Photo" onPress={handleChoosePhoto} />
+            <ImageView
+              images={images.map((im) => ({uri: im}))}
+              imageIndex={0}
+              visible={false}
+              // onRequestClose={() => setIsVisible(false)}
+            />
             <View style={styles.des}>
               <Text>Mô tả sản phẩm *</Text>
               <Textarea
