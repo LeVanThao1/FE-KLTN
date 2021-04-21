@@ -1,4 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import { valueFromAST } from 'graphql';
 import { MobXProviderContext } from 'mobx-react';
 import { useObserver } from 'mobx-react-lite';
@@ -19,13 +20,15 @@ const ViewAll = () => {
     const {
       stores: {shop},
     } = useContext(MobXProviderContext);
+    const navigation = useNavigation();
 
     const [listBook, setListBook] = useState(null);
-    const [book, setBook] = useState(null);
+    const [aBook, setABook] = useState(null);
     const [books, {called, loading, data, error}] = useLazyQuery(
       GET_BOOKS_STORE, {
       onCompleted: async(data) => {
-        setBook(data?.books);
+        setABook(data?.books);
+        console.log('dataa.....',data)
         setListBook(
           data?.books.map((ct, i) => ({
             id: ct.id,
@@ -36,7 +39,10 @@ const ViewAll = () => {
             numberOfReprint: ct.numberOfReprint,
             year: ct.year,
             amount: ct.amount,
-            sold: ct.sold
+            sold: ct.sold,
+            // description: ct.description,
+            // images: ct.images? ct.img : [],
+            // comment: ct.comment ? ct.comment : ''
           }))
         )
       },
@@ -61,7 +67,7 @@ const ViewAll = () => {
         console.log(err);
       }
     })
-
+    console.log('abook....',aBook);
     const onPress = (value) => {
       console.log('value',value);
       deleteBook({
@@ -72,6 +78,20 @@ const ViewAll = () => {
     };
 
   const RenderItem = ({item}) => (
+    <TouchableOpacity onPress={() => navigation.navigate('BookDetail', 
+    { bookId: item.id,
+      bookName: item.name,
+      bookCategory: item.category,
+      bookPublisher: item.publisher,
+      bookYear: item.year,
+      bookPrint: item.numberOfReprint,
+      bookPrice: item.price,
+      bookAmount: item.amount,
+      bookSold: item.sold,
+      bookDescription: item.description,
+      bookImg: item.images
+    }
+    )}>
     <View style={stylesTable.tableRow}>
       <View style={stylesTable.id}>
         <Text>{item.id}</Text>
@@ -99,11 +119,12 @@ const ViewAll = () => {
       </View>
       <View style={stylesTable.column}>
         <Text>{item.sold}</Text>
-      </View>
+      </View>     
       <View style={stylesTable.column}>
         <TouchableOpacity onPress={() => onPress(item.id)}><Text>Xóa</Text></TouchableOpacity>
       </View>
     </View>
+    </TouchableOpacity>
   )
 
   return (
@@ -157,9 +178,9 @@ const ViewAll = () => {
                 </View>
                 <View style={stylesTable.column}>
                   <Text>Đã bán</Text>
-                </View>
+                </View>               
                 <View style={stylesTable.column}>
-                  <Text>Hành động</Text>
+                  <Text>Xóa</Text>
                 </View>
               </View>
               <View>

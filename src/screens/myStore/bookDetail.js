@@ -14,58 +14,60 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
-import {CREATE_BOOK} from '../../query/book';
+import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
+import { button } from '../style';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-const CreateProduct = () => {
+const BookDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
       stores: {category},
     } = useContext(MobXProviderContext);
-    // console.log('categoriiiiiiii', category.categories);
-    const [product, setProduct] = useState({
-      value: '',
-      error: '',
-    });
+
+    const {bookId, bookName,bookCategory,bookPublisher, 
+        bookYear, bookPrint, bookPrice, bookAmount, bookDescription, bookImg} = route.params;
+
+        console.log("parammm....",bookId, bookName,bookCategory,bookPublisher, 
+        bookYear, bookPrint, bookPrice, bookAmount, bookDescription, bookImg)
     const [name, setName] = useState({
-      value: '',
+      value: bookName,
       error: '',
     });
 
     const [author, setAuthor] = useState({
-      value: '',
+      value: 'Bao',
       error: '',
     });
     const [year, setYear] = useState({
-      value: '',
+      value: bookYear?bookYear: '',
       error: '',
     });
     const [publisher, setPublisher] = useState({
-      value: '',
+      value: bookPublisher?bookPublisher: '',
       error: '',
     });
     const [numPrint, setNumPrint] = useState({
-      value: 0,
+      value: bookPrint?Number(bookPrint): 0,
       error: '',
     });
     const [description, setDescription] = useState({
-      value: '',
+      value: bookDescription?bookDescription: '',
       error: '',
     });
 
     const [price, setPrice] = useState({
-      value: 0,
+      value: bookPrice?bookPrice: 0,
       error: '',
     });
 
     const [amount, setAmount] = useState({
-      value: 0,
+      value: bookAmount?Number(bookAmount):0,
       error: '',
     });
 
     const [categori, setCategori] = useState({
-      value: '',
+      value: bookCategory,
     });
     const [images, setImages] = useState([])
     const onChange = (value) => {
@@ -74,30 +76,39 @@ const CreateProduct = () => {
       });
     };
 
-    // const [photo, setPhoto] = useState(null);
-
-    const handleChoosePhoto = () => {
-      const options = {
-        noData: true,
-      };
-      ImagePicker.launchImageLibrary(options, (response) => {
-        if (response.uri) {
-          setPhoto({photo: response});
+    const [updateBook, {called, loading, data, error}] = useMutation(
+        UPDATE_BOOK, {
+            onCompleted: async(data) => {
+                
+            },
+            onError: (err) => {
+                console.log(err);
+            },
         }
-      });
-    };
-
-    const [createBook, {called, loading, data, error}] = useMutation(
-      CREATE_BOOK,
-      {
-        onCompleted: async (data) => {
-          // setBookStore()
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      },
     );
+    
+    // useEffect(() => {
+    //     let dataBook= {
+    //         name: name.value,
+    //         description: description.value,
+    //         year: year.value,
+    //         numberOfReprint: numPrint.value,
+    //         publisher: publisher.value,
+    //         category: categori,
+    //         images: ['https://picsum.photos/200/300'],
+    //         amount: amount.value,
+    //         price: price.value,
+    //     };
+    //     updateBook({
+    //       variables: {
+    //         dataBook,
+    //         id: bookId
+    //       }
+    //     })
+    //   }, [bookId]);
+
+
+
 
     const onPress = () => {
       let dataBook = {
@@ -111,9 +122,10 @@ const CreateProduct = () => {
         amount: amount.value,
         price: price.value,
       };
-      createBook({
+      updateBook({
         variables: {
           dataBook,
+          id: bookId
         },
       });
     };
@@ -123,14 +135,19 @@ const CreateProduct = () => {
       <ScrollView>
         <View style={styles.container_product}>
           {/*  */}
-          <Text style={styles.header}>Thêm 1 sản phẩm mới</Text>
+          <Text style={styles.header}>Thông tin sản phẩm</Text>
           <View style={styles.title}>
             {/* name */}
             <View style={styles.name}>
-              <Text>Tên sản phẩm *</Text>
+              <Text>Mã sản phẩm</Text>
+              <Text>{bookId}</Text>
+              </View>
+            <View style={styles.name}>
+              <Text>Tên sản phẩm</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập tên sản phẩm"
+                defaultValue={name.value}
                 value={name.value}
                 onFocus={() => {
                   setName({
@@ -147,7 +164,7 @@ const CreateProduct = () => {
               />
             </View>
             <View>
-              <Text>Danh mục sách *</Text>
+              <Text>Danh mục sách</Text>
               <Form>
                 <Item picker>
                   <Picker
@@ -171,7 +188,7 @@ const CreateProduct = () => {
 
             {/* author */}
             <View style={styles.name}>
-              <Text>Tác giả *</Text>
+              <Text>Tác giả</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập tên tác giả"
@@ -192,7 +209,7 @@ const CreateProduct = () => {
             </View>
             {/* year */}
             <View style={styles.name}>
-              <Text>Năm phát hành *</Text>
+              <Text>Năm phát hành</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập năm phát hành"
@@ -213,7 +230,7 @@ const CreateProduct = () => {
             </View>
             {/* pulisher */}
             <View style={styles.name}>
-              <Text>Nhà xuất bản *</Text>
+              <Text>Nhà xuất bản</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập tên nhà xuất bản"
@@ -234,7 +251,7 @@ const CreateProduct = () => {
             </View>
             {/* number of printed lines */}
             <View style={styles.name}>
-              <Text>Số lần xuất bản *</Text>
+              <Text>Số lần xuất bản</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập số lần xuất bản"
@@ -257,15 +274,15 @@ const CreateProduct = () => {
             <View style={styles.container}>
             </View>
 
-            <Button title="Choose Photo" onPress={handleChoosePhoto} />
+            {/* <Button title="Choose Photo" onPress={handleChoosePhoto} />
             <ImageView
               images={images.map((im) => ({uri: im}))}
               imageIndex={0}
               visible={false}
               // onRequestClose={() => setIsVisible(false)}
-            />
+            /> */}
             <View style={styles.des}>
-              <Text>Mô tả sản phẩm *</Text>
+              <Text>Mô tả sản phẩm</Text>
               <Textarea
                 containerStyle={styles.textareacont}
                 style={styles.textarea}
@@ -320,7 +337,7 @@ const CreateProduct = () => {
               </View>
             </View>
             <View style={styles.price}>
-              <Text>Giá sách *</Text>
+              <Text>Giá sách</Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -330,7 +347,8 @@ const CreateProduct = () => {
                 <TextInput
                   style={styles.input}
                   placeholder="Nhập giá sách"
-                  value={price.value}
+                  value={bookPrice}
+                  defaultValue={bookPrice}
                   onFocus={() => {
                     setPrice({
                       ...price,
@@ -360,7 +378,7 @@ const CreateProduct = () => {
               title="Xác nhận"
               onPress={onPress}></Button> */}
             <TouchableOpacity onPress={onPress}>
-              <Text>Xac nhan</Text>
+              <Text style={button.btn}>Cập nhật</Text>
             </TouchableOpacity>
           </View>
           {/* des */}
@@ -423,4 +441,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(CreateProduct);
+export default memo(BookDetail);

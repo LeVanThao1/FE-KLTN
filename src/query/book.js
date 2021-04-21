@@ -66,7 +66,6 @@ export const GET_BOOKS_STORE = gql`
       book {
         id
         name
-        avatar
       }
       category{
         id
