@@ -39,6 +39,8 @@ import ManageOrder from '../screens/manage-order';
 import OrderDetail from '../screens/order-detail';
 import {useNotification} from '../hooks';
 import BookDetail from '../screens/myStore/bookDetail';
+import PostDetail from '../screens/post/postDetail';
+import PostOne from '../screens/post/post';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -76,61 +78,15 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Feed" component={Feed} />
       <Stack.Screen name="BookDetail" component={BookDetail} />
-
+      <Stack.Screen name="PostDetail" component={PostDetail} />
+      <Stack.Screen name="Post" component={Post} />
+      <Stack.Screen name="PostOne" component={PostOne} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="ManageOrder" component={ManageOrder} />
       <Stack.Screen name="OrderDetail" component={OrderDetail} />
     </Stack.Navigator>
   );
 };
-
-// const PaymentStack = () => {
-//   return (
-//     <Stack.Navigator initialRouteName="Thanh toán">
-//       <Stack.Screen name="Thanh toán" component={Payment} />
-//       <Stack.Screen name="Địa chỉ" component={Address} />
-//     </Stack.Navigator>
-//   );
-// };
-// const StoreStack = () => {
-//   return (
-//     // <NavigationContainer>
-//     <Stack.Navigator initialRouteName="Store">
-//       <Stack.Screen name="Store" component={CreateStore} />
-//       <Stack.Screen name="CreateProduct" component={CreateProduct} />
-//       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
-//       <Stack.Screen name="ManageOrder" component={ViewAllOrder} />
-//       <Stack.Screen name="Statistics" component={Statistics} />
-//       <Stack.Screen name="Revenue" component={Revenue} />
-//     </Stack.Navigator>
-//     // </NavigationContainer>
-//   );
-// };
-// const PostStack = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="" component={Post}  tilte={"tasadsa"} />
-//       <Stack.Screen name="Thêm bài viết" component={newPost} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const StackPersonal = () => {
-//   return (
-//     <Stack.Navigator initialRouteName="Personal">
-//       <Stack.Screen name="Personal" component={Profile} />
-//       {/* <Stack.Screen name="Thêm bài viết" component={newPost} /> */}
-//     </Stack.Navigator>
-//   );
-// };
-
-// const ContactStack = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Contact" component={Contact} />
-//     </Stack.Navigator>
-//   );
-// };
 
 const AuthStack = () => {
   return useObserver(() => {

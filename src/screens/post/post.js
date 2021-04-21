@@ -1,19 +1,52 @@
+import { useMutation } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
 import {Icon, Text, View} from 'native-base';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, TextInput, TouchableHighlight, TouchableOpacity} from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import { DELETE_POST } from '../../query/post';
 import {stylesPost} from './stylePost';
 const PostOne = ({route, post, info, type}) => {
   const [visible, setIsVisible] = useState(false);
   const navigation = useNavigation();
+
+  const [deletePost, {called, loading, data, error}] = useMutation(DELETE_POST, {
+    onCompleted: async(data) => {
+      
+    },
+    onError: (err) => {
+      console.log(err);
+    }
+  });
+
+  const onPress = () => {
+    deletePost({
+      variables: ({
+        id: post.id,
+      })
+    })
+  }
+
+  useEffect(() => {
+    
+  }, [post])
+
   return (
-    <View>
-      <View>
-        <TouchableOpacity onPress={() => navigation.navigate('AddPost')}>
-          <Text>Thêm bài viết</Text>
-        </TouchableOpacity>
-      </View>
+    <TouchableOpacity onPress={() => navigation.navigate("PostDetail", {
+      postId: post.id,
+      postTitle: post.title,
+      // postBookName: post.uniqueBook.name,
+      postDescription: post.description,
+      postImg: post.images,
+      postYear: post.year,
+      postNumPrint: post.numberOfReprint,
+      postCategory: post.category,
+      postPrice: post.price,
+      postPublisher: post.publisher,
+      postWanna: post.bookWanna.reduce((a,b) => a+' - '+b, ''),
+      postComment: post.comment
+    })}>
+    <View >      
       <View style={stylesPost.person}>
         <View style={stylesPost.info}>
           <Image
@@ -24,7 +57,9 @@ const PostOne = ({route, post, info, type}) => {
             {type ? info.name : post.author.name}
           </Text>
         </View>
-        <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
+        <TouchableOpacity>
+          <Icon name="dots-horizontal" type="MaterialCommunityIcons" onPress={onPress}/>
+        </TouchableOpacity>
       </View>
       <View style={stylesPost.text}>
         <Text style={{fontWeight: 'bold'}}>#{post.title}</Text>
@@ -77,6 +112,7 @@ const PostOne = ({route, post, info, type}) => {
         <View style={stylesPost.cmt}></View>
       </View>
     </View>
+    </TouchableOpacity>
   );
 };
 
