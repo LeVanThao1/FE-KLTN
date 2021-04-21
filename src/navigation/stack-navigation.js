@@ -36,6 +36,7 @@ import Cart from '../screens/cart';
 import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
 import { useNotification } from '../hooks';
+import BookDetail from '../screens/myStore/bookDetail';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -72,6 +73,8 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Feed" component={Feed} />
+      <Stack.Screen name="BookDetail" component={BookDetail} />
+
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
