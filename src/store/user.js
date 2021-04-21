@@ -10,10 +10,14 @@ export class User {
   @observable
   posts = undefined;
 
-  constructor(info, cart, post) {
+  @observable
+  subOrders = [];
+
+  constructor(info, cart, post, subOrders) {
     this.cart = cart;
     this.info = info;
     this.posts = post;
+    this.subOrders = subOrders;
     makeObservable(this);
   }
 
@@ -29,5 +33,9 @@ export class User {
   @action
   setPosts = (posts) => {
     this.posts = posts;
+  };
+  @action
+  setSubOrder = (orders) => {
+    this.subOrders = subOrders;
   };
 }

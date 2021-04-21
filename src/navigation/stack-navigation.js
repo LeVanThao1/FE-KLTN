@@ -35,6 +35,8 @@ import Profile from '../screens/profile';
 import Cart from '../screens/cart';
 import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
+import ManageOrder from '../screens/manage-order';
+import OrderDetail from '../screens/order-detail';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -58,7 +60,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="CreateProduct" component={CreateProduct} />
       <Stack.Screen name="CreateStore" component={CreateStore} />
       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
-      <Stack.Screen name="ManageOrder" component={ViewAllOrder} />
+      <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Revenue" component={Revenue} />
       <Stack.Screen name="Payment" component={Payment} />
@@ -71,6 +73,8 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Feed" component={Feed} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="ManageOrder" component={ManageOrder} />
+      <Stack.Screen name="OrderDetail" component={OrderDetail} />
     </Stack.Navigator>
   );
 };
