@@ -17,7 +17,7 @@ export const stylesTable = StyleSheet.create({
   tableGrid: {
     marginTop: 50,
     width: '100%',
-    height: 100,
+    height: 'auto',
     flexDirection: 'column',
     justifyContent: 'space-between',
 
@@ -30,12 +30,17 @@ export const stylesTable = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#eee',
     width: '100%',
+    height: 'auto',
+    borderColor: '#CFD2D1',
+    borderWidth: 1 
   },
   column: {
     flex: 1,
     width: 100,
     marginHorizontal: 10,
     alignItems: 'center',
+    color: "#111",
+    fontSize: 14,
   },
   id: {
     width: 50,
