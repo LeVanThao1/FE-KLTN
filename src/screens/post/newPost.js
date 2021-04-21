@@ -78,9 +78,6 @@ const NewPost = () => {
     }
   })
 
-  console.log('name-',name.value, '-title-', title.value, 'description', description.value, 'publisher', publisher.value,
-  'bookwna', bookWanna.value, 'category', categori.value, 'year', year.value, 'numberPrint', numberOfReprint.value, 'price', price.value)
-
   const onPress = () => {
     let dataPost = {
       title: title.value,
@@ -287,7 +284,7 @@ const NewPost = () => {
       </View>
     </ScrollView>
   );
-          });
+});
 };
 
 export default memo(NewPost);

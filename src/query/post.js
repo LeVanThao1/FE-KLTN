@@ -12,6 +12,7 @@ export const GET_POSTS = gql`
       publisher
       bookWanna
       images
+      price
       category {
         id
         name
@@ -52,6 +53,7 @@ export const GET_POSTS_USER= gql`
         }
         createdAt
       }
+      price
       title
       description
       images
@@ -87,6 +89,10 @@ export const GET_POST = gql`
         }
         createdAt
       }
+      uniqueBook {
+        name
+      }
+      price
       title
       description
       images
@@ -136,17 +142,9 @@ mutation createPost($dataPost: dataCreatePost!) {
 `;
 
 export const UPDATE_POST = gql`
-  mutation updatePostByUser($dataPost: dataUpdatePost!, $id: ID!) {
-    updatePostByUser(dataPost: $dataPost, id: $id) {
-      id
-      title
-      description
-      images
-      bookWanna
-      author {
-        name
-        avatar
-      }
+  mutation updatePost($dataPost: dataUpdatePost!, $id: ID!) {
+    updatePost(dataPost: $dataPost, id: $id) {
+      message
     }
   }
 `;

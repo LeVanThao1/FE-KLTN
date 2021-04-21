@@ -29,12 +29,22 @@ export const stylesPost = StyleSheet.create({
     marginHorizontal: "2%",
     flexDirection: 'row',
     marginVertical: 10,
+    marginRight: 10,
     justifyContent: "space-between"
   },
   post: {
     width: "45%",
     height: 200,
-    resizeMode: "cover"
+    resizeMode: "cover",
+    marginRight: 5
+  },
+
+  img: {
+    padding: 10,
+    borderTopColor: '#111',
+    borderTopWidth: 0.2,
+    marginTop: 15,
+    flexDirection: 'row'
   },
 
   picker: {
@@ -60,6 +70,10 @@ export const stylesPost = StyleSheet.create({
     alignItems: 'center',
   },
 
+  textImg: {
+    marginVertical: 10,
+  },
+
   textCount: {
     paddingLeft: 10,
   },
@@ -76,7 +90,12 @@ export const stylesPost = StyleSheet.create({
 
   addpost: {
     padding: 10,
-    // margin: 50,
+  },
+
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 
   input: {

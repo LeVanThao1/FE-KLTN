@@ -6,6 +6,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
 import {GET_POSTS_USER} from '../../query/post';
+import { button } from '../style';
 import PostOne from './post';
 const Post = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -17,7 +18,6 @@ const Post = ({navigation, route}) => {
     const {posts, setPosts, info} = user;
     const userId = route?.params?.userId || info.id;
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
       queryData(GET_POSTS_USER, {userId})
         .then(({data}) => {
@@ -37,10 +37,15 @@ const Post = ({navigation, route}) => {
             onRefresh={() => {
               setRefreshing(true);
             }}
-          />
+          />          
         }>
+        <View style={{position: 'relative'}}>
+        <TouchableOpacity style={button.addPost} onPress={() => navigation.navigate('AddPost')}>
+          <Text style={button.addPost}>+</Text>
+        </TouchableOpacity>
+      </View>
         {!loading ? (
-          posts && posts.length > 0 ? (
+          posts && posts.length > 0 ? (            
             posts.map((pt) => (
               <PostOne key={pt.id} post={pt} info={info} type={true} />
             ))
@@ -51,16 +56,7 @@ const Post = ({navigation, route}) => {
           )
         ) : (
           <Spinner />
-        )}
-        {/* {posts && posts.length > 0 ? (
-          posts.map((pt) => (
-            <PostOne key={pt.id} post={pt} info={info} type={true}></PostOne>
-          ))
-        ) : (
-          <Text style={{textAlign: 'center', marginTop: 20}}>
-            Chưa có bài viết
-          </Text>
-        )} */}
+        )}     
       </ScrollView>
     );
   });

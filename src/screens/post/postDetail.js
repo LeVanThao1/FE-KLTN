@@ -14,44 +14,42 @@ import {
 import Textarea from 'react-native-textarea';
 
 import Images from '../../assets/images/images';
-import { CREATE_POST } from '../../query/post';
+import {UPDATE_POST } from '../../query/post';
 import {stylesPost} from './stylePost';
 
-const PostDetail = () => {
+const PostDetail = ({route}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
     } = useContext(MobXProviderContext);
-    
-  const [name, setName] = useState({
-    value: '',
-    error: ''
-  })
-
+    const {postId, postTitle, postDescription, postImg,
+       postYear, postNumPrint, postCategory, 
+       postPrice, postPublisher, postWanna, postComment
+    } = route.params;
   const [title, setTitle] = useState({
-    value: '',
+    value: postTitle?postTitle: '',
     error: '',
   });
   const [description, setDescription] = useState({
-    value: '',
+    value: postDescription?postDescription : '',
     error: '',
   });
 
   const [bookWanna, setBookWanna] = useState({
-    value: [],
+    value: postWanna?postWanna : '',
     error: '',
   });
 
   const [price, setPrice] = useState({
-    value: 0,
+    value: postPrice?postPrice.toString(): '0',
     error: ''
   });
   const [year, setYear] = useState({
-    value: '',
+    value: postYear?postYear : '',
     error: ''
   });
   const [publisher, setPublisher] = useState({
-    value: '',
+    value: postPublisher?postPublisher: '',
     error: ''
   });
   const [categori, setCategori] = useState({
@@ -59,7 +57,7 @@ const PostDetail = () => {
     error: ''
   });
   const [numberOfReprint, setNumberOfReprint] = useState({
-    value: 0,
+    value: postNumPrint?postNumPrint.toString(): '0',
     error: ''
   })
 
@@ -69,7 +67,7 @@ const PostDetail = () => {
     })
   }
 
-  const [createPost, {called, loading, data, error}] = useMutation(CREATE_POST, {
+  const [updatePost, {called, loading, data, error}] = useMutation(UPDATE_POST, {
     onCompleted: async(data) => {
 
     },
@@ -78,34 +76,52 @@ const PostDetail = () => {
     }
   })
 
-  console.log('name-',name.value, '-title-', title.value, 'description', description.value, 'publisher', publisher.value,
-  'bookwna', bookWanna.value, 'category', categori.value, 'year', year.value, 'numberPrint', numberOfReprint.value, 'price', price.value)
+  const renderItem = ({item}) => (
+    <View style={stylesPost.content}>
+      <Text>Hình ảnh</Text>
+      {item.map((img, i) => (
+      <Image key={i} source={{uri: img}} style={stylesPost.post} />   
+      ))}
+    </View>
+  )
 
   const onPress = () => {
     let dataPost = {
       title: title.value,
-      name: name.value,
       description: description.value,
       bookWanna: [bookWanna.value],
-      images: ['https://picsum.photos/200/300'],
+      // images: ['https://picsum.photos/200/300'],
       publisher: publisher.value,
-      numberOfReprint: numberOfReprint.value,
-      category: categori.value,
+      numberOfReprint: Number(numberOfReprint.value),
+      // category: categori.value,
       year: year.value,
-      price: price.value,
+      price: Number(price.value),
     };
-    createPost({
+    updatePost({
       variables: {
-        dataPost
+        dataPost,
+        id: postId
       }
     })
   }
 
   return (
     <ScrollView horizontal={false}>
-      <View style={stylesPost.addpost}>        
-        <Image source={Images.onepiece1} style={stylesPost.post} />   
-
+      <View style={stylesPost.addpost}>   
+        <View style={stylesPost.rowBetween}>
+          <Text>ID: </Text>
+          <Text>{postId}</Text>
+        </View>
+        <ScrollView showsVerticalScrollIndicator>
+          <View style={stylesPost.textImg}>
+            <Text>Hình ảnh</Text>          
+            <View style={stylesPost.img}>
+              {postImg.map((img, i) => (
+                <Image key={i} source={{uri: img}} style={stylesPost.post} />   
+              ))}
+            </View>
+          </View>
+        </ScrollView>
         <View style={stylesPost.content}>     
           <View style={stylesPost.text}>
             <Text>Tiêu đề: </Text>
@@ -123,23 +139,7 @@ const PostDetail = () => {
                   value: value
                 })
               }}
-            />            
-            <Text>Tên sách: </Text>
-            <TextInput placeholder="Nhập tên sách" 
-              value={name.value}
-              onFocus={() => {
-                setName({
-                  ...name,
-                  error: ''
-                })
-              }}
-              onChangeText={(value) => {
-                setName({
-                  ...name,
-                  value: value
-                })
-              }}
-            />
+            />                        
             <Text>Danh mục sách</Text>
               <Form>
                 <Item picker>
@@ -156,7 +156,6 @@ const PostDetail = () => {
                     {category.categories.map((ct, i) => (
                       <Picker.Item label={ct.name} value={ct.id} />
                     ))}
-                    {/* <Picker.Item label="Wallet" value="key0" /> */}
                   </Picker>
                 </Item>
               </Form>
@@ -176,22 +175,24 @@ const PostDetail = () => {
                 })
               }}
             />
-            <Text>Số lần xuất bản </Text>
-            <TextInput placeholder="Nhập số lần xuất bản" 
-              value={numberOfReprint.value}
-              onFocus={() => {
-                setNumberOfReprint({
-                  ...numberOfReprint,
-                  error: ''
-                })
-              }}
-              onChangeText={(value) => {
-                setNumberOfReprint({
-                  ...numberOfReprint,
-                  value: Number(value),
-                })
-              }}
-            />
+            <View >
+              <Text>Số lần xuất bản </Text>
+              <TextInput placeholder="Nhập số lần xuất bản" 
+                value={numberOfReprint.value}
+                onFocus={() => {
+                  setNumberOfReprint({
+                    ...numberOfReprint,
+                    error: ''
+                  })
+                }}
+                onChangeText={(value) => {
+                  setNumberOfReprint({
+                    ...numberOfReprint,
+                    value: Number(value),
+                  })
+                }}
+              />
+            </View>
             <Text>Năm xuất bản </Text>
             <TextInput placeholder="Nhập năm xuất bản" 
               onFocus={() => {
@@ -229,7 +230,7 @@ const PostDetail = () => {
                   onChangeText={(value) => {
                     setPrice({
                       ...price,
-                      value: Number(value),
+                      value: value,
                     });
                   }}
                 />
@@ -270,19 +271,17 @@ const PostDetail = () => {
                 value: value
               })
             }}
-            // defaultValue={this.state.text}
+            value={description.value}
             maxLength={120}
             placeholder={'Nhập mô tả sách'}
             placeholderTextColor={'#c7c7c7'}
             underlineColorAndroid={'transparent'}
-            value={description.value}
             placeholder="Nhập mô tả" 
             /> 
             <TouchableOpacity style={{width: '100%'}} onPress={onPress}>
-              <Text style={stylesPost.btn}>Đăng bài</Text>
+              <Text style={stylesPost.btn}>Cập nhật</Text>
             </TouchableOpacity>
-          </View>
-         
+          </View>         
         </View>
       </View>
     </ScrollView>
