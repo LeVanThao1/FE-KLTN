@@ -35,9 +35,11 @@ import Profile from '../screens/profile';
 import Cart from '../screens/cart';
 import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
+import { useNotification } from '../hooks';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
+  const notification = useNotification();
   return (
     <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
       <Stack.Screen
@@ -126,13 +128,15 @@ const HomeStack = ({navigation, initialRoute}) => {
 const AuthStack = () => {
   return useObserver(() => {
     const {
-      stores: {auth, user, shop},
+      stores: {auth, user, shop, notification},
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(true);
     const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
       onCompleted: async (data) => {
         shop.setInfo(data.refreshToken.user.store);
         user.setCart(data.refreshToken.user.cart);
+        notification.setAllNotification(data.refreshToken.user.notifications)
+        delete data.refreshToken.user.notifications;
         delete data.refreshToken.user.store;
         delete data.refreshToken.user.cart;
         user.setInfo(data.refreshToken.user);
@@ -142,7 +146,6 @@ const AuthStack = () => {
           'refreshToken',
           data.refreshToken.refreshToken,
         );
-        setLoading(false);
       },
       onError: (err) => {
         setLoading(false);
@@ -152,6 +155,8 @@ const AuthStack = () => {
       onCompleted: async (data) => {
         shop.setInfo(data.profile.store);
         user.setCart(data.profile.cart);
+        notification.setAllNotification(data.profile.notifications)
+        delete data.profile.notifications;
         delete data.profile.store;
         delete data.profile.cart;
         user.setInfo(data.profile);
@@ -166,7 +171,7 @@ const AuthStack = () => {
         // });
       },
     });
-
+    console.log(notification.book, notification.post)
     useEffect(() => {
       AsyncStorage.getItem('token').then((data) => {
         AsyncStorage.getItem('refreshToken').then((dt) => {
