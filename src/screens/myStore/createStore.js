@@ -30,14 +30,16 @@ const CreateStore = ({navigation}) => {
       stores: {shop},
     } = useContext(MobXProviderContext);
     const {info} = shop;
+    console.log(shop);
+    console.log(info);
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState(null);
     const [text, setText] = useState('');
     const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
       onCompleted: async (data) => {
         setListInfo({
-          id: info.id,
-          name: info.name,
+          id: info?.id,
+          name: info?.name,
         });
       },
       onError: (err) => {
@@ -47,7 +49,7 @@ const CreateStore = ({navigation}) => {
     useEffect(() => {
       store({
         variables: {
-          id: info.id,
+          id: info?.id,
         },
       });
     }, [info]);
@@ -56,11 +58,11 @@ const CreateStore = ({navigation}) => {
 
     return (
       <ScrollView>
-        <View style={styles.images}>
+        {/* <View style={styles.images}>
           <ImageBackground source={Images.slider1} style={styles.image}>
             <Image source={{uri: info.avatar}} style={styles.avatar} />
           </ImageBackground>
-        </View>
+        </View> */}
         <View style={styles.container_store}>
           <View style={styles.content}>
             <Text>Tên shop: </Text>
@@ -76,7 +78,7 @@ const CreateStore = ({navigation}) => {
                   width: '100%',
                 })
               }
-              value={info.name}
+              value={info?.name}
             />
           </View>
           <View style={styles.des}>
@@ -90,7 +92,7 @@ const CreateStore = ({navigation}) => {
               placeholder={'Description'}
               placeholderTextColor={'#c7c7c7'}
               underlineColorAndroid={'transparent'}
-              value={info.description}
+              value={info?.description}
             />
           </View>
           <View style={styles.evalue}>
