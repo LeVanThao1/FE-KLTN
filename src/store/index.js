@@ -7,7 +7,7 @@ import {Notification} from  './notification';
 
 export const stores = {
   auth: new Auth(false, '', ''),
-  user: new User(undefined, undefined),
+  user: new User(undefined, undefined, undefined, []),
   book: new Book(undefined),
   category: new Category(undefined),
   shop: new Shop(undefined, undefined),

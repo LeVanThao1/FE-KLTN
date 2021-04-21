@@ -15,7 +15,12 @@ import {Icon} from 'native-base';
 export default function AccountManager({navigation}) {
   return useObserver(() => {
     const {
-      stores: {auth, user},
+      stores: {
+        auth,
+        user: {
+          info: {name, avatar},
+        },
+      },
     } = useContext(MobXProviderContext);
     const ManagerItem = ({label, icon, url, isLogout}) => {
       return !url ? (
@@ -52,16 +57,6 @@ export default function AccountManager({navigation}) {
     };
     return (
       <View style={styles.container}>
-        <View style={styles.header_wrap}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon
-              name="arrow-back-sharp"
-              type="Ionicons"
-              style={styles.headerIcon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Account</Text>
-        </View>
         <ScrollView>
           <View style={styles.content_wrap}>
             <View style={styles.user_wrap}>
@@ -69,10 +64,11 @@ export default function AccountManager({navigation}) {
                 style={styles.user__avatar}
                 source={{
                   uri:
+                    avatar ||
                     'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
                 }}
               />
-              <Text style={styles.user_name}>Anh Lâm</Text>
+              <Text style={styles.user_name}>{name}</Text>
             </View>
             <View style={styles.manager_wrapp}>
               <ManagerItem
@@ -89,7 +85,7 @@ export default function AccountManager({navigation}) {
               <ManagerItem
                 label="Quản lý đơn hàng mua"
                 icon="gift"
-                url="manager-order"
+                url="ManageOrder"
               />
               <ManagerItem
                 label="Quản lý giỏ hàng"
@@ -109,7 +105,6 @@ export default function AccountManager({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
   },
   //   manager_wrapp: {
 
@@ -131,22 +126,35 @@ const styles = StyleSheet.create({
   },
   user_wrap: {
     justifyContent: 'center',
-    marginBottom: 5,
+    marginBottom: 16,
     alignItems: 'center',
   },
   user__avatar: {
     width: 150,
     height: 150,
     borderRadius: 150 / 2,
+    marginBottom: 16,
+  },
+  user_name: {
+    fontSize: 16,
+    marginBottom: 10,
   },
   manager_item: {
-    marginVertical: 10,
+    marginVertical: 0,
   },
   manager_item_wrap: {
     flexDirection: 'row',
-    borderBottomColor: '#ffe31b',
+    borderBottomColor: 'rgba(68, 108, 179, 1)',
     borderBottomWidth: 0.6,
+    paddingVertical: 8,
+    paddingLeft: 16,
   },
-  manager_item_icon: {fontSize: 16, color: '#ffe31b', marginRight: 5},
-  manager_item_text: {},
+  manager_item_icon: {
+    fontSize: 20,
+    color: 'rgba(68, 108, 179, 1)',
+    marginRight: 16,
+  },
+  manager_item_text: {
+    fontSize: 16,
+  },
 });
