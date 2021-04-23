@@ -13,11 +13,15 @@ export class User {
   @observable
   subOrders = [];
 
-  constructor(info, cart, post, subOrders) {
+  @observable
+  likes = [];
+
+  constructor(info, cart, post, subOrders, likes) {
     this.cart = cart;
     this.info = info;
     this.posts = post;
     this.subOrders = subOrders;
+    this.likes = likes;
     makeObservable(this);
   }
 
@@ -37,5 +41,20 @@ export class User {
   @action
   setSubOrder = (orders) => {
     this.subOrders = subOrders;
+  };
+
+  @action
+  addToLike = (book) => {
+    this.likes = [...this.likes, value];
+  };
+
+  @action
+  setLikes = (value) => {
+    this.likes = value;
+  };
+
+  @action
+  removeToLike = (id) => {
+    this.likes = this.likes.filter((lk) => lk.id + '' !== id);
   };
 }

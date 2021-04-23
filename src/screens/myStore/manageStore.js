@@ -9,7 +9,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing'
+import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
@@ -67,7 +67,7 @@ const CreateProduct = () => {
     const [categori, setCategori] = useState({
       value: '',
     });
-    const [images, setImages] = useState([])
+    const [images, setImages] = useState([]);
     const onChange = (value) => {
       setCategori({
         value: value,
@@ -82,7 +82,8 @@ const CreateProduct = () => {
       };
       ImagePicker.launchImageLibrary(options, (response) => {
         if (response.uri) {
-          setPhoto({photo: response});
+          console.log(response);
+          setImages(response);
         }
       });
     };
@@ -117,7 +118,6 @@ const CreateProduct = () => {
         },
       });
     };
-
 
     return (
       <ScrollView>
@@ -254,16 +254,15 @@ const CreateProduct = () => {
               />
             </View>
             {/* Image */}
-            <View style={styles.container}>
-            </View>
+            <View style={styles.container}></View>
 
             <Button title="Choose Photo" onPress={handleChoosePhoto} />
-            <ImageView
+            {/* <ImageView
               images={images.map((im) => ({uri: im}))}
               imageIndex={0}
               visible={false}
               // onRequestClose={() => setIsVisible(false)}
-            />
+            /> */}
             <View style={styles.des}>
               <Text>Mô tả sản phẩm *</Text>
               <Textarea
