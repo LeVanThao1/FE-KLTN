@@ -1,30 +1,72 @@
-import React from 'react';
+import React, {useContext, useRef, useState} from 'react';
 
 import {Accordion, Icon, Row} from 'native-base';
 import {TextInput, Text, View, StyleSheet, SafeAreaView} from 'react-native';
+import {SEARCH_BOOK} from '../query/book';
+import {useLazyQuery} from '@apollo/client';
+import {useObserver} from 'mobx-react-lite';
+import {MobXProviderContext} from 'mobx-react';
 
 const HeaderStack = ({navigation}) => {
-  const openMenu = () => {};
+  return useObserver(() => {
+    const {
+      stores: {book},
+    } = useContext(MobXProviderContext);
+    const {books, textSearch, setTextSearch} = book;
 
-  return (
-    <SafeAreaView>
-      <View style={styles.container__header}>
-        {/* <View style={styles.header__text}>
+    const openMenu = () => {};
+    const [value, setValue] = useState('');
+    const ref = useRef(null);
+    console.log(book.booksSearch);
+    const [booksSearch, {called, loading, data, error}] = useLazyQuery(
+      SEARCH_BOOK,
+      {
+        onCompleted: async (data) => {
+          book.setBooksSearch(data.bookByName);
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      },
+    );
+    const onChangeText = (value) => {
+      if (ref.current) {
+        clearTimeout(ref.current);
+      }
+      setTextSearch(value);
+      setTimeout(() => {
+        booksSearch({
+          variables: {
+            name: value,
+          },
+        });
+      }, 300);
+    };
+    return (
+      <SafeAreaView>
+        <View style={styles.container__header}>
+          {/* <View style={styles.header__text}>
         <Text>PoobStore</Text>
       </View> */}
-        <View style={styles.header__menu}>
-          <Icon
-            name="menu"
-            onPress={() => navigation.openDrawer()}
-            style={styles.icon}
-          />
-          <Icon name="search" style={styles.searchIcon} />
-          <TextInput style={styles.search} placeholder="search book" />
-          <Icon name="message1" style={styles.message} type="AntDesign" />
+          <View style={styles.header__menu}>
+            <Icon
+              name="menu"
+              onPress={() => navigation.openDrawer()}
+              style={styles.icon}
+            />
+            <Icon name="search" style={styles.searchIcon} />
+            <TextInput
+              style={styles.search}
+              placeholder="search book"
+              value={textSearch}
+              onChangeText={(value) => onChangeText(value)}
+            />
+            <Icon name="message1" style={styles.message} type="AntDesign" />
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  });
 };
 
 const styles = StyleSheet.create({

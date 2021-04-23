@@ -16,18 +16,48 @@ import {useNavigation} from '@react-navigation/native';
 import {GET_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {UPDATE_CART} from '../../query/user';
+import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
 
 const DetailProduct = ({navigation, route}) => {
   return useObserver(() => {
     const {
       stores: {user},
     } = useContext(MobXProviderContext);
-    const {cart, setCart} = user;
+    const {cart, setCart, likes, addToLike, removeToLike} = user;
     const {productId} = route.params;
     const [book, setBook] = useState(null);
     const [listItem, setListItem] = useState(null);
+    const [isHeart, setIsHeart] = useState(
+      likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
+    );
+    console.log('detail', likes);
+    const [addLike] = useMutation(ADD_TO_LIKE, {
+      onCompleted: () => {
+        addToLike({
+          id: productId,
+          name: book.name || null,
+          images: book.images || null,
+          price: book.price,
+          amount: book.amount,
+          sold: book.sold,
+          book: book.book
+            ? {
+                id: book.book.id,
+                name: book.book.name,
+                images: book.book.images,
+              }
+            : null,
+        });
+      },
+      onError: (err) => console.log(err),
+    });
 
+    const [removeLike] = useMutation(REMOVE_TO_LIKE, {
+      onCompleted: () => {
+        removeToLike(productId);
+      },
+      onError: (err) => console.log(err),
+    });
     const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
       onCompleted: async (data) => {
         setBook(data.book);
@@ -63,6 +93,24 @@ const DetailProduct = ({navigation, route}) => {
         console.log(err);
       },
     });
+
+    const likeProduct = () => {
+      if (isHeart) {
+        setIsHeart(false);
+        removeLike({
+          variables: {
+            id: productId,
+          },
+        });
+      } else {
+        setIsHeart(true);
+        addLike({
+          variables: {
+            id: productId,
+          },
+        });
+      }
+    };
     const [quantity, setQuantity] = React.useState(1);
     const [comment, onChangeComment] = React.useState('');
     const addToCart = () => {
@@ -80,7 +128,6 @@ const DetailProduct = ({navigation, route}) => {
           }
           return tamp;
         });
-        console.log('data cart found', dataCart);
         updateCart({
           variables: {
             dataCart,
@@ -99,7 +146,6 @@ const DetailProduct = ({navigation, route}) => {
             amount: ct.amount,
           };
         });
-        console.log('data cart not found', cartData);
         updateCart({
           variables: {
             dataCart: [newBook, ...cartData],
@@ -189,11 +235,13 @@ const DetailProduct = ({navigation, route}) => {
                   <View style={styles.quantity_sold}>
                     <Text style={styles.quantity__sold_text}>{book.sold}</Text>
                     {/* sản phẩm được yêu thích */}
-                    <Icon
-                      style={[styles.icon__heart, styles.icon__heart_active]}
-                      name="heart"
-                      type="AntDesign"
-                    />
+                    <TouchableOpacity onPress={likeProduct}>
+                      <Icon
+                        style={[styles.icon__heart, styles.icon__heart_active]}
+                        name={isHeart ? 'heart' : 'hearto'}
+                        type="AntDesign"
+                      />
+                    </TouchableOpacity>
                     {/* sản phẩm chưa được yêu thích */}
                     {/* <Icon
                   style={styles.icon__heart}
@@ -523,7 +571,7 @@ const styles = StyleSheet.create({
     color: '#ffe31b',
   },
   icon__heart: {
-    fontSize: 16,
+    fontSize: 25,
   },
   icon__heart_active: {
     color: '#e21f1f',
