@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import {Icon, ListItem, Separator} from 'native-base';
 import {
@@ -31,13 +32,15 @@ const Payment = ({navigation}) => {
         <View style={styles.container_payment}>
           {/* address */}
 
-          <View style={styles.address}>
+          <TouchableOpacity
+            style={styles.address}
+            onPress={() => navigation.navigate('Andress')}>
             <View style={styles.location}>
               <Icon name="location" style={styles.icon} />
               <Text
                 style={styles.text}
-                onPress={() => navigation.navigate('Địa chỉ')}>
-                Địa chỉ nhận hàng {add ? ' - Vui lòng chọn địa chỉ' : ''}
+                onPress={() => navigation.navigate('Andress')}>
+                Địa chỉ nhận hàng {add ? ' - Vui lòng họn địa chỉ' : ''}
               </Text>
             </View>
             <View>
@@ -47,7 +50,7 @@ const Payment = ({navigation}) => {
                 onPress={() => navigation.navigate('Địa chỉ')}
               />
             </View>
-          </View>
+          </TouchableOpacity>
           {/* payment method */}
           <View style={styles.shipping}>
             <View style={styles.shipping_title}>
