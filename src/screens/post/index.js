@@ -6,7 +6,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
 import {GET_POSTS_USER} from '../../query/post';
-import { button } from '../style';
+import {button} from '../style';
 import PostOne from './post';
 const Post = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -37,15 +37,28 @@ const Post = ({navigation, route}) => {
             onRefresh={() => {
               setRefreshing(true);
             }}
-          />          
+          />
         }>
         <View style={{position: 'relative'}}>
-        <TouchableOpacity style={button.addPost} onPress={() => navigation.navigate('AddPost')}>
-          <Text style={button.addPost}>+</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={button.addPost}
+            onPress={() => navigation.navigate('AddPost')}>
+            <Text style={button.addPost}>Thêm post</Text>
+
+            {/* <TouchableOpacity onPress={() => setChooseCategory(index + 1)}>
+              <Text
+                style={
+                  index + 1 === chooseCategory
+                    ? styles.filterActiveText
+                    : styles.filterInactiveText
+                }>
+                {e.name}
+              </Text>
+            </TouchableOpacity> */}
+          </TouchableOpacity>
+        </View>
         {!loading ? (
-          posts && posts.length > 0 ? (            
+          posts && posts.length > 0 ? (
             posts.map((pt) => (
               <PostOne key={pt.id} post={pt} info={info} type={true} />
             ))
@@ -56,7 +69,7 @@ const Post = ({navigation, route}) => {
           )
         ) : (
           <Spinner />
-        )}     
+        )}
       </ScrollView>
     );
   });

@@ -2,7 +2,7 @@ import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useContext, useState} from 'react';
 import {Image} from 'react-native';
 import {
   TextInput,
@@ -17,7 +17,7 @@ import Images from '../../assets/images/images';
 import {UPDATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 
-const PostDetail = ({route, navigation}) => {
+const PostDetail = ({route}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
@@ -79,14 +79,14 @@ const PostDetail = ({route, navigation}) => {
     const [updatePost, {called, loading, data, error}] = useMutation(
       UPDATE_POST,
       {
-        onCompleted: async (data) => {
-          navigation.goBack();
-        },
+        onCompleted: async (data) => {},
         onError: (err) => {
-          console.log('errr', err);
+          console.log(err);
         },
       },
     );
+
+    console.log('description....', description);
 
     const renderItem = ({item}) => (
       <View style={stylesPost.content}>
@@ -96,16 +96,12 @@ const PostDetail = ({route, navigation}) => {
         ))}
       </View>
     );
-    useEffect(() => {
-      console.log(
-        'Co khi nao no o cho file khac ko, co chuyen trang dau ma trang khac thuw comment het descrip  ',
-        publisher,
-      );
-    }, [publisher]);
+
     const onPress = () => {
+      console.log('press ', description);
       let dataPost = {
         title: title.value,
-        description: description.value,
+        // description: description.value,
         bookWanna: [bookWanna.value],
         // images: ['https://picsum.photos/200/300'],
         publisher: publisher.value,
@@ -121,14 +117,11 @@ const PostDetail = ({route, navigation}) => {
         },
       });
     };
+    // sao ? say
 
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
-          <View style={stylesPost.rowBetween}>
-            <Text>ID: </Text>
-            <Text>{postId}</Text>
-          </View>
           <ScrollView showsVerticalScrollIndicator>
             <View style={stylesPost.textImg}>
               <Text>Hình ảnh</Text>
@@ -288,10 +281,7 @@ const PostDetail = ({route, navigation}) => {
                   });
                 }}
                 onChangeText={(value) => {
-                  setDescription({
-                    ...description,
-                    value: value,
-                  });
+                  setDescription((cur) => ({...cur, value: value}));
                 }}
                 value={description.value}
                 maxLength={120}

@@ -21,6 +21,9 @@ export const GET_POSTS = gql`
         id
         name
         avatar
+        phone
+        email
+        address
       }
       comment {
         id
@@ -38,7 +41,7 @@ export const GET_POSTS = gql`
   }
 `;
 
-export const GET_POSTS_USER= gql`
+export const GET_POSTS_USER = gql`
   query postByUser($userId: ID) {
     posts(userId: $userId) {
       id
@@ -50,6 +53,9 @@ export const GET_POSTS_USER= gql`
           id
           name
           avatar
+          phone
+          email
+          address
         }
         createdAt
       }
@@ -61,6 +67,9 @@ export const GET_POSTS_USER= gql`
         id
         name
         avatar
+        phone
+        email
+        address
       }
       name
       year
@@ -116,7 +125,7 @@ export const GET_POST = gql`
   }
 `;
 export const CREATE_POST = gql`
-mutation createPost($dataPost: dataCreatePost!) {
+  mutation createPost($dataPost: dataCreatePost!) {
     createPost(dataPost: $dataPost) {
       id
       title
