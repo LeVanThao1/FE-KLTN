@@ -92,7 +92,7 @@ export default function AccountManager({navigation}) {
                 icon="shoppingcart"
                 url="Cart"
               />
-              <ManagerItem label="Wishlist" icon="hearto" url="wishlist" />
+              <ManagerItem label="Wishlist" icon="hearto" url="WishList" />
               <ManagerItem label="Đăng xuất" icon="logout" url="" />
             </View>
           </View>

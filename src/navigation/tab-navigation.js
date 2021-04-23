@@ -50,11 +50,26 @@ const BottomTabNavigator = () => {
           );
         },
       })}>
-      <Tab.Screen name="Home" component={() => <HomeStack initialRoute="Home"/>} />
-      <Tab.Screen name="Feed" component={() => <HomeStack initialRoute="Feed"/>} />
-      <Tab.Screen name="Personal" component={() => <HomeStack initialRoute="Personal"/>} />
-      <Tab.Screen name="Cart" component={() => <HomeStack initialRoute="Cart"/>}  />
-      <Tab.Screen name="Notication" component={() => <HomeStack initialRoute="Home"/>}  />
+      <Tab.Screen
+        name="Home"
+        component={() => <HomeStack initialRoute="Home" />}
+      />
+      <Tab.Screen
+        name="Feed"
+        component={() => <HomeStack initialRoute="Feed" />}
+      />
+      <Tab.Screen
+        name="Personal"
+        component={() => <HomeStack initialRoute="Personal" />}
+      />
+      <Tab.Screen
+        name="Cart"
+        component={() => <HomeStack initialRoute="Cart" />}
+      />
+      <Tab.Screen
+        name="Notication"
+        component={() => <HomeStack initialRoute="ViewSearch" />}
+      />
     </Tab.Navigator>
   );
 };

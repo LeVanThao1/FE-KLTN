@@ -31,13 +31,13 @@ export default function Cart() {
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <TouchableOpacity>
             <Icon name="arrow-back" type="Ionicons" style={styles.headerIcon} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Giỏ Hàng</Text>
-        </View>
+        </View> */}
         {cart && cart.length > 0 ? (
           <ScrollView style={styles.body}>
             {cart.map((ct, i) => (

@@ -14,6 +14,10 @@ import {
 } from 'react-native';
 import {useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
+import * as ImagePicker from 'react-native-image-picker';
+import {Button} from 'native-base';
+import {ReactNativeFile} from 'apollo-upload-client';
+import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
@@ -27,7 +31,15 @@ const Profile = ({navigation}) => {
         },
       },
     } = useContext(MobXProviderContext);
-    console.log('Profile Screen', {name, avatar, phone, address, email});
+    const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
+      onCompleted: (data) => {
+        console.log(data);
+        setUserAvatar(data.uploadSingleFile.uri);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
     const [userAvatar, setUserAvatar] = useState(avatar || defaultAvatar);
     const [userName, setUserName] = useState(name);
     const [userEmail, setUserEmail] = useState(email);
@@ -47,6 +59,32 @@ const Profile = ({navigation}) => {
       },
       onError: (err) => console.log(err),
     });
+
+    const handleChoosePhoto = () => {
+      const options = {
+        noData: true,
+      };
+      ImagePicker.launchImageLibrary(options, (response) => {
+        if (response.uri) {
+          upload({
+            variables: {
+              file: new ReactNativeFile({
+                uri: response.uri,
+                name: response.fileName,
+                type: response.type,
+              }),
+            },
+          });
+          // console.log(response);
+          // setUserAvatar(response.uri);
+          // const file = new ReactNativeFile({
+          //   uri: uriFromCameraRoll,
+          //   name: 'a.jpg',
+          //   type: 'image/jpeg',
+          // });
+        }
+      });
+    };
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>
@@ -54,10 +92,28 @@ const Profile = ({navigation}) => {
             <Image
               style={styles.image}
               source={{
-                uri: avatar || imageURL,
+                uri: userAvatar || imageURL,
               }}
             />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={handleChoosePhoto}
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  margin: 0,
+                  backgroundColor: 'rgba(68, 108, 179, 1)',
+                }}>
+                <Text style={{color: '#fff'}}>Upload Avatar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+
           <Hr />
           <View style={styles.form}>
             <View style={styles.row}>

@@ -16,6 +16,19 @@ export const LOGIN = gql`
         avatar
         email
         address
+        likes {
+          id
+          amount
+          price
+          images
+          book {
+            id
+            name
+            images
+          }
+          name
+          sold
+        }
         store {
           id
           name
@@ -28,6 +41,7 @@ export const LOGIN = gql`
             price
             images
             book {
+              id
               name
               images
             }
@@ -56,10 +70,10 @@ export const LOGIN = gql`
               id
               content
               book {
-                  id
+                id
               }
               author {
-                  name
+                name
               }
               type
               createdAt
@@ -72,16 +86,16 @@ export const LOGIN = gql`
             title
             description
             commentPost {
+              id
+              content
+              post {
                 id
-                content
-                post {
-                    id
-                }
-                author {
-                    name
-                }
-                type
-                createdAt
+              }
+              author {
+                name
+              }
+              type
+              createdAt
             }
             seen
             createdAt
@@ -117,6 +131,19 @@ export const GET_USER = gql`
       avatar
       email
       address
+      likes {
+        id
+        amount
+        price
+        images
+        book {
+          id
+          name
+          images
+        }
+        name
+        sold
+      }
       store {
         id
         name
@@ -157,10 +184,10 @@ export const GET_USER = gql`
             id
             content
             book {
-                id
+              id
             }
             author {
-                name
+              name
             }
             type
             createdAt
@@ -173,16 +200,16 @@ export const GET_USER = gql`
           title
           description
           commentPost {
+            id
+            content
+            post {
               id
-              content
-              post {
-                  id
-              }
-              author {
-                  name
-              }
-              type
-              createdAt
+            }
+            author {
+              name
+            }
+            type
+            createdAt
           }
           seen
           createdAt
@@ -221,6 +248,19 @@ export const REFRESH_TOKEN = gql`
       avatar
       email
       address
+      likes {
+        id
+        amount
+        price
+        images
+        book {
+          id
+          name
+          images
+        }
+        name
+        sold
+      }
       cart {
         book {
           id
@@ -257,10 +297,10 @@ export const REFRESH_TOKEN = gql`
             id
             content
             book {
-                id
+              id
             }
             author {
-                name
+              name
             }
             type
             createdAt
@@ -273,16 +313,16 @@ export const REFRESH_TOKEN = gql`
           title
           description
           commentPost {
+            id
+            content
+            post {
               id
-              content
-              post {
-                  id
-              }
-              author {
-                  name
-              }
-              type
-              createdAt
+            }
+            author {
+              name
+            }
+            type
+            createdAt
           }
           seen
           createdAt
@@ -301,3 +341,46 @@ export const UPDATE_USER_INFO = gql`
     }
   }
 `;
+
+export const ADD_TO_LIKE = gql`
+  mutation addToLike($id: ID!) {
+    addToLike(id: $id) {
+      message
+    }
+  }
+`;
+export const REMOVE_TO_LIKE = gql`
+  mutation removeToLike($id: ID!) {
+    removeToLike(id: $id) {
+      message
+    }
+  }
+`;
+
+export const FORGOT_PASSWORD = gql`
+  query forgotPassword($email: String, $phone: String, $type: Boolean!) {
+    forgotPassword(email: $email, phone: $phone, type: $type) {
+      message
+    }
+  }
+`;
+
+export const CHECK_OTP_FORGOT = gql`
+  query checkOTPForgot(
+    $email: String
+    $phone: String
+    $type: Boolean!
+    $otp: String!
+  ) {
+    checkOTPForgot(email: $email, phone: $phone, type: $type, otp: $otp)
+  }
+`;
+
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($token: String!, $password: String!) {
+    resetPassword(token: $token, password: $password) {
+      message
+    }
+  }
+`

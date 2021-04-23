@@ -72,7 +72,7 @@ export const GET_BOOKS_STORE = gql`
         id
         name
       }
-      category{
+      category {
         id
         name
       }
@@ -80,7 +80,7 @@ export const GET_BOOKS_STORE = gql`
       price
       sold
       createdAt
-    	updatedAt
+      updatedAt
     }
   }
 `;
@@ -187,6 +187,46 @@ export const DELETE_BOOK = gql`
   mutation deleteBook($id: ID!) {
     deleteBook(id: $id) {
       message
+    }
+  }
+`;
+
+export const SEARCH_BOOK = gql`
+  query bookByName($name: String!) {
+    bookByName(name: $name) {
+      id
+      book {
+        id
+        name
+        images
+        year
+        numberOfReprint
+        publisher
+        category {
+          id
+          name
+        }
+        description
+      }
+      store {
+        id
+        name
+        avatar
+      }
+      name
+      images
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      description
+      amount
+      price
+      sold
+      createdAt
     }
   }
 `;

@@ -41,10 +41,12 @@ const Login = ({navigation}) => {
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
-        notification.setAllNotification(data.login.user.notifications)
+        user.setLikes(data.login.user.likes);
+        notification.setAllNotification(data.login.user.notifications);
         delete data.login.user.notifications;
         delete data.login.user.store;
         delete data.login.user.cart;
+        delete data.login.user.likes;
         user.setInfo(data?.login.user);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
