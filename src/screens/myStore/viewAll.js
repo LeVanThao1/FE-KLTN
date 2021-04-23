@@ -84,7 +84,6 @@ const ViewAll = () => {
       bookName: item.name,
       bookCategoryId: item.categoryId,
       bookCategoryName: item.categoryName,
-
       bookPublisher: item.publisher,
       bookYear: item.year,
       bookPrint: item.numberOfReprint,
