@@ -41,7 +41,7 @@ const Post = ({navigation, route}) => {
         }>
         <View style={{position: 'relative'}}>
         <TouchableOpacity style={button.addPost} onPress={() => navigation.navigate('AddPost')}>
-          <Text style={button.addPost}>+</Text>
+          <Text style={button.addPost}>Thêm post</Text>
         </TouchableOpacity>
       </View>
         {!loading ? (

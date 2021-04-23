@@ -77,7 +77,6 @@ const NewPost = () => {
       console.log(err);
     }
   })
-
   const onPress = () => {
     let dataPost = {
       title: title.value,
@@ -98,6 +97,7 @@ const NewPost = () => {
     })
   }
 
+  //doi dia chi ip chua
   return (
     <ScrollView horizontal={false}>
       <View style={stylesPost.addpost}>        
@@ -274,7 +274,7 @@ const NewPost = () => {
             underlineColorAndroid={'transparent'}
             value={description.value}
             placeholder="Nhập mô tả" 
-            /> 
+            />
             <TouchableOpacity style={{width: '100%'}} onPress={onPress}>
               <Text style={stylesPost.btn}>Đăng bài</Text>
             </TouchableOpacity>

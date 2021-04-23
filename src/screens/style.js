@@ -11,7 +11,8 @@ export const button = StyleSheet.create({
     },
 
     addPost: {
-        position: 'absolute',
+        // position: 'absolute',
+        height: 50,
         padding: 10,
         backgroundColor: 'rgba(68, 108, 179, 1)',
         color: '#fff',

@@ -76,6 +76,8 @@ const PostDetail = ({route}) => {
     }
   })
 
+  console.log("description....", description);
+
   const renderItem = ({item}) => (
     <View style={stylesPost.content}>
       <Text>Hình ảnh</Text>
@@ -86,9 +88,10 @@ const PostDetail = ({route}) => {
   )
 
   const onPress = () => {
+    console.log("press ",description)
     let dataPost = {
       title: title.value,
-      description: description.value,
+      // description: description.value,
       bookWanna: [bookWanna.value],
       // images: ['https://picsum.photos/200/300'],
       publisher: publisher.value,
@@ -108,10 +111,6 @@ const PostDetail = ({route}) => {
   return (
     <ScrollView horizontal={false}>
       <View style={stylesPost.addpost}>   
-        <View style={stylesPost.rowBetween}>
-          <Text>ID: </Text>
-          <Text>{postId}</Text>
-        </View>
         <ScrollView showsVerticalScrollIndicator>
           <View style={stylesPost.textImg}>
             <Text>Hình ảnh</Text>          
@@ -266,10 +265,7 @@ const PostDetail = ({route}) => {
               })
             }}
             onChangeText={(value) => {
-              setDescription({
-                ...description,
-                value: value
-              })
+              setDescription((cur) => ({...cur, value: value}))
             }}
             value={description.value}
             maxLength={120}

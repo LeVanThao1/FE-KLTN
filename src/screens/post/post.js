@@ -30,6 +30,7 @@ const PostOne = ({route, post, info, type}) => {
   useEffect(() => {
     
   }, [post])
+  console.log('post...', post);
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate("PostDetail", {
