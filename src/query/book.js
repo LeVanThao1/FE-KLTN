@@ -230,3 +230,30 @@ export const SEARCH_BOOK = gql`
     }
   }
 `;
+
+export const GET_BOOK_SELL = gql`
+  query bookSell {
+    bookSell {
+      id
+      name
+      images
+      category {
+        id
+        name
+      }
+      book {
+        id
+        name
+        images
+        category {
+          id
+          name
+        }
+      }
+      amount
+      price
+      sold
+      createdAt
+    }
+  }
+`;

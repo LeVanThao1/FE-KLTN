@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import CartDetail from './CartDetail';
 
-export default function Cart() {
+export default function Cart({navigation}) {
   return useObserver(() => {
     const {
       stores: {user},
@@ -55,7 +55,9 @@ export default function Cart() {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.footerPayment}>
+            <TouchableOpacity
+              style={styles.footerPayment}
+              onPress={() => navigation.navigate('Payment')}>
               <Text style={styles.footerPaymentText}>Mua hàng</Text>
             </TouchableOpacity>
           </View>
