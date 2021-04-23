@@ -9,23 +9,34 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing'
+import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
-import { button } from '../style';
+import {button} from '../style';
 
 const BookDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {category},
+      stores: {category, shop},
     } = useContext(MobXProviderContext);
-
-    const {bookId, bookName,bookCategoryId, bookCategoryName,bookPublisher, 
-        bookYear, bookPrint, bookPrice, bookAmount, bookDescription, bookImg} = route.params;
+    const {bookStore} = shop;
+    const {
+      bookId,
+      bookName,
+      bookCategoryId,
+      bookCategoryName,
+      bookPublisher,
+      bookYear,
+      bookPrint,
+      bookPrice,
+      bookAmount,
+      bookDescription,
+      bookImg,
+    } = route.params;
 
     const [name, setName] = useState({
       value: bookName,
@@ -37,53 +48,74 @@ const BookDetail = ({navigation, route}) => {
       error: '',
     });
     const [year, setYear] = useState({
-      value: bookYear?bookYear: '',
+      value: bookYear ? bookYear : '',
       error: '',
     });
     const [publisher, setPublisher] = useState({
-      value:bookPublisher?bookPublisher: '',
+      value: bookPublisher ? bookPublisher : '',
       error: '',
     });
     const [numPrint, setNumPrint] = useState({
-      value: bookPrint?bookPrint.toString(): '0',
+      value: bookPrint ? bookPrint.toString() : '0',
       error: '',
     });
     const [description, setDescription] = useState({
-      value: bookDescription?bookDescription: '',
+      value: bookDescription ? bookDescription : '',
       error: '',
     });
 
     const [price, setPrice] = useState({
-      value: bookPrice?bookPrice.toString(): '0',
+      value: bookPrice ? bookPrice.toString() : '0',
       error: '',
     });
 
     const [amount, setAmount] = useState({
-      value: bookAmount?bookAmount.toString():'0',
+      value: bookAmount ? bookAmount.toString() : '0',
       error: '',
     });
 
     const [categori, setCategori] = useState({
       value: bookCategoryId,
     });
-    const [images, setImages] = useState([])
+    const [images, setImages] = useState([]);
     const onChange = (value) => {
       setCategori({
         value: value,
       });
     };
-
     const [updateBook, {called, loading, data, error}] = useMutation(
-        UPDATE_BOOK, {
-            onCompleted: async(data) => {
-                
+      UPDATE_BOOK,
+      {
+        onCompleted: async (data) => {
+          console.log(bookStore.length);
+          const newData = [...bookStore].filter(
+            (bt) => bt.id + '' !== bookId + '',
+          );
+          console.log('adadaaddadasdsd', newData.length);
+          const bookUpdate = {
+            id: bookId,
+            name: name.value,
+            description: description.value,
+            year: year.value,
+            numberOfReprint: Number(numPrint.value),
+            publisher: publisher.value,
+            category: {
+              id: bookCategoryId,
+              name: bookCategoryName,
             },
-            onError: (err) => {
-                console.log(err);
-            },
-        }
+            images: ['https://picsum.photos/200/300'],
+            amount: Number(amount.value),
+            price: Number(price.value),
+          };
+          shop.setBookStore([bookUpdate, ...newData]);
+          navigation.goBack();
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      },
     );
-  
+
     const onPress = () => {
       let dataBook = {
         name: name.value,
@@ -99,11 +131,12 @@ const BookDetail = ({navigation, route}) => {
       updateBook({
         variables: {
           dataBook,
-          id: bookId
+          id: bookId,
         },
       });
-    };
 
+      // navigation.goBack();
+    };
 
     return (
       <ScrollView>
@@ -115,7 +148,7 @@ const BookDetail = ({navigation, route}) => {
             <View style={styles.name}>
               <Text>Mã sản phẩm</Text>
               <Text>{bookId}</Text>
-              </View>
+            </View>
             <View style={styles.name}>
               <Text>Tên sản phẩm</Text>
               <TextInput
@@ -126,7 +159,7 @@ const BookDetail = ({navigation, route}) => {
                 onFocus={() => {
                   setName({
                     ...name,
-                    error: '',                 
+                    error: '',
                   });
                 }}
                 onChangeText={(value) => {
@@ -245,8 +278,7 @@ const BookDetail = ({navigation, route}) => {
               />
             </View>
             {/* Image */}
-            <View style={styles.container}>
-            </View>
+            <View style={styles.container}></View>
 
             {/* <Button title="Choose Photo" onPress={handleChoosePhoto} />
             <ImageView
