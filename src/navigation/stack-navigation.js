@@ -31,7 +31,6 @@ import Post from '../screens/post';
 import NewPost from '../screens/post/newPost';
 import AccountManager from '../screens/account-manager';
 import Profile from '../screens/profile';
-import UserInfo from '../screens/profile/infoUser';
 import Cart from '../screens/cart';
 import Feed from '../screens/feed';
 import ChangePassword from '../screens/change-password';
@@ -41,7 +40,10 @@ import {useNotification} from '../hooks';
 import BookDetail from '../screens/myStore/bookDetail';
 import PostDetail from '../screens/post/postDetail';
 import PostOne from '../screens/post/post';
-import BooksStore from '../screens/myStore/book/booksStore';
+import ViewSearch from '../screens/viewSearch';
+import WishList from '../screens/wishlist';
+import ResetPassword from '../screens/reset-password';
+import VerifyForgot from '../screens/verifyFogot';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -59,16 +61,37 @@ const HomeStack = ({navigation, initialRoute}) => {
           },
         }}
       />
+      <Stack.Screen
+        name="ViewSearch"
+        component={ViewSearch}
+        options={{
+          title: 'search',
+          headerTitle: () => <HeaderStack navigation={navigation} />,
+          headerStyle: {
+            backgroundColor: 'rgba(68, 108, 179, 1)',
+          },
+        }}
+      />
+      {routes.map((rt, i) => (
+        <Stack.Screen
+          name={rt.name}
+          component={rt.component}
+          options={{
+            title: rt.title,
+            // headerTitle: () =>
+            //   rt.header && <HeaderStack navigation={navigation} />,
+          }}
+        />
+      ))}
       {/* <Stack.Screen name="Login" component={Login} /> */}
-      <Stack.Screen name="Detail-Product" component={DetailProduct} />
+      {/* <Stack.Screen name="Detail-Product" component={DetailProduct} /> */}
       {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
       <Stack.Screen name="Store" component={CreateStore} />
-      <Stack.Screen name="CreateProduct" component={CreateBook} />
-      <Stack.Screen name="CreateStore" component={CreateStore} />
+      <Stack.Screen name="CreateProduct" component={CreateProduct} />
+      {/* <Stack.Screen name="CreateStore" component={CreateStore} /> */}
       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
       <Stack.Screen name="BooksStore" component={BooksStore} />
-
-      {/* <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} /> */}
+      <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Revenue" component={Revenue} />
       <Stack.Screen name="Payment" component={Payment} />
@@ -87,11 +110,148 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="ManageOrder" component={ManageOrder} />
       <Stack.Screen name="OrderDetail" component={OrderDetail} />
-      <Stack.Screen name="UserInfo" component={UserInfo} />
     </Stack.Navigator>
   );
 };
 
+const routes = [
+  {
+    name: 'Detail-Product',
+    title: 'Chi tiết sản phẩm',
+    header: false,
+    component: DetailProduct,
+  },
+  {name: 'Store', title: 'Cửa hàng', header: false, component: CreateStore},
+  {
+    name: 'CreateProduct',
+    title: 'Tạo sản phẩm',
+    header: false,
+    component: CreateProduct,
+  },
+  {
+    name: 'CreateStore',
+    title: 'Tạo cửa hàng',
+    header: false,
+    component: CreateStore,
+  },
+  {
+    name: 'ViewAllProduct',
+    title: 'Sản phẩm',
+    header: false,
+    component: ViewAll,
+  },
+  {
+    name: 'StoreManageOrder',
+    title: 'Quản lý đơn hàng',
+    header: false,
+    component: ViewAllOrder,
+  },
+  {
+    name: 'Statistics',
+    title: 'Thống kê',
+    header: false,
+    component: Statistics,
+  },
+  {
+    name: 'Revenue',
+    title: 'Danh thu',
+    header: false,
+    component: Revenue,
+  },
+  {
+    name: 'Payment',
+    title: 'Thanh toán',
+    header: false,
+    component: Payment,
+  },
+  {
+    name: 'Andress',
+    title: 'Địa chỉ',
+    header: false,
+    component: Address,
+  },
+  {
+    name: 'PostUser',
+    title: 'Bài viết cá nhân',
+    header: false,
+    component: Post,
+  },
+  {
+    name: 'AddPost',
+    title: 'Tạo bài viết',
+    header: false,
+    component: NewPost,
+  },
+  {
+    name: 'Personal',
+    title: 'Quản lý cá nhân',
+    header: false,
+    component: AccountManager,
+  },
+  {
+    name: 'Profile',
+    title: 'Thông tin cá nhân',
+    header: false,
+    component: Profile,
+  },
+  {
+    name: 'Contact',
+    title: 'Liên hệ',
+    header: false,
+    component: Contact,
+  },
+  {name: 'Cart', title: 'Giỏ hàng', header: false, component: Cart},
+  {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
+  {
+    name: 'BookDetail',
+    title: 'Chi tiết sách',
+    header: false,
+    component: BookDetail,
+  },
+  {
+    name: 'PostDetail',
+    title: 'Chi tiết bài viết',
+    header: false,
+    component: PostDetail,
+  },
+  {name: 'Post', title: 'Bài đăng', header: false, component: Post},
+  {
+    name: 'PostOne',
+    title: 'Chi tiết bài viết',
+    header: false,
+    component: PostOne,
+  },
+  {
+    name: 'ChangePassword',
+    title: 'Thay đổi mật khẩu',
+    header: false,
+    component: ChangePassword,
+  },
+  {
+    name: 'ManageOrder',
+    title: 'Quản lý đơn hàng',
+    header: false,
+    component: ManageOrder,
+  },
+  {
+    name: 'OrderDetail',
+    title: 'Chi tiết đơn hàng',
+    header: false,
+    component: OrderDetail,
+  },
+  {
+    name: 'WishList',
+    title: 'Sản phẩm yêu thích',
+    header: false,
+    component: WishList,
+  },
+  // {
+  //   name: 'ViewSearch',
+  //   title: 'Tất cả sản phẩm',
+  //   header: false,
+  //   component: ViewSearch,
+  // },
+];
 const AuthStack = () => {
   return useObserver(() => {
     const {
@@ -103,6 +263,8 @@ const AuthStack = () => {
         shop.setInfo(data.refreshToken.user.store);
         user.setCart(data.refreshToken.user.cart);
         notification.setAllNotification(data.refreshToken.user.notifications);
+        user.setLikes(data.refreshToken.user.likes);
+        delete data.refreshToken.user.likes;
         delete data.refreshToken.user.notifications;
         delete data.refreshToken.user.store;
         delete data.refreshToken.user.cart;
@@ -123,6 +285,8 @@ const AuthStack = () => {
         shop.setInfo(data.profile.store);
         user.setCart(data.profile.cart);
         notification.setAllNotification(data.profile.notifications);
+        user.setLikes(data.profile.likes);
+        delete data.profile.likes;
         delete data.profile.notifications;
         delete data.profile.store;
         delete data.profile.cart;
@@ -169,6 +333,8 @@ const AuthStack = () => {
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="SignUp" component={Register} />
             <Stack.Screen name="Verify" component={VerifyCode} />
+            <Stack.Screen name="ResetPassword" component={ResetPassword} />
+            <Stack.Screen name="VerifyForgot" component={VerifyForgot} />
           </Stack.Navigator>
         ) : (
           <View style={styles.container}>

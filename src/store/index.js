@@ -4,6 +4,7 @@ import {Category} from './category';
 import {User} from './user';
 import {Shop} from './shop';
 import {Notification} from './notification';
+import {Order} from './order';
 
 export const stores = {
   auth: new Auth(false, '', ''),
@@ -12,6 +13,7 @@ export const stores = {
   category: new Category(undefined),
   shop: new Shop(undefined, undefined),
   notification: new Notification([], [], []),
+  order: new Order(undefined),
 };
 
 export const storeInstance = stores;

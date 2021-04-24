@@ -30,7 +30,6 @@ const DetailProduct = ({navigation, route}) => {
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
     );
-    console.log('detail', likes);
     const [addLike] = useMutation(ADD_TO_LIKE, {
       onCompleted: () => {
         addToLike({
