@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // import Feed from '../screens/feed';
 // import Cart from '../screens/cart';
-// import Notication from '../screens/notification';
+import Notification from '../screens/notification';
 import {HomeStack} from './stack-navigation';
 // import Profile from '../screens/profile';
 // import AccountManager from '../screens/account-manager';
@@ -34,7 +34,7 @@ const BottomTabNavigator = () => {
               name: 'shoppingcart',
               type: 'AntDesign',
             },
-            Notication: {
+            Notification: {
               name: 'notifications-none',
               type: 'MaterialIcons',
             },
@@ -67,8 +67,8 @@ const BottomTabNavigator = () => {
         component={() => <HomeStack initialRoute="Cart" />}
       />
       <Tab.Screen
-        name="Notication"
-        component={() => <HomeStack initialRoute="ViewSearch" />}
+        name="Notification"
+        component={() => <HomeStack initialRoute="Notification" />}
       />
     </Tab.Navigator>
   );
