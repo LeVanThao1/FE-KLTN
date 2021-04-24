@@ -1,7 +1,7 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect, memo} from 'react';
 import {Icon} from 'native-base';
 
 import {
@@ -16,83 +16,88 @@ import {
 import {DELETE_BOOK, GET_BOOKS_STORE} from '../../../query/book';
 
 import Book from './book';
+import {queryData} from '../../../common';
 
-const ManageOrder = ({navigation}) => {
+const BooksStore = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {shop},
+      stores: {shop, category},
     } = useContext(MobXProviderContext);
-    const [selectedStatus, setSelectedStatus] = useState('WAITING');
-    const [subOrders, setSubOrders] = useState([]);
+    const [selectedStatus, setSelectedStatus] = useState('ALL');
 
     const {bookStore, setBookStore} = shop;
-    const [listBook, setListBook] = useState(null);
-    // const [aBook, setABook] = useState(null);
-    const [books, {called, loading, data, error}] = useLazyQuery(
-      GET_BOOKS_STORE,
-      {
-        onCompleted: async (data) => {
-          setBookStore(data.books);
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      },
-    );
+    const [listBook, setListBook] = useState([]);
+    // const [books, {called, loading, data, error}] = useLazyQuery(
+    //   GET_BOOKS_STORE,
+    //   {
+    //     onCompleted: async (data) => {
+    //       setBookStore(data.books);
+    //     },
+    //     onError: (err) => {
+    //       console.log(err);
+    //     },
+    //   },
+    //   fetchPolicy:'no-cache'
+    // );
 
     useEffect(() => {
-      books({
-        variables: {
-          store: shop.info.id,
-        },
-      });
+      queryData(GET_BOOKS_STORE, {store: shop.info.id})
+        .then(({data}) => {
+          setBookStore(data.books);
+        })
+        .catch((err) => console.log(err));
     }, []);
 
     useEffect(() => {
       if (bookStore) {
         setListBook(
           bookStore.map((ct, i) => ({
-            id: ct.id,
-            name: ct.name,
-            categoryId: ct.category.id,
-            categoryName: ct.category.name,
-            price: ct.price,
-            publisher: ct.publisher,
-            numberOfReprint: ct.numberOfReprint,
-            year: ct.year,
-            amount: ct.amount,
-            sold: ct.sold,
-            description: ct.description,
-            // images: ct.images? ct.img : [],
+            id: ct.id ? ct.id : '',
+            name: ct.name ? ct.name : '',
+            categoryId: ct.category.id ? ct.category.id : '',
+            categoryName: ct.category.name ? ct.category.name : '',
+            author: 'Alibacasto',
+            price: ct.price ? ct.price : '',
+            publisher: ct.publisher ? ct.publisher : '',
+            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
+            year: ct.year ? ct.year : '',
+            amount: ct.amount ? ct.amount : '',
+            sold: ct.sold ? ct.sold : '',
+            description: ct.description ? ct.description : '',
+            images: ct.images[0] ? ct.images[0] : [],
             // comment: ct.comment ? ct.comment : ''
           })),
         );
       }
     }, [bookStore]);
 
-    const [deleteBook, {dd, aa, ss, xx}] = useMutation(DELETE_BOOK, {
-      onCompleted: async (data) => {},
-      onError: (err) => {
-        console.log(err);
-      },
-    });
-    const onPress = (value) => {
-      console.log('value', value);
-      deleteBook({
-        variables: {
-          id: value,
-        },
-      });
-    };
+    const [categori, setCategori] = useState([]);
 
+    useEffect(() => {
+      setCategori(listBook);
+    }, [listBook]);
+
+    const onPressTab = (name, status) => {
+      setSelectedStatus(status);
+      setCategori(
+        status === 'ALL'
+          ? listBook
+          : listBook.filter((b) => b.categoryName === name),
+      );
+    };
+    //
     const renderBook = () => (
-      // return Book.filter((so) => so.status === selectedStatus).map((so) => (
-      <Book />
+      <>
+        {categori?.map((book, i) => (
+          <Book key={i} book={book} />
+          // delete={onPress(book.id)}
+        ))}
+      </>
     );
-    // ));
+
     function Tab({name, status}) {
       return (
-        <TouchableOpacity onPress={() => setSelectedStatus(status)}>
+        <TouchableOpacity onPress={() => onPressTab(name, status)}>
           <Text
             style={status == selectedStatus ? styles.tabSelected : styles.tab}>
             {name}
@@ -111,21 +116,21 @@ const ManageOrder = ({navigation}) => {
         </View>
         <View style={{height: 46}}>
           <ScrollView horizontal>
-            <Tab name="Tất cả" status="All" />
-            <Tab name="Truyện - tiểu thuyết" status="NOVEL" />
+            <Tab name="Tất cả" status="ALL" />
+            <Tab name="Truyện - Tiểu thuyết" status="NOVEL" />
             <Tab name="Truyện tranh" status="COMIC" />
-            <Tab name="Tôn giáo - tâm linh" status="RELIGION" />
-            <Tab name="Chính trị - Pháp luật" status="LAW" />
+            <Tab name="Tôn giáo - Tâm linh" status="RELIGION" />
+            <Tab name="Lịch sử" status="HISTORY" />
+            <Tab name="Chính trị – Pháp luật" status="LAW" />
             <Tab name="Khoa học - Công nghệ" status="TECHNOLOGY" />
-            <Tab name="Văn học - nghệ thuật" status="literary" />
-            <Tab name="Xã hội - lịch sử" status="HISTORY" />
+            <Tab name="Văn học nghệ thuật" status="LITERARY" />
+            <Tab name="Văn hóa - Xã hội" status="SOCIOTY" />
             <Tab name="Giáo trình" status="CURRICULUM" />
           </ScrollView>
         </View>
         <View style={styles.orderContainer}>
-          <ScrollView>
-            <Book />
-          </ScrollView>
+          <ScrollView>{renderBook()}</ScrollView>
+          {/* sao thes ok chua */}
         </View>
       </View>
     );
@@ -185,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ManageOrder;
+export default memo(BooksStore);

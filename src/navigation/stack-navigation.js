@@ -44,6 +44,8 @@ import ViewSearch from '../screens/viewSearch';
 import WishList from '../screens/wishlist';
 import ResetPassword from '../screens/reset-password';
 import VerifyForgot from '../screens/verifyFogot';
+import BooksStore from '../screens/myStore/book/booksStore';
+
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -86,10 +88,10 @@ const HomeStack = ({navigation, initialRoute}) => {
       {/* <Stack.Screen name="Login" component={Login} /> */}
       {/* <Stack.Screen name="Detail-Product" component={DetailProduct} /> */}
       {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
-      <Stack.Screen name="Store" component={CreateStore} />
-      <Stack.Screen name="CreateProduct" component={CreateProduct} />
+      {/* <Stack.Screen name="Store" component={CreateStore} /> */}
+      {/* <Stack.Screen name="CreateProduct" component={CreateProduct} /> */}
       {/* <Stack.Screen name="CreateStore" component={CreateStore} /> */}
-      <Stack.Screen name="ViewAllProduct" component={ViewAll} />
+      {/* <Stack.Screen name="ViewAllProduct" component={ViewAll} />
       <Stack.Screen name="BooksStore" component={BooksStore} />
       <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
       <Stack.Screen name="Statistics" component={Statistics} />
@@ -109,7 +111,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="PostOne" component={PostOne} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="ManageOrder" component={ManageOrder} />
-      <Stack.Screen name="OrderDetail" component={OrderDetail} />
+      <Stack.Screen name="OrderDetail" component={OrderDetail} /> */}
     </Stack.Navigator>
   );
 };
@@ -123,10 +125,10 @@ const routes = [
   },
   {name: 'Store', title: 'Cửa hàng', header: false, component: CreateStore},
   {
-    name: 'CreateProduct',
+    name: 'CreateBook',
     title: 'Tạo sản phẩm',
     header: false,
-    component: CreateProduct,
+    component: CreateBook,
   },
   {
     name: 'CreateStore',
@@ -140,12 +142,12 @@ const routes = [
     header: false,
     component: ViewAll,
   },
-  {
-    name: 'StoreManageOrder',
-    title: 'Quản lý đơn hàng',
-    header: false,
-    component: ViewAllOrder,
-  },
+  // {
+  //   name: 'StoreManageOrder',
+  //   title: 'Quản lý đơn hàng',
+  //   header: false,
+  //   component: ViewAllOrder,
+  // },
   {
     name: 'Statistics',
     title: 'Thống kê',
@@ -244,6 +246,12 @@ const routes = [
     title: 'Sản phẩm yêu thích',
     header: false,
     component: WishList,
+  },
+  {
+    name: 'BooksStore',
+    title: 'Quản lý sách',
+    header: false,
+    component: BooksStore,
   },
   // {
   //   name: 'ViewSearch',
