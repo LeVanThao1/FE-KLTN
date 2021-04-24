@@ -1,3 +1,4 @@
+import {Picker} from 'native-base';
 import React, {memo, useState} from 'react';
 import {
   View,
@@ -9,11 +10,12 @@ import {
   Image,
   Button,
 } from 'react-native';
-// import RNPickerSelect from 'react-native-picker-select';
-import sub from 'sub-vn';
+import RNPickerSelect from 'react-native-picker-select';
+import sub, {getProvinces} from 'sub-vn';
 
 const Address = () => {
-  const [value, setValue] = useState('');
+  const [provinces, setProvinces] = useState('');
+  console.log(provinces);
   return (
     <View style={styles.container}>
       <View>
@@ -25,16 +27,26 @@ const Address = () => {
         <TextInput placeholder="Nhập SĐT" />
       </View>
       <View>
-        {/* <RNPickerSelect
-          // onValueChange={(value) => console.log(value)}
-          items={[
-            {label: 'Football', value: 'football'},
-            {label: 'Baseball', value: 'baseball'},
-            {label: 'Hockey', value: 'hockey'},
-          ]}
-        /> */}
-        {/* <Text>Tỉnh/TP</Text>
-        <TextInput placeholder="Nhập SĐT" /> */}
+        <Picker
+          note
+          mode="dropdown"
+          style={{width: '100%'}}
+          // selectedValue={provinces}
+          placeholder="Chọn tỉnh / thành phố"
+          onValueChange={(value) => setProvinces(value)}>
+          {getProvinces().map((pr) => (
+            <Picker.Item
+              key={pr.code}
+              label={pr.name}
+              value={pr.code + '-' + pr.name}
+            />
+          ))}
+          {/* <Picker.Item label="Wallet" value="key0" />
+          <Picker.Item label="ATM Card" value="key1" />
+          <Picker.Item label="Debit Card" value="key2" />
+          <Picker.Item label="Credit Card" value="key3" />
+          <Picker.Item label="Net Banking" value="key4" /> */}
+        </Picker>
       </View>
       <View>
         <Text>Quận/Huyện</Text>

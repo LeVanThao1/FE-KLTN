@@ -26,6 +26,7 @@ const Payment = ({navigation}) => {
     const {
       stores: {
         user: {cart, setCart},
+        order: {info, setInfo},
       },
     } = useContext(MobXProviderContext);
     const [add, setAdd] = useState('');
