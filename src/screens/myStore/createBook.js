@@ -8,6 +8,7 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -23,7 +24,6 @@ const CreateProduct = () => {
     const {
       stores: {category},
     } = useContext(MobXProviderContext);
-    // console.log('categoriiiiiiii', category.categories);
     const [product, setProduct] = useState({
       value: '',
       error: '',
@@ -65,7 +65,7 @@ const CreateProduct = () => {
     });
 
     const [categori, setCategori] = useState({
-      value: '',
+      value: category.categories[0].id,
     });
     const [images, setImages] = useState([]);
     const onChange = (value) => {
@@ -74,7 +74,13 @@ const CreateProduct = () => {
       });
     };
 
-    // const [photo, setPhoto] = useState(null);
+    const [visibleToast, setvisibleToast] = useState(false);
+
+    useEffect(() => setvisibleToast(false), [visibleToast]);
+
+    const handleButtonPress = () => {
+      setvisibleToast(true);
+    };
 
     const handleChoosePhoto = () => {
       const options = {
@@ -107,7 +113,7 @@ const CreateProduct = () => {
         year: year.value,
         numberOfReprint: numPrint.value,
         publisher: publisher.value,
-        category: categori,
+        category: categori.value,
         images: ['https://picsum.photos/200/300'],
         amount: amount.value,
         price: price.value,
@@ -117,6 +123,7 @@ const CreateProduct = () => {
           dataBook,
         },
       });
+      <Toast visible={visibleToast} message="Exampsssle" />;
     };
 
     return (

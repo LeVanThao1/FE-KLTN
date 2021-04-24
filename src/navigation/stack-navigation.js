@@ -12,13 +12,12 @@ import ForgotPassword from '../screens/forgot-password';
 import Store from '../screens/myStore/index';
 import HeaderStack from '../header';
 import CreateStore from '../screens/myStore/createStore';
-import ManageStore from '../screens/myStore/manageStore';
+import SreateStore from '../screens/myStore/createStore';
 import {NavigationContainer} from '@react-navigation/native';
 import ViewAll from '../screens/myStore/viewAll';
-import ViewAllOrder from '../screens/myStore/orders/viewAllOrder';
 import Statistics from '../screens/myStore/finance/statistics';
 import Revenue from '../screens/myStore/finance/revenue';
-import CreateProduct from '../screens/myStore/manageStore';
+import CreateBook from '../screens/myStore/createBook';
 import Address from '../screens/payment/address';
 import BottomTabNavigator from './tab-navigation';
 import VerifyCode from '../screens/verifyCode';
@@ -42,6 +41,7 @@ import {useNotification} from '../hooks';
 import BookDetail from '../screens/myStore/bookDetail';
 import PostDetail from '../screens/post/postDetail';
 import PostOne from '../screens/post/post';
+import BooksStore from '../screens/myStore/book/booksStore';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -63,10 +63,12 @@ const HomeStack = ({navigation, initialRoute}) => {
       <Stack.Screen name="Detail-Product" component={DetailProduct} />
       {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
       <Stack.Screen name="Store" component={CreateStore} />
-      <Stack.Screen name="CreateProduct" component={CreateProduct} />
+      <Stack.Screen name="CreateProduct" component={CreateBook} />
       <Stack.Screen name="CreateStore" component={CreateStore} />
       <Stack.Screen name="ViewAllProduct" component={ViewAll} />
-      <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
+      <Stack.Screen name="BooksStore" component={BooksStore} />
+
+      {/* <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} /> */}
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Revenue" component={Revenue} />
       <Stack.Screen name="Payment" component={Payment} />

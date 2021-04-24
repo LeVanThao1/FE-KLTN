@@ -130,8 +130,7 @@ const CreateStore = ({navigation}) => {
                     onPress={() => navigation.navigate('CreateProduct')}>
                     <Text>Thêm sản phẩm</Text>
                   </ListItem>
-                  <ListItem
-                    onPress={() => navigation.navigate('ViewAllProduct')}>
+                  <ListItem onPress={() => navigation.navigate('BooksStore')}>
                     <Text>Tất cả sản phẩm</Text>
                   </ListItem>
                 </CollapseBody>
