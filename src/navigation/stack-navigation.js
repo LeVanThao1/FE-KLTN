@@ -44,8 +44,7 @@ import ViewSearch from '../screens/viewSearch';
 import WishList from '../screens/wishlist';
 import ResetPassword from '../screens/reset-password';
 import VerifyForgot from '../screens/verifyFogot';
-import BooksStore from '../screens/myStore/book/booksStore';
-
+import Notification from '../screens/notification';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -259,6 +258,12 @@ const routes = [
   //   header: false,
   //   component: ViewSearch,
   // },
+  {
+    name: 'Notification',
+    title: 'Thông báo',
+    header: false,
+    component: Notification,
+  },
 ];
 const AuthStack = () => {
   return useObserver(() => {
