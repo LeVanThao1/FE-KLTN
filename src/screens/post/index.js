@@ -44,17 +44,6 @@ const Post = ({navigation, route}) => {
             style={button.addPost}
             onPress={() => navigation.navigate('AddPost')}>
             <Text style={button.addPost}>Thêm post</Text>
-
-            {/* <TouchableOpacity onPress={() => setChooseCategory(index + 1)}>
-              <Text
-                style={
-                  index + 1 === chooseCategory
-                    ? styles.filterActiveText
-                    : styles.filterInactiveText
-                }>
-                {e.name}
-              </Text>
-            </TouchableOpacity> */}
           </TouchableOpacity>
         </View>
         {!loading ? (

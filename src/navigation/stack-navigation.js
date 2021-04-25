@@ -17,7 +17,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import ViewAll from '../screens/myStore/viewAll';
 import Statistics from '../screens/myStore/finance/statistics';
 import Revenue from '../screens/myStore/finance/revenue';
-import CreateBook from '../screens/myStore/createBook';
+import CreateBook from '../screens/myStore/book/createBook';
 import Address from '../screens/payment/address';
 import BottomTabNavigator from './tab-navigation';
 import VerifyCode from '../screens/verifyCode';
@@ -45,6 +45,8 @@ import WishList from '../screens/wishlist';
 import ResetPassword from '../screens/reset-password';
 import VerifyForgot from '../screens/verifyFogot';
 import Notification from '../screens/notification';
+import BooksStore from '../screens/myStore/book/booksStore';
+import UpdatePost from '../screens/post/updatePost';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -122,7 +124,12 @@ const routes = [
     header: false,
     component: DetailProduct,
   },
-  {name: 'Store', title: 'Cửa hàng', header: false, component: CreateStore},
+  {
+    name: 'Store',
+    title: 'Cửa hàng',
+    header: false,
+    component: CreateStore,
+  },
   {
     name: 'CreateBook',
     title: 'Tạo sản phẩm',
@@ -182,6 +189,12 @@ const routes = [
     title: 'Tạo bài viết',
     header: false,
     component: NewPost,
+  },
+  {
+    name: 'UpdatePost',
+    title: 'Cập nhật bài viết',
+    header: false,
+    component: UpdatePost,
   },
   {
     name: 'Personal',

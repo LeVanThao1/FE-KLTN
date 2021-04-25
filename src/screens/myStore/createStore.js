@@ -54,7 +54,6 @@ const CreateStore = ({navigation}) => {
       });
     }, [info]);
     // console.log('List info ...', listInfo);
-    console.log('Store info ...', info);
 
     return (
       <ScrollView>
@@ -126,8 +125,7 @@ const CreateStore = ({navigation}) => {
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody>
-                  <ListItem
-                    onPress={() => navigation.navigate('CreateProduct')}>
+                  <ListItem onPress={() => navigation.navigate('CreateBook')}>
                     <Text>Thêm sản phẩm</Text>
                   </ListItem>
                   <ListItem onPress={() => navigation.navigate('BooksStore')}>

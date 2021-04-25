@@ -88,10 +88,16 @@ const BooksStore = ({navigation}) => {
     //
     const renderBook = () => (
       <>
-        {categori?.map((book, i) => (
-          <Book key={i} book={book} />
-          // delete={onPress(book.id)}
-        ))}
+        {categori.length > 0 ? (
+          categori?.map((book, i) => (
+            <Book key={i} book={book} />
+            // delete={onPress(book.id)}
+          ))
+        ) : (
+          <View style={{padding: 20}}>
+            <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>
+          </View>
+        )}
       </>
     );
 
@@ -130,7 +136,6 @@ const BooksStore = ({navigation}) => {
         </View>
         <View style={styles.orderContainer}>
           <ScrollView>{renderBook()}</ScrollView>
-          {/* sao thes ok chua */}
         </View>
       </View>
     );

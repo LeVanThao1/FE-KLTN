@@ -80,6 +80,7 @@ export const GET_POSTS_USER = gql`
         name
       }
       bookWanna
+      createdAt
     }
   }
 `;

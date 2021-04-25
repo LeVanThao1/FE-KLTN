@@ -14,12 +14,12 @@ import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
-import Images from '../../assets/images/images';
-import {CREATE_BOOK} from '../../query/book';
+import Images from '../../../assets/images/images';
+import {CREATE_BOOK} from '../../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-const CreateProduct = () => {
+const CreateBook = () => {
   return useObserver(() => {
     const {
       stores: {category},
@@ -429,4 +429,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(CreateProduct);
+export default memo(CreateBook);
