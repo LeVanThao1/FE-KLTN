@@ -1,4 +1,4 @@
-const {gql} = require('apollo-server-express');
+const {gql} = require('@apollo/client');
 
 export const GET_ORDER = gql`
   query order($id: ID!) {
@@ -51,8 +51,8 @@ export const GET_ORDER = gql`
 `;
 
 export const CREATE_ORDER = gql`
-  query createOrder ($address: String!, $phone: String!, subOrder: [DetailUpdate!!){
-    createOrder(address: $address, phone: $phone, subOrder: $subOrder) {
+  mutation createOrder($dataOrder: OrderCreate!) {
+    createOrder(dataOrder: $dataOrder) {
       message
     }
   }

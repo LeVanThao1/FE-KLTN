@@ -9,8 +9,10 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  Dimensions,
+  Modal,
 } from 'react-native';
-import {Icon, ListItem, Separator} from 'native-base';
+import {Icon, ListItem, Picker, Separator} from 'native-base';
 import {
   Collapse,
   CollapseHeader,
@@ -20,6 +22,8 @@ import Images from '../../assets/images/images';
 import Address from './address';
 import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
+import {useMutation} from '@apollo/client';
+import {CREATE_ORDER} from '../../query/order';
 
 const Payment = ({navigation}) => {
   return useObserver(() => {
@@ -30,17 +34,47 @@ const Payment = ({navigation}) => {
       },
     } = useContext(MobXProviderContext);
     const [add, setAdd] = useState('');
-
+    const [typePayment, setTypePayment] = useState('AFTERRECEIVED');
     const [total, setTotal] = useState(0);
-    const order = () => {
-      console.log('order');
-    };
     const [ship, setShip] = useState(18000);
+    const [note, setNote] = useState('');
     useEffect(() => {
       if (cart) {
         setTotal(cart.reduce((a, b) => a + b.book.price * b.amount, 0));
       }
     }, [cart]);
+    const [createOrder] = useMutation(CREATE_ORDER, {
+      onCompleted: () => {
+        setCart([]);
+        setInfo(undefined);
+        navigation.navigate('ManageOrder');
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+    const onPress = () => {
+      const subOrder = [...cart].map((ct) => ({
+        book: ct.book.id,
+        amount: ct.amount,
+        price: ct.book.price,
+      }));
+      const order = {
+        name: info.name,
+        phone: info.phone,
+        address: info.address,
+        subOrder,
+        typePayment: typePayment,
+        note: note,
+      };
+      console.log(order);
+      createOrder({
+        variables: {
+          dataOrder: order,
+        },
+      });
+    };
+    console.log(info);
     return (
       <SafeAreaView>
         <ScrollView>
@@ -52,18 +86,16 @@ const Payment = ({navigation}) => {
               onPress={() => navigation.navigate('Andress')}>
               <View style={styles.location}>
                 <Icon name="location" style={styles.icon} />
-                <Text
-                  style={styles.text}
-                  onPress={() => navigation.navigate('Andress')}>
+                <Text style={styles.text}>
                   Địa chỉ nhận hàng {add ? ' - Vui lòng họn địa chỉ' : ''}
                 </Text>
               </View>
-              <View>
-                <Icon
-                  name="keyboard-arrow-right"
-                  type="MaterialIcons"
-                  onPress={() => navigation.navigate('Địa chỉ')}
-                />
+              <View style={{alignItems: 'center', height: 30}}>
+                {info && (
+                  <Text style={{...styles.text, width: 150}} numberOfLines={2}>
+                    {info.address}
+                  </Text>
+                )}
               </View>
             </TouchableOpacity>
             {/* payment method */}
@@ -77,47 +109,26 @@ const Payment = ({navigation}) => {
                 <Text style={styles.title}>Phương thức thanh toán</Text>
               </View>
               <View>
-                <Collapse>
-                  <CollapseHeader>
-                    <Separator
-                      bordered
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        height: 50,
-                        padding: -10,
-                        margin: 0,
-                      }}>
-                      <Text>Chọn phương thức thanh toán</Text>
-                      <Icon name="keyboard-arrow-down" type="MaterialIcons" />
-                    </Separator>
-                  </CollapseHeader>
-                  <CollapseBody>
-                    <ListItem>
-                      <Icon
-                        name="payment"
-                        type="MaterialIcons"
-                        style={{fontSize: 30}}
-                      />
-                      <Text style={{marginHorizontal: 10}}>
-                        Thanh toán bằng ví Momo
-                      </Text>
-                    </ListItem>
-                    <ListItem>
-                      <Icon
-                        name="money"
-                        type="FontAwesome"
-                        style={{fontSize: 25}}
-                      />
-                      <Text style={{marginHorizontal: 10}}>
-                        Thanh toán khi nhận hàng
-                      </Text>
-                    </ListItem>
-                  </CollapseBody>
-                </Collapse>
+                <Picker
+                  note
+                  mode="dropdown"
+                  style={{width: '100%'}}
+                  selectedValue={typePayment}
+                  placeholder="Chọn phương thức thanh toán"
+                  onValueChange={(value) => setTypePayment(value)}>
+                  <Picker.Item
+                    key={'AFTERRECEIVED'}
+                    label="Thanh toán sau khi nhận"
+                    value={'AFTERRECEIVED'}
+                  />
+                  <Picker.Item
+                    key={'ONLINE'}
+                    label="Thanh toán trực tuyến"
+                    value={'ONLINE'}
+                  />
+                </Picker>
               </View>
             </View>
-            {/* product */}
             {cart &&
               cart.map((ct, i) => (
                 <View>
@@ -142,25 +153,36 @@ const Payment = ({navigation}) => {
                       </View>
                     </View>
                   </View>
-                  <View style={styles.rowInput}>
-                    {/* <Text>Tin nhắn:</Text>
-                    <TextInput
-                      placeholder="Lưu ý cho người bán ..."
-                      style={{borderBottomWidth: 0.5, padding: 5}}
-                    /> */}
-                  </View>
+
                   <View style={styles.row}>
                     <Text style={{fontSize: 15}}>
                       Tổng số tiền ({ct.amount} sản phẩm):
                     </Text>
                     <Text
-                      style={(styles.price, {fontSize: 14, color: 'purple'})}>
+                      style={
+                        (styles.price,
+                        {fontSize: 14, color: 'rgba(68, 108, 179, 1)'})
+                      }>
                       {ct.amount * ct.book.price} đ
                     </Text>
                   </View>
                 </View>
               ))}
             {/* sumary */}
+            <View style={styles.rowInput}>
+              <Text style={{width: 80}}>Tin nhắn:</Text>
+              <TextInput
+                placeholder="Lưu ý cho người bán ..."
+                style={{
+                  borderBottomWidth: 0.5,
+                  padding: 5,
+                  paddingBottom: 1,
+                  width: Dimensions.get('window').width - 120,
+                }}
+                value={note}
+                onChangeText={(value) => setNote(value)}
+              />
+            </View>
             <View>
               <View style={styles.row}>
                 <Text>Tổng tiền hàng</Text>
@@ -183,9 +205,9 @@ const Payment = ({navigation}) => {
             <View style={styles.button}>
               <Button
                 title="Đặt hàng"
-                color="purple"
+                color="rgba(68, 108, 179, 1)"
                 hasTVPreferredFocus={true}
-                onPress={order}
+                onPress={onPress}
               />
             </View>
           </View>
@@ -203,16 +225,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
+
+    // height: 40,
+    alignItems: 'center',
     borderBottomWidth: 1.2,
-    borderBottomColor: 'purple',
+    borderBottomColor: 'rgba(68, 108, 179, 1)',
   },
   location: {
     flexDirection: 'row',
-    height: 30,
     alignItems: 'center',
   },
   icon: {
-    color: 'purple',
+    color: 'rgba(68, 108, 179, 1)',
   },
 
   shipping_title: {
@@ -227,6 +251,11 @@ const styles = StyleSheet.create({
   product: {
     padding: 15,
     flexDirection: 'row',
+    // borderBottomColor: 'grey',
+    // borderTopColor: 'grey',
+    // borderBottomWidth: 1,
+    // borderTopWidth: 1,
+    // marginVertical: 5,
   },
   product_name: {
     marginHorizontal: 20,
@@ -253,7 +282,7 @@ const styles = StyleSheet.create({
   sumary: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'purple',
+    color: 'rgba(68, 108, 179, 1)',
   },
   price: {
     fontSize: 12,
