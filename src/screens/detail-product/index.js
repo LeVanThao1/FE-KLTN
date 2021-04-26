@@ -26,7 +26,7 @@ const DetailProduct = ({navigation, route}) => {
     const {cart, setCart, likes, addToLike, removeToLike} = user;
     const {productId} = route.params;
     const [book, setBook] = useState(null);
-    const [listItem, setListItem] = useState(null);
+    const [listItem, setListItem] = useState([]);
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
     );
@@ -59,6 +59,7 @@ const DetailProduct = ({navigation, route}) => {
     });
     const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
       onCompleted: async (data) => {
+        console.log("quanggggggggg",data);
         setBook(data.book);
         setListItem(
           data.book.store.books.map((ct, i) => ({
@@ -185,7 +186,7 @@ const DetailProduct = ({navigation, route}) => {
               <SliderBox
                 style={styles.slide__image}
                 images={[
-                  ...(book.book ? book.book.images : book.images),
+                  ...(book ? book.images : []),
                   Images.onepiece1,
                 ]}
                 autoplay={true}
@@ -194,45 +195,15 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
                 <Text style={styles.detail__content_name}>
-                  {book.name ? book.name : book.book.name}
+                  {book.name ? book.name : "Tên sách"}
                 </Text>
                 <View style={styles.detail__content_price}>
-                  <Text style={styles.current__price}>{book.price}đ</Text>
-                  <Text style={styles.old__price}>500.000đ</Text>
+                  <Text style={styles.current__price}>Giá bán: {book.price}đ</Text>
                 </View>
                 <View style={styles.detail__content_rate}>
-                  <View style={styles.rate}>
-                    <View style={styles.rate_start}>
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                    </View>
-                    <Text style={styles.rate_text}>4.8</Text>
-                  </View>
+                  
                   <View style={styles.quantity_sold}>
-                    <Text style={styles.quantity__sold_text}>{book.sold}</Text>
+                    <Text style={styles.quantity__sold_text}>Đã bán: {book.sold}</Text>
                     {/* sản phẩm được yêu thích */}
                     <TouchableOpacity onPress={likeProduct}>
                       <Icon
@@ -241,31 +212,7 @@ const DetailProduct = ({navigation, route}) => {
                         type="AntDesign"
                       />
                     </TouchableOpacity>
-                    {/* sản phẩm chưa được yêu thích */}
-                    {/* <Icon
-                  style={styles.icon__heart}
-                  name="hearto"
-                  type="AntDesign"
-                /> */}
                   </View>
-                </View>
-              </View>
-              <View style={styles.detail__content_delivery}>
-                <View style={styles.delivery__wrap}>
-                  <Icon
-                    style={styles.delivery__icon}
-                    name="rocket1"
-                    type="AntDesign"
-                  />
-                  <Text>Phí vận chuyển : {0}đ</Text>
-                </View>
-                <View style={styles.delivery__wrap}>
-                  <Icon
-                    style={styles.delivery__icon}
-                    name="book"
-                    type="AntDesign"
-                  />
-                  <Text>Trả hàng / Hoàn tiền trong 3 ngày</Text>
                 </View>
               </View>
               <View style={styles.detail__buy_control}>
@@ -310,7 +257,7 @@ const DetailProduct = ({navigation, route}) => {
                   </Button>
                 </View>
               </View>
-              <View style={styles.detail__store}>
+              {/* <View style={styles.detail__store}>
                 <View style={styles.detail__store_info}>
                   <View style={styles.store__header}>
                     <View style={styles.store__wrapper}>
@@ -370,7 +317,7 @@ const DetailProduct = ({navigation, route}) => {
                     />
                   </View>
                 </View>
-              </View>
+              </View> */}
               <View style={styles.detail__book_description}>
                 <Text style={styles.detail__book_description_title}>
                   Chi tiết sản phẩm
@@ -396,7 +343,7 @@ const DetailProduct = ({navigation, route}) => {
                 </Text>
               </View>
               <View style={styles.detail__book_rate}>
-                <Text style={styles.detail__book_description_title}>
+                {/* <Text style={styles.detail__book_description_title}>
                   Đánh giá sản phẩm
                 </Text>
                 <View style={[styles.rate, styles.rate__start_wrap]}>
@@ -428,7 +375,7 @@ const DetailProduct = ({navigation, route}) => {
                     />
                   </View>
                   <Text>Đánh giá của bạn</Text>
-                </View>
+                </View> */}
                 <View style={styles.detail__book_commnet}>
                   <TextInput
                     style={styles.comment}
@@ -527,36 +474,21 @@ const styles = StyleSheet.create({
   },
   detail__content_name: {
     fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center"
   },
   detail__content_price: {
     marginVertical: 8,
   },
   current__price: {
-    color: '#ee4d2d',
+    color: 'rgba(68, 108, 179, 1)',
     fontSize: 14,
-  },
-  old__price: {
-    textDecorationLine: 'line-through',
-    fontWeight: '300',
-    color: '#414141',
+    textAlign: "center"
   },
   detail__content_rate: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  rate: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '34%',
-    justifyContent: 'space-between',
-    borderRightColor: '#ccc',
-    borderRightWidth: 1,
-    paddingRight: 5,
-  },
-  rate_start: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   quantity_sold: {
     flexDirection: 'row',
@@ -574,20 +506,6 @@ const styles = StyleSheet.create({
   },
   icon__heart_active: {
     color: '#e21f1f',
-  },
-  detail__content_delivery: {
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-  },
-  delivery__wrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  delivery__icon: {
-    fontSize: 16,
-    paddingRight: 4,
-    color: 'green',
   },
   detail__store: {
     backgroundColor: '#f6f6f6',
@@ -643,7 +561,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buy__action_text: {
-    color: '#f57f1a',
+    color: 'rgba(68, 108, 179, 1)',
   },
   control__buy_action: {
     flexDirection: 'row',

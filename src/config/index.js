@@ -38,6 +38,7 @@ const authMiddleware = new ApolloLink(async (operation, forward) => {
     headers: {
       authorization: await AsyncStorage.getItem('token'),
       refresh_token: await AsyncStorage.getItem('refreshToken'),
+      "Access-Control-Allow-Origin": "*"
     },
   });
   return forward(operation);

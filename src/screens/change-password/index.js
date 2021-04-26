@@ -93,14 +93,6 @@ export default function ForgotPassword({navigation}) {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={{width: '100%'}}
-        onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: 'rgba(68, 108, 179, 1)', fontWeight: 'bold'}}>
-          {'Trở lại'}
-        </Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>Thay đổi mật khẩu</Text>
       <View style={{width: '100%'}}>
         <Text style={styles.text}>Chào mừng bạn quay trở lại!</Text>
       </View>
