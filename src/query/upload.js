@@ -7,3 +7,15 @@ export const UPLOAD_SINGLE_FILE = gql`
     }
   }
 `;
+
+export const UPLOAD_MULTI_FILE = gql`
+  mutation uploadMultiFile($files: [Upload!]!) {
+    uploadMultiFile(files: $files) {
+      id
+      url
+      name
+      asset_id
+      public_id
+    }
+  }
+`;
