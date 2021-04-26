@@ -24,10 +24,21 @@ export const stylesPost = StyleSheet.create({
   infocmt: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: 10,
+    paddingTop: 10,
   },
 
   day: {
     paddingLeft: 20,
+  },
+
+  userCmt: {
+    // flex: 1,
+
+    marginHorizontal: 10,
+    backgroundColor: '#dfdfdf',
+    borderRadius: 30,
+    paddingHorizontal: 25,
   },
 
   name: {

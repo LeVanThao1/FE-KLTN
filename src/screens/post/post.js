@@ -169,7 +169,7 @@ const PostOne = ({route, post, info, type}) => {
               source={{uri: type ? info.avatar : post.author.avatar}}
               style={stylesPost.avtcmt}
             />
-            <View style={stylesPost.day}>
+            <View style={stylesPost.userCmt}>
               <Text style={stylesPost.name}>
                 {type ? info.name : post.author.name}
               </Text>

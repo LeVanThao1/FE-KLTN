@@ -14,11 +14,10 @@ import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
-import Images from '../../assets/images/images';
-import {CREATE_BOOK} from '../../query/book';
+import {CREATE_BOOK} from '../../../query/book';
 // import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
 import {ReactNativeFile} from 'extract-files';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
