@@ -1,6 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, View} from 'native-base';
+import {Icon, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
   TextInput,
@@ -15,7 +15,10 @@ import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK} from '../../query/book';
-import * as ImagePicker from 'react-native-image-picker';
+// import * as ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {ReactNativeFile} from 'extract-files';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const CreateProduct = () => {
@@ -67,6 +70,7 @@ const CreateProduct = () => {
     const [categori, setCategori] = useState({
       value: '',
     });
+    const [imagesUpload, setImageUpload] = useState([]);
     const [images, setImages] = useState([]);
     const onChange = (value) => {
       setCategori({
@@ -75,17 +79,47 @@ const CreateProduct = () => {
     };
 
     // const [photo, setPhoto] = useState(null);
+    const [upload] = useMutation(UPLOAD_MULTI_FILE, {
+      onCompleted: (data) => {
+        console.log('data', data);
+        const tamp = data.uploadMultiFile.map((dt) => dt.url);
+        setImageUpload([...imagesUpload, ...tamp]);
+      },
+      onError: (err) => {
+        console.log('manage', err);
+      },
+    });
 
     const handleChoosePhoto = () => {
-      const options = {
-        noData: true,
-      };
-      ImagePicker.launchImageLibrary(options, (response) => {
-        if (response.uri) {
-          console.log(response);
-          setImages(response);
-        }
-      });
+      ImagePicker.openPicker({
+        multiple: true,
+        maxFiles: 10,
+        mediaType: 'photo',
+      })
+        .then((res) => {
+          if (res.length > 10 || res.length + images.length > 10) {
+            console.log(
+              'Vượt quá giới hạn cho phép. Giới hạn cho phép 10 hình ảnh',
+            );
+            return;
+          }
+          const tamp = res.map((r) => r.path);
+          setImages([...images, ...tamp]);
+          const files = res.map(
+            (r) =>
+              new ReactNativeFile({
+                uri: r.path,
+                name: 'product',
+                type: r.mime,
+              }),
+          );
+          upload({
+            variables: {
+              files,
+            },
+          });
+        })
+        .catch((err) => console.log(err));
     };
 
     const [createBook, {called, loading, data, error}] = useMutation(
@@ -101,22 +135,29 @@ const CreateProduct = () => {
     );
 
     const onPress = () => {
+      console.log(1);
       let dataBook = {
         name: name.value,
         description: description.value,
         year: year.value,
         numberOfReprint: numPrint.value,
         publisher: publisher.value,
-        category: categori,
-        images: ['https://picsum.photos/200/300'],
+        category: categori.value,
+        images: imagesUpload,
         amount: amount.value,
         price: price.value,
       };
+      console.log(dataBook);
       createBook({
         variables: {
           dataBook,
         },
       });
+    };
+
+    const removeImages = (index) => {
+      setImages(images.filter((ig, i) => index !== i));
+      setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
 
     return (
@@ -256,13 +297,76 @@ const CreateProduct = () => {
             {/* Image */}
             <View style={styles.container}></View>
 
-            <Button title="Choose Photo" onPress={handleChoosePhoto} />
-            {/* <ImageView
-              images={images.map((im) => ({uri: im}))}
-              imageIndex={0}
-              visible={false}
-              // onRequestClose={() => setIsVisible(false)}
-            /> */}
+            {/* <Button title="Choose Photo" onPress={handleChoosePhoto} /> */}
+
+            {/* {images.length > 0 && (
+              <ImageView
+                images={images.map((im) => ({uri: im}))}
+                imageIndex={0}
+                visible={false}
+                style={{width: '100%', height: 400}}
+                // onRequestClose={() => setIsVisible(false)}
+              />
+            )} */}
+            <ScrollView
+              style={{flexDirection: 'row', marginVertical: 20}}
+              horizontal={true}>
+              {images.length > 0 &&
+                images.map((r, i) => (
+                  <View>
+                    <Image
+                      style={{
+                        width: 100,
+                        height: 100,
+                        marginRight: 10,
+                        position: 'relative',
+                      }}
+                      source={{uri: r}}
+                    />
+                    <TouchableOpacity
+                      onPress={() => removeImages(i)}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 10,
+                      }}>
+                      <Icon
+                        type="AntDesign"
+                        name="closecircleo"
+                        style={{
+                          fontSize: 22,
+                          color: 'red',
+                        }}></Icon>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              <TouchableOpacity
+                onPress={handleChoosePhoto}
+                style={{
+                  // paddingHorizontal: 10,
+                  // paddingVertical: 5,
+                  margin: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 100,
+                  height: 100,
+                  backgroundColor: '#fff',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.18,
+                  shadowRadius: 1.0,
+
+                  elevation: 1,
+                }}>
+                <Icon
+                  type="FontAwesome5"
+                  name="plus"
+                  style={{fontSize: 50, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+              </TouchableOpacity>
+            </ScrollView>
             <View style={styles.des}>
               <Text>Mô tả sản phẩm *</Text>
               <Textarea
@@ -358,9 +462,13 @@ const CreateProduct = () => {
               color="rgba(68, 108, 179, 1)"
               title="Xác nhận"
               onPress={onPress}></Button> */}
-            <TouchableOpacity onPress={onPress}>
-              <Text>Xac nhan</Text>
-            </TouchableOpacity>
+            <View style={{marginTop: 10}}>
+              <Button
+                title="Xác nhận"
+                color="rgba(68, 108, 179, 1)"
+                onPress={onPress}
+              />
+            </View>
           </View>
           {/* des */}
         </View>
