@@ -36,11 +36,11 @@ export const GET_POSTS = gql`
         }
         reply {
           id
-          conten
+          content
           author {
             id
             name
-            avatart
+            avatar
           }
         }
         createdAt
