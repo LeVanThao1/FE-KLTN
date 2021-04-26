@@ -1,1 +1,1 @@
-export default '192.168.9.206';
+export default 'http://192.168.9.206';

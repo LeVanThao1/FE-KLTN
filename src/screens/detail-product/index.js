@@ -197,11 +197,9 @@ const DetailProduct = ({navigation, route}) => {
                 <Text style={styles.detail__content_name}>
                   {book.name ? book.name : "Tên sách"}
                 </Text>
-                <View style={styles.detail__content_price}>
-                  <Text style={styles.current__price}>Giá bán: {book.price}đ</Text>
-                </View>
+                <Text style={{...styles.detail__content_name, fontSize: 16}}>{book.publisher}đ</Text>
+                <Text style={styles.current__price}>Giá bán: {book.price}đ</Text>
                 <View style={styles.detail__content_rate}>
-                  
                   <View style={styles.quantity_sold}>
                     <Text style={styles.quantity__sold_text}>Đã bán: {book.sold}</Text>
                     {/* sản phẩm được yêu thích */}
@@ -219,13 +217,9 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
-                    <Button
-                      style={styles.btn_quantity}
-                      rounded
-                      warning
-                      onPress={() => setQuantity(quantity - 1)}>
-                      <TextNT style={styles.btn__quantity_text}>-</TextNT>
-                    </Button>
+                    <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>-</Text>
+                    </TouchableOpacity>
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -233,91 +227,19 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    <Button
-                      style={styles.btn_quantity}
-                      rounded
-                      warning
-                      onPress={() => setQuantity(quantity + 1)}>
-                      <TextNT style={styles.btn__quantity_text}>+</TextNT>
-                    </Button>
+                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>+</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
-                  <Button
-                    style={styles.store__btn}
-                    bordered
-                    warning
-                    onPress={addToCart}>
-                    <TextNT style={styles.buy__action_text}>
+                  <TouchableOpacity onPress={addToCart}>
+                    <Text style={{...styles.buy__action_text, fontWeight: "500"}}>
                       Thêm vào giỏ hàng
-                    </TextNT>
-                  </Button>
-                  <Button style={styles.store__btn} bordered warning>
-                    <TextNT style={styles.buy__action_text}>Mua ngay</TextNT>
-                  </Button>
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-              {/* <View style={styles.detail__store}>
-                <View style={styles.detail__store_info}>
-                  <View style={styles.store__header}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.store__avatar}
-                        source={{
-                          uri: book.store.avatar,
-                        }}
-                      />
-                      <Text style={styles.store__name}>{'AppStore'}</Text>
-                    </View>
-                    <Button
-                      style={styles.btn__view_store}
-                      bordered
-                      warning
-                      onPress={() => navigation.navigate('/')}>
-                      <TextNT style={styles.buy__action_text}>Xem Shop</TextNT>
-                    </Button>
-                  </View>
-                  <View style={styles.store__statistical}>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>
-                        {book.store.books.length}
-                      </Text>
-                      <Text style={styles.store__statistical_code}>
-                        Sản phẩm
-                      </Text>
-                    </View>
-                    <Text style={styles.separator}>|</Text>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>4.7</Text>
-                      <Text style={styles.store__statistical_code}>
-                        Đánh giá
-                      </Text>
-                    </View>
-                    <Text style={styles.separator}>|</Text>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>91%</Text>
-                      <Text style={styles.store__statistical_code}>
-                        Phản hồi chat
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.store__products}>
-                  <View style={styles.store__products_header}>
-                    <Text>Các sản phẩm khác của shop</Text>
-                    <Text style={styles.buy__action_text}>Xem tất cả</Text>
-                  </View>
-                  <View style={styles.store__products_list}>
-                    <FlatList
-                      //   style={styles.flat_list}
-                      data={listItem && listItem}
-                      renderItem={renderProduct}
-                      keyExtractor={(item) => item.id}
-                      horizontal={true}
-                    />
-                  </View>
-                </View>
-              </View> */}
               <View style={styles.detail__book_description}>
                 <Text style={styles.detail__book_description_title}>
                   Chi tiết sản phẩm
@@ -343,39 +265,6 @@ const DetailProduct = ({navigation, route}) => {
                 </Text>
               </View>
               <View style={styles.detail__book_rate}>
-                {/* <Text style={styles.detail__book_description_title}>
-                  Đánh giá sản phẩm
-                </Text>
-                <View style={[styles.rate, styles.rate__start_wrap]}>
-                  <View style={styles.rate_start}>
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                  </View>
-                  <Text>Đánh giá của bạn</Text>
-                </View> */}
                 <View style={styles.detail__book_commnet}>
                   <TextInput
                     style={styles.comment}
@@ -384,13 +273,9 @@ const DetailProduct = ({navigation, route}) => {
                     placeholder="Nhập bình luận của bạn"
                     onChangeText={onChangeComment}
                   />
-                  <Button
-                    style={[styles.btn__view_store, styles.btn_comment]}
-                    rounded
-                    warning
-                    onPress={() => navigation.navigate('/')}>
-                    <TextNT style={styles.btn_comment_text}>Bình luận</TextNT>
-                  </Button>
+                  <TouchableOpacity>
+                    <Text style={{...styles.buy__action_text, fontSize: 14, fontWeight: "500"}}>Bình luận</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.book__comment_wrap}>
                   <View style={styles.comment__user}>
@@ -454,6 +339,7 @@ const DetailProduct = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 8,
     height: '100%',
     backgroundColor: '#f6f6f6',
   },
@@ -473,16 +359,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   detail__content_name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    textAlign: "center"
-  },
-  detail__content_price: {
-    marginVertical: 8,
+    textAlign: "center",
+    marginBottom: 8
   },
   current__price: {
     color: 'rgba(68, 108, 179, 1)',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center"
   },
   detail__content_rate: {
@@ -505,7 +389,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   icon__heart_active: {
-    color: '#e21f1f',
+    color: 'rgba(68, 108, 179, 1)',
   },
   detail__store: {
     backgroundColor: '#f6f6f6',
@@ -552,6 +436,10 @@ const styles = StyleSheet.create({
   input__quantity: {
     width: 30,
     marginHorizontal: 2,
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+    textDecorationLine: "underline"
   },
   btn_quantity: {
     width: 40,
@@ -561,11 +449,17 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buy__action_text: {
-    color: 'rgba(68, 108, 179, 1)',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: 'rgba(68, 108, 179, 1)',
+    color: '#ffffff',
+    borderRadius: 16,
+    fontSize: 16,
+    fontWeight: "bold"
   },
   control__buy_action: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: 5,
   },
   store__btn: {
@@ -620,6 +514,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderBottomColor: '#888',
     borderBottomWidth: 1,
+    fontSize: 16,
+    fontWeight: "bold"
   },
   detail__book_description_wrap: {
     flexDirection: 'row',
@@ -681,6 +577,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 25,
   },
+  quantity__sold_text:{
+    fontSize: 16
+  }
 });
 
 export default DetailProduct;
