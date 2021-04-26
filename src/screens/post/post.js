@@ -14,6 +14,7 @@ import ImageView from 'react-native-image-viewing';
 import {DELETE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 import moment from 'moment';
+import {queryData} from '../../common';
 
 const PostOne = ({route, post, info, type}) => {
   return useObserver(() => {
@@ -24,6 +25,7 @@ const PostOne = ({route, post, info, type}) => {
     const navigation = useNavigation();
 
     const {posts} = user;
+    const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
       {
@@ -36,6 +38,13 @@ const PostOne = ({route, post, info, type}) => {
         },
       },
     );
+
+    // useEffect(() => {
+    //   queryData(GET_COMMENT_POST, {postId})
+    //   .then(({data}) => {
+    //     setComment(data.comment)
+    //   })
+    // })
 
     const onPress = () => {
       deletePost({
@@ -155,7 +164,18 @@ const PostOne = ({route, post, info, type}) => {
               </View>
             </View>
           </View>
-
+          <View style={stylesPost.infocmt}>
+            <Image
+              source={{uri: type ? info.avatar : post.author.avatar}}
+              style={stylesPost.avtcmt}
+            />
+            <View style={stylesPost.day}>
+              <Text style={stylesPost.name}>
+                {type ? info.name : post.author.name}
+              </Text>
+              <Text style={stylesPost.time}>alaoalalalaa</Text>
+            </View>
+          </View>
           <View style={stylesPost.addCmt}>
             <View style={stylesPost.person}>
               <View style={stylesPost.info}>

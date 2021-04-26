@@ -14,12 +14,12 @@ export class Comment {
   }
 
   @action
-  setPost = (value) => {
+  setPostComment = (value) => {
     this.post = value;
   };
 
   @action
-  setBook = (value) => {
+  setBookComment = (value) => {
     this.book = value;
   };
 

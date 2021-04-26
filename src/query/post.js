@@ -34,6 +34,15 @@ export const GET_POSTS = gql`
           name
           avatar
         }
+        reply {
+          id
+          conten
+          author {
+            id
+            name
+            avatart
+          }
+        }
         createdAt
       }
       createdAt
@@ -53,9 +62,15 @@ export const GET_POSTS_USER = gql`
           id
           name
           avatar
-          phone
-          email
-          address
+        }
+        reply {
+          id
+          conten
+          author {
+            id
+            name
+            avatart
+          }
         }
         createdAt
       }
@@ -96,6 +111,15 @@ export const GET_POST = gql`
           id
           name
           avatar
+        }
+        reply {
+          id
+          conten
+          author {
+            id
+            name
+            avatart
+          }
         }
         createdAt
       }

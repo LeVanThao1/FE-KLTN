@@ -76,15 +76,10 @@ export default GET_COMMENT_POST = gql`
       post {
         id
         title
-        author
         images
         description
       }
-      type {
-        TEXT
-        IMAGE
-        VIDEO
-      }
+      type
       reply {
         id
         content
@@ -92,13 +87,9 @@ export default GET_COMMENT_POST = gql`
           id
           avatar
         }
-        type {
-          TEXT
-          IMAGE
-          VIDEO
-        }
+        type
       }
-      createAt
+      createdAt
     }
   }
 `;

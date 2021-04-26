@@ -21,6 +21,11 @@ export const stylesPost = StyleSheet.create({
     alignItems: 'center',
   },
 
+  infocmt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
   day: {
     paddingLeft: 20,
   },
