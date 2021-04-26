@@ -106,7 +106,7 @@ const Home = ({navigation}) => {
         {!loading && (
           <ScrollView>
             <SliderBox images={images} autoplay={true} circleLoop={true} />
-            {/* <View
+            <View
               style={{
                 paddingBottom: 20,
                 borderBottomWidth: 3,
@@ -205,8 +205,8 @@ const Home = ({navigation}) => {
               <Text style={styles.seeMoreText}>
                 XEM THÊM {books && books.length} SẢN PHẨM{' '}
               </Text>
-            </View> */}
-            <View style={styles.category__icon}>
+            </View>
+            {/* <View style={styles.category__icon}>
               <CategoryIcon />
             </View>
             <View style={styles.category__icon}>
@@ -226,7 +226,7 @@ const Home = ({navigation}) => {
             </View>
             <View style={styles.category__icon}>
               <History />
-            </View>
+            </View> */}
           </ScrollView>
         )}
       </View>
