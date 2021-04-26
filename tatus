@@ -1,0 +1,833 @@
+[33mcommit 2c3b0fb00c81ce68c2dbd83d103843f6f826976b[m[33m ([m[1;36mHEAD -> [m[1;32mup-del-post[m[33m)[m
+Merge: fa637bd b7c8d57
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 25 00:18:45 2021 +0700
+
+    pull and push manage book
+
+[33mcommit fa637bdf5d7796799ce9d5a088acf3a82772a4da[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 25 00:17:17 2021 +0700
+
+    managa book
+
+[33mcommit b7c8d570fc56833cd115e1baef11da1e7d3471fe[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 2631e9b 3dc2487
+Author: yudquang312 <47887364+yudquang312@users.noreply.github.com>
+Date:   Sat Apr 24 22:13:00 2021 +0700
+
+    Merge pull request #37 from LeVanThao1/yudquang312-notification
+    
+    notification not yet route to detail
+
+[33mcommit 3dc2487c80d3a3c0c95f6d36ae5edf548744001b[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Sat Apr 24 22:10:48 2021 +0700
+
+    notification not yet route to detail
+
+[33mcommit d26ed8b7b769342a2635a38c3b690c0a3efaa2c9[m
+Merge: 468cfbe 2631e9b
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 24 20:31:41 2021 +0700
+
+    oke
+
+[33mcommit 468cfbef6d44e5ca1560bb12d9bf515da533f661[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 24 20:26:47 2021 +0700
+
+    book of store
+
+[33mcommit 2631e9b7fae933e491a664c200cc6a80f6c9038e[m
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Sat Apr 24 19:11:22 2021 +0700
+
+    Update stack-navigation.js
+
+[33mcommit 36809cf70cca053206341155c6bff4280f6a4e26[m
+Merge: a21ad26 d5c5d29
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Sat Apr 24 19:04:56 2021 +0700
+
+    Merge pull request #36 from LeVanThao1/vanthao_payment
+    
+    doing payment
+
+[33mcommit d5c5d29bc011b8bbfd929596a18e48fab5e46b1c[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sat Apr 24 19:02:49 2021 +0700
+
+    doing payment
+
+[33mcommit a21ad2688353d4110ce38b286334191b546a8c27[m
+Merge: 6f4614a c1a53c7
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Sat Apr 24 01:14:53 2021 +0700
+
+    Merge pull request #35 from LeVanThao1/up-del-post
+    
+    Up del post
+
+[33mcommit c1a53c7798dd68cb31c418efab48172a98165f75[m[33m ([m[1;31morigin/up-del-post[m[33m)[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 24 01:14:15 2021 +0700
+
+    fix post
+
+[33mcommit 6f4614a78670a8bb932b5bb8ca940b6b35047d97[m
+Merge: cc1532b 26569ea
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Sat Apr 24 00:34:26 2021 +0700
+
+    Merge pull request #34 from LeVanThao1/vanthao_all
+    
+    doing payment
+
+[33mcommit 26569ea6dab558ab511bf6f768b29258c64ddb53[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sat Apr 24 00:31:52 2021 +0700
+
+    doing payment
+
+[33mcommit 97c68eafeba3c026ff2a5e1b92f9db83fe88bcc1[m
+Merge: e7e3af0 cc1532b
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Fri Apr 23 23:54:44 2021 +0700
+
+    ok
+
+[33mcommit e7e3af09a00938458aae533012e9e9338e944a35[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Fri Apr 23 23:52:20 2021 +0700
+
+    nothin
+
+[33mcommit cc1532ba7ecb7d3d79956ea6fa5b5a3c54df1491[m
+Merge: 8b33bd2 6e56969
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Fri Apr 23 23:50:21 2021 +0700
+
+    Merge pull request #33 from LeVanThao1/vanthao_all
+    
+    fix bao
+
+[33mcommit 6e569695f9a66110f33b5b9eeea779815ae2e156[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Fri Apr 23 23:49:36 2021 +0700
+
+    fix bao
+
+[33mcommit ecaefeaca36043a4df6d7e9c7a0d01e523620b08[m
+Merge: 205f3f4 8b33bd2
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Fri Apr 23 21:29:12 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into up-del-post
+
+[33mcommit 205f3f4d53875f488c9db30b3fdab3fec99fa17c[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Fri Apr 23 21:28:57 2021 +0700
+
+    harizontal post
+
+[33mcommit 8b33bd260b53b2eb3ec3e5e001aa0d8de5fe2857[m
+Merge: dbb72ad fb04104
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Fri Apr 23 17:49:22 2021 +0700
+
+    Merge pull request #32 from LeVanThao1/vanthao_all
+    
+    reset password, search wishlist
+
+[33mcommit fb041042f057dec7ba7db2c139fee2efdf493474[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Fri Apr 23 13:46:23 2021 +0700
+
+    reset password, search wishlist
+
+[33mcommit dbb72adc17154a9f24626d79ae9dc9e36eaad0fc[m
+Merge: d66fc9a d14f73a
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Thu Apr 22 00:06:26 2021 +0700
+
+    Merge pull request #31 from LeVanThao1/up-del-post
+    
+    Update delete post
+
+[33mcommit d14f73afd49febb69acbabaf5373d1c2818fba55[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Thu Apr 22 00:05:48 2021 +0700
+
+    ok delete and update 95%
+
+[33mcommit 4600806f6c5d20dc4c42286c4c13749cd9551df5[m
+Merge: 86b4672 d66fc9a
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Thu Apr 22 00:04:57 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into up-del-post
+
+[33mcommit 86b46723587d009134cd5f2de51badc4d21fe3ca[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Thu Apr 22 00:04:46 2021 +0700
+
+    done-delete but not complete render, update has description is not defined ???
+
+[33mcommit d66fc9a0d674ff00eed3da82d77f93b9b86598c2[m
+Merge: 7a925d8 72c2d9a
+Author: yudquang312 <47887364+yudquang312@users.noreply.github.com>
+Date:   Wed Apr 21 21:53:42 2021 +0700
+
+    Merge pull request #30 from LeVanThao1/fearture-manage-order
+    
+    add manage-order, order-detail and fill data for ít
+
+[33mcommit 72c2d9a4fee0f17958cb11ccf61aae2572cb9a77[m
+Merge: 33102f6 7a925d8
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Wed Apr 21 21:53:08 2021 +0700
+
+    fix conflic
+
+[33mcommit 33102f6a415b0032d37f218b470b1555e660ee63[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Wed Apr 21 21:27:47 2021 +0700
+
+    add manage-order, order-detail and fill data for ít
+
+[33mcommit 7a925d804c3907b4f15264d77a53a017b530c67b[m
+Merge: c1cb89a 5dc5c1c
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Wed Apr 21 20:59:29 2021 +0700
+
+    Merge pull request #29 from LeVanThao1/create-post
+    
+    Update book
+
+[33mcommit 5dc5c1ccdbf69f6fb425855eb403257b440263bc[m[33m ([m[1;31morigin/create-post[m[33m, [m[1;32mcreate-post[m[33m)[m
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Wed Apr 21 20:58:51 2021 +0700
+
+    done update delete book
+
+[33mcommit 38b2ea43f87f2b967784c6487dcbac520070cf92[m
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Wed Apr 21 16:02:48 2021 +0700
+
+    update bôk
+
+[33mcommit c1cb89ae8ae8c9116fdba155bf5f22833bc4e5bf[m
+Merge: 4cc7152 e3718ff
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Wed Apr 21 13:55:23 2021 +0700
+
+    Merge pull request #28 from LeVanThao1/create-post
+    
+    Create post
+
+[33mcommit e3718ff3a5d46530904e4c20c0c5a1a4648fba77[m
+Merge: 6852b7a 4cc7152
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Wed Apr 21 13:54:54 2021 +0700
+
+    deletebook
+
+[33mcommit 6852b7a64cba34016e65df01efbebccf3d727498[m
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Wed Apr 21 13:52:39 2021 +0700
+
+    delete book
+
+[33mcommit 4cc715223ad465097c53a45ac0774a68fb6fb683[m
+Merge: 583c470 fc0629b
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Wed Apr 21 13:02:16 2021 +0700
+
+    Merge pull request #27 from LeVanThao1/vanthao_notification
+    
+    Vanthao notification
+
+[33mcommit fc0629b27c0b3ab319ce69e7c710de70250c650f[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Wed Apr 21 12:59:58 2021 +0700
+
+    notification
+
+[33mcommit acd616b9cf97c1216cc7705a9140ad46e148a32a[m
+Merge: d6d16fa 583c470
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Wed Apr 21 01:05:37 2021 +0700
+
+    fix ip
+
+[33mcommit d6d16fa3160ead2aa51d13ccaacdefbfb43979e0[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Wed Apr 21 01:04:51 2021 +0700
+
+    fix query book add comment
+
+[33mcommit 583c470ffcec209b9d5e30e3779b7784f60064a3[m
+Merge: 5457935 757796d
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Tue Apr 20 10:38:37 2021 +0700
+
+    Merge pull request #26 from LeVanThao1/create-post
+    
+    create-post
+
+[33mcommit 757796da2b12ad4f4483fd50832816f7af318ac8[m
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Tue Apr 20 10:38:11 2021 +0700
+
+    fix creat post
+
+[33mcommit 9facde4797d2b464271e631182770f78ad99b032[m
+Author: st-baonguyen <bao.nguyen@supremetech.vn>
+Date:   Tue Apr 20 10:36:45 2021 +0700
+
+    create-post
+
+[33mcommit 72db5c498e0ad1866737b6325810d60e17d65dbd[m
+Merge: ceb7b61 5457935
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Tue Apr 20 00:07:58 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into vanthao_post_feed
+
+[33mcommit 54579358c86fd2e438370915d1eb97ac2dfe9ea2[m[33m ([m[1;32mmaster[m[33m)[m
+Merge: e6d7fb4 7536009
+Author: yudquang312 <47887364+yudquang312@users.noreply.github.com>
+Date:   Sun Apr 18 23:26:45 2021 +0700
+
+    Merge pull request #25 from LeVanThao1/yuquang312/personal-information
+    
+    update personal information, not yet upload avatar
+
+[33mcommit 7536009070e13df964f7f325fd82122e43fe36e6[m[33m ([m[1;31morigin/yuquang312/personal-information[m[33m)[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Sun Apr 18 23:23:33 2021 +0700
+
+    update personal information, not yet upload avatar
+
+[33mcommit e6d7fb4aa9ce2ee2f99e040e9365f6a0c72a0a97[m
+Merge: 2ee7a32 f0524b5
+Author: yudquang312 <47887364+yudquang312@users.noreply.github.com>
+Date:   Sun Apr 18 22:06:53 2021 +0700
+
+    Merge pull request #24 from LeVanThao1/yuquang312/personal-information
+    
+    Add screen profile
+
+[33mcommit f0524b5d4c1dfdc92a3521698639b3a860b27ac5[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Sun Apr 18 22:04:45 2021 +0700
+
+    add screen profile
+
+[33mcommit 6cb72fe7c2304146d1359fd6f5233776cc003365[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Sun Apr 18 20:36:01 2021 +0700
+
+    change ip and install
+
+[33mcommit ceb7b618d7eb3b8007bf81284a3da998bad3553a[m[33m ([m[1;31morigin/vanthao_post_feed[m[33m)[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sun Apr 18 17:50:40 2021 +0700
+
+    fix icon
+
+[33mcommit 2ee7a32876eb6c10733892ec616901e825e90cfc[m
+Merge: 1648d64 2bb4b6c
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Sun Apr 18 17:46:02 2021 +0700
+
+    Merge pull request #23 from LeVanThao1/vanthao_post_feed
+    
+    post feed pages
+
+[33mcommit 2bb4b6ca91063c7d35d8b6e46c802e5cf185d78f[m
+Merge: b8e6da7 1648d64
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sun Apr 18 17:44:12 2021 +0700
+
+    fix conflict and error of Bao
+
+[33mcommit b8e6da7b005589ccfe15753c35a182563996bfb6[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sun Apr 18 16:45:06 2021 +0700
+
+    done cart post feed
+
+[33mcommit 1648d64f3ea0edf70069e720931c85ebfe6804fe[m
+Merge: f844231 47dcdfa
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Sun Apr 18 12:42:13 2021 +0700
+
+    Merge pull request #22 from LeVanThao1/create-book
+    
+    nothing
+
+[33mcommit 47dcdfa13cf4e80ab92c4c64d1cd91f6741cdf27[m[33m ([m[1;31morigin/create-book[m[33m)[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 18 12:41:15 2021 +0700
+
+    nothing
+
+[33mcommit f844231e4071a7ec1ea4f7be75a48b2eee6c984e[m
+Merge: e12cca9 57c2ca7
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Sun Apr 18 12:18:06 2021 +0700
+
+    Merge pull request #21 from LeVanThao1/create-book
+    
+    fix create book
+
+[33mcommit 57c2ca7e7489358f4c043b6d5655ac6a6747cb26[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 18 12:17:37 2021 +0700
+
+    fix create book
+
+[33mcommit e12cca9d4c22df72010c696d35588573b68538a3[m
+Merge: 9dbe2a9 26b59b4
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Sun Apr 18 11:09:29 2021 +0700
+
+    Merge pull request #20 from LeVanThao1/create-book
+    
+    create book
+
+[33mcommit 26b59b4178d5ad0fc7e4ae1539a4252b2131cc4d[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 18 11:09:02 2021 +0700
+
+    create book
+
+[33mcommit 9dbe2a933d5c70d161194de4b6e6b677ddcbf4d9[m
+Merge: f27c23e ada157d
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Sat Apr 17 17:37:51 2021 +0700
+
+    Merge pull request #19 from LeVanThao1/done-home
+    
+    store
+
+[33mcommit ada157db6b9b2d2c1e5717e5b509da2038fa3ef2[m[33m ([m[1;31morigin/done-home[m[33m)[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 17 17:36:40 2021 +0700
+
+    store
+
+[33mcommit f2375dcc99df5dff94965457f3885e5825f231d6[m
+Merge: 9377cde f27c23e
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 17 15:00:12 2021 +0700
+
+    store profile
+
+[33mcommit 9377cde6c0f00f03437b759f8a2ed2b1f4d3f9d4[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 17 14:58:19 2021 +0700
+
+    to pull
+
+[33mcommit f27c23eeafc11efdfa8e2acd953afca45e47fab7[m
+Merge: bebf3f9 a03d3b4
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Sat Apr 17 14:57:46 2021 +0700
+
+    Merge pull request #18 from LeVanThao1/vanthao_navigation
+    
+    Vanthao navigation
+
+[33mcommit a03d3b44300da79681365ba2671778967af70446[m[33m ([m[1;31morigin/vanthao_navigation[m[33m)[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Sat Apr 17 14:55:18 2021 +0700
+
+    fix navigation
+
+[33mcommit 3e89ab89507db538a05bc361b257bfeedf7762f7[m
+Merge: f9db8d7 bebf3f9
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Fri Apr 16 20:37:05 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into vanthao_cart
+
+[33mcommit f9db8d7c853791bcbc509f517b02d07aa1474015[m
+Author: Vien Nguyen Luong <luongvien13t2@gmail.com>
+Date:   Fri Apr 16 20:36:59 2021 +0700
+
+    doing cart
+
+[33mcommit bebf3f957a0732bad7e39bff7f24bb7c44b384b3[m
+Merge: 3ff0f7f 5449c08
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Fri Apr 16 12:51:45 2021 +0700
+
+    Merge pull request #17 from LeVanThao1/vanthao_loadDB
+    
+    Vanthao load db
+
+[33mcommit 3ff0f7f6b6d11776275b51f297622e661086de13[m
+Merge: 2a607c1 7395680
+Author: anhlamlee <58698907+anhlamlee@users.noreply.github.com>
+Date:   Fri Apr 16 12:51:16 2021 +0700
+
+    Merge pull request #14 from LeVanThao1/feature/account-manager
+    
+    create account-manager screen
+
+[33mcommit 7395680eebfb2073e7fa6a92f21872b41e1205ce[m[33m ([m[1;31morigin/feature/account-manager[m[33m)[m
+Merge: 80128db 2a607c1
+Author: anhlamlee <anhlam01693347568@gmail.com>
+Date:   Fri Apr 16 12:50:22 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into feature/account-manager
+
+[33mcommit 680be2a0c027476ff6a0175229dd10857dd4cbc8[m
+Merge: 5449c08 2a607c1
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Fri Apr 16 02:21:15 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into vanthao_loadDB
+
+[33mcommit 2a607c1553f589e2ff061255767c7985fa2ccfb8[m
+Merge: 840be8d ce54e87
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Fri Apr 16 00:08:00 2021 +0700
+
+    Merge pull request #16 from LeVanThao1/done-home
+    
+    complete query for category, order, book, store
+
+[33mcommit ce54e8756b68381a8d574bb1b2ad825037ef386f[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Fri Apr 16 00:07:19 2021 +0700
+
+    complete query for category, order, book, store
+
+[33mcommit 5449c08fd6cb22ff9c1c010411e1852c68675af4[m[33m ([m[1;31morigin/vanthao_loadDB[m[33m)[m
+Merge: b88a146 840be8d
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Thu Apr 15 21:20:58 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into vanthao_loadDB
+
+[33mcommit b88a146836005c9e7420c0406bee12ea1a2cd4ec[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Thu Apr 15 21:20:50 2021 +0700
+
+    fix register
+
+[33mcommit 840be8d64cc142a8850920a41186d04c54716853[m
+Merge: b55e107 4a8d338
+Author: Bảo Nguyễn <57624326+nhtbao101@users.noreply.github.com>
+Date:   Wed Apr 14 22:58:51 2021 +0700
+
+    Merge pull request #15 from LeVanThao1/done-home
+    
+    Done home
+
+[33mcommit 4a8d338f6727cba3e60dbe54f40c10cc661172d9[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 14 22:57:12 2021 +0700
+
+    fix feed page
+
+[33mcommit 1de72db0bead0a31340837521e1125130795dc5d[m
+Merge: d25f576 b55e107
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 14 19:17:47 2021 +0700
+
+    push db for home page
+
+[33mcommit d25f576024dafd9cf09b0196d9db0ccce9a818a4[m[33m ([m[1;31morigin/screenStore[m[33m)[m
+Merge: 3f18dce 53c47f8
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 14 16:49:17 2021 +0700
+
+    dbfor home page
+
+[33mcommit 80128dbad2557ac84f2a4bcb1ef10b63bd6e934b[m
+Author: anhlamlee <anhlam01693347568@gmail.com>
+Date:   Wed Apr 14 01:22:13 2021 +0700
+
+    create account-manager screen
+
+[33mcommit b55e107ba9fea11f60678f160d18df584e2a832b[m
+Merge: e98b40f 9a55eaa
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Tue Apr 13 23:45:55 2021 +0700
+
+    Merge pull request #13 from LeVanThao1/yudquang312-screen-personal
+    
+    add screen personal
+
+[33mcommit 9a55eaaaf4342d378addd43f5c1f7ed7dc8b5145[m[33m ([m[1;31morigin/yudquang312-screen-personal[m[33m)[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Tue Apr 13 23:35:53 2021 +0700
+
+    add screen personal
+
+[33mcommit e98b40fd7a24f6b67d834d6a7f357ac2a3041dd1[m
+Merge: 7667662 f6c1a8d
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Tue Apr 13 21:27:12 2021 +0700
+
+    Merge pull request #12 from LeVanThao1/vanthao_loadDB
+    
+    Vanthao load db
+
+[33mcommit f6c1a8da43f3af9890d2e635f5dc246eee10035a[m
+Merge: 987b90a 7667662
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Tue Apr 13 21:24:19 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into vanthao_loadDB
+
+[33mcommit 76676624924872dcf5517e88ea91c5aee6f326d4[m
+Merge: 53c47f8 8dbdebf
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Tue Apr 13 21:24:06 2021 +0700
+
+    Merge pull request #11 from LeVanThao1/yudquang312-screen-change-password
+    
+    Add screen and update display eye at register screen
+
+[33mcommit 987b90ac37ccaa93e9fbe0e9eea74851cea353d5[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Tue Apr 13 21:23:31 2021 +0700
+
+    fix authetication
+
+[33mcommit 4783c5f18a5296fe48c1f60d82d0386592ddaa4f[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Tue Apr 13 21:11:54 2021 +0700
+
+    authentication with local
+
+[33mcommit 8dbdebf62c2841d1c24f859a765f8bbd44d34c98[m[33m ([m[1;31morigin/yudquang312-screen-change-password[m[33m)[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Tue Apr 13 20:07:10 2021 +0700
+
+    add screen change password, forgot password, update dispaly eye for security input text
+
+[33mcommit 3f18dcef30c0a12f6e82a552ef5f3113c89b1f42[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Mon Apr 12 21:06:32 2021 +0700
+
+    nothong
+
+[33mcommit 53c47f8bf4711587ad2708f1216361dd88ca5b32[m
+Merge: 78bc5c2 bf6e11e
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Mon Apr 12 20:07:35 2021 +0700
+
+    Merge pull request #10 from LeVanThao1/vanthao_loadDB
+    
+    fix load db
+
+[33mcommit bf6e11e7d9887d75f82d2a4677797cc25b1e8995[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Mon Apr 12 20:05:58 2021 +0700
+
+    fix load db
+
+[33mcommit daa5a1f189a622c98613833a9303193543a0c6f4[m
+Merge: 76469be 78bc5c2
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sun Apr 11 08:36:19 2021 +0700
+
+    nothing
+
+[33mcommit 76469be8d3afe90c4de23e45089c1f9cec33ba9b[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Sat Apr 10 16:17:17 2021 +0700
+
+    none
+
+[33mcommit 78bc5c2b01690413dfe8607ab656d7507166a64c[m
+Merge: 7c0a6d0 d37bf1b
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Thu Apr 8 23:57:49 2021 +0700
+
+    Merge pull request #9 from LeVanThao1/vanthao_loadDB
+    
+    load db for home and detail-product
+
+[33mcommit d37bf1b6ad08277c66d384a1ccb81bd3f313989d[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Thu Apr 8 23:56:08 2021 +0700
+
+    load db for home and detail-product
+
+[33mcommit 6632db02128d0053f3e4eb26ca1df14b5f0e0ac5[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 7 14:17:57 2021 +0700
+
+    change name product list
+
+[33mcommit 93c5aa4571d9b1fbfd4fe91ab8709f342466535d[m
+Merge: 91f20c9 7c0a6d0
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 7 14:15:47 2021 +0700
+
+    fix store screen
+
+[33mcommit 91f20c941723ae70c11dbccfd85732a4b3154359[m
+Author: nhtbao <thaibao2990@gmail.com>
+Date:   Wed Apr 7 14:11:02 2021 +0700
+
+    screen fe
+
+[33mcommit 7c0a6d0da3032491b0ce71b03ad946794c85c72b[m
+Merge: b14bdde d34be4d
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Wed Apr 7 12:41:41 2021 +0700
+
+    Merge pull request #7 from LeVanThao1/yudquang312
+    
+    Screen login, signup, verify code, cart and translate text content from ENG to VI
+
+[33mcommit d34be4d7c1170163545138db9bc55369b41b2cdc[m[33m ([m[1;31morigin/yudquang312[m[33m)[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Tue Apr 6 20:52:12 2021 +0700
+
+    translate-text-content
+
+[33mcommit b14bddef49b883c63710837a107c06c7f0a0aba3[m
+Merge: cb01e44 5fd627e
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Tue Apr 6 18:30:15 2021 +0700
+
+    Merge pull request #5 from LeVanThao1/detail-product
+    
+    Detail product
+
+[33mcommit eed326979d1bae888fc2facac9e85d97483f8fed[m
+Author: st-quangnguyen2 <quang.nguyen2@supremetech.vn>
+Date:   Tue Apr 6 14:17:14 2021 +0700
+
+    screen login, signup, verifyCode
+
+[33mcommit 5fd627eda3314a21dd3fc1d9fb4dd86e734bb93f[m[33m ([m[1;31morigin/detail-product[m[33m)[m
+Merge: 6755c7d cb01e44
+Author: anhlamlee <anhlam01693347568@gmail.com>
+Date:   Mon Apr 5 23:55:09 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into detail-product
+
+[33mcommit 6755c7de9c05d0f45c4b73583934db0e65782b90[m
+Author: anhlamlee <anhlam01693347568@gmail.com>
+Date:   Mon Apr 5 23:54:17 2021 +0700
+
+    create detail product screen
+
+[33mcommit 0ce0e521535ff461fad62833541720d61af0633a[m
+Merge: d609e2c cb01e44
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Mon Apr 5 16:54:04 2021 +0700
+
+    Merge branch 'master' of https://github.com/LeVanThao1/FE-KLTN into yudquang312
+
+[33mcommit d609e2cf9a9a9af8c9d80bf43ad5712a812c7000[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Mon Apr 5 16:53:53 2021 +0700
+
+    somthing
+
+[33mcommit cb01e44ffa416ee10ca932c9def2e80f26890962[m
+Merge: 59161a4 4be1521
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Mon Apr 5 11:15:43 2021 +0700
+
+    Merge pull request #4 from LeVanThao1/screenStore
+    
+    Screen store
+
+[33mcommit 4be1521093f6c73022da5fa17f255524afe88b34[m
+Merge: 8daadd6 59161a4
+Author: Nhtbao <thaibao2990@gmail.com>
+Date:   Mon Apr 5 11:12:10 2021 +0700
+
+    screen store
+
+[33mcommit a151e5c133569e5c47a66f5e4ba7a51fb306ab52[m
+Author: anhlamlee <anhlam01693347568@gmail.com>
+Date:   Mon Mar 29 23:51:05 2021 +0700
+
+    create detail product
+
+[33mcommit 8daadd6ba8bfddc6eff5265e9a3a528daede410b[m
+Author: Nhtbao <thaibao2990@gmail.com>
+Date:   Mon Mar 29 21:38:25 2021 +0700
+
+    temp
+
+[33mcommit 59161a48b890d68a9ba29a846a3a87a475e63146[m
+Merge: 2342ee3 819aaa0
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Mon Mar 29 21:36:39 2021 +0700
+
+    Merge pull request #3 from LeVanThao1/yudquang312
+    
+    Yudquang312
+
+[33mcommit 819aaa0540b0b08947715f1c7bbfdfac3fc93aa7[m
+Merge: c6f2919 2342ee3
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Thu Mar 25 11:57:31 2021 +0700
+
+    fixed a little home screen
+
+[33mcommit c6f2919f2281c10c751353859a7d5244d4dcd9b3[m
+Author: yudquang312 <duyquang31296@gmail.com>
+Date:   Thu Mar 25 11:01:01 2021 +0700
+
+    q
+
+[33mcommit 2342ee329a8a5e089c90194667af50fef81e97bb[m
+Merge: 6d24bcd 6706fc6
+Author: LeVanThao1 <46316006+LeVanThao1@users.noreply.github.com>
+Date:   Tue Mar 23 15:47:54 2021 +0700
+
+    Merge pull request #2 from LeVanThao1/bbao
+    
+    done homepage screen
+
+[33mcommit 6706fc65b079facda8cea0aafe7d8af6577a0b48[m[33m ([m[1;31morigin/bbao[m[33m)[m
+Author: Nhtbao <thaibao2990@gmail.com>
+Date:   Tue Mar 23 15:31:59 2021 +0700
+
+    home page
+
+[33mcommit 6d24bcd33636975e3b6b0dcb9df1193f34a2579f[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Mon Mar 22 10:15:34 2021 +0700
+
+    done codebase with apollo/client
+
+[33mcommit e543e17b58d572dbcc17955073d6653194219671[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Sat Mar 20 22:14:27 2021 +0700
+
+    clear log
+
+[33mcommit 74ceba2d2351e08af422e33e5ad7350026fff0f8[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Sat Mar 20 22:14:07 2021 +0700
+
+    config mobx
+
+[33mcommit 86cfec13c3c8452c1948ecc7c47f93492fffbfba[m
+Author: Van Thao <vanthaodhdt@gmail.com>
+Date:   Sat Mar 20 02:28:34 2021 +0700
+
+    code base navigation
+
+[33mcommit f98cc1f26c8448dfbfa8a831c5cf41fda75ebe21[m
+Author: Your Name <you@example.com>
+Date:   Sun Mar 7 19:57:51 2021 +0700
+
+    initial commit

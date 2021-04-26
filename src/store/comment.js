@@ -1,40 +1,31 @@
 import {observable, action, makeObservable} from 'mobx';
 
-export class Notification {
+export class Comment {
   @observable
   post = undefined;
 
   @observable
   book = undefined;
 
-  @observable
-  order = undefined;
-
-  constructor(post, book, order) {
+  constructor(post, book) {
     this.post = post;
     this.book = book;
-    this.order = order;
     makeObservable(this);
   }
 
   @action
-  setPost = (value) => {
+  setPostComment = (value) => {
     this.post = value;
   };
 
   @action
-  setBook = (value) => {
+  setBookComment = (value) => {
     this.book = value;
-  };
-  @action
-  setOrder = (value) => {
-    this.order = value;
   };
 
   @action
-  setAllNotification = ({order, book, post}) => {
+  setComment = ({book, post}) => {
     this.post = post;
     this.book = book;
-    this.order = order;
   };
 }

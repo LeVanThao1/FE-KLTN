@@ -57,7 +57,8 @@ export default function Cart({navigation}) {
 
             <TouchableOpacity
               style={styles.footerPayment}
-              onPress={() => navigation.navigate('Payment')}>
+              onPress={() => navigation.navigate('Payment')}
+            >
               <Text style={styles.footerPaymentText}>Mua hàng</Text>
             </TouchableOpacity>
           </View>
@@ -71,6 +72,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#ededed',
+    padding: 12
   },
   header: {
     width: '100%',
@@ -90,6 +93,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   footer: {
+    marginHorizontal: -12,
     borderTopColor: '#000000',
     width: '100%',
     bottom: 0,
@@ -98,6 +102,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderColor: 'rgba(68, 108, 179, 1)',
     borderWidth: 0.2,
+    backgroundColor: "#ffffff"
   },
   footerTotal: {
     height: '100%',
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerPaymentText: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#ffffff',
     letterSpacing: 0.5,
   },

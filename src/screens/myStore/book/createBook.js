@@ -8,25 +8,24 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
 import {Form, Item, Picker} from 'native-base';
-import Images from '../../assets/images/images';
-import {CREATE_BOOK} from '../../query/book';
+import {CREATE_BOOK} from '../../../query/book';
 // import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
 import {ReactNativeFile} from 'extract-files';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-const CreateProduct = () => {
+const CreateBook = () => {
   return useObserver(() => {
     const {
       stores: {category},
     } = useContext(MobXProviderContext);
-    // console.log('categoriiiiiiii', category.categories);
     const [product, setProduct] = useState({
       value: '',
       error: '',
@@ -68,7 +67,7 @@ const CreateProduct = () => {
     });
 
     const [categori, setCategori] = useState({
-      value: '',
+      value: category.categories[0].id,
     });
     const [imagesUpload, setImageUpload] = useState([]);
     const [images, setImages] = useState([]);
@@ -78,6 +77,13 @@ const CreateProduct = () => {
       });
     };
 
+    const [visibleToast, setvisibleToast] = useState(false);
+
+    useEffect(() => setvisibleToast(false), [visibleToast]);
+
+    const handleButtonPress = () => {
+      setvisibleToast(true);
+    };
     // const [photo, setPhoto] = useState(null);
     const [upload] = useMutation(UPLOAD_MULTI_FILE, {
       onCompleted: (data) => {
@@ -153,6 +159,7 @@ const CreateProduct = () => {
           dataBook,
         },
       });
+      <Toast visible={visibleToast} message="Exampsssle" />;
     };
 
     const removeImages = (index) => {
@@ -297,17 +304,6 @@ const CreateProduct = () => {
             {/* Image */}
             <View style={styles.container}></View>
 
-            {/* <Button title="Choose Photo" onPress={handleChoosePhoto} /> */}
-
-            {/* {images.length > 0 && (
-              <ImageView
-                images={images.map((im) => ({uri: im}))}
-                imageIndex={0}
-                visible={false}
-                style={{width: '100%', height: 400}}
-                // onRequestClose={() => setIsVisible(false)}
-              />
-            )} */}
             <ScrollView
               style={{flexDirection: 'row', marginVertical: 20}}
               horizontal={true}>
@@ -450,18 +446,6 @@ const CreateProduct = () => {
                 <Text>VND</Text>
               </View>
             </View>
-            {/* status */}
-            {/* <View style={styles.status}>
-            <Text>Tình trạng sách (mới)</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TextInput style={styles.input} placeholder="Nhập tình trạng" />
-              <Text>%</Text>
-            </View>
-          </View> */}
-            {/* <Button
-              color="rgba(68, 108, 179, 1)"
-              title="Xác nhận"
-              onPress={onPress}></Button> */}
             <View style={{marginTop: 10}}>
               <Button
                 title="Xác nhận"
@@ -530,4 +514,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(CreateProduct);
+export default memo(CreateBook);

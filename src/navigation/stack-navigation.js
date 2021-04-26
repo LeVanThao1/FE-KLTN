@@ -12,13 +12,12 @@ import ForgotPassword from '../screens/forgot-password';
 import Store from '../screens/myStore/index';
 import HeaderStack from '../header';
 import CreateStore from '../screens/myStore/createStore';
-import ManageStore from '../screens/myStore/manageStore';
+import SreateStore from '../screens/myStore/createStore';
 import {NavigationContainer} from '@react-navigation/native';
 import ViewAll from '../screens/myStore/viewAll';
-import ViewAllOrder from '../screens/myStore/orders/viewAllOrder';
 import Statistics from '../screens/myStore/finance/statistics';
 import Revenue from '../screens/myStore/finance/revenue';
-import CreateProduct from '../screens/myStore/manageStore';
+import CreateBook from '../screens/myStore/book/createBook';
 import Address from '../screens/payment/address';
 import BottomTabNavigator from './tab-navigation';
 import VerifyCode from '../screens/verifyCode';
@@ -46,6 +45,8 @@ import WishList from '../screens/wishlist';
 import ResetPassword from '../screens/reset-password';
 import VerifyForgot from '../screens/verifyFogot';
 import Notification from '../screens/notification';
+import BooksStore from '../screens/myStore/book/booksStore';
+import UpdatePost from '../screens/post/updatePost';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -88,10 +89,11 @@ const HomeStack = ({navigation, initialRoute}) => {
       {/* <Stack.Screen name="Login" component={Login} /> */}
       {/* <Stack.Screen name="Detail-Product" component={DetailProduct} /> */}
       {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
-      {/* <Stack.Screen name="Store" component={CreateStore} />
-      <Stack.Screen name="CreateProduct" component={CreateProduct} />
-      <Stack.Screen name="CreateStore" component={CreateStore} />
-      <Stack.Screen name="ViewAllProduct" component={ViewAll} />
+      {/* <Stack.Screen name="Store" component={CreateStore} /> */}
+      {/* <Stack.Screen name="CreateProduct" component={CreateProduct} /> */}
+      {/* <Stack.Screen name="CreateStore" component={CreateStore} /> */}
+      {/* <Stack.Screen name="ViewAllProduct" component={ViewAll} />
+      <Stack.Screen name="BooksStore" component={BooksStore} />
       <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Revenue" component={Revenue} />
@@ -122,12 +124,17 @@ const routes = [
     header: false,
     component: DetailProduct,
   },
-  {name: 'Store', title: 'Cửa hàng', header: false, component: CreateStore},
   {
-    name: 'CreateProduct',
+    name: 'Store',
+    title: 'Cửa hàng',
+    header: false,
+    component: CreateStore,
+  },
+  {
+    name: 'CreateBook',
     title: 'Tạo sản phẩm',
     header: false,
-    component: CreateProduct,
+    component: CreateBook,
   },
   {
     name: 'CreateStore',
@@ -141,12 +148,12 @@ const routes = [
     header: false,
     component: ViewAll,
   },
-  {
-    name: 'StoreManageOrder',
-    title: 'Quản lý đơn hàng',
-    header: false,
-    component: ViewAllOrder,
-  },
+  // {
+  //   name: 'StoreManageOrder',
+  //   title: 'Quản lý đơn hàng',
+  //   header: false,
+  //   component: ViewAllOrder,
+  // },
   {
     name: 'Statistics',
     title: 'Thống kê',
@@ -155,7 +162,7 @@ const routes = [
   },
   {
     name: 'Revenue',
-    title: 'Danh thu',
+    title: 'Doanh thu',
     header: false,
     component: Revenue,
   },
@@ -182,6 +189,12 @@ const routes = [
     title: 'Tạo bài viết',
     header: false,
     component: NewPost,
+  },
+  {
+    name: 'UpdatePost',
+    title: 'Cập nhật bài viết',
+    header: false,
+    component: UpdatePost,
   },
   {
     name: 'Personal',
@@ -245,6 +258,12 @@ const routes = [
     title: 'Sản phẩm yêu thích',
     header: false,
     component: WishList,
+  },
+  {
+    name: 'BooksStore',
+    title: 'Quản lý sách',
+    header: false,
+    component: BooksStore,
   },
   // {
   //   name: 'ViewSearch',
