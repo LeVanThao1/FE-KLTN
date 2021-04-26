@@ -14,8 +14,9 @@ import {
 } from 'react-native';
 import {useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
-import * as ImagePicker from 'react-native-image-picker';
-import {Button} from 'native-base';
+// import * as ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import {Button, Icon} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 
@@ -34,12 +35,13 @@ const Profile = ({navigation}) => {
     const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
       onCompleted: (data) => {
         console.log(data);
-        setUserAvatar(data.uploadSingleFile.uri);
+        setAvatarUpload(data.uploadSingleFile.url);
       },
       onError: (err) => {
         console.log(err);
       },
     });
+    const [avatarUpload, setAvatarUpload] = useState(avatar);
     const [userAvatar, setUserAvatar] = useState(avatar || defaultAvatar);
     const [userName, setUserName] = useState(name);
     const [userEmail, setUserEmail] = useState(email);
@@ -60,30 +62,42 @@ const Profile = ({navigation}) => {
       onError: (err) => console.log(err),
     });
 
-    const handleChoosePhoto = () => {
-      const options = {
-        noData: true,
-      };
-      ImagePicker.launchImageLibrary(options, (response) => {
-        if (response.uri) {
+    const handleChoosePhoto = (type) => {
+      if (type) {
+        ImagePicker.openPicker({
+          width: 1024,
+          height: 720,
+          // includeBase64: true,
+        }).then((response) => {
           upload({
             variables: {
               file: new ReactNativeFile({
-                uri: response.uri,
-                name: response.fileName,
-                type: response.type,
+                uri: response.path,
+                name: 'avatar',
+                type: response.mime,
               }),
             },
           });
-          // console.log(response);
-          // setUserAvatar(response.uri);
-          // const file = new ReactNativeFile({
-          //   uri: uriFromCameraRoll,
-          //   name: 'a.jpg',
-          //   type: 'image/jpeg',
-          // });
-        }
-      });
+        });
+      } else {
+        ImagePicker.openCamera({
+          width: 1024,
+          height: 720,
+          // includeBase64: true,
+        }).then((response) => {
+          console.log(response, Object.keys(response));
+          setUserAvatar(response.path);
+          upload({
+            variables: {
+              file: new ReactNativeFile({
+                uri: response.path,
+                name: 'avatar',
+                type: response.mime,
+              }),
+            },
+          });
+        });
+      }
     };
     return (
       <View style={styles.container}>
@@ -98,18 +112,44 @@ const Profile = ({navigation}) => {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={handleChoosePhoto}
+                onPress={() => handleChoosePhoto(false)}
                 style={{
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
+                  paddingHorizontal: 0,
+                  paddingVertical: 0,
                   margin: 0,
-                  backgroundColor: 'rgba(68, 108, 179, 1)',
+                  // width: 70,
+                  // height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 50,
+                  height: 40,
+                  backgroundColor: 'transparent',
                 }}>
-                <Text style={{color: '#fff'}}>Upload Avatar</Text>
+                <Icon
+                  type="MaterialIcons"
+                  name="camera-alt"
+                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleChoosePhoto(true)}
+                style={{
+                  // paddingHorizontal: 10,
+                  // paddingVertical: 5,
+                  margin: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 50,
+                  height: 40,
+                  backgroundColor: 'transparent',
+                }}>
+                <Icon
+                  type="MaterialIcons"
+                  name="photo-library"
+                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
               </TouchableOpacity>
             </View>
           </View>
@@ -180,7 +220,7 @@ const Profile = ({navigation}) => {
                     variables: {
                       userUpdate: {
                         name: userName,
-                        avatar: userAvatar,
+                        avatar: avatarUpload,
                         address: userAddress,
                         interests: interests,
                       },
