@@ -12,10 +12,12 @@ const Post = ({navigation, route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   return useObserver(() => {
     const {
-      stores: {user},
+      stores: {user, comment},
     } = useContext(MobXProviderContext);
 
+    console.log('rrr', user.posts);
     const {posts, setPosts, info} = user;
+    const {postComment} = comment;
     const userId = route?.params?.userId || info.id;
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -26,7 +28,10 @@ const Post = ({navigation, route}) => {
           setRefreshing(false);
         })
         .catch((err) => console.log(err));
+      // queryData(GET_COMMENT_POST, {postId})
     }, [refreshing]);
+
+    // useEffect(() =>)
 
     return (
       <ScrollView
@@ -43,18 +48,7 @@ const Post = ({navigation, route}) => {
           <TouchableOpacity
             style={button.addPost}
             onPress={() => navigation.navigate('AddPost')}>
-            <Text style={button.addPost}>Thêm post</Text>
-
-            {/* <TouchableOpacity onPress={() => setChooseCategory(index + 1)}>
-              <Text
-                style={
-                  index + 1 === chooseCategory
-                    ? styles.filterActiveText
-                    : styles.filterInactiveText
-                }>
-                {e.name}
-              </Text>
-            </TouchableOpacity> */}
+            <Text style={button.addPost}>+</Text>
           </TouchableOpacity>
         </View>
         {!loading ? (
