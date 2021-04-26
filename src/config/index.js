@@ -11,11 +11,11 @@ import IP from '../../ip';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {createUploadLink} from 'apollo-upload-client';
-const url = `${IP}:3000`;
+const url = `http://${IP}:3000`;
 const httpLink = createUploadLink({uri: `${url}/graphql`});
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:3000/subscriptions',
+  uri: `ws://${IP}:3000/subscriptions`,
   options: {
     reconnect: true,
   },
