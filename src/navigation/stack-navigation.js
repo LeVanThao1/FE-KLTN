@@ -162,7 +162,7 @@ const routes = [
   },
   {
     name: 'Revenue',
-    title: 'Danh thu',
+    title: 'Doanh thu',
     header: false,
     component: Revenue,
   },
