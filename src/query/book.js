@@ -57,6 +57,7 @@ export const GET_BOOKS_STORE = gql`
       publisher
       numberOfReprint
       description
+      images
       comment {
         id
         content

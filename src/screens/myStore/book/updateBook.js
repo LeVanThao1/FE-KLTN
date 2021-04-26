@@ -25,7 +25,7 @@ const BookDetail = ({navigation, route}) => {
     } = useContext(MobXProviderContext);
     const {bookStore} = shop;
     const {
-      bookId,
+      bosokId,
       bookName,
       bookCategoryId,
       bookCategoryName,
