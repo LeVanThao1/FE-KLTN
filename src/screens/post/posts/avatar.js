@@ -30,7 +30,6 @@ const Avatar = ({source, online, story}) => {
   return (
     <Container>
       <User source={source} story={story} />
-      {online && <UserActive />}
     </Container>
   );
 };

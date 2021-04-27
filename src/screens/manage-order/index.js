@@ -28,7 +28,7 @@ const ManageOrder = ({navigation}) => {
       {
         onCompleted: async (data) => {
           const {subOrdersByUser} = data;
-          console.log('subOrdersByUser', subOrdersByUser);
+          // console.log('subOrdersByUser', subOrdersByUser);
           setSubOrders(
             subOrdersByUser.map(
               ({
@@ -37,9 +37,11 @@ const ManageOrder = ({navigation}) => {
                   book: {name, images},
                   amount,
                   price,
+                  
                 },
                 status,
-              }) => ({id, name, images, amount, price, status}),
+                createdAt
+              }) => ({id, name, images, amount, price, status, createdAt}),
             ),
           );
         },
@@ -54,7 +56,11 @@ const ManageOrder = ({navigation}) => {
     }, []);
 
     useEffect(() => {
-      console.log('selectedStatus', selectedStatus);
+      // console.log('subOrders', subOrders);
+    }, [subOrders]);
+
+    useEffect(() => {
+      // console.log('selectedStatus', selectedStatus);
     }, [selectedStatus]);
 
     const renderSubOrders = () => {
@@ -82,6 +88,7 @@ const ManageOrder = ({navigation}) => {
       ],
       amount = 1,
       price = 100000,
+      createdAt
     }) {
       return (
         <TouchableOpacity
@@ -100,7 +107,7 @@ const ManageOrder = ({navigation}) => {
             }}>
             <View>
               <Image
-                style={{width: 80, height: 100}}
+                style={{width: 100, height: 120}}
                 source={{uri: images[0]}}
               />
             </View>
@@ -114,8 +121,18 @@ const ManageOrder = ({navigation}) => {
               <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
               <Text
                 style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
-                Thành tiền: {price}
+                Đơn giá: {price}
               </Text>
+              <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                <Text
+                  style={{fontSize: 14, color: '#333333'}}>
+                  {createdAt.slice(0, 10)}
+                </Text>
+                <Text
+                  style={{fontSize: 16, color: 'rgba(68, 108, 179, 1)'}}>
+                  Tổng tiền: {amount * price}
+                </Text>
+              </View>
             </View>
           </View>
         </TouchableOpacity>
