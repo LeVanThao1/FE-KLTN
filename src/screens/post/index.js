@@ -15,7 +15,6 @@ const Post = ({navigation, route}) => {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
 
-    console.log('rrr', user.posts);
     const {posts, setPosts, info} = user;
     const {postComment} = comment;
     const userId = route?.params?.userId || info.id;

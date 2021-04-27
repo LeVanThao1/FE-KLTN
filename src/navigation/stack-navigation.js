@@ -9,10 +9,9 @@ import Payment from '../screens/payment/payment';
 import Login from '../screens/login';
 import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
-import Store from '../screens/myStore/index';
 import HeaderStack, {HeaderLogo} from '../header';
-import CreateStore from '../screens/myStore/createStore';
-import SreateStore from '../screens/myStore/createStore';
+import Store from '../screens/myStore/store';
+import SreateStore from '../screens/myStore/store';
 import {NavigationContainer} from '@react-navigation/native';
 import ViewAll from '../screens/myStore/viewAll';
 import Statistics from '../screens/myStore/finance/statistics';
@@ -48,6 +47,7 @@ import Notification from '../screens/notification';
 import BooksStore from '../screens/myStore/book/booksStore';
 import UpdatePost from '../screens/post/updatePost';
 import Products from '../screens/products';
+import CreateStore from '../screens/myStore/createStore';
 
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
@@ -144,7 +144,7 @@ const routes = [
     name: 'Store',
     title: 'Cửa hàng',
     header: false,
-    component: CreateStore,
+    component: Store,
   },
   {
     name: 'CreateBook',

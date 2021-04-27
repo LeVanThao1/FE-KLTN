@@ -26,10 +26,9 @@ const PostOne = ({route, post, info, type}) => {
     const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
 
-    const {posts} = user;
-    const {comments, setComments} = comment;
-    // const firstCmt = post?.conment[0]?.content;
-    console.log('cmttttttt', post.comment[0].content);
+    const {postComment, setPostComment} = comment;
+    console.log('post...', post);
+
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
@@ -43,19 +42,7 @@ const PostOne = ({route, post, info, type}) => {
         },
       },
     );
-    // const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = React.useState(false);
-    // useEffect(() => {
-    //   queryData(GET_COMMENT_POST, {postId})
-    //     .then(({data}) => {
-    //       setComments(data.comment);
-    //       // setLoading(false);
-    //       setRefreshing(false);
-    //     })
-    //     .catch((err) => console.log(err));
-    // }, [refreshing]);
 
-    console.log('cmt', comments);
     const onPress = () => {
       deletePost({
         variables: {
@@ -104,23 +91,11 @@ const PostOne = ({route, post, info, type}) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('PostDetail', {
-              postId: post.id,
-              postTitle: post.title,
-              // postBookName: post.uniqueBook.name,
-              postDescription: post.description,
-              postImg: post.images,
-              postYear: post.year,
-              postNumPrint: post.numberOfReprint,
-              postCategory: post.category,
-              postPrice: post.price,
-              postPublisher: post.publisher,
-              postWanna: post.bookWanna.reduce((a, b) => a + '- ' + b, ''),
-              postComment: post.comment,
-              postTime: post.createdAt,
-            })
-          }>
+          onPress={() => {
+            user.setPostCurrent(post);
+            setPostComment(post.comment);
+            navigation.navigate('PostDetail');
+          }}>
           <View>
             <View style={stylesPost.text}>
               <Text style={stylesPost.title}>#{post.title}</Text>

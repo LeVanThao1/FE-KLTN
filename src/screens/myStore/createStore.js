@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator} from 'native-base';
+import {Icon, ListItem, Separator, Button} from 'native-base';
 import {
   Collapse,
   CollapseHeader,
@@ -20,40 +20,55 @@ import Images from '../../assets/images/images';
 import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
 import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery} from '@apollo/client';
-import {GET_STORE} from '../../query/store';
+import {useLazyQuery, useMutation} from '@apollo/client';
+import {CREATE_STORE, GET_STORE} from '../../query/store';
 import {introspectionFromSchema} from 'graphql';
+import {transaction} from 'mobx';
 
 const CreateStore = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {shop},
+      stores: {shop, user},
     } = useContext(MobXProviderContext);
     const {info} = shop;
-    console.log(shop);
-    console.log(info);
     const navigation = useNavigation();
-    const [listInfo, setListInfo] = useState(null);
-    const [text, setText] = useState('');
-    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-      onCompleted: async (data) => {
-        setListInfo({
-          id: info?.id,
-          name: info?.name,
-        });
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [createStore, {called, loading, data, error}] = useMutation(
+      CREATE_STORE,
+      {
+        onCompleted: async (data) => {
+          goBack();
+        },
+        onError: (err) => {
+          console.log(err);
+        },
       },
-      onError: (err) => {
-        console.log(err);
-      },
-    });
-    useEffect(() => {
-      store({
+    );
+    // useEffect(() => {
+    //   store({
+    //     variables: {
+    //       id: info?.id,
+    //     },
+    //   });
+    // }, [info]);
+    // console.log('List info ...', listInfo);
+
+    const onPress = () => {
+      let dataStore = {
+        avatar: 'https://picsum.photos/200',
+        background: 'https://picsum.photos/id/237/200/300',
+        name: name,
+        description: description,
+        owner: user.info.id,
+      };
+      // dk gmail di.. hien tai dk bang dth no kh nhan dc sdt m. nen kh dk dc dau. bữa là nó cung caaso cho 2 cai api 1 la dung authentication của nó 2 là gui message. bữa t dùng thứ 1 nên nó xác nhận dc dth lạ. còn hiện tại t đổi lại dùng cai thứ  2 nên nó kh xác nhận dc sdt lạ nên lỗi đó, dt còn pin ko mở gọi ns cho nhanh, m chat dài vl còn lâu
+      createStore({
         variables: {
-          id: info?.id,
+          dataStore,
         },
       });
-    }, [info]);
-    // console.log('List info ...', listInfo);
+    };
 
     return (
       <ScrollView>
@@ -62,136 +77,41 @@ const CreateStore = ({navigation}) => {
             <Image source={{uri: info.avatar}} style={styles.avatar} />
           </ImageBackground>
         </View> */}
+
         <View style={styles.container_store}>
+          <View>
+            <Text>Thêm avatar nha</Text>
+          </View>
+          <View>
+            <Text>Thêm background nha</Text>
+          </View>
           <View style={styles.content}>
-            <Text>Tên shop: </Text>
+            <Text style={{fontSize: 16}}>Tên shop </Text>
             <TextInput
-              style={
-                (styles.text,
-                {
-                  color: '#333',
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: '#111',
-                  padding: 0,
-                  marginLeft: 10,
-                  width: '100%',
-                })
-              }
-              value={info?.name}
+              style={styles.titleCreate}
+              placeholder="Nhập tên shop"
+              value={name}
+              onChangeText={(value) => setName(value)}
             />
           </View>
           <View style={styles.des}>
-            <Text>Mô tả shop: </Text>
+            <Text style={{fontSize: 16}}>Mô tả shop </Text>
             <Textarea
               containerStyle={styles.textareacont}
               style={styles.textarea}
               // onChangeText={this.onChange}
               // defaultValue={this.state.text}
-              maxLength={120}
-              placeholder={'Description'}
+              maxLength={200}
+              placeholder={'Nhập mô tả'}
               placeholderTextColor={'#c7c7c7'}
               underlineColorAndroid={'transparent'}
-              value={info?.description}
+              value={description}
+              onChangeText={(value) => setDescription(value)}
             />
           </View>
-          <View style={styles.evalue}>
-            <Text>Đánh giá shop: </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Text>4.5/5 </Text>
-              <View style={{flexDirection: 'row'}}>
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star-half" type="MaterialIcons" />
-                <Icon name="star-border" type="MaterialIcons" />
-              </View>
-            </View>
-          </View>
-          {/* <View style={styles.product}></View> */}
-          <View style={styles.product}>
-            <View>
-              <Collapse>
-                <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
-                    <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
-                    {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
-                  </Separator>
-                </CollapseHeader>
-                <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('CreateBook')}>
-                    <Text>Thêm sản phẩm</Text>
-                  </ListItem>
-                  <ListItem onPress={() => navigation.navigate('BooksStore')}>
-                    <Text>Tất cả sản phẩm</Text>
-                  </ListItem>
-                </CollapseBody>
-              </Collapse>
-            </View>
-          </View>
-          {/*  manage order */}
-          <View style={styles.order}>
-            <View>
-              <Collapse>
-                <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{
-                      backgroundColor: 'rgba(68, 108, 179, 1)',
-                    }}>
-                    <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
-                  </Separator>
-                </CollapseHeader>
-                <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('ManageOrder')}>
-                    <Text>Tất cả sản phẩm</Text>
-                  </ListItem>
-                  {/* <ListItem>
-                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                    Tất cả sản phẩm
-                  </Text>
-                </ListItem> */}
-                </CollapseBody>
-              </Collapse>
-            </View>
-          </View>
-          {/*  manage order */}
-          {/* money */}
-          <View style={styles.order}>
-            <View>
-              <Collapse>
-                <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
-                    <Text style={{color: '#fff'}}>+ Tài chính</Text>
-                  </Separator>
-                </CollapseHeader>
-                <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('Revenue')}>
-                    <Text>Doanh thu</Text>
-                  </ListItem>
-                  <ListItem onPress={() => navigation.navigate('Statistics')}>
-                    <Text>Thống kê</Text>
-                  </ListItem>
-                  {/* <ListItem>
-                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                    Tất cả sản phẩm
-                  </Text>
-                </ListItem> */}
-                </CollapseBody>
-              </Collapse>
-            </View>
-          </View>
-          {/* money */}
-          {/* test */}
-          {/* tét */}
+          <Button style={styles.btnCreate} onPress={onPress}>
+            <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
+          </Button>
         </View>
       </ScrollView>
     );
@@ -200,11 +120,37 @@ const CreateStore = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container_store: {
-    flex: 0,
     margin: 10,
     padding: 10,
+    // alignItems: 'felx-start',
     // width: '90%',
   },
+
+  createStore: {
+    marginHorizontal: 'auto',
+    paddingVertical: '60%',
+  },
+
+  titleCreate: {
+    width: '100%',
+    height: 35,
+    fontSize: 14,
+    // paddingBottom: 20,
+    // marginLeft: 10, de t tao cai store xong da
+    color: '#111',
+    borderWidth: 0.2,
+    borderRadius: 4,
+  },
+  btnCreate: {
+    alignSelf: 'center',
+    padding: 15,
+    borderRadius: 4,
+  },
+
+  txtCreate: {
+    color: '#fff',
+  },
+
   image: {
     // flex: 1,
     width: '100%',
@@ -217,10 +163,11 @@ const styles = StyleSheet.create({
     margin: 30,
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // alignItems: 'center',
     margin: 5,
-    width: '70%',
+    paddingVertical: 10,
+    // width: '70%',
   },
   text: {
     marginLeft: 10,

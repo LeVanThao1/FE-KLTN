@@ -2,7 +2,7 @@ import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
-import React, {memo, useContext, useState} from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import {
   TextInput,
@@ -24,53 +24,37 @@ const PostDetail = ({navigation, route}) => {
     const {
       stores: {user, category, comment},
     } = useContext(MobXProviderContext);
-    const {info} = user;
-    const {postComment} = comment;
-    const {
-      postId,
-      postTitle,
-      postDescription,
-      postImg,
-      postYear,
-      postNumPrint,
-      postCategory,
-      postPrice,
-      postPublisher,
-      postWanna,
-      postCmt,
-      postTime,
-    } = route.params;
+    const {info, postCurrent, setPostCurrent} = user;
+    const {postComment, setPostComment} = comment;
+    const [cmts, setCmts] = useState('');
+    const [addCmt, setAddCmt] = useState('');
+    console.log('postComen111t', postComment);
+    console.log('info', info);
 
-    const [cmt, setCmt] = useState('');
-    // const [createCommentPost, {called, loading, data, error}] = useMutation(
-    //   CREATE_COMMENTS_POST,
-    //   {
-    //     onCompleted: async (data) => {},
-    //     onError: (err) => {
-    //       console.log(err);
-    //     },
-    //   },
-    // );
-    const [createCommentPost] = useMutation(CREATE_COMMENT_POST, {
+    const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
-        console.log('dataComment', data);
-        // const newData = [...postComment].filter(cmt => cmt.id+'' !== )
-        // const
+        console.log('datapost', data.createCommentPost);
+        setPostCurrent({
+          ...postCurrent,
+          comment: [data.createCommentPost, ...postCurrent.comment],
+        });
+        setPostComment([data.createCommentPost, ...postComment]);
       },
       onError: (err) => {
         console.log('gaga', err);
       },
     });
+
+    console.log('adadadsadsadasdsd ', postCurrent.comment[0]);
     const onPress = () => {
-      console.log('asdasdas');
       let dataComment = {
-        content: cmt,
+        content: cmts,
         type: 'TEXT',
       };
-      createCommentPost({
+      createComment({
         variables: {
           dataComment,
-          postId: postId,
+          postId: postCurrent.id,
         },
       });
     };
@@ -83,7 +67,7 @@ const PostDetail = ({navigation, route}) => {
                 Hình ảnh
               </Text>
               <View style={stylesPost.img}>
-                {postImg.map((img, i) => (
+                {postCurrent.images.map((img, i) => (
                   <Image key={i} source={{uri: img}} style={stylesPost.post} />
                 ))}
               </View>
@@ -93,23 +77,25 @@ const PostDetail = ({navigation, route}) => {
             <View style={stylesPost.text}>
               <View style={stylesPost.titleCenter}>
                 <Text style={stylesPost.txtBold}>Tiêu đề </Text>
-                <Text style={stylesPost.titlePost}>{postTitle}</Text>
+                <Text style={stylesPost.titlePost}>{postCurrent.title}</Text>
               </View>
               <View style={stylesPost.titleCenter}>
                 <Text style={stylesPost.txtBold}>Thông tin sách</Text>
               </View>
               <View style={stylesPost.horizontal}>
                 <Text>Nhà xuất bản </Text>
-                <Text style={stylesPost.detail}>{postPublisher}</Text>
+                <Text style={stylesPost.detail}>{postCurrent.publisher}</Text>
               </View>
 
               <View style={stylesPost.horizontal}>
                 <Text>Số lần xuất bản </Text>
-                <Text style={stylesPost.detail}>{postNumPrint}</Text>
+                <Text style={stylesPost.detail}>
+                  {postCurrent.numberOfReprint}
+                </Text>
               </View>
               <View style={stylesPost.horizontal}>
                 <Text>Năm xuất bản </Text>
-                <Text style={stylesPost.detail}>{postYear}</Text>
+                <Text style={stylesPost.detail}>{postCurrent.year}</Text>
               </View>
               <View style={stylesPost.horizontal}>
                 <Text>Giá sách</Text>
@@ -120,7 +106,7 @@ const PostDetail = ({navigation, route}) => {
                     justifyContent: 'space-between',
                     color: '#f00',
                   }}>
-                  <Text style={stylesPost.detail}>{postPrice}</Text>
+                  <Text style={stylesPost.detail}>{postCurrent.price}</Text>
                   <Text
                     style={{paddingLeft: 5, color: 'rgba(68, 108, 179, 1)'}}>
                     VND
@@ -129,16 +115,43 @@ const PostDetail = ({navigation, route}) => {
               </View>
               <View style={stylesPost.elment}>
                 <Text>Sách muốn đổi </Text>
-                <Text style={stylesPost.detail}>{postWanna}</Text>
+                <Text style={stylesPost.detail}>asdas</Text>
               </View>
 
               <Text style={stylesPost.textContent}>Mô tả</Text>
               <View style={stylesPost.textDes}>
-                <Text>{postDescription}</Text>
+                <Text>{postCurrent.description}</Text>
               </View>
-              {postCmt?.map((cmt, i) => (
-                <Comment key={i} cmt={cmt} onPr={onPress} />
+              {postComment?.map((cmt, i) => (
+                <Comment key={i} cmt={cmt} />
               ))}
+              <View style={stylesPost.addCmt}>
+                <View style={stylesPost.person}>
+                  <View style={stylesPost.info}>
+                    <Image
+                      source={{uri: info.avatar}}
+                      style={stylesPost.avtcmt}
+                    />
+                    <View style={stylesPost.addComment}>
+                      <TextInput
+                        style={stylesPost.comment}
+                        placeholder="Thêm bình luận"
+                        value={cmts}
+                        onFocus={() => {}}
+                        onChangeText={(value) => {
+                          setCmts(value);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <Icon
+                  name="ios-arrow-forward-circle-outline"
+                  type="Ionicons"
+                  style={stylesPost.iconEnter}
+                  onPress={onPress}
+                />
+              </View>
               {/* <View>
                 {postCmt?.map((cmt, i) => (
                   <View style={stylesPost.infocmt}>
