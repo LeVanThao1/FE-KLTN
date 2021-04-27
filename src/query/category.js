@@ -19,6 +19,7 @@ export const GET_BOOKS_CATEGORIES = gql`
         name
         images
         year
+        author
         numberOfReprint
         publisher
         category {

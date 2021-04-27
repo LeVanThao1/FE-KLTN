@@ -33,12 +33,11 @@ export const stylesPost = StyleSheet.create({
   },
 
   userCmt: {
-    // flex: 1,
-
     marginHorizontal: 10,
     backgroundColor: '#dfdfdf',
     borderRadius: 30,
     paddingHorizontal: 25,
+    paddingBottom: 4,
   },
 
   name: {

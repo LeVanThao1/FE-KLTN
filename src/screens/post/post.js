@@ -12,19 +12,24 @@ import {
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {DELETE_POST} from '../../query/post';
+import {GET_COMMENT_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 import moment from 'moment';
 import {queryData} from '../../common';
+import {Comment} from './comment';
 
 const PostOne = ({route, post, info, type}) => {
   return useObserver(() => {
     const {
-      stores: {user},
+      stores: {user, comment},
     } = useContext(MobXProviderContext);
     const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
 
     const {posts} = user;
+    const {comments, setComments} = comment;
+    // const firstCmt = post?.conment[0]?.content;
+    console.log('cmttttttt', post.comment[0].content);
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
@@ -38,14 +43,19 @@ const PostOne = ({route, post, info, type}) => {
         },
       },
     );
-
+    // const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = React.useState(false);
     // useEffect(() => {
     //   queryData(GET_COMMENT_POST, {postId})
-    //   .then(({data}) => {
-    //     setComment(data.comment)
-    //   })
-    // })
+    //     .then(({data}) => {
+    //       setComments(data.comment);
+    //       // setLoading(false);
+    //       setRefreshing(false);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }, [refreshing]);
 
+    console.log('sdsdsd', comments);
     const onPress = () => {
       deletePost({
         variables: {
@@ -149,11 +159,6 @@ const PostOne = ({route, post, info, type}) => {
           <View style={stylesPost.action}>
             <View style={stylesPost.heart_cmt}>
               <View style={stylesPost.action}>
-                <Text style={{paddingRight: 10}}>Like</Text>
-                <Icon name="heart-o" type="FontAwesome" />
-                <Text style={stylesPost.textCount}>10</Text>
-              </View>
-              <View style={stylesPost.action}>
                 <Text>Comment</Text>
                 <Icon
                   name="comment-o"
@@ -166,14 +171,14 @@ const PostOne = ({route, post, info, type}) => {
           </View>
           <View style={stylesPost.infocmt}>
             <Image
-              source={{uri: type ? info.avatar : post.author.avatar}}
+              source={{uri: type ? info.avatar : post.comment[0].author.avatar}}
               style={stylesPost.avtcmt}
             />
             <View style={stylesPost.userCmt}>
               <Text style={stylesPost.name}>
-                {type ? info.name : post.author.name}
+                {type ? info.name : post.comment[0].author.name}
               </Text>
-              <Text style={stylesPost.time}>alaoalalalaa</Text>
+              <Text style={stylesPost.time}>{post.comment[0].content}</Text>
             </View>
           </View>
           <View style={stylesPost.addCmt}>
@@ -189,6 +194,7 @@ const PostOne = ({route, post, info, type}) => {
           </View>
           <View style={stylesPost.cmt}></View>
         </View>
+        {/* <Comment /> */}
         <View
           style={{
             flex: 1,
