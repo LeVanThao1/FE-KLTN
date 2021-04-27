@@ -50,7 +50,7 @@ const NotificationScreen = ({navigation}) => {
     const [noti, setNoti] = useState(notifications);
     const [selected, setSelected] = useState("order")
     useEffect(() => {
-     console.log(noti[selected]);
+    //  console.log(noti[selected]);
     }, [selected])
     const SideBarIcon = ({name}) =>(
       <TouchableOpacity onPress={()=>setSelected(name)}>

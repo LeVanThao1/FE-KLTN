@@ -1,12 +1,11 @@
 import {ApolloProvider} from '@apollo/client';
 import {NavigationContainer} from '@react-navigation/native';
 import {MobXProviderContext, Provider, useObserver} from 'mobx-react';
-import {View} from 'native-base';
+import {Root} from 'native-base';
 import React, {useContext} from 'react';
 import 'react-native-gesture-handler';
 import {Client} from '../../config';
 import {AuthStack, HomeStack} from '../../navigation';
-import DrawerNavigator from '../../navigation/drawer-navigation';
 import BottomTabNavigator from '../../navigation/tab-navigation';
 import {stores} from '../../store';
 
@@ -29,7 +28,9 @@ const AppProvider = () => {
   return (
     <ApolloProvider client={Client}>
       <Provider stores={stores}>
-        <App />
+        <Root>
+          <App />
+        </Root>
       </Provider>
     </ApolloProvider>
   );

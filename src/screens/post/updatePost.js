@@ -34,7 +34,7 @@ const UpdatePost = ({route}) => {
       postPrice,
       postPublisher,
       postWanna,
-      postComment,
+      postCmt,
     } = route.params;
 
     const [title, setTitle] = useState({

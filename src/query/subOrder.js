@@ -20,6 +20,20 @@ export const GET_SUB_ORDERS = gql`
       address
       phone
       status
+      createdAt
+    }
+  }
+`;
+
+export const GET_SUB_ORDERS_STORE = gql`
+  query subOrdersByStore {
+    subOrdersByStore {
+      id
+      detail {
+        amount
+        price
+      }
+      createdAt
     }
   }
 `;
