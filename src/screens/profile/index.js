@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import DatePicker from 'react-native-datepicker';
 import React, {useContext, useState} from 'react';
 import {
   View,
@@ -14,9 +13,8 @@ import {
 } from 'react-native';
 import {useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
-// import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Button, Icon} from 'native-base';
+import {Toast, Icon} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 
@@ -28,7 +26,8 @@ const Profile = ({navigation}) => {
       stores: {
         auth,
         user: {
-          info: {name, avatar, phone, address, email, interests},
+          info,
+          setInfo
         },
       },
     } = useContext(MobXProviderContext);
@@ -41,23 +40,26 @@ const Profile = ({navigation}) => {
         console.log(err);
       },
     });
-    const [avatarUpload, setAvatarUpload] = useState(avatar);
-    const [userAvatar, setUserAvatar] = useState(avatar || defaultAvatar);
-    const [userName, setUserName] = useState(name);
-    const [userEmail, setUserEmail] = useState(email);
-    const [userAddress, setUserAddress] = useState(address);
-    const [userPhone, setUserPhone] = useState(phone);
+    const [avatarUpload, setAvatarUpload] = useState(info.avatar);
+    const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
+    const [userName, setUserName] = useState(info.name);
+    const [userEmail, setUserEmail] = useState(info.email);
+    const [userAddress, setUserAddress] = useState(info.address);
+    const [userPhone, setUserPhone] = useState(info.phone);
     const checkEdit = () => {
       return (
-        userName != name ||
-        userPhone != phone ||
-        email != userEmail ||
-        address != userAddress
+        userName != info.name ||
+        userPhone != info.phone ||
+        info.email != userEmail ||
+        info.address != userAddress
       );
     };
     const [updateUser, {}] = useMutation(UPDATE_USER_INFO, {
       onCompleted: (data) => {
-        // set laij info user
+        Toast.show({text: "Thay đổi thành công", type: "success", position: "top", style:{backgroundColor: 'rgba(68, 108, 179, 1)', color: "#ffffff"}});
+        setInfo({...info, name: userName,
+          avatar: avatarUpload,
+          address: userAddress});
       },
       onError: (err) => console.log(err),
     });
@@ -172,7 +174,7 @@ const Profile = ({navigation}) => {
                 style={styles.inputText}
                 placeholder="Số điện thoại"
                 value={userPhone}
-                editable={!phone}
+                editable={!info.phone}
                 onChangeText={(value) => setUserPhone(value)}
                 keyboardType="numeric"
               />
@@ -184,7 +186,7 @@ const Profile = ({navigation}) => {
                 placeholder="Email"
                 value={userEmail}
                 onChangeText={(value) => setUserEmail(value)}
-                editable={!email}
+                editable={!info.email}
               />
             </View>
             <Hr />
@@ -212,7 +214,7 @@ const Profile = ({navigation}) => {
               </View>
             </TouchableOpacity>
             <Hr />
-            {checkEdit ? (
+            {checkEdit() ? (
               <TouchableOpacity
                 style={styles.button}
                 onPress={() =>
@@ -222,7 +224,7 @@ const Profile = ({navigation}) => {
                         name: userName,
                         avatar: avatarUpload,
                         address: userAddress,
-                        interests: interests,
+                        interests: info.interests,
                       },
                     },
                   })

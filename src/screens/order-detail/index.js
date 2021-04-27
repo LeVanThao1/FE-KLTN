@@ -19,7 +19,7 @@ const OrderDetail = ({navigation, route}) => {
       GET_SUB_ORDER,
       {
         onCompleted: async (data) => {
-          console.log(data.subOrderByUser);
+          // console.log(data.subOrderByUser);
           setSubOrder(data.subOrderByUser);
         },
         onError: (err) => {
@@ -40,16 +40,16 @@ const OrderDetail = ({navigation, route}) => {
       <View style={styles.container}>
         <ScrollView>
           <View style={{marginBottom: 16}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 8}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 8}}>
               Địa chỉ nhận hàng
             </Text>
-            <Text style={{fontSize: 18, marginBottom: 8}}>
+            <Text style={{fontSize: 16, marginBottom: 8}}>
               {subOrder?.user?.name}
             </Text>
-            <Text style={{fontSize: 18, marginBottom: 8}}>
+            <Text style={{fontSize: 16, marginBottom: 8}}>
               (+84) {subOrder.phone}
             </Text>
-            <Text style={{fontSize: 18, marginBottom: 8}}>
+            <Text style={{fontSize: 16, marginBottom: 8}}>
               {subOrder.address}
             </Text>
           </View>
@@ -62,10 +62,11 @@ const OrderDetail = ({navigation, route}) => {
               borderRadius: 4,
               padding: 10,
               marginVertical: 8,
+              backgroundColor: "#ffffff"
             }}>
             <View>
               <Image
-                style={{width: 100, height: 150}}
+                style={{width: 90, height: 120}}
                 source={{uri: subOrder?.detail?.book?.images[0]}}
               />
             </View>
@@ -73,7 +74,7 @@ const OrderDetail = ({navigation, route}) => {
               style={{flex: 1, justifyContent: 'space-between', padding: 8}}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: 'bold',
                   color: '#000000',
                   marginBottom: 8,
@@ -84,15 +85,14 @@ const OrderDetail = ({navigation, route}) => {
               <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
                 x {subOrder?.detail?.amount}
               </Text>
-              <Text style={{fontSize: 16, textAlign: 'right', marginBottom: 8}}>
+              <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
                 Giá: {subOrder?.detail?.price}
               </Text>
               <Text
                 style={{
-                  fontSize: 18,
-                  color: '#000000',
+                  fontSize: 16,
+                  color: 'rgba(68, 108, 179, 1)',
                   textAlign: 'right',
-                  marginBottom: 8,
                 }}>
                 Thành tiền: {subOrder?.detail?.price * subOrder?.detail?.amount}
               </Text>

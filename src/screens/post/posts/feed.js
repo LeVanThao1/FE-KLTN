@@ -3,10 +3,12 @@ import {View} from 'react-native';
 import styled from 'styled-components/native';
 // import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import {Icon} from 'native-base';
+
 import PostAvatar from './avatar';
+
 const Container = styled.View`
   flex: 1;
-  background: #ffffff;
+  backgroundcolor: #ffffff;
   padding: 4px 12px;
   margin: 6px 0;
   border-radius: 5px;
@@ -73,6 +75,7 @@ const BreakLine = styled.View`
   height: 0.5px;
   background: #000000;
 `;
+
 const PostCard = () => {
   return (
     <Container>
@@ -104,7 +107,7 @@ const PostCard = () => {
           <Icon
             type="MaterialCommunityIcons"
             name="comment-outline"
-            color="#EDEDED"
+            color="#ededed"
             style={{color: '#333333', fontSize: 20, marginRight: 8}}
           />
           <Text>Bình luận</Text>
@@ -113,6 +116,7 @@ const PostCard = () => {
     </Container>
   );
 };
+
 const Feed = () => {
   return (
     <>
