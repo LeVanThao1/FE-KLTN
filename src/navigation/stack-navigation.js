@@ -78,6 +78,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       />
       {routes.map((rt, i) => (
         <Stack.Screen
+          key={i}
           name={rt.name}
           component={rt.component}
           options={{
