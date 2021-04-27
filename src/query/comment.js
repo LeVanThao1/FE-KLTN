@@ -106,15 +106,14 @@ export default GET_COMMENTS_POST = gql`
       post {
         id
         title
-        author
+        author {
+          id
+          name
+        }
         images
         description
       }
-      type {
-        TEXT
-        IMAGE
-        VIDEO
-      }
+      type
       reply {
         id
         content
@@ -122,13 +121,9 @@ export default GET_COMMENTS_POST = gql`
           id
           avatar
         }
-        type {
-          TEXT
-          IMAGE
-          VIDEO
-        }
+        type
       }
-      createAt
+      createdAt
     }
   }
 `;
@@ -170,8 +165,8 @@ export default REPLY_COMMENT_BOOK = gql`
 `;
 
 export default CREATE_COMMENT_POST = gql`
-  mutation createCommentBook($dataComment: dataComment!, $postId: ID!) {
-    createCommentBook(dataComment: $dataComment, postId: $postId) {
+  mutation createCommentPost($dataComment: dataComment!, $postId: ID!) {
+    createCommentPost(dataComment: $dataComment, postId: $postId) {
       id
       content
       post {
@@ -179,9 +174,11 @@ export default CREATE_COMMENT_POST = gql`
         title
         description
         images
-        author
       }
-      author
+      author {
+        id
+        name
+      }
       type
       reply {
         id
@@ -190,11 +187,7 @@ export default CREATE_COMMENT_POST = gql`
           id
           avatar
         }
-        type {
-          VIDEO
-          TEXT
-          IMAGE
-        }
+        type
       }
       createdAt
     }
