@@ -1,6 +1,6 @@
 import {gql} from '@apollo/client';
 
-export default GET_COMMENT_BOOK = gql`
+export const GET_COMMENT_BOOK = gql`
   query commentOfBook($id: ID!) {
     commentOfBook(id: $id) {
       id
@@ -9,11 +9,7 @@ export default GET_COMMENT_BOOK = gql`
         id
         avatar
       }
-      type {
-        TEXT
-        IMAGE
-        VIDEO
-      }
+      type
       reply {
         id
         content
@@ -21,18 +17,14 @@ export default GET_COMMENT_BOOK = gql`
           id
           avatar
         }
-        type {
-          TEXT
-          IMAGE
-          VIDEO
-        }
+        type
       }
       createAt
     }
   }
 `;
 
-export default GET_COMMENTS_BOOK = gql`
+export const GET_COMMENTS_BOOK = gql`
   query commentsOfBook($bookId: ID!) {
     commentsOfBook(bookId: $bookId) {
       id
@@ -41,11 +33,7 @@ export default GET_COMMENTS_BOOK = gql`
         id
         avatar
       }
-      type {
-        TEXT
-        IMAGE
-        VIDEO
-      }
+      type
       reply {
         id
         content
@@ -53,18 +41,14 @@ export default GET_COMMENTS_BOOK = gql`
           id
           avatar
         }
-        type {
-          TEXT
-          IMAGE
-          VIDEO
-        }
+        type
       }
       createAt
     }
   }
 `;
 
-export default GET_COMMENT_POST = gql`
+export const GET_COMMENT_POST = gql`
   query commentOfPost($id: ID!) {
     commentOfPost(id: $id) {
       id
@@ -94,7 +78,7 @@ export default GET_COMMENT_POST = gql`
   }
 `;
 
-export default GET_COMMENTS_POST = gql`
+export const GET_COMMENTS_POST = gql`
   query commentsOfPost($postId: ID!) {
     commentsOfPost(postId: $postId) {
       id
@@ -128,7 +112,7 @@ export default GET_COMMENTS_POST = gql`
   }
 `;
 
-export default CREATE_COMMENT_BOOK = gql`
+export const CREATE_COMMENT_BOOK = gql`
   mutation createCommentBook($dataComment: dataComment!, $commentId: ID!) {
     createCommentBook(dataComment: $dataComment, commentId: $commentId) {
       id
@@ -156,15 +140,15 @@ export default CREATE_COMMENT_BOOK = gql`
   }
 `;
 
-export default REPLY_COMMENT_BOOK = gql`
-  query replyCommentBook($dataComment: dataComment!, commentId: ID!) {
+export const REPLY_COMMENT_BOOK = gql`
+  query replyCommentBook($dataComment: dataComment!, $commentId: ID!) {
     replyCommentBook(dataComment: $dataComment, commentId: $commentId) {
       message
     }
   }
 `;
 
-export default CREATE_COMMENT_POST = gql`
+export const CREATE_COMMENT_POST = gql`
   mutation createCommentPost($dataComment: dataComment!, $postId: ID!) {
     createCommentPost(dataComment: $dataComment, postId: $postId) {
       id
@@ -194,8 +178,8 @@ export default CREATE_COMMENT_POST = gql`
   }
 `;
 
-export default REPLY_COMMENT_POST = gql`
-  query replyCommentPost($dataComment: dataComment!, commentId: ID!) {
+export const REPLY_COMMENT_POST = gql`
+  query replyCommentPost($dataComment: dataComment!, $commentId: ID!) {
     replyCommentPost(dataComment: $dataComment, commentId: $commentId) {
       message
     }

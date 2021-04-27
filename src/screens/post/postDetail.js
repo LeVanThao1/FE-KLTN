@@ -15,13 +15,17 @@ import Textarea from 'react-native-textarea';
 
 import Images from '../../assets/images/images';
 import {UPDATE_POST} from '../../query/post';
+import {CREATE_COMMENT_POST} from '../../query/comment';
+import Comment from './comment';
 import {stylesPost} from './stylePost';
 
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, comment},
     } = useContext(MobXProviderContext);
+    const {info} = user;
+    const {postComment} = comment;
     const {
       postId,
       postTitle,
@@ -33,11 +37,43 @@ const PostDetail = ({navigation, route}) => {
       postPrice,
       postPublisher,
       postWanna,
-      postComment,
+      postCmt,
       postTime,
     } = route.params;
-    console.log('cmt', postComment);
 
+    const [cmt, setCmt] = useState('');
+    // const [createCommentPost, {called, loading, data, error}] = useMutation(
+    //   CREATE_COMMENTS_POST,
+    //   {
+    //     onCompleted: async (data) => {},
+    //     onError: (err) => {
+    //       console.log(err);
+    //     },
+    //   },
+    // );
+    const [createCommentPost] = useMutation(CREATE_COMMENT_POST, {
+      onCompleted: (data) => {
+        console.log('dataComment', data);
+        // const newData = [...postComment].filter(cmt => cmt.id+'' !== )
+        // const
+      },
+      onError: (err) => {
+        console.log('gaga', err);
+      },
+    });
+    const onPress = () => {
+      console.log('asdasdas');
+      let dataComment = {
+        content: cmt,
+        type: 'TEXT',
+      };
+      createCommentPost({
+        variables: {
+          dataComment,
+          postId: postId,
+        },
+      });
+    };
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -100,7 +136,52 @@ const PostDetail = ({navigation, route}) => {
               <View style={stylesPost.textDes}>
                 <Text>{postDescription}</Text>
               </View>
-
+              {postCmt?.map((cmt, i) => (
+                <Comment key={i} cmt={cmt} onPr={onPress} />
+              ))}
+              {/* <View>
+                {postCmt?.map((cmt, i) => (
+                  <View style={stylesPost.infocmt}>
+                    <Image
+                      source={{uri: cmt.author.avatar}}
+                      style={stylesPost.avtcmt}
+                    />
+                    <View style={stylesPost.userCmt}>
+                      <Text style={stylesPost.name}>{cmt.author.name}</Text>
+                      <Text style={stylesPost.time}>{cmt.content}</Text>
+                    </View>
+                  </View>
+                ))}
+                <View style={stylesPost.addCmt}>
+                  <View style={stylesPost.person}>
+                    <View style={stylesPost.info}>
+                      <Image
+                        source={{uri: info.avatar}}
+                        style={stylesPost.avtcmt}
+                      />
+                      <View style={stylesPost.addComment}>
+                        <TextInput
+                          style={stylesPost.comment}
+                          placeholder="Thêm bình luận"
+                          value={cmt}
+                          // onFocus={() => {
+                          //   setCmt()
+                          // }}
+                          onChangeText={(value) => {
+                            setCmt(value);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <Icon
+                    name="ios-arrow-forward-circle-outline"
+                    type="Ionicons"
+                    style={stylesPost.iconEnter}
+                    onPress={onPress}
+                  />
+                </View>
+              </View> */}
               <TouchableOpacity
                 style={{width: '100%'}}
                 onPress={() =>
@@ -116,7 +197,7 @@ const PostDetail = ({navigation, route}) => {
                     postPrice: postPrice,
                     postPublisher: postPublisher,
                     postWanna: postWanna,
-                    postComment: postComment,
+                    postCmt: postCmt,
                     postTime: postTime,
                   })
                 }>
@@ -124,9 +205,6 @@ const PostDetail = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </View>
-          {/* {postComment.map((cmt, i) => (
-            <Comment key={i} cmt={cmt} />
-          ))} */}
         </View>
       </ScrollView>
     );

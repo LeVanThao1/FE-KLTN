@@ -55,7 +55,7 @@ const PostOne = ({route, post, info, type}) => {
     //     .catch((err) => console.log(err));
     // }, [refreshing]);
 
-    console.log('sdsdsd', comments);
+    console.log('cmt', comments);
     const onPress = () => {
       deletePost({
         variables: {
