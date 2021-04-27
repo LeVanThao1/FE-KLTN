@@ -10,7 +10,7 @@ import Login from '../screens/login';
 import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
 import Store from '../screens/myStore/index';
-import HeaderStack from '../header';
+import HeaderStack, {HeaderLogo} from '../header';
 import CreateStore from '../screens/myStore/createStore';
 import SreateStore from '../screens/myStore/createStore';
 import {NavigationContainer} from '@react-navigation/native';
@@ -47,6 +47,8 @@ import VerifyForgot from '../screens/verifyFogot';
 import Notification from '../screens/notification';
 import BooksStore from '../screens/myStore/book/booksStore';
 import UpdatePost from '../screens/post/updatePost';
+import Products from '../screens/products';
+
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -58,7 +60,7 @@ const HomeStack = ({navigation, initialRoute}) => {
         component={Home}
         options={{
           title: 'My home',
-          headerTitle: () => <HeaderStack navigation={navigation} />,
+          headerTitle: () => <HeaderLogo navigation={navigation} />,
           headerStyle: {
             backgroundColor: 'rgba(68, 108, 179, 1)',
           },
@@ -73,6 +75,18 @@ const HomeStack = ({navigation, initialRoute}) => {
           headerStyle: {
             backgroundColor: 'rgba(68, 108, 179, 1)',
           },
+        }}
+      />
+      <Stack.Screen
+        name="Products"
+        component={Products}
+        options={{
+          title: 'Danh sách sản phẩm',
+          headerTitle: () => <HeaderStack navigation={navigation} />,
+          headerStyle: {
+            backgroundColor: 'rgba(68, 108, 179, 1)',
+          },
+          headerLeft: null,
         }}
       />
       {routes.map((rt, i) => (
@@ -328,7 +342,7 @@ const AuthStack = () => {
         // });
       },
     });
-    console.log(notification.book, notification.post);
+
     useEffect(() => {
       AsyncStorage.getItem('token').then((data) => {
         AsyncStorage.getItem('refreshToken').then((dt) => {
