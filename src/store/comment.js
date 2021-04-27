@@ -2,25 +2,25 @@ import {observable, action, makeObservable} from 'mobx';
 
 export class Comment {
   @observable
-  post = undefined;
+  postComment = undefined;
 
   @observable
-  book = undefined;
+  bookComment = undefined;
 
-  constructor(post, book) {
-    this.post = post;
-    this.book = book;
+  constructor(postComment, bookComment) {
+    this.postComment = postComment;
+    this.bookComment = bookComment;
     makeObservable(this);
   }
 
   @action
   setPostComment = (value) => {
-    this.post = value;
+    this.postComment = value;
   };
 
   @action
   setBookComment = (value) => {
-    this.book = value;
+    this.bookComment = value;
   };
 
   @action

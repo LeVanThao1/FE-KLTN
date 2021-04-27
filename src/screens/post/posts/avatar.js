@@ -1,7 +1,5 @@
 import React from 'react';
-
 import styled from 'styled-components/native';
-
 const Container = styled.View`
   width: 40px;
   height: 40px;
@@ -25,7 +23,6 @@ const UserActive = styled.View`
   border-width: 2px;
   border-color: #ffffff;
 `;
-
 const Avatar = ({source, online, story}) => {
   return (
     <Container>
@@ -33,5 +30,4 @@ const Avatar = ({source, online, story}) => {
     </Container>
   );
 };
-
 export default Avatar;

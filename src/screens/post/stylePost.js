@@ -16,9 +16,14 @@ export const stylesPost = StyleSheet.create({
     padding: 12,
     justifyContent: 'space-between',
   },
+
+  // personCmt: {
+  //   width: '100%'
+  // },
   info: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
 
   infocmt: {
@@ -40,6 +45,16 @@ export const stylesPost = StyleSheet.create({
     paddingBottom: 4,
   },
 
+  addComment: {
+    position: 'relative',
+  },
+
+  iconEnter: {
+    position: 'absolute',
+    right: 0,
+    top: 15,
+  },
+
   name: {
     fontWeight: 'bold',
   },
@@ -56,6 +71,7 @@ export const stylesPost = StyleSheet.create({
     paddingHorizontal: 20,
     marginLeft: 20,
     height: 35,
+    width: '100%',
   },
 
   avt: {

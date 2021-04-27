@@ -1,18 +1,14 @@
 import React from 'react';
-
 import {View} from 'react-native';
-
 import styled from 'styled-components/native';
-
 // import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
-
 import {Icon} from 'native-base';
 
 import PostAvatar from './avatar';
 
 const Container = styled.View`
   flex: 1;
-  backgroundColor: #ffffff;
+  backgroundcolor: #ffffff;
   padding: 4px 12px;
   margin: 6px 0;
   border-radius: 5px;
@@ -78,7 +74,7 @@ const BreakLine = styled.View`
   width: 100%;
   height: 0.5px;
   background: #000000;
-`
+`;
 
 const PostCard = () => {
   return (
@@ -94,42 +90,43 @@ const PostCard = () => {
           </View>
         </Row>
       </PostHeader>
-      <BreakLine/>
-      <View style={{paddingVertical: 8, borderBottomColor: "#000000", borderBottomWidth: 0.5}}>
-        <PostTitle>
-          Đây là title
-        </PostTitle>
+      <BreakLine />
+      <View
+        style={{
+          paddingVertical: 8,
+          borderBottomColor: '#000000',
+          borderBottomWidth: 0.5,
+        }}>
+        <PostTitle>Đây là title</PostTitle>
         <PostDescription>Đây là chi tiết</PostDescription>
         <PostPhoto source={require('../../../assets/images/post1.jpg')} />
       </View>
       <PostFooter>
         <TextCount>2k Bình luận</TextCount>
-        <Button onPress={()=>console.log("onPresssssssssssssssss")}>
+        <Button onPress={() => console.log('onPresssssssssssssssss')}>
           <Icon
             type="MaterialCommunityIcons"
             name="comment-outline"
             color="#ededed"
             style={{color: '#333333', fontSize: 20, marginRight: 8}}
           />
-        <Text>Bình luận</Text>
+          <Text>Bình luận</Text>
         </Button>
       </PostFooter>
     </Container>
-  )
-}
+  );
+};
 
 const Feed = () => {
   return (
     <>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
-      
+      <PostCard />
+      <PostCard />
+      <PostCard />
+      <PostCard />
+      <PostCard />
+      <PostCard />
     </>
   );
 };
-
 export default Feed;

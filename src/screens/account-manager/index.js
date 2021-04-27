@@ -81,7 +81,7 @@ export default function AccountManager({navigation}) {
                 icon="logout"
                 url="PostUser"
               />
-              <ManagerItem label="Tạo cửa hàng" icon="book" url="CreateStore" />
+              <ManagerItem label="Cửa hàng" icon="book" url="Store" />
               <ManagerItem
                 label="Quản lý đơn hàng mua"
                 icon="gift"
@@ -105,7 +105,7 @@ export default function AccountManager({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12
+    padding: 12,
   },
   //   manager_wrapp: {
 
