@@ -128,39 +128,47 @@ export default function CartDetail({data}) {
             }}
           />
         </View>
-        <View style={{flex: 1, justifyContent: 'center', padding: 8}}>
+        <View style={{flex: 1, justifyContent: 'space-between', paddingHorizontal: 16, height: "100%"}}>
           <TouchableOpacity>
-            <Text style={{fontSize: 18, color: '#000000', marginBottom: 8}}>
+            <Text style={{fontSize: 16, color: '#000000'}}>
               {data.book.name? data.book.name : data.book.book.name}
             </Text>
           </TouchableOpacity>
-
           <Text
-            style={{fontSize: 16, color: 'rgba(68, 108, 179, 1)', marginTop: 8}}>
-            {data.book.price}
+            style={{fontSize: 14, color: 'rgba(68, 108, 179, 1)'}}>
+            {data.book.price}đ
           </Text>
         </View>
-        <View
-          style={{
-            width: '20%',
-            height: '50%',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <TouchableOpacity onPress={() => changeAmount(false)}>
-            <Icon name="arrow-back" type="Ionicons" style={styles.icon} />
+        <View style={{width: "20%", alignItems: "center", height: "100%", justifyContent: "space-between"}}>
+          <View
+            style={{
+              // height: '50%',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => changeAmount(false)}>
+              <Icon name="arrow-back" type="Ionicons" style={styles.icon} />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.amountInput}
+              value={amount + ''}
+              keyboardType="numeric"
+              editable={false}
+            />
+            <TouchableOpacity onPress={() => changeAmount(true)}>
+              <Icon name="arrow-forward" type="Ionicons" style={styles.icon} />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity>
+            <View style={{width: 24, height: 24, borderRadius: 24, backgroundColor: "rgba(68, 108, 179, 1)", alignItems: "center", justifyContent: "center"}}>
+            <Icon name="delete" type="MaterialIcons" style={{fontSize: 15, color: "#ffffff"}} />
+            </View>
+            
           </TouchableOpacity>
-          <TextInput
-            style={styles.amountInput}
-            value={amount + ''}
-            keyboardType="numeric"
-            editable={false}
-          />
-          <TouchableOpacity onPress={() => changeAmount(true)}>
-            <Icon name="arrow-forward" type="Ionicons" style={styles.icon} />
-          </TouchableOpacity>
+            
+          
         </View>
-      </View>}
+        </View>}
       </>
     );
   })
@@ -168,15 +176,17 @@ export default function CartDetail({data}) {
 
 const styles = StyleSheet.create({
   container: {
+    height: 100,
     width: '100%',
     flexDirection: 'row',
     borderColor: '#696969',
     borderWidth: 0.2,
     borderRadius: 4,
     padding: 10,
-    marginVertical: 4,
+    marginBottom: 8,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: "center",
+    backgroundColor: "#ffffff"
   },
   image: {width: 80, height: 80},
   icon: {
@@ -184,11 +194,13 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   amountInput: {
-    padding: 4,
+    padding: 2,
     margin: 4,
     borderWidth: 0.2,
     borderColor: '#696969',
     textAlign: 'center',
     color: '#000000',
+    fontSize: 14,
+    fontWeight: "bold"
   },
 });

@@ -28,6 +28,7 @@ export const GET_BOOKS_STORE = gql`
       numberOfReprint
       description
       images
+      author
       comment {
         id
         content
@@ -59,6 +60,7 @@ export const GET_BOOK = gql`
   query book($id: ID!) {
     book(id: $id) {
       id
+      author
       comment {
         id
         content
@@ -131,6 +133,7 @@ export const CREATE_BOOK = gql`
     createBook(dataBook: $dataBook) {
       id
       name
+      author
       description
       year
       numberOfReprint
@@ -166,6 +169,7 @@ export const SEARCH_BOOK = gql`
   query bookByName($name: String!) {
     bookByName(name: $name) {
       id
+      author
       book {
         id
         name

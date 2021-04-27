@@ -114,6 +114,7 @@ const NotificationScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
+    backgroundColor: "#ededed"
   },
   bodyContainer: {
     flex: 1,

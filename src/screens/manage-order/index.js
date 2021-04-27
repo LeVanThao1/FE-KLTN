@@ -95,7 +95,8 @@ const ManageOrder = ({navigation}) => {
               borderWidth: 0.2,
               borderRadius: 4,
               padding: 10,
-              marginVertical: 8,
+              marginBottom: 8,
+              backgroundColor: "#ffffff"
             }}>
             <View>
               <Image
@@ -106,13 +107,13 @@ const ManageOrder = ({navigation}) => {
             <View
               style={{flex: 1, justifyContent: 'space-between', padding: 8}}>
               <Text
-                style={{fontSize: 20, fontWeight: 'bold', color: '#000000'}}
+                style={{fontSize: 16, fontWeight: 'bold', color: '#000000'}}
                 numberOfLines={1}>
                 {name}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
               <Text
-                style={{fontSize: 18, color: '#000000', textAlign: 'right'}}>
+                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
                 Thành tiền: {price}
               </Text>
             </View>
@@ -132,7 +133,7 @@ const ManageOrder = ({navigation}) => {
             />
           </View>
         </View>
-        <View style={{height: 46}}>
+        <View style={{height: 46, backgroundColor: "#ffffff"}}>
           <ScrollView horizontal>
             <Tab name="Đang chờ" status="WAITING" />
             <Tab name="Đã xác nhận" status="CONFIRMED" />
@@ -152,6 +153,8 @@ const ManageOrder = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ededed"
+
     // alignItems: 'center',
   },
   row: {
@@ -199,6 +202,7 @@ const styles = StyleSheet.create({
   },
   orderContainer: {
     flex: 1,
+    padding: 12
   },
 });
 

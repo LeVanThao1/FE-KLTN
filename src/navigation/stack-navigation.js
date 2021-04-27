@@ -49,6 +49,7 @@ import BooksStore from '../screens/myStore/book/booksStore';
 import UpdatePost from '../screens/post/updatePost';
 import Products from '../screens/products';
 
+import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -91,6 +92,7 @@ const HomeStack = ({navigation, initialRoute}) => {
       />
       {routes.map((rt, i) => (
         <Stack.Screen
+          key={i}
           name={rt.name}
           component={rt.component}
           options={{
@@ -176,7 +178,7 @@ const routes = [
   },
   {
     name: 'Revenue',
-    title: 'Danh thu',
+    title: 'Doanh thu',
     header: false,
     component: Revenue,
   },
@@ -198,6 +200,7 @@ const routes = [
     header: false,
     component: Post,
   },
+
   {
     name: 'AddPost',
     title: 'Tạo bài viết',
@@ -229,7 +232,10 @@ const routes = [
     component: Contact,
   },
   {name: 'Cart', title: 'Giỏ hàng', header: false, component: Cart},
-  {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
+
+  // {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
+  {name: 'Feed', title: 'Bài đăng', header: false, component: PostFb},
+
   {
     name: 'BookDetail',
     title: 'Chi tiết sách',

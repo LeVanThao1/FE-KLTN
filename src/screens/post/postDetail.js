@@ -36,6 +36,8 @@ const PostDetail = ({navigation, route}) => {
       postComment,
       postTime,
     } = route.params;
+    console.log('cmt', postComment);
+
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -122,6 +124,9 @@ const PostDetail = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </View>
+          {/* {postComment.map((cmt, i) => (
+            <Comment key={i} cmt={cmt} />
+          ))} */}
         </View>
       </ScrollView>
     );

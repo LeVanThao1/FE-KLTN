@@ -114,7 +114,7 @@ const Login = ({navigation}) => {
     };
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Đặng nhập</Text>
+        <Text style={styles.title}>Đăng nhập</Text>
         <View style={{width: '100%'}}>
           <Text style={styles.text}>Chào mừng quay trở lại!</Text>
         </View>

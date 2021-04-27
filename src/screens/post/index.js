@@ -31,6 +31,7 @@ const Post = ({navigation, route}) => {
       // queryData(GET_COMMENT_POST, {postId})
     }, [refreshing]);
 
+    // console.log(comment);
     // useEffect(() =>)
 
     return (
