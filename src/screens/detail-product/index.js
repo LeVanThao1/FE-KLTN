@@ -26,7 +26,7 @@ const DetailProduct = ({navigation, route}) => {
     const {cart, setCart, likes, addToLike, removeToLike} = user;
     const {productId} = route.params;
     const [book, setBook] = useState(null);
-    const [listItem, setListItem] = useState(null);
+    const [listItem, setListItem] = useState([]);
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
     );
@@ -59,6 +59,7 @@ const DetailProduct = ({navigation, route}) => {
     });
     const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
       onCompleted: async (data) => {
+        console.log("quanggggggggg",data);
         setBook(data.book);
         setListItem(
           data.book.store.books.map((ct, i) => ({
@@ -185,7 +186,7 @@ const DetailProduct = ({navigation, route}) => {
               <SliderBox
                 style={styles.slide__image}
                 images={[
-                  ...(book.book ? book.book.images : book.images),
+                  ...(book ? book.images : []),
                   Images.onepiece1,
                 ]}
                 autoplay={true}
@@ -194,45 +195,13 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
                 <Text style={styles.detail__content_name}>
-                  {book.name ? book.name : book.book.name}
+                  {book.name ? book.name : "Tên sách"}
                 </Text>
-                <View style={styles.detail__content_price}>
-                  <Text style={styles.current__price}>{book.price}đ</Text>
-                  <Text style={styles.old__price}>500.000đ</Text>
-                </View>
+                <Text style={{...styles.detail__content_name, fontSize: 16}}>{book.publisher}đ</Text>
+                <Text style={styles.current__price}>Giá bán: {book.price}đ</Text>
                 <View style={styles.detail__content_rate}>
-                  <View style={styles.rate}>
-                    <View style={styles.rate_start}>
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                      <Icon
-                        style={styles.icon__start}
-                        name="star"
-                        type="AntDesign"
-                      />
-                    </View>
-                    <Text style={styles.rate_text}>4.8</Text>
-                  </View>
                   <View style={styles.quantity_sold}>
-                    <Text style={styles.quantity__sold_text}>{book.sold}</Text>
+                    <Text style={styles.quantity__sold_text}>Đã bán: {book.sold}</Text>
                     {/* sản phẩm được yêu thích */}
                     <TouchableOpacity onPress={likeProduct}>
                       <Icon
@@ -241,44 +210,16 @@ const DetailProduct = ({navigation, route}) => {
                         type="AntDesign"
                       />
                     </TouchableOpacity>
-                    {/* sản phẩm chưa được yêu thích */}
-                    {/* <Icon
-                  style={styles.icon__heart}
-                  name="hearto"
-                  type="AntDesign"
-                /> */}
                   </View>
-                </View>
-              </View>
-              <View style={styles.detail__content_delivery}>
-                <View style={styles.delivery__wrap}>
-                  <Icon
-                    style={styles.delivery__icon}
-                    name="rocket1"
-                    type="AntDesign"
-                  />
-                  <Text>Phí vận chuyển : {0}đ</Text>
-                </View>
-                <View style={styles.delivery__wrap}>
-                  <Icon
-                    style={styles.delivery__icon}
-                    name="book"
-                    type="AntDesign"
-                  />
-                  <Text>Trả hàng / Hoàn tiền trong 3 ngày</Text>
                 </View>
               </View>
               <View style={styles.detail__buy_control}>
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
-                    <Button
-                      style={styles.btn_quantity}
-                      rounded
-                      warning
-                      onPress={() => setQuantity(quantity - 1)}>
-                      <TextNT style={styles.btn__quantity_text}>-</TextNT>
-                    </Button>
+                    <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>-</Text>
+                    </TouchableOpacity>
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -286,89 +227,17 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    <Button
-                      style={styles.btn_quantity}
-                      rounded
-                      warning
-                      onPress={() => setQuantity(quantity + 1)}>
-                      <TextNT style={styles.btn__quantity_text}>+</TextNT>
-                    </Button>
+                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>+</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
-                  <Button
-                    style={styles.store__btn}
-                    bordered
-                    warning
-                    onPress={addToCart}>
-                    <TextNT style={styles.buy__action_text}>
+                  <TouchableOpacity onPress={addToCart}>
+                    <Text style={{...styles.buy__action_text, fontWeight: "500"}}>
                       Thêm vào giỏ hàng
-                    </TextNT>
-                  </Button>
-                  <Button style={styles.store__btn} bordered warning>
-                    <TextNT style={styles.buy__action_text}>Mua ngay</TextNT>
-                  </Button>
-                </View>
-              </View>
-              <View style={styles.detail__store}>
-                <View style={styles.detail__store_info}>
-                  <View style={styles.store__header}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.store__avatar}
-                        source={{
-                          uri: book.store.avatar,
-                        }}
-                      />
-                      <Text style={styles.store__name}>{'AppStore'}</Text>
-                    </View>
-                    <Button
-                      style={styles.btn__view_store}
-                      bordered
-                      warning
-                      onPress={() => navigation.navigate('/')}>
-                      <TextNT style={styles.buy__action_text}>Xem Shop</TextNT>
-                    </Button>
-                  </View>
-                  <View style={styles.store__statistical}>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>
-                        {book.store.books.length}
-                      </Text>
-                      <Text style={styles.store__statistical_code}>
-                        Sản phẩm
-                      </Text>
-                    </View>
-                    <Text style={styles.separator}>|</Text>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>4.7</Text>
-                      <Text style={styles.store__statistical_code}>
-                        Đánh giá
-                      </Text>
-                    </View>
-                    <Text style={styles.separator}>|</Text>
-                    <View style={styles.store__statistical_wrap}>
-                      <Text style={styles.store__statistical_text}>91%</Text>
-                      <Text style={styles.store__statistical_code}>
-                        Phản hồi chat
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.store__products}>
-                  <View style={styles.store__products_header}>
-                    <Text>Các sản phẩm khác của shop</Text>
-                    <Text style={styles.buy__action_text}>Xem tất cả</Text>
-                  </View>
-                  <View style={styles.store__products_list}>
-                    <FlatList
-                      //   style={styles.flat_list}
-                      data={listItem && listItem}
-                      renderItem={renderProduct}
-                      keyExtractor={(item) => item.id}
-                      horizontal={true}
-                    />
-                  </View>
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style={styles.detail__book_description}>
@@ -396,39 +265,6 @@ const DetailProduct = ({navigation, route}) => {
                 </Text>
               </View>
               <View style={styles.detail__book_rate}>
-                <Text style={styles.detail__book_description_title}>
-                  Đánh giá sản phẩm
-                </Text>
-                <View style={[styles.rate, styles.rate__start_wrap]}>
-                  <View style={styles.rate_start}>
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                    <Icon
-                      style={styles.icon__start}
-                      name="staro"
-                      type="AntDesign"
-                    />
-                  </View>
-                  <Text>Đánh giá của bạn</Text>
-                </View>
                 <View style={styles.detail__book_commnet}>
                   <TextInput
                     style={styles.comment}
@@ -437,13 +273,9 @@ const DetailProduct = ({navigation, route}) => {
                     placeholder="Nhập bình luận của bạn"
                     onChangeText={onChangeComment}
                   />
-                  <Button
-                    style={[styles.btn__view_store, styles.btn_comment]}
-                    rounded
-                    warning
-                    onPress={() => navigation.navigate('/')}>
-                    <TextNT style={styles.btn_comment_text}>Bình luận</TextNT>
-                  </Button>
+                  <TouchableOpacity>
+                    <Text style={{...styles.buy__action_text, fontSize: 14, fontWeight: "500"}}>Bình luận</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.book__comment_wrap}>
                   <View style={styles.comment__user}>
@@ -507,6 +339,7 @@ const DetailProduct = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 8,
     height: '100%',
     backgroundColor: '#f6f6f6',
   },
@@ -526,37 +359,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   detail__content_name: {
-    fontSize: 16,
-  },
-  detail__content_price: {
-    marginVertical: 8,
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8
   },
   current__price: {
-    color: '#ee4d2d',
-    fontSize: 14,
-  },
-  old__price: {
-    textDecorationLine: 'line-through',
-    fontWeight: '300',
-    color: '#414141',
+    color: 'rgba(68, 108, 179, 1)',
+    fontSize: 16,
+    textAlign: "center"
   },
   detail__content_rate: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  rate: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '34%',
-    justifyContent: 'space-between',
-    borderRightColor: '#ccc',
-    borderRightWidth: 1,
-    paddingRight: 5,
-  },
-  rate_start: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   quantity_sold: {
     flexDirection: 'row',
@@ -573,21 +389,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   icon__heart_active: {
-    color: '#e21f1f',
-  },
-  detail__content_delivery: {
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-  },
-  delivery__wrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  delivery__icon: {
-    fontSize: 16,
-    paddingRight: 4,
-    color: 'green',
+    color: 'rgba(68, 108, 179, 1)',
   },
   detail__store: {
     backgroundColor: '#f6f6f6',
@@ -634,6 +436,10 @@ const styles = StyleSheet.create({
   input__quantity: {
     width: 30,
     marginHorizontal: 2,
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+    textDecorationLine: "underline"
   },
   btn_quantity: {
     width: 40,
@@ -643,11 +449,17 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buy__action_text: {
-    color: '#f57f1a',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: 'rgba(68, 108, 179, 1)',
+    color: '#ffffff',
+    borderRadius: 16,
+    fontSize: 16,
+    fontWeight: "bold"
   },
   control__buy_action: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: 5,
   },
   store__btn: {
@@ -702,6 +514,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderBottomColor: '#888',
     borderBottomWidth: 1,
+    fontSize: 16,
+    fontWeight: "bold"
   },
   detail__book_description_wrap: {
     flexDirection: 'row',
@@ -763,6 +577,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 25,
   },
+  quantity__sold_text:{
+    fontSize: 16
+  }
 });
 
 export default DetailProduct;

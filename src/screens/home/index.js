@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from 'react-native';
 import {GET_USER} from '../../query/user';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -26,11 +27,13 @@ import History from './history';
 import {NotiSuccess} from '../../utils/notifications';
 import {GET_CATEGORIES} from '../../query/category';
 const {width, height} = Dimensions.get('window');
-
+import {queryData} from '../../common';
+import {GET_HOME} from '../../query/home';
+import {Spinner} from 'native-base';
 const Home = ({navigation}) => {
-  const ProductItem = ({book}) => (
+  const ProductItem = ({book, type}) => (
     <TouchableOpacity
-      style={styles.itemContainer}
+      style={type ? styles.itemContainer__all : styles.itemContainer}
       onPress={() =>
         navigation.navigate('Detail-Product', {productId: book.id})
       }>
@@ -48,51 +51,25 @@ const Home = ({navigation}) => {
     const {
       stores: {book, user, category},
     } = useContext(MobXProviderContext);
-    const {books, setBooks} = book;
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [books, setBooks] = useState(undefined);
     const {categories, setCategory} = category;
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [bookSell, setBookSell] = useState(undefined);
-    const [getBooks, {}] = useLazyQuery(GET_BOOKS, {
-      onCompleted: async (data) => {
-        setBooks(data.books);
-        setLoading(false);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    });
-    const [getBooksSell, {}] = useLazyQuery(GET_BOOK_SELL, {
-      onCompleted: async (data) => {
-        setBookSell(data.bookSell);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    });
-
-    const [getCategories, {}] = useLazyQuery(GET_CATEGORIES, {
-      onCompleted: async (data) => {
-        setCategory(data.categories);
-        // setListItem(
-        //   data.categories.map((ct, i) => ({
-        //     id: ct.id,
-        //     name: 'database',
-        //     type: 'AntDesign',
-        //     description: ct.name,
-        //   })),
-        // );
-        // setLoading(false);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    });
 
     useEffect(() => {
-      // getBooksSell();
-      getBooks();
-      // getCategories();
-    }, []);
+      setLoading(true);
+      queryData(GET_HOME)
+        .then(({data}) => {
+          const {books, categories, bestSell} = data.home;
+          setBooks(books);
+          setCategory(categories);
+          setBookSell(bestSell);
+          setRefreshing(false);
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }, [refreshing]);
 
     const [chooseCategory, setChooseCategory] = useState(0);
     const [images, setImages] = useState([
@@ -102,134 +79,98 @@ const Home = ({navigation}) => {
       Images.slider4,
     ]);
     return (
-      <View style={styles.home__container}>
-        {!loading && (
-          <ScrollView>
-            <SliderBox images={images} autoplay={true} circleLoop={true} />
-            {/* <View
-              style={{
-                paddingBottom: 20,
-                borderBottomWidth: 3,
-                borderBottomColor: '#3e3e3e',
-              }}>
-              <Text style={styles.sectionTitle}>Best sell</Text>
-              <ScrollView horizontal={true}>
+      <ScrollView
+        style={styles.home__container}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+            }}
+          />
+        }>
+        <View style={styles.slider__container}>
+          <SliderBox images={images} autoplay={true} circleLoop={true} />
+        </View>
+        {!loading ? (
+          <View style={styles.body}>
+            <View style={styles.bestSell}>
+              <Text style={styles.title}>BEST SELL</Text>
+              <ScrollView horizontal={true} style={styles.scroll__view}>
                 {bookSell && (
                   <View style={styles.filterContainer}>
                     <ScrollView horizontal={true}>
                       <View style={styles.listItemContainer}>
                         {bookSell &&
-                          bookSell.map(
-                            (e, index) =>
-                              index % 2 === 0 &&
-                              index < bookSell.length && (
-                                <View key={index.toString()}>
-                                  <ProductItem key={e.id} book={e} />
-                                  <ProductItem
-                                    key={bookSell && bookSell[index + 1].id}
-                                    book={bookSell && bookSell[index + 1]}
-                                  />
-                                </View>
-                              ),
-                          )}
+                          bookSell.map((e, index) => (
+                            <ProductItem key={e.id} book={e} />
+                          ))}
                       </View>
                     </ScrollView>
                   </View>
                 )}
               </ScrollView>
             </View>
-            <ScrollView horizontal={true}>
-              <View style={styles.filterContainer}>
-                <View
-                  key={'all'}
-                  style={
-                    chooseCategory === 0
-                      ? styles.filterActiveButtonContainer
-                      : styles.filterInactiveButtonContainer
-                  }>
-                  <TouchableOpacity onPress={() => setChooseCategory(0)}>
-                    <Text
-                      style={
-                        chooseCategory === 0
-                          ? styles.filterActiveText
-                          : styles.filterInactiveText
-                      }>
-                      Tất cả
-                    </Text>
-                  </TouchableOpacity>
+            <View style={styles.all__book}>
+              <ScrollView horizontal={true} style={styles.scroll__view}>
+                <View style={styles.filterContainer}>
+                  <View
+                    key={'all'}
+                    style={
+                      chooseCategory === 0
+                        ? styles.filterActiveButtonContainer
+                        : styles.filterInactiveButtonContainer
+                    }>
+                    <TouchableOpacity onPress={() => setChooseCategory(0)}>
+                      <Text
+                        style={
+                          chooseCategory === 0
+                            ? styles.filterActiveText
+                            : styles.filterInactiveText
+                        }>
+                        Tất cả
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {categories &&
+                    categories.map((e, index) => (
+                      <View
+                        key={index.toString()}
+                        style={
+                          index + 1 === chooseCategory
+                            ? styles.filterActiveButtonContainer
+                            : styles.filterInactiveButtonContainer
+                        }>
+                        <TouchableOpacity
+                          onPress={() => setChooseCategory(index + 1)}>
+                          <Text
+                            style={
+                              index + 1 === chooseCategory
+                                ? styles.filterActiveText
+                                : styles.filterInactiveText
+                            }>
+                            {e.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
                 </View>
-                {categories &&
-                  categories.map((e, index) => (
-                    <View
-                      key={index.toString()}
-                      style={
-                        index + 1 === chooseCategory
-                          ? styles.filterActiveButtonContainer
-                          : styles.filterInactiveButtonContainer
-                      }>
-                      <TouchableOpacity
-                        onPress={() => setChooseCategory(index + 1)}>
-                        <Text
-                          style={
-                            index + 1 === chooseCategory
-                              ? styles.filterActiveText
-                              : styles.filterInactiveText
-                          }>
-                          {e.name}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+              </ScrollView>
+              <View style={styles.bookByCategory}>
+                {books &&
+                  books.map((bk) => (
+                    <ProductItem key={bk.id} book={bk} type={true} />
                   ))}
               </View>
-            </ScrollView>
-            <ScrollView horizontal={true}>
-              <View style={styles.listItemContainer}>
-                {books &&
-                  books.map(
-                    (e, index) =>
-                      index % 2 === 0 &&
-                      index < 8 && (
-                        <View key={index.toString()}>
-                          <ProductItem key={e.id} book={e} />
-                          <ProductItem
-                            key={books && books[index + 1].id}
-                            book={books && books[index + 1]}
-                          />
-                        </View>
-                      ),
-                  )}
+              <View style={styles.seeMoreContainer}>
+                <Text style={styles.seeMoreText}>XEM TẤT CẢ SẢN PHẨM</Text>
               </View>
-            </ScrollView>
-
-            <View style={styles.seeMoreContainer}>
-              <Text style={styles.seeMoreText}>
-                XEM THÊM {books && books.length} SẢN PHẨM{' '}
-              </Text>
-            </View> */}
-            <View style={styles.category__icon}>
-              <CategoryIcon />
             </View>
-            <View style={styles.category__icon}>
-              <CommonList />
-            </View>
-            <View style={styles.category__icon}>
-              <MangaList />
-            </View>
-            <View style={styles.category__icon}>
-              <Novel />
-            </View>
-            <View style={styles.category__icon}>
-              <Science />
-            </View>
-            <View style={styles.category__icon}>
-              <Literary />
-            </View>
-            <View style={styles.category__icon}>
-              <History />
-            </View>
-          </ScrollView>
+          </View>
+        ) : (
+          <Spinner color="rgba(68, 108, 179, 1)" />
         )}
-      </View>
+      </ScrollView>
     );
   });
 };
@@ -239,27 +180,77 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     width: '100%',
-    // paddingHorizontal: 12,
   },
-  sectionContainer: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 5,
+  slider__container: {
+    borderRadius: 10,
+    marginVertical: 10,
   },
-  sectionTitle: {
-    fontWeight: '700',
-    fontSize: 16,
-    color: '#2f2f2f',
-    paddingVertical: 10,
+  body: {
+    marginHorizontal: 12,
   },
-  sectionImage: {
-    width: width - 24,
-    height: 130,
-    borderRadius: 4,
+  title: {
+    fontSize: 20,
   },
-  //
   filterContainer: {
     flexDirection: 'row',
     marginTop: 0,
+  },
+  listItemContainer: {
+    flexDirection: 'row',
+    marginLeft: 0,
+    paddingHorizontal: 12,
+  },
+  itemContainer__all: {
+    width: (width - 60) / 2,
+    marginBottom: 15,
+    borderRadius: 10,
+    paddingBottom: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 3,
+  },
+  itemContainer: {
+    width: 120,
+    marginRight: 10,
+    marginTop: 15,
+    marginBottom: 5,
+    borderRadius: 10,
+    paddingBottom: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  itemImage: {
+    width: '100%',
+    height: 120,
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
+  },
+  itemName: {
+    fontSize: 14,
+    paddingHorizontal: 5,
+    color: '#484848',
+    marginVertical: 4,
+  },
+  itemPrice: {
+    paddingHorizontal: 5,
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'rgba(68, 108, 179, 1)',
   },
   filterActiveButtonContainer: {
     backgroundColor: 'rgba(68, 108, 179, 1)',
@@ -283,38 +274,20 @@ const styles = StyleSheet.create({
   filterInactiveText: {
     color: '#000',
   },
-  //
-  listItemContainer: {
+  all__book: {
+    marginVertical: 12,
+  },
+  scroll__view: {
+    paddingVertical: 10,
+  },
+  bookByCategory: {
+    flexWrap: 'wrap',
     flexDirection: 'row',
-    marginLeft: 0,
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
   },
-  itemContainer: {
-    width: 120,
-    marginRight: 10,
-    marginTop: 15,
-    borderColor: '#5a5a5a',
-    borderWidth: 1,
-  },
-  itemImage: {
-    width: '100%',
-    height: 120,
-  },
-  itemName: {
-    fontSize: 14,
-    paddingHorizontal: 5,
-    color: '#484848',
-    marginVertical: 4,
-  },
-  itemPrice: {
-    paddingHorizontal: 5,
-    fontSize: 14,
-    fontWeight: '600',
-    color: 'rgba(68, 108, 179, 1)',
-  },
-  //
   seeMoreContainer: {
-    marginTop: 10,
-    padding: 12,
+    marginVertical: 6,
     borderTopWidth: 0.6,
     borderTopColor: '#ededed',
     alignItems: 'center',

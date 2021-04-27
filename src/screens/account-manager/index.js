@@ -105,6 +105,7 @@ export default function AccountManager({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 12
   },
   //   manager_wrapp: {
 
