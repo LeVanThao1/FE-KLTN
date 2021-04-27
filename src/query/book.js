@@ -1,46 +1,15 @@
 import {gql} from '@apollo/client';
 
 export const GET_BOOKS = gql`
-  query books {
-    books {
+  query books($limit: Int, $page: Int) {
+    books(limit: $limit, page: $page) {
       id
-      author
-      comment {
-        id
-        content
-        type
-        author {
-          id
-          name
-          avatar
-        }
-        createdAt
-      }
       name
       images
-      year
-      numberOfReprint
-      publisher
-      category {
-        id
-        name
-      }
       book {
         id
         name
         images
-        year
-        numberOfReprint
-        publisher
-        category {
-          id
-          name
-        }
-      }
-      store {
-        id
-        name
-        avatar
       }
       amount
       price
@@ -260,6 +229,23 @@ export const GET_BOOK_SELL = gql`
       price
       sold
       createdAt
+    }
+  }
+`;
+export const GET_BOOKS_CATEGORY = gql`
+  query booksByCategory($id: ID!, $limit: Int, $page: Int) {
+    booksByCategory(id: $id, limit: $limit, page: $page) {
+      id
+      name
+      images
+      book {
+        id
+        name
+        images
+      }
+      amount
+      price
+      sold
     }
   }
 `;

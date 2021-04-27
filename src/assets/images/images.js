@@ -10,7 +10,7 @@ import onepiece2 from './onepiece2.jpg';
 // import onepiece6 from './onepiece6.jfif';
 import rich from './rich.jpg';
 import poor from './poor.jpg';
-
+import dino from './dinosaur.png';
 const Images = {
   slider1: slider1,
   slider2: slider2,
@@ -24,6 +24,7 @@ const Images = {
   // onepiece6: onepiece6,
   rich: rich,
   poor: poor,
+  logo: dino,
 };
 
 export default Images;

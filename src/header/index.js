@@ -1,7 +1,14 @@
 import React, {useContext, useRef, useState} from 'react';
 
 import {Accordion, Icon, Row} from 'native-base';
-import {TextInput, Text, View, StyleSheet, SafeAreaView} from 'react-native';
+import {
+  TextInput,
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+} from 'react-native';
 import {SEARCH_BOOK} from '../query/book';
 import {useLazyQuery} from '@apollo/client';
 import {useObserver} from 'mobx-react-lite';
@@ -17,7 +24,6 @@ const HeaderStack = ({navigation}) => {
     const openMenu = () => {};
     const [value, setValue] = useState('');
     const ref = useRef(null);
-    console.log(book.booksSearch);
     const [booksSearch, {called, loading, data, error}] = useLazyQuery(
       SEARCH_BOOK,
       {
@@ -45,9 +51,6 @@ const HeaderStack = ({navigation}) => {
     return (
       <SafeAreaView>
         <View style={styles.container__header}>
-          {/* <View style={styles.header__text}>
-        <Text>PoobStore</Text>
-      </View> */}
           <View style={styles.header__menu}>
             <Icon
               name="menu"
@@ -57,7 +60,7 @@ const HeaderStack = ({navigation}) => {
             <Icon name="search" style={styles.searchIcon} />
             <TextInput
               style={styles.search}
-              placeholder="search book"
+              placeholder="Search book"
               value={textSearch}
               onChangeText={(value) => onChangeText(value)}
             />
@@ -69,6 +72,50 @@ const HeaderStack = ({navigation}) => {
   });
 };
 
+export const HeaderLogo = ({navigation}) => {
+  return (
+    <SafeAreaView>
+      <View style={styles.container__header}>
+        <View style={styles.header__menu}>
+          <Icon name="menu" style={styles.icon} />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../assets/images/dinosaurRevert.png')}
+              style={{
+                height: 40,
+                resizeMode: 'contain',
+                padding: 0,
+                marginLeft: -8,
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 30,
+                color: '#fff',
+                fontWeight: 'bold',
+                padding: 0,
+                marginRight: -8,
+                marginLeft: -8,
+              }}>
+              DINO{' '}
+            </Text>
+            <Image
+              source={require('../assets/images/dinosaur.png')}
+              style={{
+                height: 40,
+                resizeMode: 'contain',
+                padding: 0,
+                marginLeft: -8,
+              }}
+            />
+          </View>
+          <Icon name="message1" style={styles.message} type="AntDesign" />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
 const styles = StyleSheet.create({
   container__header: {
     flexDirection: 'column',
@@ -78,14 +125,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   header__menu: {
-    margin: -20,
-    width: '110%',
+    // margin: -20,
+    width: '100%',
     // height: 00,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   icon: {
-    margin: 15,
+    // margin: 15,
     fontSize: 35,
     color: '#fff',
     // paddingLeft: 20
@@ -96,14 +144,14 @@ const styles = StyleSheet.create({
     color: '#111',
     backgroundColor: '#fff',
     position: 'relative',
-    paddingLeft: 40,
+    paddingLeft: 10,
     fontSize: 17,
     padding: 0,
     borderRadius: 6,
   },
   searchIcon: {
     position: 'absolute',
-    left: 70,
+    right: 55,
     zIndex: 1,
     opacity: 0.4,
     fontSize: 24,
