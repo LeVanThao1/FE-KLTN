@@ -2,24 +2,31 @@ import React, {PureComponent, PropTypes} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import moment from 'moment';
 
-const Comment = () => (
+const Comment = ({cmt}) => (
   // Pull comment object out of props
-  <View style={styles.container}>
-    <View style={styles.avatarContainer}>
-      {
-        <Image
-          resizeMode="contain"
-          style={styles.avatar}
-          source={{uri: 'picsum.photos/200/300'}}
-        />
-      }
+
+  <View style={stylesPost.comment}>
+    <View style={stylesPost.infocmt}>
+      <Image
+        source={{
+          uri: type ? info.avatar : post.comment[0].author.avatar,
+        }}
+        style={stylesPost.avtcmt}
+      />
+      <View style={stylesPost.userCmt}>
+        <Text style={stylesPost.name}>
+          {type ? info.name : post.comment[0].author.name}
+        </Text>
+        <Text style={stylesPost.time}>{post.comment[0].content}</Text>
+      </View>
     </View>
-    <View style={styles.contentContainer}>
-      <Text>
-        <Text style={[styles.text, styles.name]}>sdasádasd</Text>
-        <Text style={styles.text}>ádasdascontent</Text>
-      </Text>
-      <Text style={[styles.text, styles.created]}>xãasxasxas</Text>
+    <View style={stylesPost.addCmt}>
+      <View style={stylesPost.person}>
+        <View style={stylesPost.info}>
+          <Image source={{uri: info.avatar}} style={stylesPost.avtcmt} />
+          <TextInput style={stylesPost.comment} placeholder="Thêm bình luận" />
+        </View>
+      </View>
     </View>
   </View>
 );

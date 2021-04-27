@@ -194,7 +194,7 @@ const PostOne = ({route, post, info, type}) => {
           </View>
           <View style={stylesPost.cmt}></View>
         </View>
-        {/* <Comment /> */}
+        {}
         <View
           style={{
             flex: 1,

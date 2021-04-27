@@ -106,15 +106,14 @@ export default GET_COMMENTS_POST = gql`
       post {
         id
         title
-        author
+        author {
+          id
+          name
+        }
         images
         description
       }
-      type {
-        TEXT
-        IMAGE
-        VIDEO
-      }
+      type
       reply {
         id
         content
@@ -122,13 +121,9 @@ export default GET_COMMENTS_POST = gql`
           id
           avatar
         }
-        type {
-          TEXT
-          IMAGE
-          VIDEO
-        }
+        type
       }
-      createAt
+      createdAt
     }
   }
 `;
