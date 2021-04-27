@@ -10,7 +10,7 @@ import {Comment} from './comment';
 export const stores = {
   auth: new Auth(false, '', ''),
   user: new User(undefined, undefined, undefined, [], []),
-  book: new Book(undefined, undefined),
+  book: new Book(undefined, undefined, '', {}),
   category: new Category(undefined),
   shop: new Shop(undefined, undefined),
   notification: new Notification([], [], []),
