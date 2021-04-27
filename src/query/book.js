@@ -166,38 +166,16 @@ export const DELETE_BOOK = gql`
 `;
 
 export const SEARCH_BOOK = gql`
-  query bookByName($name: String!) {
-    bookByName(name: $name) {
+  query bookByName($name: String!, $category: ID, $limit: Int, $page: Int) {
+    bookByName(name: $name, category: $category, limit: $limit, page: $page) {
       id
-      author
       book {
         id
         name
         images
-        year
-        numberOfReprint
-        publisher
-        category {
-          id
-          name
-        }
-        description
-      }
-      store {
-        id
-        name
-        avatar
       }
       name
       images
-      year
-      numberOfReprint
-      publisher
-      category {
-        id
-        name
-      }
-      description
       amount
       price
       sold

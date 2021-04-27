@@ -18,19 +18,26 @@ import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
 import ProductCart from '../../components/productCart';
 import {styles} from './styles';
+import {GET_BOOKS_CATEGORY} from '../../query/book';
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {book, user, category},
     } = useContext(MobXProviderContext);
     const [refreshing, setRefreshing] = React.useState(false);
-    const {books, setBooks} = book;
-    const {categories, setCategory} = category;
+    const {books, setBooks, booksCategory, setBooksCategory} = book;
+    const {
+      categories,
+      setCategory,
+      selectCategory,
+      setSelectCategory,
+    } = category;
     const [loading, setLoading] = useState(true);
     const [bookSell, setBookSell] = useState(undefined);
-
+    const [loadingByCategory, setLoadingByCategory] = useState(false);
     useEffect(() => {
       setLoading(true);
+      setSelectCategory('all');
       queryData(GET_HOME)
         .then(({data}) => {
           const {books, categories, bestSell} = data.home;
@@ -43,7 +50,21 @@ const Home = ({navigation}) => {
         .catch((err) => console.log(err));
     }, [refreshing]);
 
-    const [chooseCategory, setChooseCategory] = useState('all');
+    useEffect(() => {
+      if (selectCategory !== 'all') {
+        setLoadingByCategory(true);
+        queryData(GET_BOOKS_CATEGORY, {id: selectCategory})
+          .then(({data}) => {
+            setBooksCategory({
+              ...booksCategory,
+              [selectCategory]: data.booksByCategory,
+            });
+            setLoadingByCategory(false);
+          })
+          .catch((err) => console.log(err));
+      }
+    }, [selectCategory]);
+
     const [images, setImages] = useState([
       Images.slider1,
       Images.slider2,
@@ -95,14 +116,14 @@ const Home = ({navigation}) => {
                   <View
                     key={'all'}
                     style={
-                      chooseCategory === 'all'
+                      selectCategory === 'all'
                         ? styles.filterActiveButtonContainer
                         : styles.filterInactiveButtonContainer
                     }>
-                    <TouchableOpacity onPress={() => setChooseCategory('all')}>
+                    <TouchableOpacity onPress={() => setSelectCategory('all')}>
                       <Text
                         style={
-                          chooseCategory === 'all'
+                          selectCategory === 'all'
                             ? styles.filterActiveText
                             : styles.filterInactiveText
                         }>
@@ -115,15 +136,15 @@ const Home = ({navigation}) => {
                       <View
                         key={index.toString()}
                         style={
-                          e.id + '' === chooseCategory + ''
+                          e.id + '' === selectCategory + ''
                             ? styles.filterActiveButtonContainer
                             : styles.filterInactiveButtonContainer
                         }>
                         <TouchableOpacity
-                          onPress={() => setChooseCategory(e.id)}>
+                          onPress={() => setSelectCategory(e.id)}>
                           <Text
                             style={
-                              e.id + '' === chooseCategory + ''
+                              e.id + '' === selectCategory + ''
                                 ? styles.filterActiveText
                                 : styles.filterInactiveText
                             }>
@@ -135,7 +156,7 @@ const Home = ({navigation}) => {
                 </View>
               </ScrollView>
               {/* <View style={styles.bookByCategory}> */}
-              {chooseCategory === 'all' && (
+              {selectCategory === 'all' && (
                 <>
                   <View style={styles.bookByCategory}>
                     {books &&
@@ -174,16 +195,27 @@ const Home = ({navigation}) => {
                   ) : null}
                 </>
               )}
-              {categories &&
+              {!loadingByCategory ? (
+                categories &&
                 categories.map(
                   (ct) =>
-                    chooseCategory + '' === ct.id + '' && (
+                    selectCategory + '' === ct.id + '' && (
                       <BookByCategory
                         navigation={navigation}
                         category={ct.id}
                       />
                     ),
-                )}
+                )
+              ) : (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                  }}>
+                  <Spinner color="rgba(68, 108, 179, 1)" />
+                </View>
+              )}
               {/* {books &&
                   books.map((bk) => (
                     <ProductItem

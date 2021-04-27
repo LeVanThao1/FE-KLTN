@@ -13,25 +13,11 @@ const BookByCategory = ({navigation, category, type}) => {
       stores: {book},
     } = useContext(MobXProviderContext);
     const {booksCategory, setBooksCategory} = book;
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-      setLoading(true);
-      queryData(GET_BOOKS_CATEGORY, {id: category})
-        .then(({data}) => {
-          setBooksCategory({
-            ...booksCategory,
-            [category]: data.booksByCategory,
-          });
-          setLoading(false);
-        })
-        .catch((err) => console.log(err));
-    }, []);
 
     return (
       <>
         <View style={styles.bookByCategory}>
-          {!loading ? (
-            booksCategory[category] &&
+          {booksCategory[category] &&
             booksCategory[category].map((bk) => (
               <ProductCart
                 key={bk.id}
@@ -39,19 +25,9 @@ const BookByCategory = ({navigation, category, type}) => {
                 type={true}
                 navigation={navigation}
               />
-            ))
-          ) : (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-              }}>
-              <Spinner color="rgba(68, 108, 179, 1)" />
-            </View>
-          )}
+            ))}
         </View>
-        {!loading && booksCategory[category] ? (
+        {booksCategory[category] ? (
           booksCategory[category].length > 0 ? (
             type ? null : (
               <TouchableOpacity
