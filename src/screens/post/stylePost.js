@@ -17,9 +17,23 @@ export const stylesPost = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  // personCmt: {
-  //   width: '100%'
-  // },
+  vertical: {
+    paddingVertical: 10,
+  },
+
+  inp: {
+    height: 35,
+    borderWidth: 0.3,
+    borderRadius: 6,
+  },
+
+  inpPrice: {
+    height: 35,
+    width: '70%',
+    borderWidth: 0.3,
+    borderRadius: 6,
+  },
+
   info: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -117,9 +131,9 @@ export const stylesPost = StyleSheet.create({
 
   content: {
     padding: 10,
-    borderTopColor: '#111',
-    borderTopWidth: 0.2,
-    marginTop: 15,
+    // borderTopColor: '#111',
+    // borderTopWidth: 0.2,
+    // marginTop: 15,
   },
   action: {
     flexDirection: 'row',

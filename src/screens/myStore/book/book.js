@@ -12,13 +12,13 @@ import {MobXProviderContext} from 'mobx-react';
 const Book = ({book}) => {
   return useObserver(() => {
     const {
-      stores: {shop},
+      stores: {shop, user, comment},
     } = useContext(MobXProviderContext);
     const {bookStore} = shop;
+    const {bookComment, setBookComment} = comment;
     const navigation = useNavigation();
     const [deleteBook, {dd, aa, ss, xx}] = useMutation(DELETE_BOOK, {
       onCompleted: async (data) => {
-        console.log(bookStore.length);
         const newData = [...bookStore].filter(
           (bt) => bt.id + '' !== book.id + '',
         );
@@ -43,23 +43,13 @@ const Book = ({book}) => {
     return (
       <TouchableOpacity
         // key={id}
-        onPress={() =>
+        onPress={() => {
+          user.setBookCurrent(book);
+          setBookComment(book.comment);
           navigation.navigate('BookDetail', {
-            bookId: book.id,
-            // bookName: book.name,
-            // bookCategoryId: book.categoryId,
-            // bookCategoryName: book.categoryName,
-            // bookAuthor: book.author,
-            // bookPublisher: book.publisher,
-            // bookYear: book.year,
-            // bookPrint: book.numberOfReprint,
-            // bookPrice: book.price,
-            // bookAmount: book.amount,
-            // bookSold: book.sold,
-            // bookDescription: book.description,
-            // bookImg: book.images,
-          })
-        }>
+            book: book,
+          });
+        }}>
         <View
           style={{
             width: '100%',
@@ -73,7 +63,11 @@ const Book = ({book}) => {
           <View>
             <Image
               style={{width: 80, height: 100}}
-              source={{uri: book.images}}
+              source={{
+                uri: book.images
+                  ? book.images
+                  : 'https://picsum.photos/200/300',
+              }}
             />
           </View>
           <View
