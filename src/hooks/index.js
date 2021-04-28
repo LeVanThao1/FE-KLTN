@@ -1,49 +1,77 @@
 import {useLazyQuery, useSubscription} from '@apollo/client';
-import { MobXProviderContext, useObserver } from 'mobx-react';
+import {MobXProviderContext, useObserver} from 'mobx-react';
 import {useContext, useEffect, useState} from 'react';
-import {COMMENTS_BOOK_NOTIFICATION, COMMENTS_POST_NOTIFICATION} from '../query/notification';
-
+import Toast from 'react-native-toast-message';
+import {
+  COMMENTS_BOOK_NOTIFICATION,
+  COMMENTS_ORDER_NOTIFICATION,
+  COMMENTS_POST_NOTIFICATION,
+} from '../query/notification';
+import {NOTIFI} from '../constants';
+import {Notification} from '../utils/notifications';
 export const useNotification = () => {
-    return useObserver(() => {
-        const {
-          stores: {notification, user},
-        } = useContext(MobXProviderContext);
-    const {setOrder, setPost, setBook,post ,book, order} = notification
-  const { data: dataPost  } = useSubscription(COMMENTS_POST_NOTIFICATION, {
+  return useObserver(() => {
+    const {
+      stores: {notification, user},
+    } = useContext(MobXProviderContext);
+    const {setOrder, setPost, setBook, post, book, order} = notification;
+    const {data: dataPost} = useSubscription(COMMENTS_POST_NOTIFICATION, {
       variables: {
-          userId: user.info.id
+        userId: user.info.id,
       },
+    });
+
+    const {data: dataBook} = useSubscription(COMMENTS_BOOK_NOTIFICATION, {
+      variables: {
+        userId: user.info.id,
+      },
+    });
+
+    const {data: dataOrder} = useSubscription(COMMENTS_ORDER_NOTIFICATION, {
+      variables: {
+        userId: user.info.id,
+      },
+    });
+
+    useEffect(() => {
+      if (dataPost) {
+        setPost([dataPost.receiveNotificationCommentPost, ...post]);
+        if (dataPost.receiveNotificationCommentPost)
+          Toast.show(
+            Notification(
+              NOTIFI.info,
+              dataPost.receiveNotificationCommentPost.title,
+              dataPost.receiveNotificationCommentPost.description,
+            ),
+          );
+      }
+    }, [dataPost]);
+
+    useEffect(() => {
+      if (dataBook) {
+        setBook([dataBook.receiveNotificationCommentBook, ...book]);
+        Toast.show(
+          Notification(
+            NOTIFI.info,
+            dataBook.receiveNotificationCommentBook.title,
+            dataBook.receiveNotificationCommentBook.description,
+          ),
+        );
+      }
+    }, [dataBook]);
+
+    useEffect(() => {
+      if (dataOrder) {
+        setOrder([dataOrder.receiveNotificationOrder, ...order]);
+        Toast.show(
+          Notification(
+            NOTIFI.info,
+            dataOrder.receiveNotificationOrder.title,
+            dataOrder.receiveNotificationOrder.description,
+          ),
+        );
+      }
+    }, [dataOrder]);
+    return true;
   });
-
-  const { data: dataBook  } = useSubscription(COMMENTS_BOOK_NOTIFICATION, {
-    variables: {
-        userId: user.info.id
-    },
-});
-
-const { data: dataOrder  } = useSubscription(COMMENTS_POST_NOTIFICATION, {
-    variables: {
-        userId: user.info.id
-    },
-});
-
-  useEffect(() => {
-    if (dataPost) {
-        setPost([dataPost.receiveNotificationCommentPost, ...post])
-    }
-  }, [dataPost]);
-
-  useEffect(() => {
-    if (dataBook) {
-        setBook([dataBook.receiveNotificationCommentBook, ...book])
-    }
-  }, [dataBook]);
-
-  useEffect(() => {
-    if (dataOrder) {
-        setOrder([dataOrder, ...order])
-    }
-  }, [dataOrder]);
-  return true;
-})
 };
