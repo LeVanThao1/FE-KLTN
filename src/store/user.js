@@ -14,24 +14,33 @@ export class User {
   postCurrent = undefined;
 
   @observable
+  bookCurrent = undefined;
+
+  @observable
   subOrders = [];
 
   @observable
   likes = [];
 
-  constructor(info, cart, post, subOrders, likes, postCurrent) {
+  constructor(info, cart, post, subOrders, likes, postCurrent, bookCurrent) {
     this.cart = cart;
     this.info = info;
     this.posts = post;
     this.subOrders = subOrders;
     this.likes = likes;
     this.postCurrent = postCurrent;
+    this.bookCurrent = bookCurrent;
     makeObservable(this);
   }
 
   @action
   setPostCurrent = (value) => {
     this.postCurrent = value;
+  };
+
+  @action
+  setBookCurrent = (value) => {
+    this.bookCurrent = value;
   };
 
   @action

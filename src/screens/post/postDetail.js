@@ -199,19 +199,19 @@ const PostDetail = ({navigation, route}) => {
                 style={{width: '100%'}}
                 onPress={() =>
                   navigation.navigate('UpdatePost', {
-                    postId: postId,
-                    postTitle: postTitle,
-                    // postBookName: post.uniqueBook.name,
-                    postDescription: postDescription,
-                    postImg: postImg,
-                    postYear: postYear,
-                    postNumPrint: postNumPrint,
-                    postCategory: postCategory,
-                    postPrice: postPrice,
-                    postPublisher: postPublisher,
-                    postWanna: postWanna,
-                    postCmt: postCmt,
-                    postTime: postTime,
+                    postId: postCurrent.id,
+                    // postTitle: postTitle,
+                    // // postBookName: post.uniqueBook.name,
+                    // postDescription: postDescription,
+                    // postImg: postImg,
+                    // postYear: postYear,
+                    // postNumPrint: postNumPrint,
+                    // postCategory: postCategory,
+                    // postPrice: postPrice,
+                    // postPublisher: postPublisher,
+                    // postWanna: postWanna,
+                    // postCmt: postCmt,
+                    // postTime: postTime,
                   })
                 }>
                 <Text style={stylesPost.btn}>Cập nhật</Text>

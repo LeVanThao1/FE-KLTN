@@ -11,6 +11,18 @@ export const GET_BOOKS = gql`
         name
         images
       }
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
+      author
       amount
       price
       sold

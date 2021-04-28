@@ -25,27 +25,16 @@ const BooksStore = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [selectedStatus, setSelectedStatus] = useState('ALL');
 
+    console.log('shop', shop);
     const {bookStore, setBookStore} = shop;
     const [listBook, setListBook] = useState([]);
-    // const [books, {called, loading, data, error}] = useLazyQuery(
-    //   GET_BOOKS_STORE,
-    //   {
-    //     onCompleted: async (data) => {
-    //       setBookStore(data.books);
-    //     },
-    //     onError: (err) => {
-    //       console.log(err);
-    //     },
-    //   },
-    //   fetchPolicy:'no-cache'
-    // );
 
     useEffect(() => {
       queryData(GET_BOOKS_STORE, {store: shop.info.id})
         .then(({data}) => {
           setBookStore(data.books);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log('err book', err));
     }, []);
 
     useEffect(() => {
@@ -56,7 +45,7 @@ const BooksStore = ({navigation}) => {
             name: ct.name ? ct.name : '',
             categoryId: ct.category.id ? ct.category.id : '',
             categoryName: ct.category.name ? ct.category.name : '',
-            author: 'Alibacasto',
+            author: ct.author,
             price: ct.price ? ct.price : '',
             publisher: ct.publisher ? ct.publisher : '',
             numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
@@ -65,7 +54,7 @@ const BooksStore = ({navigation}) => {
             sold: ct.sold ? ct.sold : '',
             description: ct.description ? ct.description : '',
             images: ct.images[0] ? ct.images[0] : [],
-            // comment: ct.comment ? ct.comment : ''
+            comment: ct.comment ? ct.comment : '',
           })),
         );
       }

@@ -113,14 +113,21 @@ export const GET_COMMENTS_POST = gql`
 `;
 
 export const CREATE_COMMENT_BOOK = gql`
-  mutation createCommentBook($dataComment: dataComment!, $commentId: ID!) {
-    createCommentBook(dataComment: $dataComment, commentId: $commentId) {
+  mutation createCommentBook($dataComment: dataComment!, $bookId: ID!) {
+    createCommentBook(dataComment: $dataComment, bookId: $bookId) {
       id
       content
+      author {
+        id
+        avatar
+      }
       book {
         id
+        name
+        author
+        images
+        description
       }
-      author
       type
       reply {
         id
@@ -129,11 +136,7 @@ export const CREATE_COMMENT_BOOK = gql`
           id
           avatar
         }
-        type {
-          VIDEO
-          TEXT
-          IMAGE
-        }
+        type
       }
       createdAt
     }

@@ -25,16 +25,16 @@ const UpdatePost = ({route}) => {
     const {posts} = user;
     const {
       postId,
-      postTitle,
-      postDescription,
-      postImg,
-      postYear,
-      postNumPrint,
-      postCategory,
-      postPrice,
-      postPublisher,
-      postWanna,
-      postCmt,
+      // postTitle,
+      // postDescription,
+      // postImg,
+      // postYear,
+      // postNumPrint,
+      // postCategory,
+      // postPrice,
+      // postPublisher,
+      // postWanna,
+      // postCmt,
     } = route.params;
 
     const [title, setTitle] = useState({

@@ -18,7 +18,7 @@ import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
 import {button} from '../style';
 
-const BookDetail = ({navigation, route}) => {
+const UpdateBook = ({navigation, route}) => {
   return useObserver(() => {
     const {
       stores: {category, shop},
@@ -443,4 +443,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(BookDetail);
+export default memo(UpdateBook);

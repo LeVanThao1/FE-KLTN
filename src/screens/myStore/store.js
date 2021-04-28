@@ -104,24 +104,6 @@ const Store = ({navigation}) => {
               value={info?.description}
             />
           </View>
-          {/* <View style={styles.evalue}>
-            <Text>Đánh giá shop: </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Text>4.5/5 </Text>
-              <View style={{flexDirection: 'row'}}>
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star" type="MaterialIcons" />
-                <Icon name="star-half" type="MaterialIcons" />
-                <Icon name="star-border" type="MaterialIcons" />
-              </View>
-            </View>
-          </View> */}
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
             <View>
