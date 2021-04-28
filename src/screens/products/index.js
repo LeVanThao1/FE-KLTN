@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {queryData} from '../../common';
 import ProductCart from '../../components/productCart';
-import {GET_BOOKS} from '../../query/book';
+import {GET_BOOKS, GET_BOOKS_CATEGORY} from '../../query/book';
 import BookByCategory from '../home/bookByCategory';
 import {styles} from './styles';
 
@@ -21,39 +21,99 @@ const Products = ({navigation, route}) => {
     const {
       stores: {book, category},
     } = useContext(MobXProviderContext);
-    const {categoryId} = route.params;
     const [refreshing, setRefreshing] = React.useState(false);
-    const {books, setBooks} = book;
-    const {categories, setCategory} = category;
+    const {
+      books,
+      setBooks,
+      booksCategory,
+      setBooksCategory,
+      booksSearch,
+    } = book;
+    const {
+      categories,
+      setCategory,
+      selectCategory,
+      setSelectCategory,
+      option,
+      setOption,
+    } = category;
     const [loading, setLoading] = useState(true);
-    const [option, setOption] = useState({
-      limit: 20,
-      page: 1,
-    });
+    const [loadingByCategory, setLoadingByCategory] = useState(false);
+
     useEffect(() => {
-      if (option.page !== 1) {
-        setLoading(true);
-        queryData(GET_BOOKS, {
-          ...option,
-        })
-          .then(({data}) => {
-            setBooks([...books, ...data.books]);
-            setLoading(false);
+      if (selectCategory === 'all') {
+        if (option.page !== 1) {
+          setLoading(true);
+          queryData(GET_BOOKS, {
+            ...option,
           })
-          .catch((err) => {
-            console.log(err);
-            setLoading(false);
-          });
+            .then(({data}) => {
+              if (data.books.length > 0) setBooks([...books, ...data.books]);
+              else {
+                setOption({...option, page: option.page - 1});
+              }
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoading(false);
+            });
+        }
+      } else {
+        if (booksCategory[selectCategory]) {
+          if (option.page === 1) {
+            return;
+          } else {
+            setLoading(true);
+            queryData(GET_BOOKS_CATEGORY, {id: selectCategory, ...option})
+              .then(({data}) => {
+                if (data.booksByCategory.length > 0)
+                  setBooksCategory({
+                    ...booksCategory,
+                    [selectCategory]: data.booksByCategory,
+                  });
+                else {
+                  setOption({...option, page: option.page - 1});
+                }
+                setLoading(false);
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+              });
+          }
+        }
       }
     }, [option]);
+
+    useEffect(() => {
+      if (selectCategory !== 'all') {
+        if (!booksCategory[selectCategory]) {
+          setLoadingByCategory(true);
+          queryData(GET_BOOKS_CATEGORY, {id: selectCategory, ...option})
+            .then(({data}) => {
+              setBooksCategory({
+                ...booksCategory,
+                [selectCategory]: data.booksByCategory,
+              });
+              setLoadingByCategory(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoadingByCategory(false);
+            });
+        }
+      }
+    }, [selectCategory]);
 
     useEffect(() => {
       setOption({
         limit: 20,
         page: 1,
       });
+
+      setSelectCategory('all');
       if (refreshing) {
-        setLoading(true);
         queryData(GET_BOOKS, {
           limit: 20,
           page: 1,
@@ -61,28 +121,16 @@ const Products = ({navigation, route}) => {
           .then(({data}) => {
             setBooks(data.books);
             setRefreshing(false);
-            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
-            setLoading(false);
           });
       }
     }, [refreshing]);
 
-    const [chooseCategory, setChooseCategory] = useState(categoryId);
     return (
       <ScrollView
         style={styles.home__container}
-        onMomentumScrollEnd={(e) => {
-          const scrollPosition = e.nativeEvent.contentOffset.y;
-          const scrolViewHeight = e.nativeEvent.layoutMeasurement.height;
-          const contentHeight = e.nativeEvent.contentSize.height;
-          const isScrolledToBottom = scrolViewHeight + scrollPosition;
-          if (isScrolledToBottom + 100 >= contentHeight) {
-            setOption((cur) => ({...cur, page: cur.page + 1}));
-          }
-        }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -90,7 +138,16 @@ const Products = ({navigation, route}) => {
               setRefreshing(true);
             }}
           />
-        }>
+        }
+        onMomentumScrollEnd={(e) => {
+          const scrollPosition = e.nativeEvent.contentOffset.y;
+          const scrolViewHeight = e.nativeEvent.layoutMeasurement.height;
+          const contentHeight = e.nativeEvent.contentSize.height;
+          const isScrolledToBottom = scrolViewHeight + scrollPosition;
+          if (isScrolledToBottom + 150 >= contentHeight) {
+            setOption({...option, page: option.page + 1});
+          }
+        }}>
         <View style={styles.body}>
           <View style={styles.all__book}>
             <ScrollView horizontal={true} style={styles.scroll__view}>
@@ -98,14 +155,18 @@ const Products = ({navigation, route}) => {
                 <View
                   key={'all'}
                   style={
-                    chooseCategory === 'all'
+                    selectCategory === 'all'
                       ? styles.filterActiveButtonContainer
                       : styles.filterInactiveButtonContainer
                   }>
-                  <TouchableOpacity onPress={() => setChooseCategory('all')}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectCategory('all');
+                      setOption({...option, page: 1});
+                    }}>
                     <Text
                       style={
-                        chooseCategory === 'all'
+                        selectCategory === 'all'
                           ? styles.filterActiveText
                           : styles.filterInactiveText
                       }>
@@ -118,14 +179,18 @@ const Products = ({navigation, route}) => {
                     <View
                       key={index.toString()}
                       style={
-                        e.id + '' === chooseCategory + ''
+                        e.id + '' === selectCategory + ''
                           ? styles.filterActiveButtonContainer
                           : styles.filterInactiveButtonContainer
                       }>
-                      <TouchableOpacity onPress={() => setChooseCategory(e.id)}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setSelectCategory(e.id);
+                          setOption({...option, page: 1});
+                        }}>
                         <Text
                           style={
-                            e.id + '' === chooseCategory + ''
+                            e.id + '' === selectCategory + ''
                               ? styles.filterActiveText
                               : styles.filterInactiveText
                           }>
@@ -136,47 +201,87 @@ const Products = ({navigation, route}) => {
                   ))}
               </View>
             </ScrollView>
-            {chooseCategory === 'all' && (
-              <>
+            {booksSearch ? (
+              booksSearch.length > 0 ? (
                 <View style={styles.bookByCategory}>
-                  {books &&
-                    books.map((bk) => (
-                      <ProductCart
-                        key={bk.id}
-                        book={bk}
-                        type={true}
-                        navigation={navigation}
-                      />
-                    ))}
+                  {booksSearch.map((bk) => (
+                    <ProductCart
+                      key={bk.id}
+                      book={bk}
+                      type={true}
+                      navigation={navigation}
+                    />
+                  ))}
                 </View>
-                {books
-                  ? books.length === 0 && (
-                      <View
-                        style={{
-                          ...styles.seeMoreContainer,
-                          marginTop: 0,
-                          marginBottom: 20,
-                        }}>
-                        <Text style={styles.seeMoreText}>
-                          HIỆN TẠI CHƯA CÓ SẢN PHẨM
-                        </Text>
-                      </View>
-                    )
-                  : null}
+              ) : (
+                <View
+                  style={{
+                    ...styles.seeMoreContainer,
+                    marginTop: 0,
+                    marginBottom: 20,
+                  }}>
+                  <Text style={styles.seeMoreText}>
+                    KHÔNG TÌM THẤY KẾT QUẢ PHÙ HỢP
+                  </Text>
+                </View>
+              )
+            ) : (
+              <>
+                {selectCategory === 'all' && (
+                  <>
+                    <View style={styles.bookByCategory}>
+                      {books &&
+                        books.map((bk) => (
+                          <ProductCart
+                            key={bk.id}
+                            book={bk}
+                            type={true}
+                            navigation={navigation}
+                          />
+                        ))}
+                    </View>
+                    {books
+                      ? books.length === 0 && (
+                          <View
+                            style={{
+                              ...styles.seeMoreContainer,
+                              marginTop: 0,
+                              marginBottom: 20,
+                            }}>
+                            <Text style={styles.seeMoreText}>
+                              HIỆN TẠI CHƯA CÓ SẢN PHẨM
+                            </Text>
+                          </View>
+                        )
+                      : null}
+                  </>
+                )}
+
+                {!loadingByCategory ? (
+                  categories &&
+                  categories.map(
+                    (ct) =>
+                      selectCategory + '' === ct.id + '' && (
+                        <BookByCategory
+                          navigation={navigation}
+                          category={ct.id}
+                          type={true}
+                        />
+                      ),
+                  )
+                ) : (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                    }}>
+                    <Spinner color="rgba(68, 108, 179, 1)" />
+                  </View>
+                )}
               </>
             )}
 
-            {categories &&
-              categories.map(
-                (ct) =>
-                  chooseCategory + '' === ct.id + '' && (
-                    <BookByCategory
-                      navigation={navigation}
-                      category={ct.id}
-                      type={true}
-                    />
-                  ),
-              )}
             {loading && <Spinner color="rgba(68, 108, 179, 1)" size="small" />}
           </View>
         </View>

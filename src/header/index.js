@@ -17,17 +17,17 @@ import {MobXProviderContext} from 'mobx-react';
 const HeaderStack = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {book},
+      stores: {book, category},
     } = useContext(MobXProviderContext);
     const {books, textSearch, setTextSearch} = book;
-
+    const {option, setOption, selectCategory} = category;
     const openMenu = () => {};
-    const [value, setValue] = useState('');
     const ref = useRef(null);
     const [booksSearch, {called, loading, data, error}] = useLazyQuery(
       SEARCH_BOOK,
       {
         onCompleted: async (data) => {
+          console.log(data.bookByName);
           book.setBooksSearch(data.bookByName);
         },
         onError: (err) => {
@@ -40,10 +40,21 @@ const HeaderStack = ({navigation}) => {
         clearTimeout(ref.current);
       }
       setTextSearch(value);
+      if (value.length === 0) {
+        book.setBooksSearch(undefined);
+        return;
+      }
+
+      const variables = {
+        name: value,
+        ...option,
+        category: selectCategory === 'all' ? null : selectCategory,
+      };
+      console.log(variables);
       setTimeout(() => {
         booksSearch({
           variables: {
-            name: value,
+            ...variables,
           },
         });
       }, 300);
