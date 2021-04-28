@@ -11,6 +11,18 @@ export const GET_BOOKS = gql`
         name
         images
       }
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        createdAt
+      }
+      author
       amount
       price
       sold
@@ -142,6 +154,20 @@ export const CREATE_BOOK = gql`
         id
         name
       }
+      book {
+        id
+        name
+        author
+        description
+        year
+        numberOfReprint
+        publisher
+        category {
+          id
+          name
+        }
+        images
+      }
       images
       amount
       price
@@ -166,38 +192,16 @@ export const DELETE_BOOK = gql`
 `;
 
 export const SEARCH_BOOK = gql`
-  query bookByName($name: String!) {
-    bookByName(name: $name) {
+  query bookByName($name: String!, $category: ID, $limit: Int, $page: Int) {
+    bookByName(name: $name, category: $category, limit: $limit, page: $page) {
       id
-      author
       book {
         id
         name
         images
-        year
-        numberOfReprint
-        publisher
-        category {
-          id
-          name
-        }
-        description
-      }
-      store {
-        id
-        name
-        avatar
       }
       name
       images
-      year
-      numberOfReprint
-      publisher
-      category {
-        id
-        name
-      }
-      description
       amount
       price
       sold
@@ -246,6 +250,25 @@ export const GET_BOOKS_CATEGORY = gql`
       amount
       price
       sold
+    }
+  }
+`;
+
+export const GET_RECOMMENT_BY_NAME = gql`
+  query getRecommentByName($name: String!) {
+    getRecommentByName(name: $name) {
+      id
+      name
+      author
+      description
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      images
     }
   }
 `;

@@ -11,7 +11,7 @@ export const stores = {
   auth: new Auth(false, '', ''),
   user: new User(undefined, undefined, undefined, [], [], undefined),
   book: new Book(undefined, undefined, '', {}),
-  category: new Category(undefined),
+  category: new Category(undefined, 'all', {limit: 20, page: 1}),
   shop: new Shop(undefined, undefined),
   notification: new Notification([], [], []),
   order: new Order(undefined),
