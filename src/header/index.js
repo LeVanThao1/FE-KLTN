@@ -50,8 +50,7 @@ const HeaderStack = ({navigation}) => {
         ...option,
         category: selectCategory === 'all' ? null : selectCategory,
       };
-      console.log(variables);
-      setTimeout(() => {
+      ref.current = setTimeout(() => {
         booksSearch({
           variables: {
             ...variables,

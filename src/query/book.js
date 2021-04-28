@@ -142,6 +142,20 @@ export const CREATE_BOOK = gql`
         id
         name
       }
+      book {
+        id
+        name
+        author
+        description
+        year
+        numberOfReprint
+        publisher
+        category {
+          id
+          name
+        }
+        images
+      }
       images
       amount
       price
@@ -224,6 +238,25 @@ export const GET_BOOKS_CATEGORY = gql`
       amount
       price
       sold
+    }
+  }
+`;
+
+export const GET_RECOMMENT_BY_NAME = gql`
+  query getRecommentByName($name: String!) {
+    getRecommentByName(name: $name) {
+      id
+      name
+      author
+      description
+      year
+      numberOfReprint
+      publisher
+      category {
+        id
+        name
+      }
+      images
     }
   }
 `;

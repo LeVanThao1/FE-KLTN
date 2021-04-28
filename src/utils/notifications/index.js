@@ -1,20 +1,9 @@
-import {Toast} from 'native-base';
-
-export const NotiError = (title, position = 'top') => {
-  Toast.show({
-    text: title,
-    type: 'danger',
-    position: position,
-  });
-};
-
-export const NotiSuccess = (title, position = 'top') => {
-  Toast.show({
-    text: title,
-    type: 'success',
-    position: position,
-    style: {
-      backgroundColor: 'rgba(68, 108, 179, 1)',
-    },
-  });
-};
+export const Notification = (type, msg1, msg2) => ({
+  type: type,
+  position: 'top',
+  text1: msg1,
+  text2: msg2,
+  visibilityTime: 300,
+  autoHide: true,
+  topOffset: 10,
+});

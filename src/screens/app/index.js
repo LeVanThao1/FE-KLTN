@@ -8,7 +8,7 @@ import {Client} from '../../config';
 import {AuthStack, HomeStack} from '../../navigation';
 import BottomTabNavigator from '../../navigation/tab-navigation';
 import {stores} from '../../store';
-
+import Toast from 'react-native-toast-message';
 const App = () => {
   return useObserver(() => {
     const {
@@ -19,6 +19,7 @@ const App = () => {
       <NavigationContainer>
         {/* <DrawerNavigator /> */}
         {!isAuth ? <AuthStack /> : <BottomTabNavigator />}
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </NavigationContainer>
     );
   });

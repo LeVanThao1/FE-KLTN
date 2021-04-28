@@ -1,26 +1,28 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Icon, Text, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {memo, useContext, useEffect, useRef, useState} from 'react';
 import {
   TextInput,
   StyleSheet,
   Image,
-  Button,
   TouchableOpacity,
   ToastAndroid,
+  Dimensions,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
-import {Form, Item, Picker} from 'native-base';
-import {CREATE_BOOK} from '../../../query/book';
+import {Form, Item, Picker, Button} from 'native-base';
+import {CREATE_BOOK, GET_RECOMMENT_BY_NAME} from '../../../query/book';
 // import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import {UPLOAD_MULTI_FILE} from '../../../query/upload';
 import {ReactNativeFile} from 'extract-files';
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
+import Modal from 'react-native-modal';
+import {queryData} from '../../../common';
+import Menu, {MenuItem} from 'react-native-material-menu';
 const CreateBook = () => {
   return useObserver(() => {
     const {
@@ -47,6 +49,8 @@ const CreateBook = () => {
       value: '',
       error: '',
     });
+    const [book, setBook] = useState(undefined);
+    const [booksRecomment, setBooksRecomment] = useState(undefined);
     const [numPrint, setNumPrint] = useState({
       value: 0,
       error: '',
@@ -65,10 +69,13 @@ const CreateBook = () => {
       value: 0,
       error: '',
     });
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const [categori, setCategori] = useState({
       value: category.categories[0].id,
     });
+
+    const refName = useRef(null);
     const [imagesUpload, setImageUpload] = useState([]);
     const [images, setImages] = useState([]);
     const onChange = (value) => {
@@ -80,14 +87,13 @@ const CreateBook = () => {
     const [visibleToast, setvisibleToast] = useState(false);
 
     useEffect(() => setvisibleToast(false), [visibleToast]);
-
+    const [type, setType] = useState(false);
     const handleButtonPress = () => {
       setvisibleToast(true);
     };
     // const [photo, setPhoto] = useState(null);
     const [upload] = useMutation(UPLOAD_MULTI_FILE, {
       onCompleted: (data) => {
-        console.log('data', data);
         const tamp = data.uploadMultiFile.map((dt) => dt.url);
         setImageUpload([...imagesUpload, ...tamp]);
       },
@@ -139,34 +145,59 @@ const CreateBook = () => {
         },
       },
     );
+    const onChangeTextName = (value) => {
+      if (refName.current) {
+        clearTimeout(refName.current);
+      }
+      setName({
+        error: '',
+        value: value,
+      });
+      if (value.length === 0) {
+        setBooksRecomment(undefined);
+        return;
+      }
 
+      refName.current = setTimeout(() => {
+        queryData(GET_RECOMMENT_BY_NAME, {name: value})
+          .then(({data}) => {
+            setBooksRecomment(data.getRecommentByName);
+            setType(true);
+          })
+          .catch((err) => console.log(err));
+      }, 300);
+    };
     const onPress = () => {
-      console.log(1);
       let dataBook = {
         name: name.value,
-        description: description.value,
-        year: year.value,
-        numberOfReprint: numPrint.value,
-        publisher: publisher.value,
-        category: categori.value,
-        images: imagesUpload,
+
         amount: amount.value,
         price: price.value,
       };
-      console.log(dataBook);
+      if (book) {
+        dataBook.book = book.id;
+      } else {
+        dataBook.description = description.value;
+        dataBook.year = year.value;
+        dataBook.numberOfReprint = numPrint.value;
+        dataBook.publisher = publisher.value;
+        dataBook.category = categori.value;
+        dataBook.images = imagesUpload;
+        dataBook.author = author.value;
+      }
       createBook({
         variables: {
           dataBook,
         },
       });
-      <Toast visible={visibleToast} message="Exampsssle" />;
+      // <Toast visible={visibleToast} message="Exampsssle" />;
     };
 
     const removeImages = (index) => {
       setImages(images.filter((ig, i) => index !== i));
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
-
+    console.log(book);
     return (
       <ScrollView>
         <View style={styles.container_product}>
@@ -181,18 +212,56 @@ const CreateBook = () => {
                 placeholder="Nhập tên sản phẩm"
                 value={name.value}
                 onFocus={() => {
-                  setName({
-                    ...name,
-                    error: '',
-                  });
+                  // setName({
+                  //   ...name,
+                  //   error: '',
+                  // });
+                  // onChangeTextName(name.value);
+                  setType(true);
+                  setBook(undefined);
                 }}
                 onChangeText={(value) => {
-                  setName({
-                    ...name,
-                    value: value,
-                  });
+                  onChangeTextName(value);
                 }}
+                onEndEditing={() => {}}
               />
+              {type && booksRecomment && booksRecomment.length > 0 && (
+                <ScrollView style={styles.listRecomment}>
+                  {booksRecomment.map((bk) => (
+                    <TouchableOpacity
+                      style={styles.recomment}
+                      onPress={() => {
+                        console.log('click click');
+                        setBook(bk);
+                        setName({...name, value: bk.name});
+                        setType(false);
+                      }}>
+                      <Image
+                        source={require('../../../assets/images/dinosaurRevert.png')}
+                        style={{
+                          width: 70,
+                          height: 70,
+                          resizeMode: 'stretch',
+                        }}></Image>
+                      <View style={styles.content}>
+                        <View style={styles.content_main}>
+                          <Text style={styles.content_name} numberOfLines={1}>
+                            {bk.name}
+                          </Text>
+                          <Text style={styles.content_author}>
+                            Tác giả: {bk.author}
+                          </Text>
+                          <Text
+                            style={styles.content_description}
+                            numberOfLines={2}>
+                            Mô tả: {bk.description}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              )}
             </View>
             <View>
               <Text>Danh mục sách *</Text>
@@ -201,12 +270,13 @@ const CreateBook = () => {
                   <Picker
                     style={styles.picker}
                     mode="dropdown"
+                    enabled={book ? false : true}
                     // iosIcon={<Icon name="arrow-down" />}
                     style={{width: undefined}}
                     placeholder="Chọn danh mục"
                     placeholderStyle={{color: '#bfc6ea'}}
                     placeholderIconColor="#007aff"
-                    selectedValue={categori}
+                    selectedValue={book ? book.category.id : categori}
                     onValueChange={onChange}>
                     {category.categories.map((ct, i) => (
                       <Picker.Item label={ct.name} value={ct.id} />
@@ -221,9 +291,10 @@ const CreateBook = () => {
             <View style={styles.name}>
               <Text>Tác giả *</Text>
               <TextInput
+                editable={book ? false : true}
                 style={styles.input}
                 placeholder="Nhập tên tác giả"
-                value={author.value}
+                value={book ? book.author : author.value}
                 onFocus={() => {
                   setAuthor({
                     ...author,
@@ -242,9 +313,10 @@ const CreateBook = () => {
             <View style={styles.name}>
               <Text>Năm phát hành *</Text>
               <TextInput
+                editable={book ? false : true}
                 style={styles.input}
                 placeholder="Nhập năm phát hành"
-                value={year.value}
+                value={book ? book.year : year.value}
                 onFocus={() => {
                   setYear({
                     ...year,
@@ -263,9 +335,10 @@ const CreateBook = () => {
             <View style={styles.name}>
               <Text>Nhà xuất bản *</Text>
               <TextInput
+                editable={book ? false : true}
                 style={styles.input}
                 placeholder="Nhập tên nhà xuất bản"
-                value={publisher.value}
+                value={book ? book.publisher : publisher.value}
                 onFocus={() => {
                   setPublisher({
                     ...publisher,
@@ -284,9 +357,10 @@ const CreateBook = () => {
             <View style={styles.name}>
               <Text>Số lần xuất bản *</Text>
               <TextInput
+                editable={book ? false : true}
                 style={styles.input}
                 placeholder="Nhập số lần xuất bản"
-                value={numPrint.value}
+                value={book ? book.numberOfReprint + '' : numPrint.value}
                 onFocus={() => {
                   setNumPrint({
                     ...numPrint,
@@ -303,69 +377,90 @@ const CreateBook = () => {
             </View>
             {/* Image */}
             <View style={styles.container}></View>
-
+            <Text>Hình ảnh *</Text>
             <ScrollView
-              style={{flexDirection: 'row', marginVertical: 20}}
+              style={{flexDirection: 'row', marginVertical: 10}}
               horizontal={true}>
-              {images.length > 0 &&
-                images.map((r, i) => (
-                  <View>
-                    <Image
-                      style={{
-                        width: 100,
-                        height: 100,
-                        marginRight: 10,
-                        position: 'relative',
-                      }}
-                      source={{uri: r}}
-                    />
-                    <TouchableOpacity
-                      onPress={() => removeImages(i)}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 10,
-                      }}>
-                      <Icon
-                        type="AntDesign"
-                        name="closecircleo"
+              {book
+                ? book.images.map((r, i) => (
+                    <View key={i}>
+                      <Image
                         style={{
-                          fontSize: 22,
-                          color: 'red',
-                        }}></Icon>
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              <TouchableOpacity
-                onPress={handleChoosePhoto}
-                style={{
-                  // paddingHorizontal: 10,
-                  // paddingVertical: 5,
-                  margin: 0,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 100,
-                  height: 100,
-                  backgroundColor: '#fff',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 1,
-                  },
-                  shadowOpacity: 0.18,
-                  shadowRadius: 1.0,
+                          width: 100,
+                          height: 100,
+                          marginRight: 10,
+                          position: 'relative',
+                        }}
+                        source={{uri: r}}
+                      />
+                    </View>
+                  ))
+                : images.length > 0 &&
+                  images.map((r, i) => (
+                    <View key={i}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 100,
+                          marginRight: 10,
+                          position: 'relative',
+                        }}
+                        source={{uri: r}}
+                      />
+                      <TouchableOpacity
+                        onPress={() => removeImages(i)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 10,
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="closecircleo"
+                          style={{
+                            fontSize: 22,
+                            color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+              {!book ||
+                (images.length < 10 && (
+                  <TouchableOpacity
+                    onPress={handleChoosePhoto}
+                    style={{
+                      // paddingHorizontal: 10,
+                      // paddingVertical: 5,
+                      margin: 0,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 100,
+                      height: 100,
+                      backgroundColor: '#fff',
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 1,
+                      },
+                      shadowOpacity: 0.18,
+                      shadowRadius: 1.0,
 
-                  elevation: 1,
-                }}>
-                <Icon
-                  type="FontAwesome5"
-                  name="plus"
-                  style={{fontSize: 50, color: 'rgba(68, 108, 179, 1)'}}></Icon>
-              </TouchableOpacity>
+                      elevation: 1,
+                    }}>
+                    <Icon
+                      type="FontAwesome5"
+                      name="plus"
+                      style={{
+                        fontSize: 50,
+                        color: 'rgba(68, 108, 179, 1)',
+                      }}></Icon>
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
             <View style={styles.des}>
               <Text>Mô tả sản phẩm *</Text>
               <Textarea
+                editable={book ? false : true}
                 containerStyle={styles.textareacont}
                 style={styles.textarea}
                 // onChangeText={this.onChange}
@@ -374,7 +469,7 @@ const CreateBook = () => {
                 placeholder={'Nhập mô tả sách'}
                 placeholderTextColor={'#c7c7c7'}
                 underlineColorAndroid={'transparent'}
-                value={description.value}
+                value={book ? book.description : description.value}
                 onFocus={() => {
                   setDescription({
                     ...description,
@@ -446,12 +541,23 @@ const CreateBook = () => {
                 <Text>VND</Text>
               </View>
             </View>
-            <View style={{marginTop: 10}}>
-              <Button
+            <View
+              style={{
+                marginTop: 10,
+                justifyContent: 'flex-end',
+                // width: '100%',
+                flexDirection: 'row',
+              }}>
+              {/* <Button
                 title="Xác nhận"
                 color="rgba(68, 108, 179, 1)"
                 onPress={onPress}
-              />
+              /> */}
+              <Button
+                style={{color: 'rgba(68, 108, 179, 1)', padding: 0}}
+                onPress={onPress}>
+                <Text>Xác nhận</Text>
+              </Button>
             </View>
           </View>
           {/* des */}
@@ -477,6 +583,7 @@ const styles = StyleSheet.create({
     height: 40,
     // borderWidth: 0.2,
     // borderRadius: 2,
+    position: 'relative',
   },
   name: {},
   image: {
@@ -511,6 +618,51 @@ const styles = StyleSheet.create({
     borderWidth: 0.1,
     borderRadius: 3,
     color: '#333',
+  },
+
+  listRecomment: {
+    position: 'absolute',
+    top: 60,
+    width: Dimensions.get('screen').width - 40,
+    bottom: 0,
+    zIndex: 999,
+    height: 250,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  recomment: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+    // borderTopColor: 'grey',
+    // borderTopWidth: 1,
+    paddingVertical: 10,
+  },
+  content: {
+    width: '100%',
+    flexDirection: 'row',
+  },
+  content_main: {
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  content_name: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    width: Dimensions.get('screen').width - 130,
+  },
+  content_description: {
+    fontSize: 13,
+    width: Dimensions.get('screen').width - 130,
+  },
+  content_author: {
+    fontSize: 13,
+    width: Dimensions.get('screen').width - 130,
   },
 });
 
