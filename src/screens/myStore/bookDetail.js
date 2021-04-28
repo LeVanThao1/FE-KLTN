@@ -55,6 +55,7 @@ const BookDetail = ({navigation, book}) => {
           bookId: bookCurrent.id,
         },
       });
+      setCmts('');
     };
     return (
       <ScrollView horizontal={false}>
