@@ -104,7 +104,7 @@ const Store = ({navigation}) => {
               value={info?.description}
             />
           </View>
-          <View style={styles.evalue}>
+          {/* <View style={styles.evalue}>
             <Text>Đánh giá shop: </Text>
             <View
               style={{
@@ -121,7 +121,7 @@ const Store = ({navigation}) => {
                 <Icon name="star-border" type="MaterialIcons" />
               </View>
             </View>
-          </View>
+          </View> */}
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
             <View>

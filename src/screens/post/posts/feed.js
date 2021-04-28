@@ -8,7 +8,7 @@ import PostAvatar from './avatar';
 
 const Container = styled.View`
   flex: 1;
-  backgroundcolor: #ffffff;
+  background: #ffffff;
   padding: 4px 12px;
   margin: 6px 0;
   border-radius: 5px;
