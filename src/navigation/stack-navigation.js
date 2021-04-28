@@ -234,7 +234,7 @@ const routes = [
   {name: 'Cart', title: 'Giỏ hàng', header: false, component: Cart},
 
   // {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
-  {name: 'Feed', title: 'Bài đăng', header: false, component: PostFb},
+  {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
 
   {
     name: 'BookDetail',
