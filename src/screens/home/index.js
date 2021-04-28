@@ -1,10 +1,8 @@
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Spinner} from 'native-base';
+import {Spinner} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
-  Dimensions,
-  Image,
   RefreshControl,
   ScrollView,
   Text,
@@ -14,11 +12,11 @@ import {
 import {SliderBox} from 'react-native-image-slider-box';
 import Images from '../../assets/images/images';
 import {queryData} from '../../common';
+import ProductCart from '../../components/productCart';
+import {GET_BOOKS_CATEGORY} from '../../query/book';
 import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
-import ProductCart from '../../components/productCart';
 import {styles} from './styles';
-import {GET_BOOKS_CATEGORY} from '../../query/book';
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {
