@@ -48,6 +48,7 @@ import BooksStore from '../screens/myStore/book/booksStore';
 import UpdatePost from '../screens/post/updatePost';
 import Products from '../screens/products';
 import CreateStore from '../screens/myStore/createStore';
+import UserInfo from '../screens/profile/infoUser';
 
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
@@ -225,6 +226,14 @@ const routes = [
     header: false,
     component: Profile,
   },
+
+  {
+    name: 'UserInfo',
+    title: 'Thông tin người dùng',
+    header: false,
+    component: UserInfo,
+  },
+
   {
     name: 'Contact',
     title: 'Liên hệ',
@@ -285,6 +294,7 @@ const routes = [
     header: false,
     component: BooksStore,
   },
+
   // {
   //   name: 'ViewSearch',
   //   title: 'Tất cả sản phẩm',
