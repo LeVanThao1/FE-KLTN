@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 import Feed from './feed';
 const Container = styled.SafeAreaView`
   flex: 1;
-  backgroundcolor: #dddddd;
+  background: #dddddd;
   padding: 0 12px;
 `;
 const PostFb = () => {

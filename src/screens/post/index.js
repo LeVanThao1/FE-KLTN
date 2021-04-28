@@ -1,7 +1,7 @@
 import {useLazyQuery} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Spinner, Text, View} from 'native-base';
+import {Spinner, Text, View, Icon} from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
@@ -34,37 +34,44 @@ const Post = ({navigation, route}) => {
     // useEffect(() =>)
 
     return (
-      <ScrollView
-        horizontal={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
-              setRefreshing(true);
-            }}
-          />
-        }>
-        <View style={{position: 'relative'}}>
+      <View>
+        <View>
           <TouchableOpacity
             style={button.addPost}
             onPress={() => navigation.navigate('AddPost')}>
-            <Text style={button.addPost}>+</Text>
+            {/* <Text style={button.addPost}>+</Text> */}
+            <Icon
+              name="add-circle-outline"
+              style={button.btnAdd}
+              type="Ionicons"
+            />
           </TouchableOpacity>
         </View>
-        {!loading ? (
-          posts && posts.length > 0 ? (
-            posts.map((pt) => (
-              <PostOne key={pt.id} post={pt} info={info} type={true} />
-            ))
+        <ScrollView
+          horizontal={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+              }}
+            />
+          }>
+          {!loading ? (
+            posts && posts.length > 0 ? (
+              posts.map((pt) => (
+                <PostOne key={pt.id} post={pt} info={info} type={true} />
+              ))
+            ) : (
+              <Text style={{textAlign: 'center', marginTop: 20}}>
+                Không có bài viết
+              </Text>
+            )
           ) : (
-            <Text style={{textAlign: 'center', marginTop: 20}}>
-              Không có bài viết
-            </Text>
-          )
-        ) : (
-          <Spinner />
-        )}
-      </ScrollView>
+            <Spinner />
+          )}
+        </ScrollView>
+      </View>
     );
   });
 };
