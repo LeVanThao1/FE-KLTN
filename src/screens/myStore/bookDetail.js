@@ -1,446 +1,238 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, View} from 'native-base';
+import {useMutation} from '@apollo/client';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
+import {Image} from 'react-native';
 import {
   TextInput,
   StyleSheet,
-  Image,
-  Button,
+  FlatList,
+  ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing';
-import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
-import {Form, Item, Picker} from 'native-base';
-import Images from '../../assets/images/images';
-import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
-import * as ImagePicker from 'react-native-image-picker';
-import {button} from '../style';
 
-const BookDetail = ({navigation, route}) => {
+import Images from '../../assets/images/images';
+import {UPDATE_POST} from '../../query/post';
+import {CREATE_COMMENT_BOOK, CREATE_COMMENT_POST} from '../../query/comment';
+import Comment from '../post/comment';
+import {stylesPost} from './styles';
+
+const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
     const {
-      stores: {category, shop},
+      stores: {user, category, comment},
     } = useContext(MobXProviderContext);
-    const {bookStore} = shop;
-    const {
-      bookId,
-      bookName,
-      bookCategoryId,
-      bookCategoryName,
-      bookPublisher,
-      bookYear,
-      bookPrint,
-      bookPrice,
-      bookAmount,
-      bookDescription,
-      bookImg,
-    } = route.params;
+    const {info, bookCurrent, setBookCurrent} = user;
+    const {bookComment, setBookComment} = comment;
+    const [cmts, setCmts] = useState('');
+    const [addCmt, setAddCmt] = useState('');
 
-    const [name, setName] = useState({
-      value: bookName,
-      error: '',
-    });
-
-    const [author, setAuthor] = useState({
-      value: 'Aliba',
-      error: '',
-    });
-    const [year, setYear] = useState({
-      value: bookYear ? bookYear : '',
-      error: '',
-    });
-    const [publisher, setPublisher] = useState({
-      value: bookPublisher ? bookPublisher : '',
-      error: '',
-    });
-    const [numPrint, setNumPrint] = useState({
-      value: bookPrint ? bookPrint.toString() : '0',
-      error: '',
-    });
-    const [description, setDescription] = useState({
-      value: bookDescription ? bookDescription : '',
-      error: '',
-    });
-
-    const [price, setPrice] = useState({
-      value: bookPrice ? bookPrice.toString() : '0',
-      error: '',
-    });
-
-    const [amount, setAmount] = useState({
-      value: bookAmount ? bookAmount.toString() : '0',
-      error: '',
-    });
-
-    const [categori, setCategori] = useState({
-      value: bookCategoryId,
-    });
-    const [images, setImages] = useState([]);
-    const onChange = (value) => {
-      setCategori({
-        value: value,
-      });
-    };
-    const [updateBook, {called, loading, data, error}] = useMutation(
-      UPDATE_BOOK,
-      {
-        onCompleted: async (data) => {
-          console.log(bookStore.length);
-          const newData = [...bookStore].filter(
-            (bt) => bt.id + '' !== bookId + '',
-          );
-          const bookUpdate = {
-            id: bookId,
-            name: name.value,
-            description: description.value,
-            year: year.value,
-            numberOfReprint: Number(numPrint.value),
-            publisher: publisher.value,
-            category: {
-              id: bookCategoryId,
-              name: bookCategoryName,
-            },
-            images: ['https://picsum.photos/200/300'],
-            amount: Number(amount.value),
-            price: Number(price.value),
-          };
-          shop.setBookStore([bookUpdate, ...newData]);
-          navigation.goBack();
-        },
-        onError: (err) => {
-          console.log(err);
-        },
+    const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
+      onCompleted: (data) => {
+        console.log('datapost', data.createCommentBook);
+        setBookCurrent({
+          ...bookCurrent,
+          comment: [data.createCommentBook, ...bookCurrent.comment],
+        });
+        setBookComment([data.createCommentBook, ...bookComment]);
       },
-    );
+      onError: (err) => {
+        console.log('gaga', err);
+      },
+    });
 
+    // console.log('adadadsadsadasdsd ', postCurrent.comment[0]);
     const onPress = () => {
-      let dataBook = {
-        name: name.value,
-        description: description.value,
-        year: year.value,
-        numberOfReprint: Number(numPrint.value),
-        publisher: publisher.value,
-        category: categori.value,
-        // images: ['https://picsum.photos/200/300'],
-        amount: Number(amount.value),
-        price: Number(price.value),
+      let dataComment = {
+        content: cmts,
+        type: 'TEXT',
       };
-      updateBook({
+      createComment({
         variables: {
-          dataBook,
-          id: bookId,
+          dataComment,
+          bookId: bookCurrent.id,
         },
       });
-
-      // navigation.goBack();
     };
-
     return (
-      <ScrollView>
-        <View style={styles.container_product}>
-          {/*  */}
-          <Text style={styles.header}>Thông tin sản phẩm</Text>
-          <View style={styles.title}>
-            {/* name */}
-            <View style={styles.name}>
-              <Text>Mã sản phẩm</Text>
-              <Text>{bookId}</Text>
-            </View>
-            <View style={styles.name}>
-              <Text>Tên sản phẩm</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nhập tên sản phẩm"
-                defaultValue={name.value}
-                value={name.value}
-                onFocus={() => {
-                  setName({
-                    ...name,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setName({
-                    ...name,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            <View>
-              <Text>Danh mục sách</Text>
-              <Form>
-                <Item picker>
-                  <Picker
-                    style={styles.picker}
-                    mode="dropdown"
-                    // iosIcon={<Icon name="arrow-down" />}
-                    style={{width: undefined}}
-                    placeholder="Chọn danh mục"
-                    placeholderStyle={{color: '#bfc6ea'}}
-                    placeholderIconColor="#007aff"
-                    selectedValue={categori.value}
-                    onValueChange={onChange}>
-                    {category.categories.map((ct, i) => (
-                      <Picker.Item label={ct.name} value={ct.id} />
-                    ))}
-                    {/* <Picker.Item label="Wallet" value="key0" /> */}
-                  </Picker>
-                </Item>
-              </Form>
-            </View>
-
-            {/* author */}
-            <View style={styles.name}>
-              <Text>Tác giả</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nhập tên tác giả"
-                value={author.value}
-                onFocus={() => {
-                  setAuthor({
-                    ...author,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setAuthor({
-                    ...author,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            {/* year */}
-            <View style={styles.name}>
-              <Text>Năm phát hành</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nhập năm phát hành"
-                value={year.value}
-                onFocus={() => {
-                  setYear({
-                    ...year,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setYear({
-                    ...year,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            {/* pulisher */}
-            <View style={styles.name}>
-              <Text>Nhà xuất bản</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nhập tên nhà xuất bản"
-                value={publisher.value}
-                onFocus={() => {
-                  setPublisher({
-                    ...publisher,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setPublisher({
-                    ...publisher,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            {/* number of printed lines */}
-            <View style={styles.name}>
-              <Text>Số lần xuất bản</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nhập số lần xuất bản"
-                value={numPrint.value}
-                onFocus={() => {
-                  setNumPrint({
-                    ...numPrint,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setNumPrint({
-                    ...numPrint,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            {/* Image */}
-            <View style={styles.container}></View>
-
-            {/* <Button title="Choose Photo" onPress={handleChoosePhoto} />
-            <ImageView
-              images={images.map((im) => ({uri: im}))}
-              imageIndex={0}
-              visible={false}
-              // onRequestClose={() => setIsVisible(false)}
-            /> */}
-            <View style={styles.des}>
-              <Text>Mô tả sản phẩm</Text>
-              <Textarea
-                containerStyle={styles.textareacont}
-                style={styles.textarea}
-                maxLength={120}
-                placeholder={'Nhập mô tả sách'}
-                placeholderTextColor={'#c7c7c7'}
-                underlineColorAndroid={'transparent'}
-                value={description.value}
-                onFocus={() => {
-                  setDescription({
-                    ...description,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setDescription({
-                    ...description,
-                    value: value,
-                  });
-                }}
-              />
-            </View>
-            {/* price */}
-            <View style={styles.price}>
-              <Text>Số lượng *</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Nhập số lượng sách"
-                  value={amount.value}
-                  onFocus={() => {
-                    setAmount({
-                      ...amount,
-                      error: '',
-                    });
-                  }}
-                  onChangeText={(value) => {
-                    setAmount({
-                      ...amount,
-                      value: value,
-                    });
-                  }}
+      <ScrollView horizontal={false}>
+        <View style={stylesPost.addpost}>
+          <ScrollView showsVerticalScrollIndicator>
+            <View style={stylesPost.textImg}>
+              <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
+                Hình ảnh
+              </Text>
+              <View style={stylesPost.imgBookDetail}>
+                {/* {book.images.map((img, i) => ( */}
+                <Image
+                  // key={i}
+                  source={{uri: bookCurrent.images}}
+                  style={stylesPost.imgBook}
                 />
-                <Text>Quyển</Text>
+                {/* ))} */}
               </View>
             </View>
-            <View style={styles.price}>
-              <Text>Giá sách</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Nhập giá sách"
-                  value={price.value}
-                  onFocus={() => {
-                    setPrice({
-                      ...price,
-                      error: '',
-                    });
-                  }}
-                  onChangeText={(value) => {
-                    setPrice({
-                      ...price,
-                      value: value,
-                    });
-                  }}
-                />
-                <Text>VND</Text>
+          </ScrollView>
+          <View style={stylesPost.content}>
+            <View style={stylesPost.text}>
+              <View style={stylesPost.titleCenter}>
+                <Text style={stylesPost.txtBold}>Tên sách</Text>
+                <Text style={stylesPost.titlePost}>{bookCurrent.name}</Text>
               </View>
+              {/* <View style={stylesPost.titleCenter}>
+                <Text style={stylesPost.txtBold}>Thông tin sách</Text>
+              </View> */}
+              <View style={stylesPost.horizontal}>
+                <Text>Danh mục </Text>
+                <Text style={stylesPost.detail}>
+                  {bookCurrent.categoryName}
+                </Text>
+              </View>
+              <View style={stylesPost.horizontal}>
+                <Text>Tác giả </Text>
+                <Text style={stylesPost.detail}>{bookCurrent.author}</Text>
+              </View>
+              <View style={stylesPost.horizontal}>
+                <Text>Nhà xuất bản </Text>
+                <Text style={stylesPost.detail}>{bookCurrent.publisher}</Text>
+              </View>
+              <View style={stylesPost.horizontal}>
+                <Text>Số lần xuất bản </Text>
+                <Text style={stylesPost.detail}>
+                  {bookCurrent.numberOfReprint}
+                </Text>
+              </View>
+              <View style={stylesPost.horizontal}>
+                <Text>Năm xuất bản </Text>
+                <Text style={stylesPost.detail}>{bookCurrent.year}</Text>
+              </View>
+              <View style={stylesPost.horizontal}>
+                <Text>Giá sách</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    color: '#f00',
+                  }}>
+                  <Text style={stylesPost.detail}>{bookCurrent.price}</Text>
+                  <Text
+                    style={{paddingLeft: 5, color: 'rgba(68, 108, 179, 1)'}}>
+                    VND
+                  </Text>
+                </View>
+              </View>
+              <View style={stylesPost.elment}>
+                <Text>Sách muốn đổi </Text>
+                <Text style={stylesPost.detail}>asdas</Text>
+              </View>
+
+              <Text style={stylesPost.textContent}>Mô tả</Text>
+              <View style={stylesPost.textDes}>
+                <Text>{bookCurrent.description}</Text>
+              </View>
+              {bookComment?.map((cmt, i) => (
+                <Comment key={i} cmt={cmt} />
+              ))}
+              <View style={stylesPost.addCmt}>
+                <View style={stylesPost.person}>
+                  <View style={stylesPost.info}>
+                    <Image
+                      source={{uri: info.avatar}}
+                      style={stylesPost.avtcmt}
+                    />
+                    <View style={stylesPost.addComment}>
+                      <TextInput
+                        style={stylesPost.comment}
+                        placeholder="Thêm bình luận"
+                        value={cmts}
+                        onFocus={() => {}}
+                        onChangeText={(value) => {
+                          setCmts(value);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <Icon
+                  name="ios-arrow-forward-circle-outline"
+                  type="Ionicons"
+                  style={stylesPost.iconEnter}
+                  onPress={onPress}
+                />
+              </View>
+              {/* <View>
+                {postCmt?.map((cmt, i) => (
+                  <View style={stylesPost.infocmt}>
+                    <Image
+                      source={{uri: cmt.author.avatar}}
+                      style={stylesPost.avtcmt}
+                    />
+                    <View style={stylesPost.userCmt}>
+                      <Text style={stylesPost.name}>{cmt.author.name}</Text>
+                      <Text style={stylesPost.time}>{cmt.content}</Text>
+                    </View>
+                  </View>
+                ))}
+                <View style={stylesPost.addCmt}>
+                  <View style={stylesPost.person}>
+                    <View style={stylesPost.info}>
+                      <Image
+                        source={{uri: info.avatar}}
+                        style={stylesPost.avtcmt}
+                      />
+                      <View style={stylesPost.addComment}>
+                        <TextInput
+                          style={stylesPost.comment}
+                          placeholder="Thêm bình luận"
+                          value={cmt}
+                          // onFocus={() => {
+                          //   setCmt()
+                          // }}
+                          onChangeText={(value) => {
+                            setCmt(value);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <Icon
+                    name="ios-arrow-forward-circle-outline"
+                    type="Ionicons"
+                    style={stylesPost.iconEnter}
+                    onPress={onPress}
+                  />
+                </View>
+              </View> */}
+              <TouchableOpacity
+                style={{width: '100%'}}
+                onPress={() =>
+                  navigation.navigate('UpdatePost', {
+                    bookId: bookCurrent.id,
+                    // postTitle: postTitle,
+                    // // postBookName: post.uniqueBook.name,
+                    // postDescription: postDescription,
+                    // postImg: postImg,
+                    // postYear: postYear,
+                    // postNumPrint: postNumPrint,
+                    // postCategory: postCategory,
+                    // postPrice: postPrice,
+                    // postPublisher: postPublisher,
+                    // postWanna: postWanna,
+                    // postCmt: postCmt,
+                    // postTime: postTime,
+                  })
+                }>
+                <Text style={stylesPost.btn}>Cập nhật</Text>
+              </TouchableOpacity>
             </View>
-            {/* status */}
-            {/* <View style={styles.status}>
-            <Text>Tình trạng sách (mới)</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TextInput style={styles.input} placeholder="Nhập tình trạng" />
-              <Text>%</Text>
-            </View>
-          </View> */}
-            {/* <Button
-              color="rgba(68, 108, 179, 1)"
-              title="Xác nhận"
-              onPress={onPress}></Button> */}
-            <TouchableOpacity onPress={onPress}>
-              <Text style={button.btn}>Cập nhật</Text>
-            </TouchableOpacity>
           </View>
-          {/* des */}
         </View>
       </ScrollView>
     );
   });
 };
-
-const styles = StyleSheet.create({
-  container_product: {
-    margin: 5,
-  },
-  header: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    // color: rgba(68, 108, 179, 1),
-  },
-  title: {
-    margin: 15,
-  },
-  input: {
-    height: 40,
-    // borderWidth: 0.2,
-    // borderRadius: 2,
-  },
-  name: {},
-  image: {
-    marginVertical: 10,
-  },
-  picker: {
-    padding: 0,
-    width: '50%',
-    borderWidth: 0.5,
-    borderColor: '#111',
-  },
-  des: {
-    marginTop: 10,
-  },
-  status: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  textareaContainer: {
-    height: 10,
-    width: '100%',
-    backgroundColor: '#F5FCFF',
-  },
-  textarea: {
-    // padding: -3?0,
-    // marginTop: -10,
-    padding: 10,
-    textAlignVertical: 'top', // hack android
-    height: 130,
-    fontSize: 14,
-    borderWidth: 0.1,
-    borderRadius: 3,
-    color: '#333',
-  },
-});
 
 export default memo(BookDetail);

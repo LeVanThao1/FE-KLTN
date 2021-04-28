@@ -102,115 +102,129 @@ const NewPost = () => {
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
-          <Image source={Images.onepiece1} style={stylesPost.post} />
-
           <View style={stylesPost.content}>
             <View style={stylesPost.text}>
-              <Text>Tiêu đề: </Text>
-              <TextInput
-                style={{fontWeight: 'bold'}}
-                placeholder="Nhập tiêu đề"
-                value={title.value}
-                onFocus={() => {
-                  setTitle({
-                    ...title,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setTitle({
-                    ...title,
-                    value: value,
-                  });
-                }}
-              />
-              <Text>Tên sách: </Text>
-              <TextInput
-                placeholder="Nhập tên sách"
-                value={name.value}
-                onFocus={() => {
-                  setName({
-                    ...name,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setName({
-                    ...name,
-                    value: value,
-                  });
-                }}
-              />
-              <Text>Danh mục sách</Text>
-              <Form>
-                <Item picker>
-                  <Picker
-                    style={stylesPost.picker}
-                    mode="dropdown"
-                    // iosIcon={<Icon name="arrow-down" />}
-                    style={{width: undefined}}
-                    placeholder="Chọn danh mục"
-                    placeholderStyle={{color: '#bfc6ea'}}
-                    placeholderIconColor="#007aff"
-                    selectedValue={categori}
-                    onValueChange={onChange}>
-                    {category.categories.map((ct, i) => (
-                      <Picker.Item label={ct.name} value={ct.id} />
-                    ))}
-                  </Picker>
-                </Item>
-              </Form>
-              <Text>Nhà xuất bản </Text>
-              <TextInput
-                placeholder="Nhập tên nhà xuất bản"
-                value={publisher.value}
-                onFocus={() => {
-                  setPublisher({
-                    ...publisher,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setPublisher({
-                    ...publisher,
-                    value: value,
-                  });
-                }}
-              />
-              <Text>Số lần xuất bản </Text>
-              <TextInput
-                placeholder="Nhập số lần xuất bản"
-                value={numberOfReprint.value}
-                onFocus={() => {
-                  setNumberOfReprint({
-                    ...numberOfReprint,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setNumberOfReprint({
-                    ...numberOfReprint,
-                    value: Number(value),
-                  });
-                }}
-              />
-              <Text>Năm xuất bản </Text>
-              <TextInput
-                placeholder="Nhập năm xuất bản"
-                onFocus={() => {
-                  setYear({
-                    ...year,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setYear({
-                    ...year,
-                    value: value,
-                  });
-                }}
-                value={year.value}
-              />
+              <View style={stylesPost.vertical}>
+                <Text>Tiêu đề: </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập tiêu đề"
+                  value={title.value}
+                  onFocus={() => {
+                    setTitle({
+                      ...title,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setTitle({
+                      ...title,
+                      value: value,
+                    });
+                  }}
+                />
+              </View>
+              <View>
+                <Text>Tên sách: </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập tên sách"
+                  value={name.value}
+                  onFocus={() => {
+                    setName({
+                      ...name,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setName({
+                      ...name,
+                      value: value,
+                    });
+                  }}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text>Danh mục sách</Text>
+                <Form>
+                  <Item picker>
+                    <Picker
+                      style={stylesPost.picker}
+                      mode="dropdown"
+                      // iosIcon={<Icon name="arrow-down" />}
+                      style={{width: undefined}}
+                      placeholder="Chọn danh mục"
+                      placeholderStyle={{color: '#bfc6ea'}}
+                      placeholderIconColor="#007aff"
+                      selectedValue={categori}
+                      onValueChange={onChange}>
+                      {category.categories.map((ct, i) => (
+                        <Picker.Item label={ct.name} value={ct.id} />
+                      ))}
+                    </Picker>
+                  </Item>
+                </Form>
+              </View>
+              <View>
+                <Text>Nhà xuất bản </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập tên nhà xuất bản"
+                  value={publisher.value}
+                  onFocus={() => {
+                    setPublisher({
+                      ...publisher,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setPublisher({
+                      ...publisher,
+                      value: value,
+                    });
+                  }}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text>Số lần xuất bản </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập số lần xuất bản"
+                  value={numberOfReprint.value}
+                  onFocus={() => {
+                    setNumberOfReprint({
+                      ...numberOfReprint,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setNumberOfReprint({
+                      ...numberOfReprint,
+                      value: Number(value),
+                    });
+                  }}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text>Năm xuất bản </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập năm xuất bản"
+                  onFocus={() => {
+                    setYear({
+                      ...year,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setYear({
+                      ...year,
+                      value: value,
+                    });
+                  }}
+                  value={year.value}
+                />
+              </View>
               <View style={stylesPost.price}>
                 <Text>Giá sách *</Text>
                 <View
@@ -220,7 +234,7 @@ const NewPost = () => {
                     justifyContent: 'space-between',
                   }}>
                   <TextInput
-                    style={stylesPost.input}
+                    style={stylesPost.inpPrice}
                     placeholder="Nhập giá sách"
                     value={price.value}
                     onFocus={() => {
@@ -239,48 +253,52 @@ const NewPost = () => {
                   <Text>VND</Text>
                 </View>
               </View>
-              <Text>Sách muốn đổi: </Text>
-              <TextInput
-                style={{fontWeight: 'bold'}}
-                placeholder="Nhập sách muốn đổi"
-                onFocus={() => {
-                  setBookWanna({
-                    ...bookWanna,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setBookWanna({
-                    ...bookWanna,
-                    value: value,
-                  });
-                }}
-                value={bookWanna.value}
-              />
-              <Text style={stylesPost.textContent}>Mô tả</Text>
-              <Textarea
-                containerStyle={stylesPost.textareacont}
-                style={stylesPost.textarea}
-                onFocus={() => {
-                  setDescription({
-                    ...description,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setDescription({
-                    ...description,
-                    value: value,
-                  });
-                }}
-                // defaultValue={this.state.text}
-                maxLength={120}
-                placeholder={'Nhập mô tả sách'}
-                placeholderTextColor={'#c7c7c7'}
-                underlineColorAndroid={'transparent'}
-                value={description.value}
-                placeholder="Nhập mô tả"
-              />
+              <View style={stylesPost.vertical}>
+                <Text>Sách muốn đổi: </Text>
+                <TextInput
+                  style={stylesPost.inp}
+                  placeholder="Nhập sách muốn đổi"
+                  onFocus={() => {
+                    setBookWanna({
+                      ...bookWanna,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setBookWanna({
+                      ...bookWanna,
+                      value: value,
+                    });
+                  }}
+                  value={bookWanna.value}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text style={stylesPost.textContent}>Mô tả</Text>
+                <Textarea
+                  containerStyle={stylesPost.textareacont}
+                  style={stylesPost.textarea}
+                  onFocus={() => {
+                    setDescription({
+                      ...description,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setDescription({
+                      ...description,
+                      value: value,
+                    });
+                  }}
+                  // defaultValue={this.state.text}
+                  maxLength={120}
+                  placeholder={'Nhập mô tả sách'}
+                  placeholderTextColor={'#c7c7c7'}
+                  underlineColorAndroid={'transparent'}
+                  value={description.value}
+                  placeholder="Nhập mô tả"
+                />
+              </View>
               <TouchableOpacity style={{width: '100%'}} onPress={onPress}>
                 <Text style={stylesPost.btn}>Đăng bài</Text>
               </TouchableOpacity>
