@@ -142,6 +142,20 @@ export const CREATE_BOOK = gql`
         id
         name
       }
+      book {
+        id
+        name
+        author
+        description
+        year
+        numberOfReprint
+        publisher
+        category {
+          id
+          name
+        }
+        images
+      }
       images
       amount
       price
