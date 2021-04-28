@@ -425,7 +425,7 @@ const CreateBook = () => {
                     </View>
                   ))}
               {!book ||
-                (images.length > 9 && (
+                (images.length < 10 && (
                   <TouchableOpacity
                     onPress={handleChoosePhoto}
                     style={{
