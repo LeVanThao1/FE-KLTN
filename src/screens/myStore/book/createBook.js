@@ -376,88 +376,89 @@ const CreateBook = () => {
               />
             </View>
             {/* Image */}
-            <View style={styles.container}></View>
-            <Text>Hình ảnh *</Text>
-            <ScrollView
-              style={{flexDirection: 'row', marginVertical: 10}}
-              horizontal={true}>
-              {book
-                ? book.images.map((r, i) => (
-                    <View key={i}>
-                      <Image
-                        style={{
-                          width: 100,
-                          height: 100,
-                          marginRight: 10,
-                          position: 'relative',
-                        }}
-                        source={{uri: r}}
-                      />
-                    </View>
-                  ))
-                : images.length > 0 &&
-                  images.map((r, i) => (
-                    <View key={i}>
-                      <Image
-                        style={{
-                          width: 100,
-                          height: 100,
-                          marginRight: 10,
-                          position: 'relative',
-                        }}
-                        source={{uri: r}}
-                      />
-                      <TouchableOpacity
-                        onPress={() => removeImages(i)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          right: 10,
-                        }}>
-                        <Icon
-                          type="AntDesign"
-                          name="closecircleo"
+            <View style={styles.name}>
+              <Text>Hình ảnh *</Text>
+              <ScrollView
+                style={{flexDirection: 'row', marginVertical: 10}}
+                horizontal={true}>
+                {book
+                  ? book.images.map((r, i) => (
+                      <View key={i}>
+                        <Image
                           style={{
-                            fontSize: 22,
-                            color: 'red',
-                          }}></Icon>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-              {!book ||
-                (images.length < 10 && (
-                  <TouchableOpacity
-                    onPress={handleChoosePhoto}
-                    style={{
-                      // paddingHorizontal: 10,
-                      // paddingVertical: 5,
-                      margin: 0,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 100,
-                      height: 100,
-                      backgroundColor: '#fff',
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 1,
-                      },
-                      shadowOpacity: 0.18,
-                      shadowRadius: 1.0,
-
-                      elevation: 1,
-                    }}>
-                    <Icon
-                      type="FontAwesome5"
-                      name="plus"
+                            width: 100,
+                            height: 100,
+                            marginRight: 10,
+                            position: 'relative',
+                          }}
+                          source={{uri: r}}
+                        />
+                      </View>
+                    ))
+                  : images.length > 0 &&
+                    images.map((r, i) => (
+                      <View key={i}>
+                        <Image
+                          style={{
+                            width: 100,
+                            height: 100,
+                            marginRight: 10,
+                            position: 'relative',
+                          }}
+                          source={{uri: r}}
+                        />
+                        <TouchableOpacity
+                          onPress={() => removeImages(i)}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 10,
+                          }}>
+                          <Icon
+                            type="AntDesign"
+                            name="closecircleo"
+                            style={{
+                              fontSize: 22,
+                              color: 'red',
+                            }}></Icon>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                {!book ||
+                  (images.length < 10 && (
+                    <TouchableOpacity
+                      onPress={handleChoosePhoto}
                       style={{
-                        fontSize: 50,
-                        color: 'rgba(68, 108, 179, 1)',
-                      }}></Icon>
-                  </TouchableOpacity>
-                ))}
-            </ScrollView>
-            <View style={styles.des}>
+                        // paddingHorizontal: 10,
+                        // paddingVertical: 5,
+                        margin: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 100,
+                        height: 100,
+                        backgroundColor: '#fff',
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.18,
+                        shadowRadius: 1.0,
+
+                        elevation: 1,
+                      }}>
+                      <Icon
+                        type="FontAwesome5"
+                        name="plus"
+                        style={{
+                          fontSize: 50,
+                          color: 'rgba(68, 108, 179, 1)',
+                        }}></Icon>
+                    </TouchableOpacity>
+                  ))}
+              </ScrollView>
+            </View>
+            <View style={styles.name}>
               <Text>Mô tả sản phẩm *</Text>
               <Textarea
                 editable={book ? false : true}
@@ -494,7 +495,7 @@ const CreateBook = () => {
                   justifyContent: 'space-between',
                 }}>
                 <TextInput
-                  style={styles.input}
+                  style={styles.inputPrice}
                   placeholder="Nhập số lượng sách"
                   value={amount.value}
                   onFocus={() => {
@@ -522,7 +523,7 @@ const CreateBook = () => {
                   justifyContent: 'space-between',
                 }}>
                 <TextInput
-                  style={styles.input}
+                  style={styles.inputPrice}
                   placeholder="Nhập giá sách"
                   value={price.value}
                   onFocus={() => {
@@ -579,13 +580,31 @@ const styles = StyleSheet.create({
   title: {
     margin: 15,
   },
+  name: {
+    marginVertical: 8,
+  },
+
   input: {
-    height: 40,
-    // borderWidth: 0.2,
-    // borderRadius: 2,
+    height: 35,
+    width: '100%',
+    paddingLeft: 10,
+    borderWidth: 0.2,
+    borderRadius: 6,
     position: 'relative',
   },
-  name: {},
+
+  inputPrice: {
+    width: '70%',
+    height: 35,
+    paddingLeft: 10,
+    borderWidth: 0.2,
+    borderRadius: 6,
+    position: 'relative',
+  },
+
+  price: {
+    width: '100%',
+  },
   image: {
     marginVertical: 10,
   },

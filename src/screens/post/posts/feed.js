@@ -1,10 +1,16 @@
-import React from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 // import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import {Icon} from 'native-base';
 
 import PostAvatar from './avatar';
+import {MobXProviderContext, useObserver} from 'mobx-react';
+import {Spinner} from 'native-base';
+import React, {memo, useContext, useEffect, useState} from 'react';
+import {RefreshControl, ScrollView} from 'react-native';
+// import {queryData} from '../../common';
+// import {GET_POSTS} from '../../query/post';
+// import PostOne from '../post/post';
 
 const Container = styled.View`
   flex: 1;
@@ -77,54 +83,67 @@ const BreakLine = styled.View`
 `;
 
 const PostCard = () => {
-  return (
-    <Container>
-      <PostHeader>
-        <Row>
-          <PostAvatar source={require('../../../assets/images/user1.jpg')} />
-          <View style={{paddingLeft: 10}}>
-            <UserName>User Name</UserName>
-            <Row>
-              <PostTime>Post time</PostTime>
-            </Row>
-          </View>
-        </Row>
-      </PostHeader>
-      <BreakLine />
-      <View
-        style={{
-          paddingVertical: 8,
-          borderBottomColor: '#000000',
-          borderBottomWidth: 0.5,
-        }}>
-        <PostTitle>Đây là title</PostTitle>
-        <PostDescription>Đây là chi tiết</PostDescription>
-        <PostPhoto source={require('../../../assets/images/post1.jpg')} />
-      </View>
-      <PostFooter>
-        <TextCount>2k Bình luận</TextCount>
-        <Button onPress={() => console.log('onPresssssssssssssssss')}>
-          <Icon
-            type="MaterialCommunityIcons"
-            name="comment-outline"
-            color="#ededed"
-            style={{color: '#333333', fontSize: 20, marginRight: 8}}
-          />
-          <Text>Bình luận</Text>
-        </Button>
-      </PostFooter>
-    </Container>
-  );
+  return useObserver(() => {
+    const {
+      stores: {user},
+    } = useContext(MobXProviderContext);
+    // const [refreshing, setRefreshing] = React.useState(false);
+    // const [posts, setPosts] = useState(null);
+    // const [loading, setLoading] = useState(true);
+    // useEffect(() => {
+    //   queryData(GET_POSTS, {id: null})
+    //     .then(({data}) => {
+    //       console.log(data);
+    //       setPosts(data.posts);
+    //       setLoading(false);
+    //       setRefreshing(false);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }, [refreshing]);
+    return (
+      <Container>
+        <PostHeader>
+          <Row>
+            <PostAvatar source={require('../../../assets/images/user1.jpg')} />
+            <View style={{paddingLeft: 10}}>
+              <UserName>User Name</UserName>
+              <Row>
+                <PostTime>Post time</PostTime>
+              </Row>
+            </View>
+          </Row>
+        </PostHeader>
+        <BreakLine />
+        <View
+          style={{
+            paddingVertical: 8,
+            borderBottomColor: '#000000',
+            borderBottomWidth: 0.5,
+          }}>
+          <PostTitle>Đây là title</PostTitle>
+          <PostDescription>Đây là chi tiết</PostDescription>
+          <PostPhoto source={require('../../../assets/images/post1.jpg')} />
+        </View>
+        <PostFooter>
+          <TextCount>2k Bình luận</TextCount>
+          <Button onPress={() => console.log('onPresssssssssssssssss')}>
+            <Icon
+              type="MaterialCommunityIcons"
+              name="comment-outline"
+              color="#ededed"
+              style={{color: '#333333', fontSize: 20, marginRight: 8}}
+            />
+            <Text>Bình luận</Text>
+          </Button>
+        </PostFooter>
+      </Container>
+    );
+  });
 };
 
 const Feed = () => {
   return (
     <>
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
       <PostCard />
     </>
   );
