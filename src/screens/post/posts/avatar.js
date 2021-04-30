@@ -26,7 +26,7 @@ const UserActive = styled.View`
 const Avatar = ({source, online, story}) => {
   return (
     <Container>
-      <User source={source} story={story} />
+      <User source={{uri: source}} story={story} />
     </Container>
   );
 };

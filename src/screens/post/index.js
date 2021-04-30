@@ -36,16 +36,16 @@ const Post = ({navigation, route}) => {
     return (
       <View>
         <View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={button.addPost}
-            onPress={() => navigation.navigate('AddPost')}>
-            {/* <Text style={button.addPost}>+</Text> */}
-            <Icon
-              name="add-circle-outline"
-              style={button.btnAdd}
-              type="Ionicons"
-            />
-          </TouchableOpacity>
+            onPress={() => console.log('55')}> */}
+          <Icon
+            name="add-circle-outline"
+            style={button.btnAdd}
+            type="Ionicons"
+            onPress={() => navigation.navigate('NewPost')}
+          />
+          {/* </TouchableOpacity> */}
         </View>
         <ScrollView
           horizontal={false}

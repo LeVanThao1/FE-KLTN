@@ -25,10 +25,9 @@ const BooksStore = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [selectedStatus, setSelectedStatus] = useState('ALL');
 
-    console.log('shop', shop);
     const {bookStore, setBookStore} = shop;
     const [listBook, setListBook] = useState([]);
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
       queryData(GET_BOOKS_STORE, {store: shop.info.id})
         .then(({data}) => {
@@ -64,6 +63,7 @@ const BooksStore = ({navigation}) => {
 
     useEffect(() => {
       setCategori(listBook);
+      setLoading(false);
     }, [listBook]);
 
     const onPressTab = (name, status) => {
@@ -77,7 +77,11 @@ const BooksStore = ({navigation}) => {
     //
     const renderBook = () => (
       <>
-        {categori.length > 0 ? (
+        {loading == true ? (
+          <View style={{width: '100%', margin: 'auto', marginTop: 20}}>
+            <Text style={{textAlign: 'center'}}>Đang tải dữ liệu</Text>
+          </View>
+        ) : categori.length > 0 ? (
           categori?.map((book, i) => (
             <Book key={i} book={book} />
             // delete={onPress(book.id)}

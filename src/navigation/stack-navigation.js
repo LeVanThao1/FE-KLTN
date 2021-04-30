@@ -103,33 +103,6 @@ const HomeStack = ({navigation, initialRoute}) => {
           }}
         />
       ))}
-      {/* <Stack.Screen name="Login" component={Login} /> */}
-      {/* <Stack.Screen name="Detail-Product" component={DetailProduct} /> */}
-      {/* <Stack.Screen name="Tab" component={BottomTabNavigator} /> */}
-      {/* <Stack.Screen name="Store" component={CreateStore} /> */}
-      {/* <Stack.Screen name="CreateProduct" component={CreateProduct} /> */}
-      {/* <Stack.Screen name="CreateStore" component={CreateStore} /> */}
-      {/* <Stack.Screen name="ViewAllProduct" component={ViewAll} />
-      <Stack.Screen name="BooksStore" component={BooksStore} />
-      <Stack.Screen name="StoreManageOrder" component={ViewAllOrder} />
-      <Stack.Screen name="Statistics" component={Statistics} />
-      <Stack.Screen name="Revenue" component={Revenue} />
-      <Stack.Screen name="Payment" component={Payment} />
-      <Stack.Screen name="Andress" component={Address} />
-      <Stack.Screen name="PostUser" component={Post} />
-      <Stack.Screen name="AddPost" component={NewPost} />
-      <Stack.Screen name="Personal" component={AccountManager} />
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Contact" component={Contact} />
-      <Stack.Screen name="Cart" component={Cart} />
-      <Stack.Screen name="Feed" component={Feed} />
-      <Stack.Screen name="BookDetail" component={BookDetail} />
-      <Stack.Screen name="PostDetail" component={PostDetail} />
-      <Stack.Screen name="Post" component={Post} />
-      <Stack.Screen name="PostOne" component={PostOne} />
-      <Stack.Screen name="ChangePassword" component={ChangePassword} />
-      <Stack.Screen name="ManageOrder" component={ManageOrder} />
-      <Stack.Screen name="OrderDetail" component={OrderDetail} /> */}
     </Stack.Navigator>
   );
 };
@@ -203,7 +176,7 @@ const routes = [
   },
 
   {
-    name: 'AddPost',
+    name: 'NewPost',
     title: 'Tạo bài viết',
     header: false,
     component: NewPost,
