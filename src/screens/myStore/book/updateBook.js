@@ -21,61 +21,51 @@ import {button} from '../style';
 const UpdateBook = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {category, shop},
+      stores: {category, user, shop},
     } = useContext(MobXProviderContext);
+    const {bookCurrent, setBookCurrent} = user;
     const {bookStore} = shop;
-    const {
-      bosokId,
-      bookName,
-      bookCategoryId,
-      bookCategoryName,
-      bookPublisher,
-      bookYear,
-      bookPrint,
-      bookPrice,
-      bookAmount,
-      bookDescription,
-      bookImg,
-    } = route.params;
 
     const [name, setName] = useState({
-      value: bookName,
+      value: bookCurrent.name,
       error: '',
     });
 
     const [author, setAuthor] = useState({
-      value: 'Aliba',
+      value: bookCurrent.author,
       error: '',
     });
     const [year, setYear] = useState({
-      value: bookYear ? bookYear : '',
+      value: bookCurrent.year ? bookCurrent.year : '',
       error: '',
     });
     const [publisher, setPublisher] = useState({
-      value: bookPublisher ? bookPublisher : '',
+      value: bookCurrent.publisher ? bookCurrent.publisher : '',
       error: '',
     });
     const [numPrint, setNumPrint] = useState({
-      value: bookPrint ? bookPrint.toString() : '0',
+      value: bookCurrent.numberOfReprint
+        ? bookCurrent.numberOfReprint.toString()
+        : '0',
       error: '',
     });
     const [description, setDescription] = useState({
-      value: bookDescription ? bookDescription : '',
+      value: bookCurrent.description ? bookCurrent.description : '',
       error: '',
     });
 
     const [price, setPrice] = useState({
-      value: bookPrice ? bookPrice.toString() : '0',
+      value: bookCurrent.price ? bookCurrent.price.toString() : '0',
       error: '',
     });
 
     const [amount, setAmount] = useState({
-      value: bookAmount ? bookAmount.toString() : '0',
+      value: bookCurrent.amount ? bookCurrent.amount.toString() : '0',
       error: '',
     });
 
     const [categori, setCategori] = useState({
-      value: bookCategoryId,
+      value: bookCurrent.category.id,
     });
     const [images, setImages] = useState([]);
     const onChange = (value) => {
@@ -114,7 +104,12 @@ const UpdateBook = ({navigation, route}) => {
         },
       },
     );
-
+    const onAlert = () => {
+      Alert.alert('Đồng ý cập nhật ?', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => onPress()},
+        {text: 'Hủy'},
+      ]);
+    };
     const onPress = () => {
       let dataBook = {
         name: name.value,
@@ -130,10 +125,15 @@ const UpdateBook = ({navigation, route}) => {
       updateBook({
         variables: {
           dataBook,
-          id: bookId,
+          id: bookCurrent.id,
         },
       });
-
+      Toast.show({
+        text: 'Cập nhật bài viết thành công',
+        type: 'success',
+        position: 'top',
+        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+      });
       // navigation.goBack();
     };
 
@@ -379,7 +379,7 @@ const UpdateBook = ({navigation, route}) => {
               color="rgba(68, 108, 179, 1)"
               title="Xác nhận"
               onPress={onPress}></Button> */}
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={onAlert}>
               <Text style={button.btn}>Cập nhật</Text>
             </TouchableOpacity>
           </View>

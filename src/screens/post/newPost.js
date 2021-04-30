@@ -3,7 +3,9 @@ import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
-import {Image} from 'react-native';
+import {Image, Alert} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
 import {
   TextInput,
   StyleSheet,
@@ -22,7 +24,7 @@ const NewPost = () => {
     const {
       stores: {user, category},
     } = useContext(MobXProviderContext);
-
+    const [post, setPost] = useState(undefined);
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -62,6 +64,54 @@ const NewPost = () => {
       value: 0,
       error: '',
     });
+    const [imagesUpload, setImageUpload] = useState([]);
+    const [images, setImages] = useState([]);
+    const [upload] = useMutation(UPLOAD_MULTI_FILE, {
+      onCompleted: (data) => {
+        const tamp = data.uploadMultiFile.map((dt) => dt.url);
+        setImageUpload([...imagesUpload, ...tamp]);
+      },
+      onError: (err) => {
+        console.log('manage', err);
+      },
+    });
+
+    const handleChoosePhoto = () => {
+      ImagePicker.openPicker({
+        multiple: true,
+        maxFiles: 10,
+        mediaType: 'photo',
+      })
+        .then((res) => {
+          if (res.length > 10 || res.length + images.length > 10) {
+            console.log(
+              'Vượt quá giới hạn cho phép. Giới hạn cho phép 10 hình ảnh',
+            );
+            return;
+          }
+          const tamp = res.map((r) => r.path);
+          setImages([...images, ...tamp]);
+          const files = res.map(
+            (r) =>
+              new ReactNativeFile({
+                uri: r.path,
+                name: 'product',
+                type: r.mime,
+              }),
+          );
+          upload({
+            variables: {
+              files,
+            },
+          });
+        })
+        .catch((err) => console.log(err));
+    };
+
+    const removeImages = (index) => {
+      setImages(images.filter((ig, i) => index !== i));
+      setImageUpload(imagesUpload.filter((ig, i) => index !== i));
+    };
 
     const onChange = (value) => {
       setCategori({
@@ -78,14 +128,45 @@ const NewPost = () => {
         },
       },
     );
+    const validateCreate = () => {
+      if (title.value < 3) {
+        setTitle({
+          ...title,
+          error: 'Tiêu đề phải dài hơn 3 ký tự',
+        });
+        return false;
+      }
+      if (name.value < 3) {
+        setName({
+          ...name,
+          error: 'Tên sách phải dài hơn 3 ký tự',
+        });
+        return false;
+      }
+      if (!price.value) {
+        setPrice({
+          ...price,
+          error: 'Vui lòng nhập giá sách',
+        });
+        return false;
+      }
+      return true;
+    };
 
-    const onPress = () => {
+    const onAlert = () => {
+      Alert.alert('Tạo bài viết mới ?', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => onCreate()},
+        {text: 'Hủy'},
+      ]);
+    };
+    const onCreate = () => {
+      if (validateCreate() === 1) return;
       let dataPost = {
         title: title.value,
         name: name.value,
         description: description.value,
         bookWanna: [bookWanna.value],
-        images: ['https://picsum.photos/200/300'],
+        images: imagesUpload,
         publisher: publisher.value,
         numberOfReprint: numberOfReprint.value,
         category: categori.value,
@@ -97,6 +178,12 @@ const NewPost = () => {
           dataPost,
         },
       });
+      Toast.show({
+        text: 'Tạo bài viết thành công',
+        type: 'success',
+        position: 'top',
+        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+      });
     };
 
     return (
@@ -107,7 +194,7 @@ const NewPost = () => {
               <View style={stylesPost.vertical}>
                 <Text>Tiêu đề: </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtInput}
                   placeholder="Nhập tiêu đề"
                   value={title.value}
                   onFocus={() => {
@@ -127,7 +214,7 @@ const NewPost = () => {
               <View>
                 <Text>Tên sách: </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtInput}
                   placeholder="Nhập tên sách"
                   value={name.value}
                   onFocus={() => {
@@ -165,10 +252,92 @@ const NewPost = () => {
                   </Item>
                 </Form>
               </View>
+              <View style={stylesPost.vertical}>
+                <Text>Hình ảnh *</Text>
+                <ScrollView
+                  style={{flexDirection: 'row', marginVertical: 10}}
+                  horizontal={true}>
+                  {post
+                    ? post.images.map((r, i) => (
+                        <View key={i}>
+                          <Image
+                            style={{
+                              width: 100,
+                              height: 100,
+                              marginRight: 10,
+                              position: 'relative',
+                            }}
+                            source={{uri: r}}
+                          />
+                        </View>
+                      ))
+                    : images.length > 0 &&
+                      images.map((r, i) => (
+                        <View key={i}>
+                          <Image
+                            style={{
+                              width: 100,
+                              height: 100,
+                              marginRight: 10,
+                              position: 'relative',
+                            }}
+                            source={{uri: r}}
+                          />
+                          <TouchableOpacity
+                            onPress={() => removeImages(i)}
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 10,
+                            }}>
+                            <Icon
+                              type="AntDesign"
+                              name="closecircleo"
+                              style={{
+                                fontSize: 22,
+                                color: 'red',
+                              }}></Icon>
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                  {!post ||
+                    (images.length < 10 && (
+                      <TouchableOpacity
+                        onPress={handleChoosePhoto}
+                        style={{
+                          // paddingHorizontal: 10,
+                          // paddingVertical: 5,
+                          margin: 0,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 100,
+                          height: 100,
+                          backgroundColor: '#fff',
+                          shadowColor: '#000',
+                          shadowOffset: {
+                            width: 0,
+                            height: 1,
+                          },
+                          shadowOpacity: 0.18,
+                          shadowRadius: 1.0,
+
+                          elevation: 1,
+                        }}>
+                        <Icon
+                          type="FontAwesome5"
+                          name="plus"
+                          style={{
+                            fontSize: 50,
+                            color: 'rgba(68, 108, 179, 1)',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    ))}
+                </ScrollView>
+              </View>
               <View>
                 <Text>Nhà xuất bản </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
                   value={publisher.value}
                   onFocus={() => {
@@ -185,10 +354,10 @@ const NewPost = () => {
                   }}
                 />
               </View>
-              <View style={stylesPost.vertical}>
+              <View style={stylesPost.horizontal}>
                 <Text>Số lần xuất bản </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtPrice}
                   placeholder="Nhập số lần xuất bản"
                   value={numberOfReprint.value}
                   onFocus={() => {
@@ -205,10 +374,10 @@ const NewPost = () => {
                   }}
                 />
               </View>
-              <View style={stylesPost.vertical}>
+              <View style={stylesPost.horizontal}>
                 <Text>Năm xuất bản </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtPrice}
                   placeholder="Nhập năm xuất bản"
                   onFocus={() => {
                     setYear({
@@ -225,16 +394,15 @@ const NewPost = () => {
                   value={year.value}
                 />
               </View>
-              <View style={stylesPost.price}>
+              <View style={stylesPost.horizontal}>
                 <Text>Giá sách *</Text>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    position: 'relative',
+                    width: '50%',
                   }}>
                   <TextInput
-                    style={stylesPost.inpPrice}
+                    style={stylesPost.txtVND}
                     placeholder="Nhập giá sách"
                     value={price.value}
                     onFocus={() => {
@@ -250,13 +418,21 @@ const NewPost = () => {
                       });
                     }}
                   />
-                  <Text>VND</Text>
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      right: 10,
+                      top: 8,
+                      fontSize: 14,
+                    }}>
+                    VND
+                  </Text>
                 </View>
               </View>
               <View style={stylesPost.vertical}>
                 <Text>Sách muốn đổi: </Text>
                 <TextInput
-                  style={stylesPost.inp}
+                  style={stylesPost.txtInput}
                   placeholder="Nhập sách muốn đổi"
                   onFocus={() => {
                     setBookWanna({
@@ -299,7 +475,7 @@ const NewPost = () => {
                   placeholder="Nhập mô tả"
                 />
               </View>
-              <TouchableOpacity style={{width: '100%'}} onPress={onPress}>
+              <TouchableOpacity style={{width: '100%'}} onPress={onAlert}>
                 <Text style={stylesPost.btn}>Đăng bài</Text>
               </TouchableOpacity>
             </View>

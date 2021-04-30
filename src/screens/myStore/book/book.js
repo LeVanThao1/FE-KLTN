@@ -1,8 +1,8 @@
-import {Text, View, Button, Icon} from 'native-base';
+import {Text, View, Button, Icon, Toast} from 'native-base';
 import React, {memo, useContext} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TouchableOpacity, Image} from 'react-native';
+import {TouchableOpacity, Image, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {DELETE_BOOK} from '../../../query/book';
 import {useMutation} from '@apollo/client';
@@ -16,6 +16,7 @@ const Book = ({book}) => {
     } = useContext(MobXProviderContext);
     const {bookStore} = shop;
     const {bookComment, setBookComment} = comment;
+    const {bookCurrent, setBookCurrent} = user;
     const navigation = useNavigation();
     const [deleteBook, {dd, aa, ss, xx}] = useMutation(DELETE_BOOK, {
       onCompleted: async (data) => {
@@ -30,12 +31,26 @@ const Book = ({book}) => {
       },
     });
 
-    //
+    const onAlert = (value) => {
+      Alert.alert('Đồng ý xóa ?', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => onPressDelete(value)},
+        {text: 'Hủy'},
+      ]);
+    };
     const onPressDelete = (value) => {
-      console.log('value', value);
       deleteBook({
         variables: {
           id: value,
+        },
+      });
+      Toast.show({
+        text: 'Xóa thành công',
+        type: 'success',
+        position: 'top',
+        style: {
+          textAlign: 'center',
+          backgroundColor: 'rgba(68, 108, 179, 1)',
+          color: '#ffffff',
         },
       });
     };
@@ -107,7 +122,7 @@ const Book = ({book}) => {
               </Text>
               <Button
                 style={{width: 50, height: 30, marginTop: -10}}
-                onPress={() => onPressDelete(book.id)}>
+                onPress={() => onAlert(book.id)}>
                 <Icon
                   name="delete"
                   type="MaterialIcons"

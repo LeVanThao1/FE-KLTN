@@ -107,19 +107,19 @@ export const stylesPost = StyleSheet.create({
     marginRight: 10,
     justifyContent: 'space-between',
   },
-  post: {
+  imgBookDetail: {
+    width: '100%',
+    margin: 'auto',
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  imgBook: {
     width: '45%',
     height: 200,
     resizeMode: 'cover',
-    marginRight: 5,
-  },
-
-  img: {
-    padding: 10,
-    borderTopColor: '#111',
-    borderTopWidth: 0.2,
-    marginTop: 15,
-    flexDirection: 'row',
   },
 
   picker: {
@@ -175,10 +175,11 @@ export const stylesPost = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 6,
     borderWidth: 0.2,
+    backgroundColor: '#fff',
   },
 
   txtPrice: {
-    width: '80%',
+    width: '40%',
     borderWidth: 0.3,
     height: 30,
     paddingHorizontal: 10,
@@ -186,6 +187,20 @@ export const stylesPost = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 6,
     borderWidth: 0.2,
+    backgroundColor: '#fff',
+  },
+
+  txtVND: {
+    width: '80%',
+    borderWidth: 0.3,
+    height: 30,
+    alignSelf: 'flex-end',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginVertical: 4,
+    borderRadius: 6,
+    borderWidth: 0.2,
+    backgroundColor: '#fff',
   },
 
   ct: {
@@ -222,6 +237,7 @@ export const stylesPost = StyleSheet.create({
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 8,
   },
 
@@ -241,6 +257,7 @@ export const stylesPost = StyleSheet.create({
 
   input: {
     height: 40,
+    backgroundColor: '#fff',
   },
 
   textareaContainer: {
@@ -258,6 +275,7 @@ export const stylesPost = StyleSheet.create({
     borderWidth: 0.1,
     borderRadius: 3,
     color: '#333',
+    backgroundColor: '#fff',
   },
   btn: {
     paddingHorizontal: 10,
