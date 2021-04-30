@@ -164,67 +164,12 @@ const BookDetail = ({navigation, book}) => {
                   onPress={onPress}
                 />
               </View>
-              {/* <View>
-                {postCmt?.map((cmt, i) => (
-                  <View style={stylesPost.infocmt}>
-                    <Image
-                      source={{uri: cmt.author.avatar}}
-                      style={stylesPost.avtcmt}
-                    />
-                    <View style={stylesPost.userCmt}>
-                      <Text style={stylesPost.name}>{cmt.author.name}</Text>
-                      <Text style={stylesPost.time}>{cmt.content}</Text>
-                    </View>
-                  </View>
-                ))}
-                <View style={stylesPost.addCmt}>
-                  <View style={stylesPost.person}>
-                    <View style={stylesPost.info}>
-                      <Image
-                        source={{uri: info.avatar}}
-                        style={stylesPost.avtcmt}
-                      />
-                      <View style={stylesPost.addComment}>
-                        <TextInput
-                          style={stylesPost.comment}
-                          placeholder="Thêm bình luận"
-                          value={cmt}
-                          // onFocus={() => {
-                          //   setCmt()
-                          // }}
-                          onChangeText={(value) => {
-                            setCmt(value);
-                          }}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                  <Icon
-                    name="ios-arrow-forward-circle-outline"
-                    type="Ionicons"
-                    style={stylesPost.iconEnter}
-                    onPress={onPress}
-                  />
-                </View>
-              </View> */}
+
               <TouchableOpacity
                 style={{width: '100%'}}
-                onPress={() =>
-                  navigation.navigate('UpdatePost', {
-                    bookId: bookCurrent.id,
-                    // postTitle: postTitle,
-                    // // postBookName: post.uniqueBook.name,
-                    // postDescription: postDescription,
-                    // postImg: postImg,
-                    // postYear: postYear,
-                    // postNumPrint: postNumPrint,
-                    // postCategory: postCategory,
-                    // postPrice: postPrice,
-                    // postPublisher: postPublisher,
-                    // postWanna: postWanna,
-                    // postCmt: postCmt,
-                    // postTime: postTime,
-                  })
+                onPress={
+                  () => navigation.navigate('UpdatePost')
+                  // setBookCurrent(book)
                 }>
                 <Text style={stylesPost.btn}>Cập nhật</Text>
               </TouchableOpacity>

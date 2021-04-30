@@ -28,8 +28,6 @@ const PostDetail = ({navigation, route}) => {
     const {postComment, setPostComment} = comment;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
-    console.log('postComen111t', postComment);
-    console.log('info', info);
 
     const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
@@ -45,7 +43,6 @@ const PostDetail = ({navigation, route}) => {
       },
     });
 
-    console.log('adadadsadsadasdsd ', postCurrent.comment[0]);
     const onPress = () => {
       let dataComment = {
         content: cmts,
@@ -66,9 +63,13 @@ const PostDetail = ({navigation, route}) => {
               <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
                 Hình ảnh
               </Text>
-              <View style={stylesPost.img}>
+              <View style={stylesPost.imgBookDetail}>
                 {postCurrent.images.map((img, i) => (
-                  <Image key={i} source={{uri: img}} style={stylesPost.post} />
+                  <Image
+                    key={i}
+                    source={{uri: img}}
+                    style={stylesPost.imgBook}
+                  />
                 ))}
               </View>
             </View>
@@ -115,7 +116,7 @@ const PostDetail = ({navigation, route}) => {
               </View>
               <View style={stylesPost.elment}>
                 <Text>Sách muốn đổi </Text>
-                <Text style={stylesPost.detail}>asdas</Text>
+                <Text style={stylesPost.detail}>{postCurrent.bookWanna}</Text>
               </View>
 
               <Text style={stylesPost.textContent}>Mô tả</Text>
@@ -152,66 +153,11 @@ const PostDetail = ({navigation, route}) => {
                   onPress={onPress}
                 />
               </View>
-              {/* <View>
-                {postCmt?.map((cmt, i) => (
-                  <View style={stylesPost.infocmt}>
-                    <Image
-                      source={{uri: cmt.author.avatar}}
-                      style={stylesPost.avtcmt}
-                    />
-                    <View style={stylesPost.userCmt}>
-                      <Text style={stylesPost.name}>{cmt.author.name}</Text>
-                      <Text style={stylesPost.time}>{cmt.content}</Text>
-                    </View>
-                  </View>
-                ))}
-                <View style={stylesPost.addCmt}>
-                  <View style={stylesPost.person}>
-                    <View style={stylesPost.info}>
-                      <Image
-                        source={{uri: info.avatar}}
-                        style={stylesPost.avtcmt}
-                      />
-                      <View style={stylesPost.addComment}>
-                        <TextInput
-                          style={stylesPost.comment}
-                          placeholder="Thêm bình luận"
-                          value={cmt}
-                          // onFocus={() => {
-                          //   setCmt()
-                          // }}
-                          onChangeText={(value) => {
-                            setCmt(value);
-                          }}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                  <Icon
-                    name="ios-arrow-forward-circle-outline"
-                    type="Ionicons"
-                    style={stylesPost.iconEnter}
-                    onPress={onPress}
-                  />
-                </View>
-              </View> */}
               <TouchableOpacity
                 style={{width: '100%'}}
                 onPress={() =>
                   navigation.navigate('UpdatePost', {
                     postId: postCurrent.id,
-                    // postTitle: postTitle,
-                    // // postBookName: post.uniqueBook.name,
-                    // postDescription: postDescription,
-                    // postImg: postImg,
-                    // postYear: postYear,
-                    // postNumPrint: postNumPrint,
-                    // postCategory: postCategory,
-                    // postPrice: postPrice,
-                    // postPublisher: postPublisher,
-                    // postWanna: postWanna,
-                    // postCmt: postCmt,
-                    // postTime: postTime,
                   })
                 }>
                 <Text style={stylesPost.btn}>Cập nhật</Text>
