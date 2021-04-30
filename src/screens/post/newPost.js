@@ -6,6 +6,7 @@ import React, {memo, useContext, useState} from 'react';
 import {Image, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {ReactNativeFile} from 'extract-files';
 import {
   TextInput,
   StyleSheet,
@@ -14,17 +15,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-
+import {Notification} from '../../utils/notifications'
 import Images from '../../assets/images/images';
 import {CREATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
-
-const NewPost = () => {
+import Toast from 'react-native-toast-message'
+import { NOTIFI } from '../../constants';
+const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
     } = useContext(MobXProviderContext);
-    const [post, setPost] = useState(undefined);
+    const {setPosts, posts} = user
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -112,8 +114,8 @@ const NewPost = () => {
       setImages(images.filter((ig, i) => index !== i));
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
-
     const onChange = (value) => {
+      console.log(value)
       setCategori({
         value: value,
       });
@@ -122,9 +124,14 @@ const NewPost = () => {
     const [createPost, {called, loading, data, error}] = useMutation(
       CREATE_POST,
       {
-        onCompleted: async (data) => {},
+        onCompleted: async (data) => {
+          setPosts([data.createPost, ...posts])
+          Toast.show(Notification(NOTIFI.success, "Tạo bài viết thành công"));
+          navigation.goBack()
+        },
         onError: (err) => {
-          console.log(err);
+          console.log(err)
+          Toast.show(Notification(NOTIFI.error, "Có lỗi xảy ra khi tạo bài viết"));
         },
       },
     );
@@ -171,18 +178,12 @@ const NewPost = () => {
         numberOfReprint: numberOfReprint.value,
         category: categori.value,
         year: year.value,
-        price: price.value,
+        price: price.value
       };
       createPost({
         variables: {
           dataPost,
         },
-      });
-      Toast.show({
-        text: 'Tạo bài viết thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
       });
     };
 
@@ -257,21 +258,7 @@ const NewPost = () => {
                 <ScrollView
                   style={{flexDirection: 'row', marginVertical: 10}}
                   horizontal={true}>
-                  {post
-                    ? post.images.map((r, i) => (
-                        <View key={i}>
-                          <Image
-                            style={{
-                              width: 100,
-                              height: 100,
-                              marginRight: 10,
-                              position: 'relative',
-                            }}
-                            source={{uri: r}}
-                          />
-                        </View>
-                      ))
-                    : images.length > 0 &&
+                  {images.length > 0 &&
                       images.map((r, i) => (
                         <View key={i}>
                           <Image
@@ -300,8 +287,8 @@ const NewPost = () => {
                           </TouchableOpacity>
                         </View>
                       ))}
-                  {!post ||
-                    (images.length < 10 && (
+                  {
+                    images.length < 10 && (
                       <TouchableOpacity
                         onPress={handleChoosePhoto}
                         style={{
@@ -331,7 +318,7 @@ const NewPost = () => {
                             color: 'rgba(68, 108, 179, 1)',
                           }}></Icon>
                       </TouchableOpacity>
-                    ))}
+                    )}
                 </ScrollView>
               </View>
               <View>
