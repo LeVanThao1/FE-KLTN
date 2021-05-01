@@ -93,7 +93,7 @@ const Store = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.address}>
-            <Text>Địa chỉ cửa hàng </Text>
+            <Text style={{paddingLeft: 10}}>Địa chỉ cửa hàng </Text>
             <Text
               style={{
                 color: '#333',

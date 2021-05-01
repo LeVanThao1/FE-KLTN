@@ -101,6 +101,8 @@ export const GET_BOOK = gql`
         id
         name
         avatar
+        background
+        address
         books {
           id
           book {
