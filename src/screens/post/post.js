@@ -117,6 +117,10 @@ const Overlay = styled.View`
   background: rgba(0, 0, 0, 0.5);
 `;
 
+const ViewImg = styled.View`
+  width: 100%;
+  height: 100%;
+`;
 //
 const User = styled.Image`
   width: 40px;

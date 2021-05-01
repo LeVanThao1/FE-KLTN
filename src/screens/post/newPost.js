@@ -15,18 +15,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-import {Notification} from '../../utils/notifications'
+import {Notification} from '../../utils/notifications';
 import Images from '../../assets/images/images';
 import {CREATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
-import Toast from 'react-native-toast-message'
-import { NOTIFI } from '../../constants';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
     } = useContext(MobXProviderContext);
-    const {setPosts, posts} = user
+    const {setPosts, posts} = user;
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -115,7 +115,7 @@ const NewPost = ({navigation}) => {
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
     const onChange = (value) => {
-      console.log(value)
+      console.log(value);
       setCategori({
         value: value,
       });
@@ -125,13 +125,15 @@ const NewPost = ({navigation}) => {
       CREATE_POST,
       {
         onCompleted: async (data) => {
-          setPosts([data.createPost, ...posts])
-          Toast.show(Notification(NOTIFI.success, "Tạo bài viết thành công"));
-          navigation.goBack()
+          setPosts([data.createPost, ...posts]);
+          Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
+          navigation.goBack();
         },
         onError: (err) => {
-          console.log(err)
-          Toast.show(Notification(NOTIFI.error, "Có lỗi xảy ra khi tạo bài viết"));
+          console.log(err);
+          Toast.show(
+            Notification(NOTIFI.error, 'Có lỗi xảy ra khi tạo bài viết'),
+          );
         },
       },
     );
@@ -178,7 +180,7 @@ const NewPost = ({navigation}) => {
         numberOfReprint: numberOfReprint.value,
         category: categori.value,
         year: year.value,
-        price: price.value
+        price: price.value,
       };
       createPost({
         variables: {
@@ -259,66 +261,65 @@ const NewPost = ({navigation}) => {
                   style={{flexDirection: 'row', marginVertical: 10}}
                   horizontal={true}>
                   {images.length > 0 &&
-                      images.map((r, i) => (
-                        <View key={i}>
-                          <Image
-                            style={{
-                              width: 100,
-                              height: 100,
-                              marginRight: 10,
-                              position: 'relative',
-                            }}
-                            source={{uri: r}}
-                          />
-                          <TouchableOpacity
-                            onPress={() => removeImages(i)}
-                            style={{
-                              position: 'absolute',
-                              top: 0,
-                              right: 10,
-                            }}>
-                            <Icon
-                              type="AntDesign"
-                              name="closecircleo"
-                              style={{
-                                fontSize: 22,
-                                color: 'red',
-                              }}></Icon>
-                          </TouchableOpacity>
-                        </View>
-                      ))}
-                  {
-                    images.length < 10 && (
-                      <TouchableOpacity
-                        onPress={handleChoosePhoto}
-                        style={{
-                          // paddingHorizontal: 10,
-                          // paddingVertical: 5,
-                          margin: 0,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: 100,
-                          height: 100,
-                          backgroundColor: '#fff',
-                          shadowColor: '#000',
-                          shadowOffset: {
-                            width: 0,
-                            height: 1,
-                          },
-                          shadowOpacity: 0.18,
-                          shadowRadius: 1.0,
-
-                          elevation: 1,
-                        }}>
-                        <Icon
-                          type="FontAwesome5"
-                          name="plus"
+                    images.map((r, i) => (
+                      <View key={i}>
+                        <Image
                           style={{
-                            fontSize: 50,
-                            color: 'rgba(68, 108, 179, 1)',
-                          }}></Icon>
-                      </TouchableOpacity>
-                    )}
+                            width: 100,
+                            height: 100,
+                            marginRight: 10,
+                            position: 'relative',
+                          }}
+                          source={{uri: r}}
+                        />
+                        <TouchableOpacity
+                          onPress={() => removeImages(i)}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 10,
+                          }}>
+                          <Icon
+                            type="AntDesign"
+                            name="closecircleo"
+                            style={{
+                              fontSize: 22,
+                              color: 'red',
+                            }}></Icon>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  {images.length < 10 && (
+                    <TouchableOpacity
+                      onPress={handleChoosePhoto}
+                      style={{
+                        // paddingHorizontal: 10,
+                        // paddingVertical: 5,
+                        margin: 0,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 100,
+                        height: 100,
+                        backgroundColor: '#fff',
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.18,
+                        shadowRadius: 1.0,
+
+                        elevation: 1,
+                      }}>
+                      <Icon
+                        type="FontAwesome5"
+                        name="plus"
+                        style={{
+                          fontSize: 50,
+                          color: 'rgba(68, 108, 179, 1)',
+                        }}></Icon>
+                    </TouchableOpacity>
+                  )}
                 </ScrollView>
               </View>
               <View>

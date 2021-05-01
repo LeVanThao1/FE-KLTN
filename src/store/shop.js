@@ -6,9 +6,14 @@ export class Shop {
 
   @observable
   bookStore = undefined;
-  constructor(info, bookStore) {
+
+  @observable
+  orderStore = undefined;
+
+  constructor(info, bookStore, orderStore) {
     this.info = info;
     this.bookStore = bookStore;
+    this.orderStore = orderStore;
     makeObservable(this);
   }
 
@@ -20,5 +25,10 @@ export class Shop {
   @action
   setBookStore = (value) => {
     this.bookStore = value;
+  };
+
+  @action
+  setOrderStore = (value) => {
+    this.orderStore = value;
   };
 }

@@ -11,8 +11,9 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
+  Alert,
 } from 'react-native';
-import {Icon, ListItem, Picker, Separator} from 'native-base';
+import {Icon, ListItem, Picker, Separator, Toast} from 'native-base';
 import {
   Collapse,
   CollapseHeader,
@@ -53,16 +54,26 @@ const Payment = ({navigation}) => {
         console.log(err);
       },
     });
+    console.log('infro payment', info);
     const onPress = () => {
       const subOrder = [...cart].map((ct) => ({
         book: ct.book.id,
         amount: ct.amount,
         price: ct.book.price,
       }));
+      if (!info) {
+        Toast.show({
+          text: 'Vui lòng nhập địa chỉ nhận hàng',
+          type: 'success',
+          position: 'top',
+          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+        });
+        return;
+      }
       const order = {
-        name: info.name,
-        phone: info.phone,
-        address: info.address,
+        name: info?.name,
+        phone: info?.phone,
+        address: info?.address,
         subOrder,
         typePayment: typePayment,
         note: note,
