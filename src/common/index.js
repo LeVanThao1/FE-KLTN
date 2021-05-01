@@ -19,7 +19,7 @@ export const mutateData = async (
   fetchPolicy = 'no-cache',
 ) => {
   const data = await Client.mutate({
-    query: inputQuery,
+    mutation: inputQuery,
     variables,
     fetchPolicy,
   });
