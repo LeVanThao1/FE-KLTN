@@ -51,6 +51,7 @@ import CreateStore from '../screens/myStore/createStore';
 import UserInfo from '../screens/profile/infoUser';
 import OrdersByStore from '../screens/myStore/order';
 import OrderDetailStore from '../screens/myStore/order/order_detail';
+import UpdateStore from '../screens/myStore/updateStore';
 
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
@@ -133,6 +134,12 @@ const routes = [
     title: 'Tạo cửa hàng',
     header: false,
     component: CreateStore,
+  },
+  {
+    name: 'UpdateStore',
+    title: 'Cập nhật cửa hàng',
+    header: false,
+    component: UpdateStore,
   },
   {
     name: 'ViewAllProduct',

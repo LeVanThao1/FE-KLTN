@@ -30,9 +30,12 @@ export const LOGIN = gql`
           sold
         }
         store {
+          avatar
+          background
           id
           name
           description
+          address
         }
         cart {
           book {
@@ -145,9 +148,12 @@ export const GET_USER = gql`
         sold
       }
       store {
+        avatar
         id
+        background
         name
         description
+        address
       }
       cart {
         book {
@@ -376,11 +382,10 @@ export const CHECK_OTP_FORGOT = gql`
   }
 `;
 
-
 export const RESET_PASSWORD = gql`
   mutation resetPassword($token: String!, $password: String!) {
     resetPassword(token: $token, password: $password) {
       message
     }
   }
-`
+`;

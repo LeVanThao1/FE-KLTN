@@ -3,9 +3,12 @@ import {gql} from '@apollo/client';
 export const GET_STORE = gql`
   query store($id: ID!) {
     store(id: $id) {
-      name
+      avatar
+      background
       id
+      name
       description
+      address
       books {
         book {
           name
@@ -24,8 +27,8 @@ export const CREATE_STORE = gql`
 `;
 
 export const UPDATE_STORE = gql`
-  mutation createStore($dataStore: storeUpdate!, $id: ID!) {
-    createStore(dataStore: $dataStore) {
+  mutation updateStore($dataStore: storeUpdate!, $id: ID!) {
+    updateStore(dataStore: $dataStore) {
       message
     }
   }
