@@ -93,9 +93,21 @@ const UpdatePost = ({route}) => {
           };
           user.setPosts([dataPost, ...newData]);
           NavigationPreloadManager.goBack();
+          Toast.show({
+            text: 'Cập nhật thành công',
+            type: 'success',
+            position: 'top',
+            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          });
         },
         onError: (err) => {
           console.log(err);
+          Toast.show({
+            text: 'Cập nhật không thành công',
+            type: 'danger',
+            position: 'top',
+            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          });
         },
       },
     );
@@ -124,12 +136,6 @@ const UpdatePost = ({route}) => {
           dataPost,
           id: postId,
         },
-      });
-      Toast.show({
-        text: 'Cập nhật thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
       });
     };
     return (

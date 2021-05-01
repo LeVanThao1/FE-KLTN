@@ -1,6 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, View} from 'native-base';
+import {Text, Toast, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
   TextInput,
@@ -8,11 +8,12 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
-import {Form, Item, Picker} from 'native-base';
+import {Form, Toast, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
@@ -128,12 +129,7 @@ const UpdateBook = ({navigation, route}) => {
           id: bookCurrent.id,
         },
       });
-      Toast.show({
-        text: 'Cập nhật bài viết thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-      });
+
       // navigation.goBack();
     };
 

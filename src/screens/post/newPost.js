@@ -1,7 +1,7 @@
 import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
+import {Button, Form, Icon, Item, Picker, Text, Toast, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
 import {Image, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -122,9 +122,22 @@ const NewPost = () => {
     const [createPost, {called, loading, data, error}] = useMutation(
       CREATE_POST,
       {
-        onCompleted: async (data) => {},
+        onCompleted: async (data) => {
+          Toast.show({
+            text: 'Tạo bài viết thành công',
+            type: 'success',
+            position: 'top',
+            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          });
+        },
         onError: (err) => {
           console.log(err);
+          Toast.show({
+            text: 'Tạo bài viết không thành công',
+            type: 'danger',
+            position: 'top',
+            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          });
         },
       },
     );
@@ -177,12 +190,6 @@ const NewPost = () => {
         variables: {
           dataPost,
         },
-      });
-      Toast.show({
-        text: 'Tạo bài viết thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
       });
     };
 

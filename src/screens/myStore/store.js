@@ -32,7 +32,6 @@ const Store = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const {info} = shop;
     // console.log(shop);
-    console.log('userinfo', user);
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState(null);
     const [text, setText] = useState('');
@@ -122,7 +121,7 @@ const Store = ({navigation}) => {
                     <Text>Thêm sản phẩm</Text>
                   </ListItem>
                   <ListItem onPress={() => navigation.navigate('BooksStore')}>
-                    <Text>Tất cả sản phẩm</Text>
+                    <Text>Quản lý sản phẩm</Text>
                   </ListItem>
                 </CollapseBody>
               </Collapse>
@@ -142,8 +141,9 @@ const Store = ({navigation}) => {
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('ManageOrder')}>
-                    <Text>Tất cả sản phẩm</Text>
+                  <ListItem
+                    onPress={() => navigation.navigate('OrdersByStore')}>
+                    <Text>Quản lý đơn hàng</Text>
                   </ListItem>
                   {/* <ListItem>
                   <Text onPress={() => navigation.navigate('ViewAllProduct')}>

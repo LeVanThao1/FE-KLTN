@@ -68,8 +68,8 @@ const PostDescription = styled.Text`
 `;
 const PostPhoto = styled.Image`
   margin: 9px auto 0;
-  width: 180px;
-  height: 210px;
+  width: 40%;
+  height: 110px;
 `;
 const PostFooter = styled.View`
   padding: 10px 10px;
@@ -95,6 +95,10 @@ const BreakLine = styled.View`
   background: #000000;
 `;
 
+const ViewImg = styled.View`
+  width: 100%;
+  height: 100%;
+`;
 //
 const User = styled.Image`
   width: 40px;
@@ -193,9 +197,13 @@ const PostOne = ({route, post, info, type}) => {
               }}>
               <PostTitle>{post.title}</PostTitle>
               <PostDescription>{post.description}</PostDescription>
-              {post.images.map((img, i) => (
-                <PostPhoto source={{uri: img}} />
-              ))}
+              {/* <ImageView> */}
+              <ViewImg>
+                {post.images.map((img, i) => (
+                  <PostPhoto source={{uri: img}} />
+                ))}
+              </ViewImg>
+              {/* </ImageView> */}
             </View>
             <PostFooter>
               <TextCount>{post.comment.length} Bình luận</TextCount>

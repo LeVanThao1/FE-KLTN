@@ -198,12 +198,6 @@ const CreateBook = () => {
           dataBook,
         },
       });
-      Toast.show({
-        text: 'Tạo sách thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-      });
     };
 
     const removeImages = (index) => {
