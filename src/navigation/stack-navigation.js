@@ -52,6 +52,7 @@ import UserInfo from '../screens/profile/infoUser';
 import OrdersByStore from '../screens/myStore/order';
 import OrderDetailStore from '../screens/myStore/order/order_detail';
 import UpdateStore from '../screens/myStore/updateStore';
+import StoreDetail from '../screens/myStore/storeDetail';
 
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
@@ -140,6 +141,12 @@ const routes = [
     title: 'Cập nhật cửa hàng',
     header: false,
     component: UpdateStore,
+  },
+  {
+    name: 'StoreDetail',
+    title: 'Cửa hàng',
+    header: false,
+    component: StoreDetail,
   },
   {
     name: 'ViewAllProduct',

@@ -52,6 +52,7 @@ const Home = ({navigation}) => {
     const {categories, setCategory} = category;
     const [loading, setLoading] = useState(false);
     const [bookSell, setBookSell] = useState(undefined);
+    console.log('book detail', book);
     const [getBooks, {}] = useLazyQuery(GET_BOOKS, {
       onCompleted: async (data) => {
         setBooks(data.books);
