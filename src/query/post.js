@@ -114,11 +114,11 @@ export const GET_POST = gql`
         }
         reply {
           id
-          conten
+          content
           author {
             id
             name
-            avatart
+            avatar
           }
         }
         createdAt
@@ -171,6 +171,27 @@ export const CREATE_POST = gql`
         name
         avatar
       }
+      comment {
+        id
+        content
+        type
+        author {
+          id
+          name
+          avatar
+        }
+        reply {
+          id
+          content
+          author {
+            id
+            name
+            avatar
+          }
+        }
+        createdAt
+      }
+      createdAt
     }
   }
 `;

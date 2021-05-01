@@ -1,6 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Icon, Text, Toast, View} from 'native-base';
+import {Icon, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useRef, useState} from 'react';
 import {
   TextInput,
@@ -25,11 +25,15 @@ import Modal from 'react-native-modal';
 import {queryData} from '../../../common';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import {styles} from './styles';
-const CreateBook = () => {
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../../utils/notifications';
+import {NOTIFI} from '../../../constants';
+const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {category},
+      stores: {category, shop},
     } = useContext(MobXProviderContext);
+    const {setBookStore, bookStore} = shop;
     const [product, setProduct] = useState({
       value: '',
       error: '',
@@ -140,10 +144,16 @@ const CreateBook = () => {
       CREATE_BOOK,
       {
         onCompleted: async (data) => {
-          // setBookStore()
+          console.log(data);
+          setBookStore([data.createBook, ...bookStore]);
+          Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
+          // navigation.navigate('BooksStore');
         },
         onError: (err) => {
           console.log(err);
+          Toast.show(
+            Notification(NOTIFI.error, 'Có lỗi xảy ra khi thêm sách mới'),
+          );
         },
       },
     );
@@ -197,12 +207,6 @@ const CreateBook = () => {
         variables: {
           dataBook,
         },
-      });
-      Toast.show({
-        text: 'Tạo sách thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
       });
     };
 
@@ -437,38 +441,39 @@ const CreateBook = () => {
                         </TouchableOpacity>
                       </View>
                     ))}
-                {!book ||
-                  (images.length < 10 && (
-                    <TouchableOpacity
-                      onPress={handleChoosePhoto}
-                      style={{
-                        // paddingHorizontal: 10,
-                        // paddingVertical: 5,
-                        margin: 0,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 100,
-                        height: 100,
-                        backgroundColor: '#fff',
-                        shadowColor: '#000',
-                        shadowOffset: {
-                          width: 0,
-                          height: 1,
-                        },
-                        shadowOpacity: 0.18,
-                        shadowRadius: 1.0,
-
-                        elevation: 1,
-                      }}>
-                      <Icon
-                        type="FontAwesome5"
-                        name="plus"
+                {!book
+                  ? images.length < 10 && (
+                      <TouchableOpacity
+                        onPress={handleChoosePhoto}
                         style={{
-                          fontSize: 50,
-                          color: 'rgba(68, 108, 179, 1)',
-                        }}></Icon>
-                    </TouchableOpacity>
-                  ))}
+                          // paddingHorizontal: 10,
+                          // paddingVertical: 5,
+                          margin: 0,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 100,
+                          height: 100,
+                          backgroundColor: '#fff',
+                          shadowColor: '#000',
+                          shadowOffset: {
+                            width: 0,
+                            height: 1,
+                          },
+                          shadowOpacity: 0.18,
+                          shadowRadius: 1.0,
+
+                          elevation: 1,
+                        }}>
+                        <Icon
+                          type="FontAwesome5"
+                          name="plus"
+                          style={{
+                            fontSize: 50,
+                            color: 'rgba(68, 108, 179, 1)',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    )
+                  : null}
               </ScrollView>
             </View>
             <View style={styles.name}>

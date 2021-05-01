@@ -1,4 +1,4 @@
-import {Text, View, Button, Icon, Toast} from 'native-base';
+import {Text, View, Button, Icon} from 'native-base';
 import React, {memo, useContext} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,6 +8,9 @@ import {DELETE_BOOK} from '../../../query/book';
 import {useMutation} from '@apollo/client';
 import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../../constants';
+import {Notification} from '../../../utils/notifications';
 
 const Book = ({book}) => {
   return useObserver(() => {
@@ -24,6 +27,7 @@ const Book = ({book}) => {
           (bt) => bt.id + '' !== book.id + '',
         );
         shop.setBookStore([...newData]);
+        Toast.show(Notification(NOTIFI.success, 'Xóa thành công'));
         // navigation.goBack();
       },
       onError: (err) => {
@@ -41,16 +45,6 @@ const Book = ({book}) => {
       deleteBook({
         variables: {
           id: value,
-        },
-      });
-      Toast.show({
-        text: 'Xóa thành công',
-        type: 'success',
-        position: 'top',
-        style: {
-          textAlign: 'center',
-          backgroundColor: 'rgba(68, 108, 179, 1)',
-          color: '#ffffff',
         },
       });
     };
