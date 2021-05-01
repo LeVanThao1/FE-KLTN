@@ -123,3 +123,11 @@ export const ORDER_BY_STORE = gql`
     }
   }
 `;
+
+export const UPDATE_STATUS_ORDER = gql`
+  mutation updateStatusSubOrder($dataStatus: STATUS!, $id: ID!) {
+    updateStatusSubOrder(dataStatus: $dataStatus, id: $id) {
+      message
+    }
+  }
+`;

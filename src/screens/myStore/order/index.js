@@ -19,22 +19,28 @@ import {queryData} from '../../../common';
 const OrdersByStore = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, shop},
+      stores: {user, shop, order},
     } = useContext(MobXProviderContext);
     const {orderStore, setOrderStore} = shop;
     const [selectedStatus, setSelectedStatus] = useState('WAITING');
     const [subOrders, setSubOrders] = useState([]);
+    const {infoOrder, setInfoOrder} = order;
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    // console.log('inforOrder', infoOrder);
     useEffect(() => {
       queryData(ORDERS_BY_STORE)
         .then(({data}) => {
           setSubOrders(data.subOrdersByStore);
+          setInfoOrder(data.subOrdersByStore);
+          // console.log('data', data.subOrdersByStore);
           setLoading(false);
           setRefreshing(true);
         })
         .catch((err) => console.log(err));
     }, [refreshing]);
+
+    useEffect(() => {}, [infoOrder]);
 
     useEffect(() => {
       // console.log('selectedStatus', selectedStatus);
@@ -60,7 +66,6 @@ const OrdersByStore = ({navigation}) => {
     }
 
     function SubOrder({order}) {
-      console.log('=====', order);
       return (
         <TouchableOpacity
           onPress={() => {

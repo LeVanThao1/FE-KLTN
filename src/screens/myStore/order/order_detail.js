@@ -2,7 +2,7 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import React, {useContext, useState, useEffect} from 'react';
-import {Icon} from 'native-base';
+import {Icon, Toast} from 'native-base';
 
 import {
   StyleSheet,
@@ -11,43 +11,23 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  RefreshControl,
+  Alert,
 } from 'react-native';
-import {queryData} from '../../../common';
+import {mutateData, queryData} from '../../../common';
+import {UPDATE_STATUS_ORDER} from '../../../query/order';
 // import {GET_SUB_ORDER} from '../../query/subOrder';
 
 const OrderDetailStore = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user, shop},
+      stores: {user, shop, order},
     } = useContext(MobXProviderContext);
-    console.log('order-detail route', route);
     const {orderStore, setOrderStore} = shop;
+    const {infoOrder, setInfoOrder} = order;
     const [subOrder, setSubOrder] = useState({});
-    console.log('order store detail', orderStore);
-    // const [getSubOrder, {called, loading, data, error}] = useLazyQuery(
-    //   GET_SUB_ORDER,
-    //   {
-    //     onCompleted: async (data) => {
-    //       // console.log(data.subOrderByUser);
-    //       setSubOrder(data.subOrderByUser);
-    //     },
-    //     onError: (err) => {
-    //       console.log(err);
-    //     },
-    //   },
-    // );
-
-    // useEffect(() => {
-    //   queryData(subOrderByStore, {id: id})
-    // })
-
-    // useEffect(() => {
-    //   getSubOrder({
-    //     variables: {
-    //       // id: route.params.id,
-    //     },
-    //   });
-    // }, []);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loading, setLoading] = useState(true);
 
     const nextStatus = (stt) => {
       let resultStt = '';
@@ -63,16 +43,65 @@ const OrderDetailStore = ({navigation, route}) => {
       return resultStt;
     };
 
-    // const changeStatus = () => {
-    //   setOrderStore({
-    //     ...orderStore,
-    //     status: nextStatus(status),
-    //   });
-    // };
+    const onAlert = () => {
+      Alert.alert('Đồng ý chuyển trạng thái ?', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => changeStatus()},
+        {text: 'Hủy'},
+      ]);
+    };
+
+    const [updateStatusSubOrder] = useMutation(UPDATE_STATUS_ORDER, {
+      onCompleted: async (data) => {
+        const newData = [...infoOrder].filter(
+          (od) => od.id + '' !== orderStore.id + '',
+        );
+        setInfoOrder([infoOrder, ...newData]);
+        Toast.show({
+          text: `Chuyển đơn hàng sang trạng thái ${nextStatus(
+            orderStore.status,
+          )} thành công`,
+          type: 'success',
+          position: 'top',
+          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+        });
+        navigation.goBack();
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+
+    const changeStatus = () => {
+      updateStatusSubOrder({
+        variables: {
+          dataStatus: nextStatus(orderStore.status),
+          id: orderStore.id,
+        },
+      });
+      // mutateData(UPDATE_STATUS_ORDER, {
+      //   dataStatus: orderStore.status,
+      //   id: orderStore.id,
+      // })
+      //   .then(({data}) => {
+      //     // setOrderStore();
+      //     console.log('update status', data);
+      //     setLoading(false);
+      //     setRefreshing(true);
+      //   })
+      //   .catch((err) => console.log(err));
+    };
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                setRefreshing(true);
+              }}
+            />
+          }>
           <View style={{marginBottom: 16}}>
             <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 8}}>
               Địa chỉ nhận hàng
@@ -142,7 +171,7 @@ const OrderDetailStore = ({navigation, route}) => {
               alignItems: 'center',
               backgroundColor: '#fff',
             }}>
-            <Text>Trạng thái đơn hàng</Text>
+            <Text style={{width: '50%'}}>Trạng thái đơn hàng</Text>
             <Text style={{paddingVertical: 20, paddingLeft: 30}}>
               {orderStore?.status}
             </Text>
@@ -156,23 +185,26 @@ const OrderDetailStore = ({navigation, route}) => {
               alignItems: 'center',
               backgroundColor: '#fff',
             }}>
-            <Text>Trạng thái kế tiếp</Text>
+            <Text style={{width: '50%'}}>Trạng thái kế tiếp</Text>
             <Text style={{paddingVertical: 20, paddingLeft: 30}}>
               {nextStatus(orderStore?.status)}
             </Text>
           </View>
           <View style={{paddingVertical: 20}}>
-            <TouchableOpacity onPress={changeStatus}>
+            <TouchableOpacity onPress={onAlert}>
               <Text
                 style={{
                   color: '#fff',
                   backgroundColor: 'rgba(68, 108, 179, 1)',
                   textAlign: 'center',
-                  width: '40%',
+                  width: '50%',
+                  alignSelf: 'center',
                   paddingHorizontal: 10,
                   paddingVertical: 10,
+                  marginVertical: 15,
+                  borderRadius: 4,
                 }}>
-                Chuyển trạng thái
+                Trạng thái tiếp theo
               </Text>
             </TouchableOpacity>
           </View>

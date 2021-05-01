@@ -78,7 +78,7 @@ const UpdatePost = ({route}) => {
       UPDATE_POST,
       {
         onCompleted: async (data) => {
-          const newData = [...posts].filter((p) => p.id + '' !== postId);
+          const newData = [...posts].filter((p) => p.id + '' !== postId + '');
 
           let dataPost = {
             title: title.value,
