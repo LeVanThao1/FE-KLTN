@@ -2,15 +2,15 @@ import {observable, action, makeObservable} from 'mobx';
 
 export class Order {
   @observable
-  info = undefined;
+  infoOrder = undefined;
 
-  constructor(info) {
-    this.info = info;
+  constructor(infoOrder) {
+    this.infoOrder = infoOrder;
     makeObservable(this);
   }
 
   @action
-  setInfo = (value) => {
-    this.info = value;
+  setInfoOrder = (value) => {
+    this.infoOrder = value;
   };
 }

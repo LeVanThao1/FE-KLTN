@@ -49,6 +49,9 @@ import UpdatePost from '../screens/post/updatePost';
 import Products from '../screens/products';
 import CreateStore from '../screens/myStore/createStore';
 import UserInfo from '../screens/profile/infoUser';
+import OrdersByStore from '../screens/myStore/order';
+import OrderDetailStore from '../screens/myStore/order/order_detail';
+import UpdateStore from '../screens/myStore/updateStore';
 
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
@@ -131,6 +134,12 @@ const routes = [
     title: 'Tạo cửa hàng',
     header: false,
     component: CreateStore,
+  },
+  {
+    name: 'UpdateStore',
+    title: 'Cập nhật cửa hàng',
+    header: false,
+    component: UpdateStore,
   },
   {
     name: 'ViewAllProduct',
@@ -243,9 +252,22 @@ const routes = [
     header: false,
     component: ChangePassword,
   },
+
+  {
+    name: 'OrdersByStore',
+    title: 'Quản lý đơn hàng',
+    header: false,
+    component: OrdersByStore,
+  },
+  {
+    name: 'OrderDetailStore',
+    title: 'Chi tiết đơn hàng',
+    header: false,
+    component: OrderDetailStore,
+  },
   {
     name: 'ManageOrder',
-    title: 'Quản lý đơn hàng',
+    title: 'Đơn hàng của bạn',
     header: false,
     component: ManageOrder,
   },

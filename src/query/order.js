@@ -57,3 +57,77 @@ export const CREATE_ORDER = gql`
     }
   }
 `;
+
+export const ORDERS_BY_STORE = gql`
+  query subOrdersByStore {
+    subOrdersByStore {
+      id
+      user {
+        id
+        name
+      }
+      detail {
+        book {
+          id
+          name
+          images
+        }
+        price
+        amount
+      }
+      address
+      phone
+      status
+      note
+      store {
+        id
+      }
+      statusPayment
+      dateOfPayment
+      receivedDate
+      deliveryDate
+      createdAt
+    }
+  }
+`;
+
+export const ORDER_BY_STORE = gql`
+  query subOrderByStore($id: ID!) {
+    subOrderByStore(id: $id) {
+      id
+      user {
+        id
+        name
+      }
+      detail {
+        book {
+          id
+          name
+          images
+        }
+        price
+        amount
+      }
+      address
+      phone
+      status
+      note
+      store {
+        id
+      }
+      statusPayment
+      dateOfPayment
+      receivedDate
+      deliveryDate
+      createdAt
+    }
+  }
+`;
+
+export const UPDATE_STATUS_ORDER = gql`
+  mutation updateStatusSubOrder($dataStatus: STATUS!, $id: ID!) {
+    updateStatusSubOrder(dataStatus: $dataStatus, id: $id) {
+      message
+    }
+  }
+`;
