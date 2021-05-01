@@ -103,7 +103,6 @@ const Store = ({navigation}) => {
               value={info?.description}
             />
           </View>
-
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
             <View>

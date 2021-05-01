@@ -66,10 +66,18 @@ const PostDescription = styled.Text`
   line-height: 21px;
   padding: 0 11px;
 `;
+const PhotoGroup = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+const PhotoContainer = styled.View`
+  width: 50%;
+  padding: 10px;
+`;
 const PostPhoto = styled.Image`
-  margin: 9px auto 0;
-  width: 40%;
-  height: 110px;
+  width: 100%;
+  height: 210px;
 `;
 const PostFooter = styled.View`
   padding: 10px 10px;
@@ -93,6 +101,20 @@ const BreakLine = styled.View`
   width: 100%;
   height: 0.5px;
   background: #000000;
+`;
+const OverlayGroup = styled.View`
+  width: 100%;
+  position: relative;
+`;
+const Overlay = styled.View`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const ViewImg = styled.View`
@@ -197,13 +219,36 @@ const PostOne = ({route, post, info, type}) => {
               }}>
               <PostTitle>{post.title}</PostTitle>
               <PostDescription>{post.description}</PostDescription>
-              {/* <ImageView> */}
-              <ViewImg>
-                {post.images.map((img, i) => (
-                  <PostPhoto source={{uri: img}} />
-                ))}
-              </ViewImg>
-              {/* </ImageView> */}
+
+              {post.images.length < 5 ? (
+                <PhotoGroup>
+                  {post.images.map((img, i) => (
+                    <PhotoContainer>
+                      <PostPhoto source={{uri: img}} />
+                    </PhotoContainer>
+                  ))}
+                </PhotoGroup>
+              ) : (
+                <PhotoGroup>
+                  {post.images.slice(0, 3).map((img, i) => (
+                    <PhotoContainer>
+                      <PostPhoto source={{uri: img}} />
+                    </PhotoContainer>
+                  ))}
+                  {
+                    <PhotoContainer>
+                      <OverlayGroup>
+                        <PostPhoto source={{uri: post.images[4]}} />
+                        <Overlay>
+                          <Text style={{color: '#ffffff', fontSize: 22}}>
+                            + {post.images.length - 3}
+                          </Text>
+                        </Overlay>
+                      </OverlayGroup>
+                    </PhotoContainer>
+                  }
+                </PhotoGroup>
+              )}
             </View>
             <PostFooter>
               <TextCount>{post.comment.length} Bình luận</TextCount>
