@@ -52,7 +52,7 @@ import UserInfo from '../screens/profile/infoUser';
 import OrdersByStore from '../screens/myStore/order';
 import OrderDetailStore from '../screens/myStore/order/order_detail';
 import UpdateStore from '../screens/myStore/updateStore';
-
+import ListStoreFound from '../screens/listStoreFound';
 import PostFb from '../screens/post/posts';
 const Stack = createStackNavigator();
 
@@ -301,6 +301,12 @@ const routes = [
     title: 'Thông báo',
     header: false,
     component: Notification,
+  },
+  {
+    name: 'ListStoreFound',
+    title: 'Tìm quanh đây',
+    header: false,
+    component: ListStoreFound,
   },
 ];
 const AuthStack = () => {

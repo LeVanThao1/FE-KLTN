@@ -92,6 +92,11 @@ export default function AccountManager({navigation}) {
                 icon="shoppingcart"
                 url="Cart"
               />
+              <ManagerItem
+                label="Tìm cửa hàng gần tôi"
+                icon="shoppingcart"
+                url="ListStoreFound"
+              />
               <ManagerItem label="Wishlist" icon="hearto" url="WishList" />
               <ManagerItem label="Đăng xuất" icon="logout" url="" />
             </View>

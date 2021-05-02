@@ -18,6 +18,21 @@ export const GET_STORE = gql`
   }
 `;
 
+export const GET_STORES_LOCATION = gql`
+  query locationsStores($lng: Float, $lat: Float, $distance: Int) {
+    locationsStores(lng: $lng, lat: $lat, distance: $distance) {
+      store {
+        id
+        name
+        avatar
+        description
+        address
+      }
+      distance
+    }
+  }
+`;
+
 export const CREATE_STORE = gql`
   mutation createStore($dataStore: storeCreate!) {
     createStore(dataStore: $dataStore) {

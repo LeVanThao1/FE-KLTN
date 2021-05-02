@@ -20,6 +20,8 @@ target 'KLTN' do
 
   pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
 
+  pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
+
   target 'KLTNTests' do
     inherit! :complete
     # Pods for testing
