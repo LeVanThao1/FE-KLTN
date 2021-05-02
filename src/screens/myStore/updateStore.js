@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
 import {Icon, ListItem, Separator, Button, Toast} from 'native-base';
@@ -21,7 +22,7 @@ import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
 import {useNavigation} from '@react-navigation/native';
 import {useLazyQuery, useMutation} from '@apollo/client';
-import {CREATE_STORE, GET_STORE} from '../../query/store';
+import {UPDATE_STORE} from '../../query/store';
 import {introspectionFromSchema} from 'graphql';
 import {transaction} from 'mobx';
 import {Picker} from 'native-base';
@@ -33,50 +34,62 @@ import sub, {
   getWardsByDistrictCode,
 } from 'sub-vn';
 
-const CreateStore = ({navigation}) => {
+const UpdateStore = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {shop, user, auth},
     } = useContext(MobXProviderContext);
     const {info, setInfo} = shop;
     const navigation = useNavigation();
+    const add = info.address.split(',');
     const [name, setName] = useState({
-      value: '',
+      value: info ? info.name : '',
       error: '',
     });
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState({
+      value: info ? info.description : '',
+      error: '',
+    });
     const [provinces, setProvinces] = useState({
-      value: info ? info.provinces : undefined,
+      value: info ? add[add.length - 1].trim() : undefined,
       error: '',
     });
     const [districts, setDistricts] = useState({
-      value: info ? info.districts : undefined,
+      value: info ? add[add.length - 2].trim() : undefined,
       error: '',
     });
     const [ward, setWard] = useState({
-      value: info ? info.ward : undefined,
+      value: info ? add[add.length - 3].trim() : undefined,
       error: '',
     });
-    const [andress, setAndress] = useState({
-      value: info ? info.andress : '',
+    const [address, setAddress] = useState({
+      value: info && add.length == 4 ? add[add.length - 4].trim() : '',
       error: '',
     });
-    const [createStore, {called, loading, data, error}] = useMutation(
-      CREATE_STORE,
+    const [updateStore, {called, loading, data, error}] = useMutation(
+      UPDATE_STORE,
       {
         onCompleted: async (data) => {
+          // let dataStore = {
+          //   avatar: 'https://picsum.photos/200',
+          //   background: 'https://picsum.photos/id/237/200/300',
+          //   name: name.value,
+          //   description: description.value,
+          //   address: `${andress.value}, ${ward.value.split('-')[1]}, ${
+          //     districts.value.split('-')[1]
+          //   }, ${provinces.value.split('-')[1]}`,
+          //   owner: user.info.id,
+          // };
+          // shop.setInfo([dataStore, ...newData]);
           Toast.show({
-            text: `Tạo cửa hàng thành công`,
+            text: `Cập nhật cửa hàng thành công`,
             type: 'success',
             position: 'top',
             style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
           });
-          AsyncStorage.clear().then(() => {
-            auth.setLogout();
-          });
         },
         onError: (err) => {
-          console.log(err);
+          console.log('error update store', err);
         },
       },
     );
@@ -110,34 +123,52 @@ const CreateStore = ({navigation}) => {
         });
         count++;
       }
-      if (!andress.value) {
-        setAndress({
-          ...andress,
+      if (!address.value) {
+        setAddress({
+          ...address,
           error: 'Vui lòng nhập địa chỉ cụ thể',
         });
         count++;
       }
       return count === 0;
     };
+
+    const onAlert = () => {
+      Alert.alert('Đồng ý cập nhật', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => onPress()},
+        {text: 'Hủy'},
+      ]);
+    };
+    console.log('shop update', user.info.store.id);
+
     const onPress = () => {
-      if (validateSubmit) {
-        let dataStore = {
-          avatar: 'https://picsum.photos/200',
-          background: 'https://picsum.photos/id/237/200/300',
-          name: name,
-          description: description,
-          address: `${andress.value}, ${ward.value.split('-')[1]}, ${
-            districts.value.split('-')[1]
-          }, ${provinces.value.split('-')[1]}`,
-          owner: user.info.id,
-        };
-        createStore({
-          variables: {
-            dataStore,
-          },
-        });
-        setInfo(dataStore);
-      }
+      // if (validateSubmit) {
+      console.log(
+        'name',
+        name.value,
+        description.value,
+        provinces.value,
+        ward.value,
+        address.value,
+      );
+
+      let dataStore = {
+        avatar: 'https://picsum.photos/200',
+        background: 'https://picsum.photos/id/237/200/300',
+        name: name.value,
+        description: description.value,
+        address: `${address.value}, ${ward.value.split('-')[1]}, ${
+          districts.value.split('-')[1]
+        }, ${provinces.value.split('-')[1]}`,
+        owner: user.info.id,
+      };
+      updateStore({
+        variables: {
+          dataStore,
+          id: user.info.store.id,
+        },
+      });
+      // }
     };
     return (
       <ScrollView>
@@ -159,8 +190,13 @@ const CreateStore = ({navigation}) => {
             <TextInput
               style={styles.titleCreate}
               placeholder="Nhập tên shop"
-              value={name}
-              onChangeText={(value) => setName(value)}
+              value={name.value}
+              onChangeText={(value) =>
+                setName({
+                  ...name,
+                  value: value,
+                })
+              }
             />
           </View>
           <View style={styles.field}>
@@ -253,13 +289,13 @@ const CreateStore = ({navigation}) => {
             <TextInput
               style={styles.titleCreate}
               placeholder="Nhập địa chỉ cụ thể"
-              value={andress.value}
-              onChangeText={(value) => setAndress({...andress, value})}
+              value={address.value}
+              onChangeText={(value) => setAddress({...address, value})}
               onFocus={() => {
-                setAndress({...andress, error: ''});
+                setAddress({...address, error: ''});
               }}
             />
-            <Text style={styles.err}>{andress.error}</Text>
+            <Text style={styles.err}>{address.error}</Text>
           </View>
           <View style={styles.des}>
             <Text style={{fontSize: 16}}>Mô tả shop </Text>
@@ -270,12 +306,17 @@ const CreateStore = ({navigation}) => {
               placeholder={'Nhập mô tả'}
               placeholderTextColor={'#c7c7c7'}
               underlineColorAndroid={'transparent'}
-              value={description}
-              onChangeText={(value) => setDescription(value)}
+              value={description.value}
+              onChangeText={(value) => {
+                setDescription({
+                  ...description,
+                  value: value,
+                });
+              }}
             />
           </View>
-          <Button style={styles.btnCreate} onPress={onPress}>
-            <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
+          <Button style={styles.btnCreate} onPress={onAlert}>
+            <Text style={styles.txtCreate}>Cập nhật cửa hàng</Text>
           </Button>
         </View>
       </ScrollView>
@@ -298,9 +339,9 @@ const styles = StyleSheet.create({
 
   titleCreate: {
     width: '100%',
-    height: 35,
+    height: 40,
     fontSize: 14,
-    // paddingBottom: 20,
+    paddingHorizontal: 10,
     // marginLeft: 10, de t tao cai store xong da
     color: '#111',
     borderWidth: 0.2,
@@ -403,4 +444,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(CreateStore);
+export default memo(UpdateStore);

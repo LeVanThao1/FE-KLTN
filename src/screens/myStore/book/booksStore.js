@@ -17,6 +17,9 @@ import {DELETE_BOOK, GET_BOOKS_STORE} from '../../../query/book';
 
 import Book from './book';
 import {queryData} from '../../../common';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../../utils/notifications';
+import {NOTIFI} from '../../../constants';
 
 const BooksStore = ({navigation}) => {
   return useObserver(() => {
@@ -33,7 +36,12 @@ const BooksStore = ({navigation}) => {
         .then(({data}) => {
           setBookStore(data.books);
         })
-        .catch((err) => console.log('err book', err));
+        .catch((err) => {
+          console.log('err book', err);
+          Toast.show(
+            Notification(NOTIFI.error, 'Có lỗi xảy ra khi tạo bài viết'),
+          );
+        });
     }, []);
 
     useEffect(() => {

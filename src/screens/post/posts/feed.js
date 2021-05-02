@@ -49,7 +49,7 @@ const PostDescription = styled.Text`
 `;
 const PostPhoto = styled.Image`
   margin: 9px auto 0;
-  width: 180px;
+  width: 120px;
   height: 210px;
 `;
 const PostFooter = styled.View`

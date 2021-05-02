@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
 import {Icon, ListItem, Separator, Button} from 'native-base';
@@ -30,31 +31,32 @@ const Store = ({navigation}) => {
     const {
       stores: {shop, user},
     } = useContext(MobXProviderContext);
-    const {info} = shop;
-    // console.log(shop);
-    console.log('userinfo', user);
+    const {info, setInfo} = shop;
+    console.log('shop info', shop.info);
+    console.log('ủe', user);
     const navigation = useNavigation();
-    const [listInfo, setListInfo] = useState(null);
+    const [listInfo, setListInfo] = useState([]);
     const [text, setText] = useState('');
     const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
       onCompleted: async (data) => {
-        setListInfo({
-          id: info?.id,
-          name: info?.name,
-        });
+        console.log('........', data);
+        // setListInfo({
+        //   id: info?.id,
+        //   name: info?.name,
+        // });
       },
       onError: (err) => {
-        console.log(err);
+        console.log('get store', err);
       },
     });
     useEffect(() => {
       store({
         variables: {
-          id: info?.id,
+          id: user.store?.id,
         },
       });
     }, [info]);
-    // console.log('List info ...', listInfo);
+    useEffect(() => {}, [info]);
 
     return !user.info.store ? (
       <View style={styles.createStore}>
@@ -74,8 +76,8 @@ const Store = ({navigation}) => {
         </View>
         <View style={styles.container_store}>
           <View style={styles.content}>
-            <Text>Tên shop: </Text>
-            <TextInput
+            <Text>Tên shop </Text>
+            <Text
               style={
                 (styles.text,
                 {
@@ -86,23 +88,41 @@ const Store = ({navigation}) => {
                   marginLeft: 10,
                   width: '100%',
                 })
-              }
-              value={info?.name}
-            />
+              }>
+              {info?.name}
+            </Text>
+          </View>
+          <View style={styles.address}>
+            <Text style={{paddingLeft: 10}}>Địa chỉ cửa hàng </Text>
+            <Text
+              style={{
+                color: '#333',
+                borderWidth: 0.3,
+                borderColor: '#111',
+                padding: 10,
+                marginVertical: 5,
+                marginLeft: 4,
+                borderRadius: 6,
+                width: '98%',
+              }}
+              numberOfLines={2}>
+              {info?.address}
+            </Text>
           </View>
           <View style={styles.des}>
             <Text>Mô tả shop: </Text>
-            <Textarea
-              containerStyle={styles.textareacont}
+            <Text
+              // containerStyle={styles.textareacont}
               style={styles.textarea}
               // onChangeText={this.onChange}
               // defaultValue={this.state.text}
-              maxLength={120}
-              placeholder={'Description'}
-              placeholderTextColor={'#c7c7c7'}
-              underlineColorAndroid={'transparent'}
-              value={info?.description}
-            />
+              // maxLength={120}
+              // placeholder={'Description'}
+              // placeholderTextColor={'#c7c7c7'}
+              // underlineColorAndroid={'transparent'}>
+            >
+              {info?.description}
+            </Text>
           </View>
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
@@ -121,7 +141,7 @@ const Store = ({navigation}) => {
                     <Text>Thêm sản phẩm</Text>
                   </ListItem>
                   <ListItem onPress={() => navigation.navigate('BooksStore')}>
-                    <Text>Tất cả sản phẩm</Text>
+                    <Text>Quản lý sản phẩm</Text>
                   </ListItem>
                 </CollapseBody>
               </Collapse>
@@ -141,8 +161,9 @@ const Store = ({navigation}) => {
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('ManageOrder')}>
-                    <Text>Tất cả sản phẩm</Text>
+                  <ListItem
+                    onPress={() => navigation.navigate('OrdersByStore')}>
+                    <Text>Quản lý đơn hàng</Text>
                   </ListItem>
                   {/* <ListItem>
                   <Text onPress={() => navigation.navigate('ViewAllProduct')}>
@@ -172,19 +193,20 @@ const Store = ({navigation}) => {
                   <ListItem onPress={() => navigation.navigate('Statistics')}>
                     <Text>Thống kê</Text>
                   </ListItem>
-                  {/* <ListItem>
-                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                    Tất cả sản phẩm
-                  </Text>
-                </ListItem> */}
                 </CollapseBody>
               </Collapse>
             </View>
           </View>
-          {/* money */}
-          {/* test */}
-          {/* tét */}
         </View>
+        <TouchableOpacity
+          style={{width: '100%'}}
+          onPress={() =>
+            navigation.navigate('UpdateStore', {
+              idStore: info.id,
+            })
+          }>
+          <Text style={styles.btn}>Cập nhật cửa hàng</Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   });
@@ -235,6 +257,11 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '70%',
   },
+
+  address: {
+    marginVertical: 5,
+  },
+
   text: {
     marginLeft: 10,
     width: '100%',
@@ -259,8 +286,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   textarea: {
-    // padding: -3?0,
-    marginTop: -10,
+    width: '98%',
+    marginVertical: 10,
     padding: 10,
     textAlignVertical: 'top', // hack android
     height: 130,
@@ -268,6 +295,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.1,
     borderRadius: 3,
     color: '#333',
+    marginBottom: 20,
   },
 
   evalue: {
@@ -282,6 +310,17 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 10,
+  },
+  btn: {
+    paddingHorizontal: 10,
+    padding: 10,
+    marginHorizontal: 85,
+    width: '50%',
+    textAlign: 'center',
+    color: '#fff',
+    borderRadius: 4,
+    marginBottom: 20,
+    backgroundColor: 'rgba(68, 108, 179, 1)',
   },
 });
 
