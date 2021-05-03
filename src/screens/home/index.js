@@ -17,6 +17,7 @@ import {GET_BOOKS_CATEGORY} from '../../query/book';
 import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
 import {styles} from './styles';
+import Voice from '@react-native-community/voice';
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -33,6 +34,7 @@ const Home = ({navigation}) => {
     const [loading, setLoading] = useState(true);
     const [bookSell, setBookSell] = useState(undefined);
     const [loadingByCategory, setLoadingByCategory] = useState(false);
+    const [isVoice, setIsVoice] = useState(false);
     useEffect(() => {
       setLoading(true);
       setSelectCategory('all');
@@ -69,6 +71,39 @@ const Home = ({navigation}) => {
       Images.slider3,
       Images.slider4,
     ]);
+
+    useEffect(() => {
+      function onSpeechStart(e) {}
+      function onSpeechResults(e) {
+        console.log('onSpeechResults: ', e);
+      }
+      function onSpeechPartialResults(e) {}
+      function onSpeechVolumeChanged(e) {}
+      function onSpeechEnd(e) {
+        setIsVoice(false);
+      }
+      function onSpeechError(e) {
+        setIsVoice(false);
+      }
+      Voice.onSpeechStart = onSpeechStart;
+      Voice.onSpeechEnd = onSpeechEnd;
+      Voice.onSpeechError = onSpeechError;
+      Voice.onSpeechResults = onSpeechResults;
+      Voice.onSpeechPartialResults = onSpeechPartialResults;
+      Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+      return () => {
+        Voice.destroy().then(Voice.removeAllListeners);
+      };
+    }, []);
+    const voice = async () => {
+      setIsVoice(true);
+      await Voice.start('vi-VN');
+    };
+    const stop = async () => {
+      setIsVoice(false);
+      await Voice.stop();
+    };
+
     return (
       <ScrollView
         style={styles.home__container}
@@ -83,6 +118,14 @@ const Home = ({navigation}) => {
         <View style={styles.slider__container}>
           <SliderBox images={images} autoplay={true} circleLoop={true} />
         </View>
+        <TouchableOpacity
+          onPress={voice}
+          style={{width: '100%', backgroundColor: 'red'}}>
+          <Text>noi</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={stop} style={{width: '100%'}}>
+          <Text>stop</Text>
+        </TouchableOpacity>
         {!loading ? (
           <View style={styles.body}>
             <View style={styles.bestSell}>
