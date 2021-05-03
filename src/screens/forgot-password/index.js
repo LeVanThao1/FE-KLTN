@@ -16,6 +16,9 @@ import {
 } from '../../utils/validations';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {FORGOT_PASSWORD} from '../../query/user';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
+import {Notification} from '../../utils/notifications';
 
 export default function ResetPassword({navigation}) {
   const [forgotPassword] = useLazyQuery(FORGOT_PASSWORD, {
@@ -26,7 +29,10 @@ export default function ResetPassword({navigation}) {
         account: account.value,
       });
     },
-    onError: (err) => console.log(err),
+    onError: (err) => {
+      Toast.show(Notification(NOTIFI.error, err.message));
+      console.log(err);
+    },
   });
   const onPress = () => {
     if (!validateAccount(true)) return;

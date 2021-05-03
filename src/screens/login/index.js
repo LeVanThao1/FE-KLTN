@@ -19,6 +19,9 @@ import {
   phoneNumberValidator,
 } from '../../utils/validations';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
+import {Notification} from '../../utils/notifications';
 const Login = ({navigation}) => {
   const [userID, setUserID] = React.useState({
     value: '',
@@ -54,6 +57,7 @@ const Login = ({navigation}) => {
       },
       onError: (err) => {
         console.log(err);
+        Toast.show(Notification(NOTIFI.error, err.message));
       },
     });
     const validateUserId = () => {

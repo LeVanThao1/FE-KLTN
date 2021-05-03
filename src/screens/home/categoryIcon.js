@@ -4,6 +4,9 @@ import {Icon} from 'native-base';
 import {GET_CATEGORIES} from '../../query/category';
 import {useLazyQuery} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
 
 const CategoryIcon = () => {
   return useObserver(() => {
@@ -29,6 +32,7 @@ const CategoryIcon = () => {
         },
         onError: (err) => {
           console.log(err);
+          Toast.show(Notification(NOTIFI.error, err.message));
         },
       },
     );

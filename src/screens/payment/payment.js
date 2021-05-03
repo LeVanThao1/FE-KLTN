@@ -13,7 +13,8 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import {Icon, ListItem, Picker, Separator, Toast} from 'native-base';
+import {Icon, ListItem, Picker, Separator} from 'native-base';
+import Toast from 'react-native-toast-message';
 import {
   Collapse,
   CollapseHeader,
@@ -25,67 +26,80 @@ import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
 import {useMutation} from '@apollo/client';
 import {CREATE_ORDER} from '../../query/order';
-
+import {mutateData, queryData} from '../../common';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import {GET_DISTANCE} from '../../query/distance';
 const Payment = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {
         user: {cart, setCart},
-        order: {info, setInfo},
+        order: {infoOrder, setInfoOrder},
       },
     } = useContext(MobXProviderContext);
     const [add, setAdd] = useState('');
     const [typePayment, setTypePayment] = useState('AFTERRECEIVED');
     const [total, setTotal] = useState(0);
-    const [ship, setShip] = useState(18000);
+    const [ship, setShip] = useState(undefined);
     const [note, setNote] = useState('');
     useEffect(() => {
       if (cart) {
         setTotal(cart.reduce((a, b) => a + b.book.price * b.amount, 0));
       }
     }, [cart]);
-    const [createOrder] = useMutation(CREATE_ORDER, {
-      onCompleted: () => {
-        setCart([]);
-        setInfo(undefined);
-        navigation.navigate('ManageOrder');
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    });
-    console.log('infro payment', info);
+
+    useEffect(() => {
+      if (infoOrder && infoOrder.address.length > 0) {
+        queryData(GET_DISTANCE, {
+          origin: infoOrder.address,
+          destination: cart.map((ct) => ct.book.store.address),
+        })
+          .then(({data}) => {
+            console.log(data);
+            setShip(data.distances);
+          })
+          .catch((err) => {
+            console.log('getDistance', err);
+            Toast.show(Notification(NOTIFI.error, err));
+          });
+      }
+    }, [infoOrder]);
+
     const onPress = () => {
-      const subOrder = [...cart].map((ct) => ({
+      if (!infoOrder) {
+        Toast.show(
+          Notification(NOTIFI.error, 'Vui lòng nhập địa chỉ nhận hàng'),
+        );
+        return;
+      }
+      const subOrder = [...cart].map((ct, i) => ({
         book: ct.book.id,
         amount: ct.amount,
         price: ct.book.price,
+        ship: ship[i],
       }));
-      if (!info) {
-        Toast.show({
-          text: 'Vui lòng nhập địa chỉ nhận hàng',
-          type: 'success',
-          position: 'top',
-          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-        });
-        return;
-      }
       const order = {
-        name: info?.name,
-        phone: info?.phone,
-        address: info?.address,
+        name: infoOrder?.name,
+        phone: infoOrder?.phone,
+        address: infoOrder?.address,
         subOrder,
         typePayment: typePayment,
         note: note,
       };
-      console.log(order);
-      createOrder({
-        variables: {
-          dataOrder: order,
-        },
-      });
+
+      mutateData(CREATE_ORDER, {dataOrder: order})
+        .then(() => {
+          setCart([]);
+          setInfoOrder(undefined);
+          navigation.navigate('ManageOrder');
+          Toast.show(Notification(NOTIFI.success, 'Đặt hàng thành công'));
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, 'Đặt hàng không thành công'));
+        });
     };
-    console.log(info);
     return (
       <SafeAreaView>
         <ScrollView>
@@ -102,9 +116,9 @@ const Payment = ({navigation}) => {
                 </Text>
               </View>
               <View style={{alignItems: 'center', height: 30}}>
-                {info && (
+                {infoOrder && (
                   <Text style={{...styles.text, width: 150}} numberOfLines={2}>
-                    {info.address}
+                    {infoOrder.address}
                   </Text>
                 )}
               </View>
@@ -142,7 +156,7 @@ const Payment = ({navigation}) => {
             </View>
             {cart &&
               cart.map((ct, i) => (
-                <View>
+                <View key={i}>
                   <View style={styles.product}>
                     <Image
                       source={{
@@ -158,9 +172,22 @@ const Payment = ({navigation}) => {
                       </Text>
                       <View style={styles.product_amount}>
                         <Text>{ct.book.price}</Text>
-                        <TextInput placeholder="Nhập số lượng">
+                        <TextInput
+                          placeholder="Nhập số lượng"
+                          style={{textAlign: 'right'}}>
                           x {ct.amount}
                         </TextInput>
+                      </View>
+                      <View style={styles.product_amount}>
+                        <Text>Phí vận chuyển</Text>
+                        <Text
+                          style={{
+                            textAlign: 'right',
+                            fontSize: 14,
+                            color: 'rgba(68, 108, 179, 1)',
+                          }}>
+                          {ship ? ship[i] + ' đ' : 'Chưa xác định'}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -174,7 +201,7 @@ const Payment = ({navigation}) => {
                         (styles.price,
                         {fontSize: 14, color: 'rgba(68, 108, 179, 1)'})
                       }>
-                      {ct.amount * ct.book.price} đ
+                      {ct.amount * ct.book.price + (ship ? ship[i] : 0)} đ
                     </Text>
                   </View>
                 </View>
@@ -201,15 +228,17 @@ const Payment = ({navigation}) => {
                   {total} đ
                 </Text>
               </View>
-              <View style={styles.row}>
+              {/* <View style={styles.row}>
                 <Text>Tổng phí vận chuyển</Text>
                 <Text style={(styles.price, {fontSize: 14, color: '#111'})}>
                   {ship} đ
                 </Text>
-              </View>
+              </View> */}
               <View style={styles.row}>
                 <Text style={styles.sumary}>Tổng thanh toán</Text>
-                <Text style={styles.sumary}>{total + ship} đ</Text>
+                <Text style={styles.sumary}>
+                  {ship ? total + ship.reduce((a, b) => a + b, 0) : total} đ
+                </Text>
               </View>
             </View>
             {/* btn payment */}
@@ -273,6 +302,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   product_amount: {
+    width: Dimensions.get('screen').width - 104,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

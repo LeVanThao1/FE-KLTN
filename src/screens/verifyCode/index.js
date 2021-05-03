@@ -12,6 +12,9 @@ import {useLazyQuery, useQuery} from '@apollo/client';
 import {VERIFY} from '../../query/user';
 import {codeValidator} from '../../utils/validations';
 import {deFormatPhone} from '../../utils/support/phoneFormat';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import Toast from 'react-native-toast-message';
 export default function VerifyCode({route, navigation}) {
   const [verify, {called, loading, data, error}] = useLazyQuery(VERIFY, {
     onCompleted: async (data) => {
@@ -19,6 +22,7 @@ export default function VerifyCode({route, navigation}) {
       navigation.navigate('Login');
     },
     onError: (err) => {
+      Toast.show(Notification(NOTIFI.error, err.message));
       console.log(err);
     },
   });

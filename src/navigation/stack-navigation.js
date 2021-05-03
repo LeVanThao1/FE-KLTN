@@ -52,9 +52,12 @@ import UserInfo from '../screens/profile/infoUser';
 import OrdersByStore from '../screens/myStore/order';
 import OrderDetailStore from '../screens/myStore/order/order_detail';
 import UpdateStore from '../screens/myStore/updateStore';
+import ListStoreFound from '../screens/listStoreFound';
 import StoreDetail from '../screens/myStore/storeDetail';
-
+import * as Notifi from '../utils/notifications';
 import PostFb from '../screens/post/posts';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../constants';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -309,6 +312,12 @@ const routes = [
     header: false,
     component: Notification,
   },
+  {
+    name: 'ListStoreFound',
+    title: 'Tìm quanh đây',
+    header: false,
+    component: ListStoreFound,
+  },
 ];
 const AuthStack = () => {
   return useObserver(() => {
@@ -336,6 +345,7 @@ const AuthStack = () => {
       },
       onError: (err) => {
         setLoading(false);
+        // Toast.show(Notifi.Notification(NOTIFI.error, err.message));
       },
     });
     const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {

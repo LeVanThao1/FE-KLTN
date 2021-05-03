@@ -120,24 +120,9 @@ export const CREATE_COMMENT_BOOK = gql`
       author {
         id
         avatar
-      }
-      book {
-        id
         name
-        author
-        images
-        description
       }
       type
-      reply {
-        id
-        content
-        author {
-          id
-          avatar
-        }
-        type
-      }
       createdAt
     }
   }

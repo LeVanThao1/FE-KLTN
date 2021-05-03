@@ -16,6 +16,9 @@ import {
   phoneNumberValidator,
 } from '../../utils/validations';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import {NOTIFI} from '../../constants';
+import {Notification} from '../../utils/notifications';
+import Toast from 'react-native-toast-message';
 export default function Register({navigation}) {
   const [register, {called, loading, data, error}] = useMutation(REGISTER, {
     onCompleted: async (data) => {
@@ -25,6 +28,7 @@ export default function Register({navigation}) {
       });
     },
     onError: (err) => {
+      Toast.show(Notification(NOTIFI.error, err.message));
       console.log(err);
     },
   });
@@ -41,7 +45,7 @@ export default function Register({navigation}) {
       email: userId.value.trim().toLowerCase(),
       name: name.value,
       password: password.value.trim(),
-      phone: typeRegister ? deFormatPhone(userId.value) : ""
+      phone: typeRegister ? deFormatPhone(userId.value) : '',
     };
     register({
       variables: {
