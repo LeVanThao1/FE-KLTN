@@ -25,6 +25,9 @@ import {useLazyQuery} from '@apollo/client';
 import {GET_STORE} from '../../query/store';
 import {introspectionFromSchema} from 'graphql';
 import {transaction} from 'mobx';
+import {Notification} from '../../utils/notifications';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 
 const Store = ({navigation}) => {
   return useObserver(() => {
@@ -46,6 +49,7 @@ const Store = ({navigation}) => {
         // });
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log('get store', err);
       },
     });
@@ -93,7 +97,7 @@ const Store = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.address}>
-            <Text>Địa chỉ cửa hàng </Text>
+            <Text style={{paddingLeft: 10}}>Địa chỉ cửa hàng </Text>
             <Text
               style={{
                 color: '#333',

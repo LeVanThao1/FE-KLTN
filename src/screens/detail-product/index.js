@@ -17,6 +17,35 @@ import {GET_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
+import styled from 'styled-components';
+import {mutateData} from '../../common';
+import {CREATE_COMMENT_BOOK} from '../../query/comment';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import moment from 'moment';
+
+const Row = styled.View`
+  align-items: center;
+  flex-direction: row;
+`;
+const UserName = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+  color: #222121;
+`;
+const PostTime = styled.Text`
+  font-size: 12px;
+  color: #747476;
+`;
+
+const User = styled.Image`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border-color: #1777f2;
+  border-width: ${(props) => (props.story ? '3px' : 0)};
+`;
 
 const DetailProduct = ({navigation, route}) => {
   return useObserver(() => {
@@ -27,6 +56,8 @@ const DetailProduct = ({navigation, route}) => {
     const {productId} = route.params;
     const [book, setBook] = useState(null);
     const [listItem, setListItem] = useState([]);
+    console.log('book detail', book);
+
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
     );
@@ -48,18 +79,23 @@ const DetailProduct = ({navigation, route}) => {
             : null,
         });
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
     });
 
     const [removeLike] = useMutation(REMOVE_TO_LIKE, {
       onCompleted: () => {
         removeToLike(productId);
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
     });
     const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
       onCompleted: async (data) => {
-        console.log("quanggggggggg",data);
         setBook(data.book);
         setListItem(
           data.book.store.books.map((ct, i) => ({
@@ -72,10 +108,16 @@ const DetailProduct = ({navigation, route}) => {
         );
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
-
+    const address = book?.store.address;
+    const Province = (add) => {
+      const tempAddress = add.split(',');
+      const length = tempAddress.length;
+      return tempAddress[length - 1];
+    };
     useEffect(() => {
       getBook({
         variables: {
@@ -86,10 +128,10 @@ const DetailProduct = ({navigation, route}) => {
 
     const [updateCart, {load}] = useMutation(UPDATE_CART, {
       onCompleted: async (dt) => {
-        console.log('dt', dt);
         setCart(dt.updateCart);
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
@@ -110,6 +152,26 @@ const DetailProduct = ({navigation, route}) => {
           },
         });
       }
+    };
+    const onComment = () => {
+      if (comment.trim().length === 0) return;
+      mutateData(CREATE_COMMENT_BOOK, {
+        dataComment: {
+          content: comment,
+          type: 'TEXT',
+        },
+        bookId: productId,
+      })
+        .then(({data}) => {
+          setBook((cur) => ({
+            ...cur,
+            comment: [data.createCommentBook, ...cur.comment],
+          }));
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, err));
+        });
     };
     const [quantity, setQuantity] = React.useState(1);
     const [comment, onChangeComment] = React.useState('');
@@ -185,23 +247,26 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.slide__image_wrap}>
               <SliderBox
                 style={styles.slide__image}
-                images={[
-                  ...(book ? book.images : []),
-                  Images.onepiece1,
-                ]}
+                images={[...(book ? book.images : []), Images.onepiece1]}
                 autoplay={true}
               />
             </View>
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
                 <Text style={styles.detail__content_name}>
-                  {book.name ? book.name : "Tên sách"}
+                  {book.name ? book.name : 'Tên sách'}
                 </Text>
-                <Text style={{...styles.detail__content_name, fontSize: 16}}>{book.publisher}đ</Text>
-                <Text style={styles.current__price}>Giá bán: {book.price}đ</Text>
+                <Text style={{...styles.detail__content_name, fontSize: 16}}>
+                  {book.publisher}đ
+                </Text>
+                <Text style={styles.current__price}>
+                  Giá bán: {book.price}đ
+                </Text>
                 <View style={styles.detail__content_rate}>
                   <View style={styles.quantity_sold}>
-                    <Text style={styles.quantity__sold_text}>Đã bán: {book.sold}</Text>
+                    <Text style={styles.quantity__sold_text}>
+                      Đã bán: {book.sold}
+                    </Text>
                     {/* sản phẩm được yêu thích */}
                     <TouchableOpacity onPress={likeProduct}>
                       <Icon
@@ -218,7 +283,9 @@ const DetailProduct = ({navigation, route}) => {
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
                     <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>-</Text>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
+                        -
+                      </Text>
                     </TouchableOpacity>
                     <TextInput
                       style={styles.input__quantity}
@@ -228,17 +295,43 @@ const DetailProduct = ({navigation, route}) => {
                       onChangeText={setQuantity}
                     />
                     <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>+</Text>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
+                        +
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
                   <TouchableOpacity onPress={addToCart}>
-                    <Text style={{...styles.buy__action_text, fontWeight: "500"}}>
+                    <Text
+                      style={{...styles.buy__action_text, fontWeight: '500'}}>
                       Thêm vào giỏ hàng
                     </Text>
                   </TouchableOpacity>
                 </View>
+              </View>
+              <View style={styles.viewStore}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('StoreDetail', {
+                      id: book.store.id,
+                    })
+                  }>
+                  <View style={styles.store}>
+                    <Row>
+                      <User source={{uri: book.store.avatar}} />
+                      <View style={{paddingLeft: 10}}>
+                        <UserName>{book.store.name}</UserName>
+                        <Row>
+                          <PostTime>{Province(address)}</PostTime>
+                        </Row>
+                      </View>
+                    </Row>
+                    <Row>
+                      <Text style={styles.showStore}>Xem shop</Text>
+                    </Row>
+                  </View>
+                </TouchableOpacity>
               </View>
               <View style={styles.detail__book_description}>
                 <Text style={styles.detail__book_description_title}>
@@ -273,60 +366,42 @@ const DetailProduct = ({navigation, route}) => {
                     placeholder="Nhập bình luận của bạn"
                     onChangeText={onChangeComment}
                   />
-                  <TouchableOpacity>
-                    <Text style={{...styles.buy__action_text, fontSize: 14, fontWeight: "500"}}>Bình luận</Text>
+                  <TouchableOpacity onPress={onComment}>
+                    <Text
+                      style={{
+                        ...styles.buy__action_text,
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
+                      Bình luận
+                    </Text>
                   </TouchableOpacity>
                 </View>
-                <View style={styles.book__comment_wrap}>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
+                {book.comment.length > 0 && (
+                  <View style={styles.book__comment_wrap}>
+                    {book.comment.map((cm, i) => (
+                      <View style={styles.comment__user} key={i}>
+                        <View style={styles.store__wrapper}>
+                          <Image
+                            style={styles.user__avatar}
+                            source={{
+                              uri: cm.author.avatar,
+                            }}
+                          />
+                          <Text style={styles.user__name}>
+                            {cm.author.name}
+                          </Text>
+                        </View>
+                        <Text style={styles.comment__user_content}>
+                          {cm.content}
+                        </Text>
+                        <Text style={styles.comment__user_date}>
+                          {moment(moment(cm.createdAt)._d).fromNow()}
+                        </Text>
+                      </View>
+                    ))}
                   </View>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
-                  </View>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
-                  </View>
-                </View>
+                )}
               </View>
             </View>
           </ScrollView>
@@ -342,6 +417,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: '100%',
     backgroundColor: '#f6f6f6',
+  },
+  viewStore: {
+    marginVertical: 10,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+  },
+  showStore: {
+    padding: 10,
+    color: 'rgba(68, 108, 179, 1)',
+    borderWidth: 0.5,
+    borderColor: 'rgba(68, 108, 179, 1)',
+    // backgroundColor: 'rgba(68, 108, 179, 1)',
+    borderRadius: 4,
+  },
+  store: {
+    width: '100%',
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   slide__image_wrap: {
     width: '100%',
@@ -360,14 +454,14 @@ const styles = StyleSheet.create({
   },
   detail__content_name: {
     fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 8
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
   },
   current__price: {
     color: 'rgba(68, 108, 179, 1)',
     fontSize: 16,
-    textAlign: "center"
+    textAlign: 'center',
   },
   detail__content_rate: {
     flexDirection: 'row',
@@ -436,10 +530,10 @@ const styles = StyleSheet.create({
   input__quantity: {
     width: 30,
     marginHorizontal: 2,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 15,
-    fontWeight: "bold",
-    textDecorationLine: "underline"
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
   btn_quantity: {
     width: 40,
@@ -455,12 +549,13 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     borderRadius: 16,
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   control__buy_action: {
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 5,
+    paddingBottom: 14,
   },
   store__btn: {
     height: 34,
@@ -515,7 +610,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#888',
     borderBottomWidth: 1,
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   detail__book_description_wrap: {
     flexDirection: 'row',
@@ -577,9 +672,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 25,
   },
-  quantity__sold_text:{
-    fontSize: 16
-  }
+  quantity__sold_text: {
+    fontSize: 16,
+  },
 });
 
 export default DetailProduct;

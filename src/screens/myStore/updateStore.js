@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button, Toast} from 'native-base';
+import {Icon, ListItem, Separator, Button} from 'native-base';
 import {
   Collapse,
   CollapseHeader,
@@ -33,6 +33,9 @@ import sub, {
   getDistrictsByProvinceCode,
   getWardsByDistrictCode,
 } from 'sub-vn';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
 
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
@@ -89,6 +92,7 @@ const UpdateStore = ({navigation}) => {
           });
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log('error update store', err);
         },
       },

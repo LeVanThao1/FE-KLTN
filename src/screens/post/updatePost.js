@@ -1,7 +1,7 @@
 import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View, Toast} from 'native-base';
+import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
 import {Image, Alert} from 'react-native';
 import {
@@ -12,12 +12,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
+import Toast from 'react-native-toast-message';
 
 import Images from '../../assets/images/images';
+import {NOTIFI} from '../../constants';
 import {UPDATE_POST} from '../../query/post';
+import {Notification} from '../../utils/notifications';
 import {stylesPost} from './stylePost';
 
-const UpdatePost = ({route}) => {
+const UpdatePost = ({route, navigation}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
@@ -92,22 +95,11 @@ const UpdatePost = ({route}) => {
             price: Number(price.value),
           };
           user.setPosts([dataPost, ...newData]);
-          NavigationPreloadManager.goBack();
-          Toast.show({
-            text: 'Cập nhật thành công',
-            type: 'success',
-            position: 'top',
-            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-          });
+          Toast.show(Notification(NOTIFI.error, 'Cập nhật thành công'));
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
           console.log(err);
-          Toast.show({
-            text: 'Cập nhật không thành công',
-            type: 'danger',
-            position: 'top',
-            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-          });
         },
       },
     );

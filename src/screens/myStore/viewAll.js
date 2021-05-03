@@ -12,7 +12,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 import {DELETE_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
+import {Notification} from '../../utils/notifications';
 import {styles, stylesTable} from './styles';
 
 const ViewAll = () => {
@@ -48,6 +51,7 @@ const ViewAll = () => {
           // );
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log(err);
         },
       },
@@ -86,6 +90,7 @@ const ViewAll = () => {
     const [deleteBook, {dd, aa, ss, xx}] = useMutation(DELETE_BOOK, {
       onCompleted: async (data) => {},
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });

@@ -13,6 +13,9 @@ import {SEARCH_BOOK} from '../query/book';
 import {useLazyQuery} from '@apollo/client';
 import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../utils/notifications';
+import {NOTIFI} from '../constants';
 
 const HeaderStack = ({navigation}) => {
   return useObserver(() => {
@@ -32,6 +35,7 @@ const HeaderStack = ({navigation}) => {
         },
         onError: (err) => {
           console.log(err);
+          Toast.show(Notification(NOTIFI.error, err.message));
         },
       },
     );

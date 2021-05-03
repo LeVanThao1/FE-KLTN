@@ -33,6 +33,36 @@ export const GET_STORES_LOCATION = gql`
   }
 `;
 
+export const GET_STORE_BY_USER = gql`
+  query store($id: ID!) {
+    store(id: $id) {
+      id
+      avatar
+      background
+      name
+      description
+      address
+      books {
+        id
+        name
+        author
+        images
+        year
+        numberOfReprint
+        publisher
+        category {
+          id
+          name
+        }
+        description
+        amount
+        price
+        sold
+      }
+    }
+  }
+`;
+
 export const CREATE_STORE = gql`
   mutation createStore($dataStore: storeCreate!) {
     createStore(dataStore: $dataStore) {

@@ -1,6 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, Toast, View} from 'native-base';
+import {Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
   TextInput,
@@ -13,11 +13,14 @@ import {
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
 import Textarea from 'react-native-textarea';
-import {Form, Toast, Item, Picker} from 'native-base';
+import {Form, Item, Picker} from 'native-base';
 import Images from '../../assets/images/images';
 import {CREATE_BOOK, UPDATE_BOOK} from '../../query/book';
 import * as ImagePicker from 'react-native-image-picker';
 import {button} from '../style';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../../utils/notifications';
+import {NOTIFI} from '../../../constants';
 
 const UpdateBook = ({navigation, route}) => {
   return useObserver(() => {
@@ -101,6 +104,7 @@ const UpdateBook = ({navigation, route}) => {
           navigation.goBack();
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log(err);
         },
       },

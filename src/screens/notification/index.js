@@ -1,76 +1,81 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
-import {StyleSheet, View, StatusBar, FlatList, Text, TouchableOpacity} from 'react-native';
-import {Icon} from "native-base";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {Icon} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const icon = {
   book: {
-    type: "FontAwesome",
-    name: "book"
+    type: 'FontAwesome',
+    name: 'book',
   },
   post: {
-    type: "MaterialCommunityIcons",
-    name: "post"
+    type: 'MaterialCommunityIcons',
+    name: 'post',
   },
   order: {
-    type: "MaterialCommunityIcons",
-    name: "sale"
+    type: 'MaterialCommunityIcons',
+    name: 'sale',
   },
-}
+};
 
 const route = {
   book: {
-    linkID: "commentBook",
-    screen: "Detail-Product",
-    id: "productId"
+    linkID: 'commentBook',
+    screen: 'Detail-Product',
+    id: 'productId',
   },
   post: {
-    linkID: "commentPost",
-    screen: "PostUser",
-    id: "postId"
+    linkID: 'commentPost',
+    screen: 'PostUser',
+    id: 'postId',
   },
   order: {
-    linkID: "order",
-    screen: "OrderDetail",
-    id: "id"
-  }
-}
+    linkID: 'order',
+    screen: 'OrderDetail',
+    id: 'id',
+  },
+};
 
 const NotificationScreen = ({navigation}) => {
-  return useObserver(()=>{
+  return useObserver(() => {
     const {
-      stores: {
-        user: {
-          info:{notifications}
-        },
-      },
+      stores: {notification},
     } = useContext(MobXProviderContext);
-    const [noti, setNoti] = useState(notifications);
-    const [selected, setSelected] = useState("order")
+    const [selected, setSelected] = useState('order');
     useEffect(() => {
-    //  console.log(noti[selected]);
-    }, [selected])
-    const SideBarIcon = ({name}) =>(
-      <TouchableOpacity onPress={()=>setSelected(name)}>
-        <View style={name === selected ? styles.buttonActiveContainer : styles.buttonInactiveContainer}>
+      //  console.log(noti[selected]);
+    }, [selected]);
+    const SideBarIcon = ({name}) => (
+      <TouchableOpacity onPress={() => setSelected(name)}>
+        <View
+          style={
+            name === selected
+              ? styles.buttonActiveContainer
+              : styles.buttonInactiveContainer
+          }>
           {name === selected ? <View style={styles.activeMark} /> : null}
-              <Icon
-                type={icon[name].type}
-                name={icon[name].name}
-                style={name === selected ? styles.activeIcon : styles.icon}
-              />
-            </View>
+          <Icon
+            type={icon[name].type}
+            name={icon[name].name}
+            style={name === selected ? styles.activeIcon : styles.icon}
+          />
+        </View>
       </TouchableOpacity>
     );
     const NotificationItem = ({item}) => (
       <TouchableOpacity>
         <View style={styles.itemContainer}>
           <View style={styles.itemTopContainer}>
-            <View
-              style={styles.itemTypeContainer}
-            >
+            <View style={styles.itemTypeContainer}>
               <Icon
                 type={icon[item.type]?.type}
                 name={icon[item.type]?.name}
@@ -79,11 +84,13 @@ const NotificationScreen = ({navigation}) => {
             </View>
             <View style={styles.itemTopTextContainer}>
               <Text style={styles.itemTitle}>{item.title}</Text>
-              <Text style={styles.itemDate}>{item.createdAt?.slice(0,16).replace("T", "  ")}</Text>
+              <Text style={styles.itemDate}>
+                {item.createdAt?.slice(0, 16).replace('T', '  ')}
+              </Text>
             </View>
           </View>
           <View>
-            <Text style={styles.itemDescription} >{item.description}</Text>
+            <Text style={styles.itemDescription}>{item.description}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -93,13 +100,13 @@ const NotificationScreen = ({navigation}) => {
         <StatusBar barStyle="light-content" />
         <View style={styles.bodyContainer}>
           <View>
-            <SideBarIcon name="order"/>
-            <SideBarIcon name="post"/>
-            <SideBarIcon name="book"/>
+            <SideBarIcon name="order" />
+            <SideBarIcon name="post" />
+            <SideBarIcon name="book" />
           </View>
           <View style={styles.listContainer}>
             <FlatList
-              data={noti[selected].map(e=> ({...e, type: selected}))}
+              data={notification[selected].map((e) => ({...e, type: selected}))}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({item}) => <NotificationItem item={item} />}
             />
@@ -107,14 +114,13 @@ const NotificationScreen = ({navigation}) => {
         </View>
       </View>
     );
-
-  })
+  });
 };
 
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    backgroundColor: "#ededed"
+    backgroundColor: '#ededed',
   },
   bodyContainer: {
     flex: 1,
@@ -136,16 +142,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#1e88e5',
     width: 4,
   },
-  icon:{
-    color:"#949494",
-    fontSize: 22
+  icon: {
+    color: '#949494',
+    fontSize: 22,
   },
   activeIcon: {
     padding: 12,
     // trick
     marginLeft: -4,
-    color:"#949494",
-    fontSize: 22
+    color: '#949494',
+    fontSize: 22,
   },
   //
   listContainer: {
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomColor: '#ededed',
     borderBottomWidth: 1,
-    marginBottom: 8
+    marginBottom: 8,
   },
   itemTopContainer: {
     flexDirection: 'row',
@@ -191,10 +197,10 @@ const styles = StyleSheet.create({
     // fontSize: 12,
     marginTop: 12,
   },
-  notificationIcon:{
-    color: "#fff",
-    fontSize: 18
-  }
+  notificationIcon: {
+    color: '#fff',
+    fontSize: 18,
+  },
 });
 
 export default NotificationScreen;

@@ -25,31 +25,31 @@ const Address = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {
-        order: {info, setInfo},
+        order: {infoOrder, setInfoOrder},
       },
     } = useContext(MobXProviderContext);
     const [provinces, setProvinces] = useState({
-      value: info ? info.provinces : undefined,
+      value: infoOrder ? infoOrder.provinces : undefined,
       error: '',
     });
     const [districts, setDistricts] = useState({
-      value: info ? info.districts : undefined,
+      value: infoOrder ? infoOrder.districts : undefined,
       error: '',
     });
     const [ward, setWard] = useState({
-      value: info ? info.ward : undefined,
+      value: infoOrder ? infoOrder.ward : undefined,
       error: '',
     });
     const [name, setName] = useState({
-      value: info ? info.name : '',
+      value: infoOrder ? infoOrder.name : '',
       error: '',
     });
     const [phone, setPhone] = useState({
-      value: info ? deFormatPhone(info.phone) : '',
+      value: infoOrder ? deFormatPhone(infoOrder.phone) : '',
       error: '',
     });
     const [andress, setAndress] = useState({
-      value: info ? info.andress : '',
+      value: infoOrder ? infoOrder.andress : '',
       error: '',
     });
     const validatePhone = (type) => {
@@ -115,7 +115,7 @@ const Address = ({navigation}) => {
     };
     const onPress = () => {
       if (validateSubmit()) {
-        setInfo({
+        setInfoOrder({
           name: name.value,
           phone: deFormatPhone(phone.value),
           address: `${andress.value}, ${ward.value.split('-')[1]}, ${

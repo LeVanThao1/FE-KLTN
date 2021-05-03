@@ -49,6 +49,9 @@ export const LOGIN = gql`
               images
             }
             name
+            store {
+              address
+            }
           }
           amount
           price
@@ -166,6 +169,9 @@ export const GET_USER = gql`
             images
           }
           name
+          store {
+            address
+          }
         }
         amount
         price
@@ -279,6 +285,9 @@ export const REFRESH_TOKEN = gql`
             images
           }
           name
+          store {
+            address
+          }
         }
         amount
         price

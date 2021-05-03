@@ -10,26 +10,33 @@ import {
 import {Icon} from 'native-base';
 
 import {passwordValidator} from '../../utils/validations';
-import { RESET_PASSWORD } from '../../query/user';
+import {RESET_PASSWORD} from '../../query/user';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import Toast from 'react-native-toast-message';
+
 export default function ResetPassword({navigation, route}) {
-  console.log(token)
+  console.log(token);
   const {token} = route.params;
   const onPress = () => {
     if (validateConfirmPassword(true) + validatePassword(true) !== 2) return;
     resetPassword({
       variables: {
         token,
-        password: newPassword.value
-      }
-    })
+        password: newPassword.value,
+      },
+    });
     //handle here
   };
   const [resetPassword] = useMutation(RESET_PASSWORD, {
     onCompleted: () => {
-      navigation.navigate("Login");
+      navigation.navigate('Login');
     },
-    onError: (err) => console.log(err)
-  })
+    onError: (err) => {
+      Toast.show(Notification(NOTIFI.error, err.message));
+      console.log(err);
+    },
+  });
   const [newPassword, setNewPassword] = useState({
     value: '',
     error: '',

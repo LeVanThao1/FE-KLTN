@@ -18,6 +18,9 @@ import {UPDATE_POST} from '../../query/post';
 import {CREATE_COMMENT_BOOK, CREATE_COMMENT_POST} from '../../query/comment';
 import Comment from '../post/comment';
 import {stylesPost} from './styles';
+import {Notification} from '../../utils/notifications';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
@@ -39,6 +42,7 @@ const BookDetail = ({navigation, book}) => {
         setBookComment([data.createCommentBook, ...bookComment]);
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log('gaga', err);
       },
     });

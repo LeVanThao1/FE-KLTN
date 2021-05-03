@@ -101,26 +101,8 @@ export const GET_BOOK = gql`
         id
         name
         avatar
-        books {
-          id
-          book {
-            id
-            name
-            images
-            year
-            numberOfReprint
-            publisher
-            description
-            category {
-              id
-              name
-            }
-          }
-          amount
-          price
-          sold
-          createdAt
-        }
+        background
+        address
       }
       name
       images

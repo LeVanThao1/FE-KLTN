@@ -74,6 +74,7 @@ const NewPost = ({navigation}) => {
         setImageUpload([...imagesUpload, ...tamp]);
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log('manage', err);
       },
     });

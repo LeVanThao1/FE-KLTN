@@ -12,9 +12,9 @@ const StoreCart = ({data}) => {
 
       style={styles.storeContainer}
       onPress={() => {
-        // navigation.navigate('BookDetail', {
-        //   book: book,
-        // });
+        navigation.navigate('StoreDetail', {
+          id: store.id,
+        });
       }}>
       <Image
         style={{width: 80, height: 80, borderRadius: 80}}

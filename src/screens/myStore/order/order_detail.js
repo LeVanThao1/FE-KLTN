@@ -2,7 +2,7 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import React, {useContext, useState, useEffect} from 'react';
-import {Icon, Toast} from 'native-base';
+import {Icon} from 'native-base';
 
 import {
   StyleSheet,
@@ -16,6 +16,9 @@ import {
 } from 'react-native';
 import {mutateData, queryData} from '../../../common';
 import {UPDATE_STATUS_ORDER} from '../../../query/order';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../../utils/notifications';
+import {NOTIFI} from '../../../constants';
 // import {GET_SUB_ORDER} from '../../query/subOrder';
 
 const OrderDetailStore = ({navigation, route}) => {
@@ -56,17 +59,18 @@ const OrderDetailStore = ({navigation, route}) => {
           (od) => od.id + '' !== orderStore.id + '',
         );
         setInfoOrder([infoOrder, ...newData]);
-        Toast.show({
-          text: `Chuyển đơn hàng sang trạng thái ${nextStatus(
-            orderStore.status,
-          )} thành công`,
-          type: 'success',
-          position: 'top',
-          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
-        });
+        Toast.show(
+          Notification(
+            NOTIFI.success,
+            `Chuyển đơn hàng sang trạng thái ${nextStatus(
+              orderStore.status,
+            )} thành công`,
+          ),
+        );
         navigation.goBack();
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
