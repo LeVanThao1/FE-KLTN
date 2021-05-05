@@ -220,7 +220,7 @@ const PostOne = ({route, post, info, type}) => {
               <PostTitle>{post.title}</PostTitle>
               <PostDescription>{post.description}</PostDescription>
 
-              {post.images.length < 5 ? (
+              {post.images.length < 3 ? (
                 <PhotoGroup>
                   {post.images.map((img, i) => (
                     <PhotoContainer>
@@ -230,7 +230,7 @@ const PostOne = ({route, post, info, type}) => {
                 </PhotoGroup>
               ) : (
                 <PhotoGroup>
-                  {post.images.slice(0, 3).map((img, i) => (
+                  {post.images.slice(0, 1).map((img, i) => (
                     <PhotoContainer>
                       <PostPhoto source={{uri: img}} />
                     </PhotoContainer>
@@ -238,10 +238,10 @@ const PostOne = ({route, post, info, type}) => {
                   {
                     <PhotoContainer>
                       <OverlayGroup>
-                        <PostPhoto source={{uri: post.images[4]}} />
+                        <PostPhoto source={{uri: post.images[1]}} />
                         <Overlay>
                           <Text style={{color: '#ffffff', fontSize: 22}}>
-                            + {post.images.length - 3}
+                            + {post.images.length - 1}
                           </Text>
                         </Overlay>
                       </OverlayGroup>
