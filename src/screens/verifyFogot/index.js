@@ -12,6 +12,9 @@ import {useLazyQuery, useQuery} from '@apollo/client';
 import {CHECK_OTP_FORGOT, VERIFY} from '../../query/user';
 import {codeValidator} from '../../utils/validations';
 import {deFormatPhone} from '../../utils/support/phoneFormat';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import Toast from 'react-native-toast-message';
 export default function VerifyForgot({route, navigation}) {
   const [verify, {called, loading, data, error}] = useLazyQuery(
     CHECK_OTP_FORGOT,
@@ -20,6 +23,7 @@ export default function VerifyForgot({route, navigation}) {
         navigation.navigate('ResetPassword', {token: data.checkOTPForgot});
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     },

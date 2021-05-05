@@ -25,6 +25,9 @@ import {useLazyQuery} from '@apollo/client';
 import {GET_STORE, GET_STORE_BY_USER} from '../../query/store';
 import {introspectionFromSchema} from 'graphql';
 import {transaction} from 'mobx';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
 
 const StoreDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -49,6 +52,7 @@ const StoreDetail = ({navigation, route}) => {
           });
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log('get store', err);
         },
       },

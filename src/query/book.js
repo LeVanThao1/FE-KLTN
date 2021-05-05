@@ -103,26 +103,6 @@ export const GET_BOOK = gql`
         avatar
         background
         address
-        books {
-          id
-          book {
-            id
-            name
-            images
-            year
-            numberOfReprint
-            publisher
-            description
-            category {
-              id
-              name
-            }
-          }
-          amount
-          price
-          sold
-          createdAt
-        }
       }
       name
       images

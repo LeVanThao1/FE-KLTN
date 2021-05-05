@@ -13,6 +13,9 @@ import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
 import {useLazyQuery} from '@apollo/client';
 import {GET_BOOKS_CATEGORIES} from '../../query/category';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
 
 const History = () => {
   const navigation = useNavigation();
@@ -34,6 +37,7 @@ const History = () => {
         );
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     },

@@ -6,6 +6,9 @@ import {Icon} from 'native-base';
 
 import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
 import {GET_SUB_ORDER} from '../../query/subOrder';
+import {Notification} from '../../utils/notifications';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 
 const OrderDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -23,6 +26,7 @@ const OrderDetail = ({navigation, route}) => {
           setSubOrder(data.subOrderByUser);
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log(err);
         },
       },
@@ -62,7 +66,7 @@ const OrderDetail = ({navigation, route}) => {
               borderRadius: 4,
               padding: 10,
               marginVertical: 8,
-              backgroundColor: "#ffffff"
+              backgroundColor: '#ffffff',
             }}>
             <View>
               <Image

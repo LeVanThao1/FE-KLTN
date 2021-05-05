@@ -14,10 +14,12 @@ import {
 import {useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Toast, Icon} from 'native-base';
+import {Icon} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
-
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import Toast from 'react-native-toast-message';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const Profile = ({navigation}) => {
@@ -25,10 +27,7 @@ const Profile = ({navigation}) => {
     const {
       stores: {
         auth,
-        user: {
-          info,
-          setInfo
-        },
+        user: {info, setInfo},
       },
     } = useContext(MobXProviderContext);
     const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
@@ -37,6 +36,7 @@ const Profile = ({navigation}) => {
         setAvatarUpload(data.uploadSingleFile.url);
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
@@ -56,12 +56,23 @@ const Profile = ({navigation}) => {
     };
     const [updateUser, {}] = useMutation(UPDATE_USER_INFO, {
       onCompleted: (data) => {
-        Toast.show({text: "Thay đổi thành công", type: "success", position: "top", style:{backgroundColor: 'rgba(68, 108, 179, 1)', color: "#ffffff"}});
-        setInfo({...info, name: userName,
+        Toast.show({
+          text: 'Thay đổi thành công',
+          type: 'success',
+          position: 'top',
+          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+        });
+        setInfo({
+          ...info,
+          name: userName,
           avatar: avatarUpload,
-          address: userAddress});
+          address: userAddress,
+        });
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
     });
 
     const handleChoosePhoto = (type) => {

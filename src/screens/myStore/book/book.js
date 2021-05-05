@@ -31,6 +31,7 @@ const Book = ({book}) => {
         // navigation.goBack();
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });

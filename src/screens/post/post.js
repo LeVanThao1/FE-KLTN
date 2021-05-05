@@ -21,9 +21,12 @@ import {Comment} from './comment';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 // import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
-import {Icon, Toast} from 'native-base';
+import {Icon} from 'native-base';
 
 import Avatar from './posts/avatar';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
 
 const Container = styled.View`
   flex: 1;
@@ -147,8 +150,10 @@ const PostOne = ({route, post, info, type}) => {
         onCompleted: async (data) => {
           const newData = [...posts].filter((p) => p.id + '' !== post.id + '');
           user.setPosts([...newData]);
+          Toast.show(Notification(NOTIFI.success, 'Xóa thành công'));
         },
         onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
           console.log(err);
         },
       },
@@ -164,12 +169,6 @@ const PostOne = ({route, post, info, type}) => {
         variables: {
           id: post.id,
         },
-      });
-      Toast.show({
-        text: 'Xóa thành công',
-        type: 'success',
-        position: 'top',
-        style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
       });
     };
 

@@ -18,6 +18,12 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
 import styled from 'styled-components';
+import {mutateData} from '../../common';
+import {CREATE_COMMENT_BOOK} from '../../query/comment';
+import Toast from 'react-native-toast-message';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import moment from 'moment';
 
 const Row = styled.View`
   align-items: center;
@@ -73,14 +79,20 @@ const DetailProduct = ({navigation, route}) => {
             : null,
         });
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
     });
 
     const [removeLike] = useMutation(REMOVE_TO_LIKE, {
       onCompleted: () => {
         removeToLike(productId);
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
     });
     const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
       onCompleted: async (data) => {
@@ -96,6 +108,7 @@ const DetailProduct = ({navigation, route}) => {
         );
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
@@ -118,6 +131,7 @@ const DetailProduct = ({navigation, route}) => {
         setCart(dt.updateCart);
       },
       onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
         console.log(err);
       },
     });
@@ -138,6 +152,26 @@ const DetailProduct = ({navigation, route}) => {
           },
         });
       }
+    };
+    const onComment = () => {
+      if (comment.trim().length === 0) return;
+      mutateData(CREATE_COMMENT_BOOK, {
+        dataComment: {
+          content: comment,
+          type: 'TEXT',
+        },
+        bookId: productId,
+      })
+        .then(({data}) => {
+          setBook((cur) => ({
+            ...cur,
+            comment: [data.createCommentBook, ...cur.comment],
+          }));
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, err));
+        });
     };
     const [quantity, setQuantity] = React.useState(1);
     const [comment, onChangeComment] = React.useState('');
@@ -332,7 +366,7 @@ const DetailProduct = ({navigation, route}) => {
                     placeholder="Nhập bình luận của bạn"
                     onChangeText={onChangeComment}
                   />
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={onComment}>
                     <Text
                       style={{
                         ...styles.buy__action_text,
@@ -343,56 +377,31 @@ const DetailProduct = ({navigation, route}) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View style={styles.book__comment_wrap}>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
+                {book.comment.length > 0 && (
+                  <View style={styles.book__comment_wrap}>
+                    {book.comment.map((cm, i) => (
+                      <View style={styles.comment__user} key={i}>
+                        <View style={styles.store__wrapper}>
+                          <Image
+                            style={styles.user__avatar}
+                            source={{
+                              uri: cm.author.avatar,
+                            }}
+                          />
+                          <Text style={styles.user__name}>
+                            {cm.author.name}
+                          </Text>
+                        </View>
+                        <Text style={styles.comment__user_content}>
+                          {cm.content}
+                        </Text>
+                        <Text style={styles.comment__user_date}>
+                          {moment(moment(cm.createdAt)._d).fromNow()}
+                        </Text>
+                      </View>
+                    ))}
                   </View>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
-                  </View>
-                  <View style={styles.comment__user}>
-                    <View style={styles.store__wrapper}>
-                      <Image
-                        style={styles.user__avatar}
-                        source={{
-                          uri:
-                            'https://theme.hstatic.net/1000361048/1000460005/14/slideshow_3.jpg?v=444',
-                        }}
-                      />
-                      <Text style={styles.user__name}>{'AppStore'}</Text>
-                    </View>
-                    <Text style={styles.comment__user_content}>
-                      Sách hay lắm bạn
-                    </Text>
-                    <Text style={styles.comment__user_date}>05/04/2021</Text>
-                  </View>
-                </View>
+                )}
               </View>
             </View>
           </ScrollView>
