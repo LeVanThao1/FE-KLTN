@@ -1,4 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
+import {COLORS} from "../../constants/themes";
 const {width, height} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   home__container: {
@@ -15,9 +16,9 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
     fontWeight: 'bold',
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 3,
     width: 88,
   },
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   filterActiveButtonContainer: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
@@ -71,7 +72,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   seeMoreText: {
-    color: '#0e45b4',
+    color: COLORS.primary,
     fontWeight: 'bold',
   },
 });

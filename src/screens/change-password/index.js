@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'native-base';
+import {COLOR, COLORS} from '../../constants/themes'
 import {passwordValidator} from '../../utils/validations';
 export default function ForgotPassword({navigation}) {
   const onPress = () => {
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

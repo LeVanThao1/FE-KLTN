@@ -5,6 +5,7 @@ import {RefreshControl, ScrollView} from 'react-native';
 import {queryData} from '../../common';
 import {GET_POSTS} from '../../query/post';
 import PostOne from '../post/post';
+import PostOfFeed from '../post/postOfFeed';
 
 const Feed = () => {
   return useObserver(() => {
@@ -38,7 +39,7 @@ const Feed = () => {
         {!loading ? (
           posts && posts.length > 0 ? (
             posts.map((pt) => (
-              <PostOne key={pt.id} post={pt} info={user.info} type={false} />
+              <PostOfFeed key={pt.id} post={pt} info={user.info} type={false} />
             ))
           ) : (
             <Text style={{textAlign: 'center', marginTop: 20}}>

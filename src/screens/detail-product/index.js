@@ -24,6 +24,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import moment from 'moment';
+import formatMoney from '../../utils/format/index';
 
 const Row = styled.View`
   align-items: center;
@@ -260,7 +261,7 @@ const DetailProduct = ({navigation, route}) => {
                   {book.publisher}đ
                 </Text>
                 <Text style={styles.current__price}>
-                  Giá bán: {book.price}đ
+                  Giá bán: {formatMoney(book.price)}đ
                 </Text>
                 <View style={styles.detail__content_rate}>
                   <View style={styles.quantity_sold}>
