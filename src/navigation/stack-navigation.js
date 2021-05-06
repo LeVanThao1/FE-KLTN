@@ -109,7 +109,6 @@ const HomeStack = ({navigation, initialRoute}) => {
             title: rt.title,
             headerStyle: {
               backgroundColor: COLORS.primary,
-              color: COLORS.white
             },
             headerTitleAlign: 'center',
             headerTitleStyle : {
