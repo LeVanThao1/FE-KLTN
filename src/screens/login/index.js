@@ -38,8 +38,8 @@ const Login = ({navigation}) => {
     const {
       stores: {auth, user, shop, notification},
     } = useContext(MobXProviderContext);
-
-    const [login, {called, loading, data, error}] = useLazyQuery(LOGIN, {
+    const [loading, setLoading] = useState(false);
+    const [login, {called, data, error}] = useLazyQuery(LOGIN, {
       onCompleted: async (data) => {
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
@@ -54,6 +54,7 @@ const Login = ({navigation}) => {
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);
+        setLoading(false);
       },
       onError: (err) => {
         console.log(err);
@@ -110,6 +111,7 @@ const Login = ({navigation}) => {
       };
       if (typeLogin) variables.phone = deFormatPhone(userID.value.trim());
       else variables.email = userID.value.trim().toLowerCase();
+      setLoading(true);
       login({
         variables: {
           ...variables,
@@ -172,6 +174,7 @@ const Login = ({navigation}) => {
 
         <TouchableOpacity style={styles.button} onPress={onPress}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
+          {loading && <Spinner size="small" color="#fff"></Spinner>}
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity

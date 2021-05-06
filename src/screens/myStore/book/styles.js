@@ -92,6 +92,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    paddingTop: 0,
   },
   recomment: {
     width: '100%',

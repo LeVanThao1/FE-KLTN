@@ -237,8 +237,8 @@ export const GET_BOOKS_CATEGORY = gql`
 `;
 
 export const GET_RECOMMENT_BY_NAME = gql`
-  query getRecommentByName($name: String!) {
-    getRecommentByName(name: $name) {
+  query getRecommentByName($name: String!, $type: String) {
+    getRecommentByName(name: $name, type: $type) {
       id
       name
       author

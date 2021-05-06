@@ -10,6 +10,7 @@ import {
   ToastAndroid,
   Dimensions,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -75,7 +76,7 @@ const CreateBook = ({navigation}) => {
       value: 0,
       error: '',
     });
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(true);
 
     const [categori, setCategori] = useState({
       value: category.categories[0].id,
@@ -158,24 +159,31 @@ const CreateBook = ({navigation}) => {
         },
       },
     );
-    const onChangeTextName = (value) => {
+    const onChangeTextName = (value, type) => {
       if (refName.current) {
         clearTimeout(refName.current);
       }
-      setName({
-        error: '',
-        value: value,
-      });
+      if (type === 'unsignedName') {
+        setName({
+          error: '',
+          value: value,
+        });
+      } else {
+        setAuthor({
+          error: '',
+          value: value,
+        });
+      }
       if (value.length === 0) {
         setBooksRecomment(undefined);
         return;
       }
 
       refName.current = setTimeout(() => {
-        queryData(GET_RECOMMENT_BY_NAME, {name: value})
+        queryData(GET_RECOMMENT_BY_NAME, {name: value, type})
           .then(({data}) => {
             setBooksRecomment(data.getRecommentByName);
-            setType(true);
+            setType(type);
           })
           .catch((err) => console.log(err));
       }, 300);
@@ -215,7 +223,7 @@ const CreateBook = ({navigation}) => {
       setImages(images.filter((ig, i) => index !== i));
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
-    console.log(book);
+
     return (
       <ScrollView>
         <View style={styles.container_product}>
@@ -230,56 +238,80 @@ const CreateBook = ({navigation}) => {
                 placeholder="Nhập tên sản phẩm"
                 value={name.value}
                 onFocus={() => {
-                  // setName({
-                  //   ...name,
-                  //   error: '',
-                  // });
-                  // onChangeTextName(name.value);
-                  setType(true);
+                  setIsModalVisible(true);
+                  onChangeTextName(name.value, 'unsignedName');
+                  setName({...name, error: ''});
+                  setType('unsignedName');
                   setBook(undefined);
                 }}
                 onChangeText={(value) => {
-                  onChangeTextName(value);
+                  onChangeTextName(value, 'unsignedName');
                 }}
                 onEndEditing={() => {}}
               />
-              {type && booksRecomment && booksRecomment.length > 0 && (
-                <ScrollView style={styles.listRecomment}>
-                  {booksRecomment.map((bk) => (
-                    <TouchableOpacity
-                      style={styles.recomment}
-                      onPress={() => {
-                        console.log('click click');
-                        setBook(bk);
-                        setName({...name, value: bk.name});
-                        setType(false);
+              {type === 'unsignedName' &&
+                isModalVisible &&
+                booksRecomment &&
+                booksRecomment.length > 0 && (
+                  <ScrollView style={styles.listRecomment}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'grey',
                       }}>
-                      <Image
-                        source={require('../../../assets/images/dinosaurRevert.png')}
-                        style={{
-                          width: 70,
-                          height: 70,
-                          resizeMode: 'stretch',
-                        }}></Image>
-                      <View style={styles.content}>
-                        <View style={styles.content_main}>
-                          <Text style={styles.content_name} numberOfLines={1}>
-                            {bk.name}
-                          </Text>
-                          <Text style={styles.content_author}>
-                            Tác giả: {bk.author}
-                          </Text>
-                          <Text
-                            style={styles.content_description}
-                            numberOfLines={2}>
-                            Mô tả: {bk.description}
-                          </Text>
+                      <Text>Gợi ý</Text>
+                      <TouchableOpacity
+                        style={{paddingVertical: 3}}
+                        onPress={() => {
+                          setAuthor({...author, value: ''});
+                          setIsModalVisible(false);
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="close"
+                          style={{
+                            fontSize: 22,
+                            // color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                    {booksRecomment.map((bk) => (
+                      <TouchableOpacity
+                        style={styles.recomment}
+                        onPress={() => {
+                          setBook(bk);
+                          setName({...name, value: bk.name});
+                          setType(false);
+                        }}>
+                        <Image
+                          source={require('../../../assets/images/dinosaurRevert.png')}
+                          style={{
+                            width: 70,
+                            height: 70,
+                            resizeMode: 'stretch',
+                          }}></Image>
+                        <View style={styles.content}>
+                          <View style={styles.content_main}>
+                            <Text style={styles.content_name} numberOfLines={1}>
+                              {bk.name}
+                            </Text>
+                            <Text style={styles.content_author}>
+                              Tác giả: {bk.author}
+                            </Text>
+                            <Text
+                              style={styles.content_description}
+                              numberOfLines={2}>
+                              Mô tả: {bk.description}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
             </View>
             <View>
               <Text>Danh mục sách *</Text>
@@ -309,23 +341,91 @@ const CreateBook = ({navigation}) => {
             <View style={styles.horizontal}>
               <Text>Tác giả *</Text>
               <TextInput
-                editable={book ? false : true}
                 style={styles.txtInput}
                 placeholder="Nhập tên tác giả"
-                value={book ? book.author : author.value}
+                value={author.value}
                 onFocus={() => {
+                  setIsModalVisible(true);
+                  onChangeTextName(author.value, 'author');
                   setAuthor({
                     ...author,
                     error: '',
                   });
+                  setType('author');
+                  setBook(undefined);
                 }}
                 onChangeText={(value) => {
-                  setAuthor({
-                    ...author,
-                    value: value,
-                  });
+                  onChangeTextName(value, 'author');
+                }}
+                onEndEditing={() => {
+                  // setIsModalVisible(false);
                 }}
               />
+              {type === 'author' &&
+                isModalVisible &&
+                booksRecomment &&
+                booksRecomment.length > 0 && (
+                  <ScrollView style={styles.listRecomment}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'grey',
+                      }}>
+                      <Text>Gợi ý</Text>
+                      <TouchableOpacity
+                        style={{paddingVertical: 3}}
+                        onPress={() => {
+                          setName({...name, value: ''});
+                          setIsModalVisible(false);
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="close"
+                          style={{
+                            fontSize: 22,
+                            // color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                    {booksRecomment.map((bk) => (
+                      <TouchableOpacity
+                        style={styles.recomment}
+                        onPress={() => {
+                          console.log('click click');
+                          setBook(bk);
+                          setAuthor({...name, value: bk.author});
+                          setName({...name, value: bk.name});
+                          setType(false);
+                        }}>
+                        <Image
+                          source={require('../../../assets/images/dinosaurRevert.png')}
+                          style={{
+                            width: 70,
+                            height: 70,
+                            resizeMode: 'stretch',
+                          }}></Image>
+                        <View style={styles.content}>
+                          <View style={styles.content_main}>
+                            <Text style={styles.content_name} numberOfLines={1}>
+                              {bk.name}
+                            </Text>
+                            <Text style={styles.content_author}>
+                              Tác giả: {bk.author}
+                            </Text>
+                            <Text
+                              style={styles.content_description}
+                              numberOfLines={2}>
+                              Mô tả: {bk.description}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
             </View>
             {/* year */}
             <View style={styles.horizontal}>
