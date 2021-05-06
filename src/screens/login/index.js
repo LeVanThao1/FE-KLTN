@@ -4,7 +4,7 @@ import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Button, Spinner} from 'native-base';
 import React, {useContext, useState} from 'react';
 import {Icon} from 'native-base';
-import {COLORS} from "../../constants/themes";
+import {COLORS} from '../../constants/themes';
 import {
   StyleSheet,
   Text,
@@ -59,6 +59,7 @@ const Login = ({navigation}) => {
       },
       onError: (err) => {
         console.log(err);
+        setLoading(false);
         Toast.show(Notification(NOTIFI.error, err.message));
       },
     });
@@ -173,9 +174,20 @@ const Login = ({navigation}) => {
 
         <Text style={styles.err}>{password.error}</Text>
 
-        <TouchableOpacity style={styles.button} onPress={onPress}>
+        <TouchableOpacity
+          style={{...styles.button, flexDirection: 'row'}}
+          onPress={onPress}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
-          {loading && <Spinner size="small" color="#fff"></Spinner>}
+          {loading && (
+            <Spinner
+              size="small"
+              color="#fff"
+              style={{
+                paddingLeft: 20,
+                width: 20,
+                height: 15,
+              }}></Spinner>
+          )}
         </TouchableOpacity>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
