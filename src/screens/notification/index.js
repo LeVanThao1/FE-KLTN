@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'native-base';
+import {COLORS} from "../../constants/themes"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const icon = {
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
   },
   itemTopTextContainer: {
     marginRight: 40,

@@ -15,6 +15,7 @@ import {UPDATE_CART} from '../../query/user';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+import {COLORS} from "../../constants/themes"
 
 const imageURL =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
@@ -149,7 +150,7 @@ export default function CartDetail({data}) {
                   {data.book.name ? data.book.name : data.book.book.name}
                 </Text>
               </TouchableOpacity>
-              <Text style={{fontSize: 14, color: 'rgba(68, 108, 179, 1)'}}>
+              <Text style={{fontSize: 14, color: COLORS.primary}}>
                 {data.book.price}đ
               </Text>
             </View>
@@ -189,14 +190,14 @@ export default function CartDetail({data}) {
                     width: 24,
                     height: 24,
                     borderRadius: 24,
-                    backgroundColor: 'rgba(68, 108, 179, 1)',
+                    backgroundColor: COLORS.primary,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
                   <Icon
                     name="delete"
                     type="MaterialIcons"
-                    style={{fontSize: 15, color: '#ffffff'}}
+                    style={{fontSize: 15, color: COLORS.white}}
                   />
                 </View>
               </TouchableOpacity>
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.white,
   },
   image: {width: 80, height: 80},
   icon: {

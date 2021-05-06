@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {COLORS} from '../../constants/themes'
 import CartDetail from './CartDetail';
 
 export default function Cart({navigation}) {
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     padding: 8,
   },
   headerIcon: {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     height: 60,
-    borderColor: 'rgba(68, 108, 179, 1)',
+    borderColor: COLORS.primary,
     borderWidth: 0.2,
     backgroundColor: "#ffffff"
   },
@@ -117,11 +118,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   footerTotalPrice: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
   footerPayment: {
     width: '40%',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
