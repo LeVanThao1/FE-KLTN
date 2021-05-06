@@ -9,6 +9,8 @@ import {
 } from '../query/notification';
 import {NOTIFI} from '../constants';
 import {Notification} from '../utils/notifications';
+// cai nay la t lam nhan thong bao user ne. m lma admin thi cung nhu ri thoi. tao ra 1 cai hook thoi
+// hientai admin chi moi nhan thong bao cua uc tao sach cua store
 export const useNotification = () => {
   return useObserver(() => {
     const {

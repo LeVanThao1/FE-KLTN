@@ -59,6 +59,7 @@ import PostFb from '../screens/post/posts';
 import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
+import {COLORS} from "../constants/themes";
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -72,7 +73,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'My home',
           headerTitle: () => <HeaderLogo navigation={navigation} />,
           headerStyle: {
-            backgroundColor: '#13a533',
+            backgroundColor: COLORS.primary,
           },
         }}
       />
@@ -83,7 +84,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'search',
           headerTitle: () => <HeaderStack navigation={navigation} />,
           headerStyle: {
-            backgroundColor: 'rgba(68, 108, 179, 1)',
+            backgroundColor: COLORS.primary,
           },
         }}
       />
@@ -106,6 +107,14 @@ const HomeStack = ({navigation, initialRoute}) => {
           component={rt.component}
           options={{
             title: rt.title,
+            headerStyle: {
+              backgroundColor: COLORS.primary,
+              color: COLORS.white
+            },
+            headerTitleAlign: 'center',
+            headerTitleStyle : {
+              color: COLORS.white
+            }
             // headerTitle: () =>
             //   rt.header && <HeaderStack navigation={navigation} />,
           }}

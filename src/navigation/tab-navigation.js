@@ -7,6 +7,7 @@ import Notification from '../screens/notification';
 import {HomeStack} from './stack-navigation';
 // import Profile from '../screens/profile';
 // import AccountManager from '../screens/account-manager';
+import {COLORS} from "../constants/themes";
 
 import {Icon} from 'native-base';
 
@@ -15,11 +16,19 @@ const Tab = createMaterialBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
-    initialRouteName="Home"
-    activeColor="#f0edf6"
-    inactiveColor="#3e2465"
-    barStyle={{ backgroundColor: '#694fad' }}
+      tabBarOptions={{
+        inactiveTintColor: 'white',
+        activeTintColor: COLORS.secondary,
+        activeBackgroundColor:"white",
+        inactiveBackgroundColor: COLORS.primary,
+        style: {
+          backgroundColor: COLORS.primary,
+        },
+      }}
       screenOptions={({route}) => ({
+        style: {
+          paddingVertical: 8
+        },
         tabBarIcon: ({color, size}) => {
           const icons = {
             Home: {
@@ -48,7 +57,7 @@ const BottomTabNavigator = () => {
             <Icon
               name={icons[route.name].name}
               type={icons[route.name].type}
-              color={color}
+              style={{color: color}}
               size={size}
             />
           );
