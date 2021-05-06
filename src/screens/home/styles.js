@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {COLORS} from "../../constants/themes";
+import {COLORS} from '../../constants/themes';
 const {width, height} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   home__container: {
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderBottomColor: COLORS.primary,
     borderBottomWidth: 3,
-    width: 88,
+    width: 90,
   },
   filterContainer: {
     flexDirection: 'row',

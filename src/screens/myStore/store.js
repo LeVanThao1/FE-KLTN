@@ -40,27 +40,28 @@ const Store = ({navigation}) => {
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState([]);
     const [text, setText] = useState('');
-    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-      onCompleted: async (data) => {
-        console.log('........', data);
-        // setListInfo({
-        //   id: info?.id,
-        //   name: info?.name,
-        // });
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log('get store', err);
-      },
-    });
-    useEffect(() => {
-      store({
-        variables: {
-          id: user.store?.id,
-        },
-      });
-    }, [info]);
-    useEffect(() => {}, [info]);
+    // const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+    //   onCompleted: async (data) => {
+    //     console.log('........', data);
+    //     // setListInfo({
+    //     //   id: info?.id,
+    //     //   name: info?.name,
+    //     // });
+    //   },
+    //   onError: (err) => {
+    //     Toast.show(Notification(NOTIFI.error, err.message));
+    //     console.log('get store', err);
+    //   },
+    // });
+    // useEffect(() => {
+    //   console.log('12133', user.store);
+    //   store({
+    //     variables: {
+    //       id: user.store?.id,
+    //     },
+    //   });
+    // }, [info]);
+    // useEffect(() => {}, [info]);
 
     return !user.info.store ? (
       <View style={styles.createStore}>
