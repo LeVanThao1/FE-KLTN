@@ -34,7 +34,6 @@ const PostDetail = ({navigation, route}) => {
 
     const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
-        console.log('datapost', data.createCommentPost);
         setPostCurrent({
           ...postCurrent,
           comment: [data.createCommentPost, ...postCurrent.comment],
@@ -59,6 +58,9 @@ const PostDetail = ({navigation, route}) => {
         },
       });
     };
+
+    console.log();
+
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -131,41 +133,43 @@ const PostDetail = ({navigation, route}) => {
                 <Comment key={i} cmt={cmt} />
               ))}
               <View style={stylesPost.addCmt}>
-                <View style={stylesPost.person}>
-                  <View style={stylesPost.info}>
-                    <Image
-                      source={{uri: info.avatar}}
-                      style={stylesPost.avtcmt}
+                <View style={stylesPost.cmtInfo}>
+                  <Image
+                    source={{uri: info.avatar}}
+                    style={stylesPost.avtcmt}
+                  />
+                  <View style={stylesPost.addComment}>
+                    <TextInput
+                      style={stylesPost.comment}
+                      placeholder="Thêm bình luận"
+                      value={cmts}
+                      onFocus={() => {}}
+                      onChangeText={(value) => {
+                        setCmts(value);
+                      }}
                     />
-                    <View style={stylesPost.addComment}>
-                      <TextInput
-                        style={stylesPost.comment}
-                        placeholder="Thêm bình luận"
-                        value={cmts}
-                        onFocus={() => {}}
-                        onChangeText={(value) => {
-                          setCmts(value);
-                        }}
-                      />
-                    </View>
+                    <Icon
+                      name="ios-arrow-forward-circle-outline"
+                      type="Ionicons"
+                      style={stylesPost.iconEnter}
+                      onPress={onPress}
+                    />
                   </View>
                 </View>
-                <Icon
-                  name="ios-arrow-forward-circle-outline"
-                  type="Ionicons"
-                  style={stylesPost.iconEnter}
-                  onPress={onPress}
-                />
               </View>
-              <TouchableOpacity
-                style={{width: '100%'}}
-                onPress={() =>
-                  navigation.navigate('UpdatePost', {
-                    postId: postCurrent.id,
-                  })
-                }>
-                <Text style={stylesPost.btn}>Cập nhật</Text>
-              </TouchableOpacity>
+              {info.id !== route.params.userId ? (
+                <></>
+              ) : (
+                <TouchableOpacity
+                  style={{width: '100%'}}
+                  onPress={() =>
+                    navigation.navigate('UpdatePost', {
+                      postId: postCurrent.id,
+                    })
+                  }>
+                  <Text style={stylesPost.btn}>Cập nhật</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

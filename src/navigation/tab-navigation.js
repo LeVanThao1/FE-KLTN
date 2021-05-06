@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 // import Feed from '../screens/feed';
 // import Cart from '../screens/cart';
 import Notification from '../screens/notification';
@@ -10,11 +10,15 @@ import {HomeStack} from './stack-navigation';
 
 import {Icon} from 'native-base';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
+    initialRouteName="Home"
+    activeColor="#f0edf6"
+    inactiveColor="#3e2465"
+    barStyle={{ backgroundColor: '#694fad' }}
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => {
           const icons = {
@@ -39,7 +43,7 @@ const BottomTabNavigator = () => {
               type: 'MaterialIcons',
             },
           };
-
+          
           return (
             <Icon
               name={icons[route.name].name}
@@ -49,7 +53,8 @@ const BottomTabNavigator = () => {
             />
           );
         },
-      })}>
+      })}      
+      >
       <Tab.Screen
         name="Home"
         component={() => <HomeStack initialRoute="Home" />}

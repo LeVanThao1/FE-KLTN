@@ -133,7 +133,7 @@ const User = styled.Image`
   border-width: ${(props) => (props.story ? '3px' : 0)};
 `;
 //
-const PostOne = ({route, post, info, type}) => {
+const PostOfFeed = ({route, post, info, type}) => {
   return useObserver(() => {
     const {
       stores: {user, comment},
@@ -196,14 +196,7 @@ const PostOne = ({route, post, info, type}) => {
                   </Row>
                 </View>
               </Row>
-            </TouchableOpacity>
-            {post.author.id === user.info.id ? (
-              <TouchableOpacity onPress={onAlert}>
-                <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
-              </TouchableOpacity>
-            ) : (
-              <></>
-            )}
+            </TouchableOpacity>            
           </PostHeader>
           <BreakLine />
           <TouchableOpacity
@@ -270,4 +263,4 @@ const PostOne = ({route, post, info, type}) => {
   });
 };
 
-export default PostOne;
+export default PostOfFeed;

@@ -27,7 +27,6 @@ const UpdatePost = ({route, navigation}) => {
     } = useContext(MobXProviderContext);
     const {posts, postCurrent} = user;
     const {postId} = route.params;
-    console.log('post-current', postCurrent);
     const [title, setTitle] = useState({
       value: postCurrent.title ? postCurrent.title : '',
       error: '',

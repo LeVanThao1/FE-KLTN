@@ -56,6 +56,7 @@ import ListStoreFound from '../screens/listStoreFound';
 import StoreDetail from '../screens/myStore/storeDetail';
 import * as Notifi from '../utils/notifications';
 import PostFb from '../screens/post/posts';
+import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
 const Stack = createStackNavigator();
@@ -71,7 +72,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'My home',
           headerTitle: () => <HeaderLogo navigation={navigation} />,
           headerStyle: {
-            backgroundColor: 'rgba(68, 108, 179, 1)',
+            backgroundColor: '#13a533',
           },
         }}
       />
@@ -255,6 +256,12 @@ const routes = [
     title: 'Chi tiết bài viết',
     header: false,
     component: PostOne,
+  },
+  {
+    name: 'PostOfFeed',
+    title: 'Chi tiết bài viết',
+    header: false,
+    component: PostOfFeed,
   },
   {
     name: 'ChangePassword',
