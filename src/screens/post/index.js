@@ -27,18 +27,11 @@ const Post = ({navigation, route}) => {
           setRefreshing(false);
         })
         .catch((err) => console.log(err));
-      // queryData(GET_COMMENT_POST, {postId})
     }, [refreshing]);
-
-    // console.log(comment);
-    // useEffect(() =>)
 
     return (
       <View>
-        <View>
-          {/* <TouchableOpacity
-            style={button.addPost}
-            onPress={() => console.log('55')}> */}
+        <View style={button.bgAdd}>
           <Icon
             name="add-circle-outline"
             style={button.btnAdd}

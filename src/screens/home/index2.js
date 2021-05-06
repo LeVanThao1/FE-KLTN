@@ -205,27 +205,6 @@ const Home = ({navigation}) => {
             <View style={styles.seeMoreContainer}>
               <Text style={styles.seeMoreText}>XEM TẤT CẢ SẢN PHẨM</Text>
             </View>
-            {/* <View style={styles.category__icon}>
-              <CategoryIcon />
-            </View>
-            <View style={styles.category__icon}>
-              <CommonList />
-            </View>
-            <View style={styles.category__icon}>
-              <MangaList />
-            </View>
-            <View style={styles.category__icon}>
-              <Novel />
-            </View>
-            <View style={styles.category__icon}>
-              <Science />
-            </View>
-            <View style={styles.category__icon}>
-              <Literary />
-            </View>
-            <View style={styles.category__icon}>
-              <History />
-            </View> */}
           </ScrollView>
         )}
       </View>
@@ -261,7 +240,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   filterActiveButtonContainer: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#14ad5f',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
@@ -286,7 +265,7 @@ const styles = StyleSheet.create({
   listItemContainer: {
     flexDirection: 'row',
     marginLeft: 0,
-    paddingHorizontal: 12,
+    paddingHorizontal: 50,
   },
   itemContainer: {
     width: 120,
@@ -296,7 +275,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   itemImage: {
-    width: '100%',
+    width: '50%',
     height: 120,
   },
   itemName: {
@@ -309,7 +288,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontSize: 14,
     fontWeight: '600',
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#14ad5f',
   },
   seeMoreContainer: {
     marginTop: 10,

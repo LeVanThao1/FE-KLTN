@@ -56,6 +56,7 @@ import ListStoreFound from '../screens/listStoreFound';
 import StoreDetail from '../screens/myStore/storeDetail';
 import * as Notifi from '../utils/notifications';
 import PostFb from '../screens/post/posts';
+import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
 import {COLORS} from "../constants/themes";
@@ -264,6 +265,12 @@ const routes = [
     title: 'Chi tiết bài viết',
     header: false,
     component: PostOne,
+  },
+  {
+    name: 'PostOfFeed',
+    title: 'Chi tiết bài viết',
+    header: false,
+    component: PostOfFeed,
   },
   {
     name: 'ChangePassword',
