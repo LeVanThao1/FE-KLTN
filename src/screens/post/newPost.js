@@ -36,6 +36,10 @@ const NewPost = ({navigation}) => {
       value: '',
       error: '',
     });
+    // const [author, setAuthor] = useState({
+    //   value: '',
+    //   error: '',
+    // });
     const [description, setDescription] = useState({
       value: '',
       error: '',
@@ -174,6 +178,7 @@ const NewPost = ({navigation}) => {
       let dataPost = {
         title: title.value,
         name: name.value,
+        // author: author.value,
         description: description.value,
         bookWanna: [bookWanna.value],
         images: imagesUpload,
@@ -235,6 +240,26 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
+              {/* <View>
+                <Text>Tác giả </Text>
+                <TextInput
+                  style={stylesPost.txtInput}
+                  placeholder="Nhập tên tác giả"
+                  value={name.value}
+                  onFocus={() => {
+                    setAuthor({
+                      ...author,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setAuthor({
+                      ...author,
+                      value: value,
+                    });
+                  }}
+                />
+              </View> */}
               <View style={stylesPost.vertical}>
                 <Text>Danh mục sách</Text>
                 <Form>

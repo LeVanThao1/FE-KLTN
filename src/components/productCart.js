@@ -19,16 +19,17 @@ const ProductCart = ({navigation, book, type}) => (
     <Text style={styles.itemName} numberOfLines={1}>
       {book.book ? book.book.name : book.name}
     </Text>
-    <Text style={styles.itemPrice}>{book.price}</Text>
+    <Text style={styles.itemPrice}>Giá: {book.price}</Text>
   </TouchableOpacity>
 );
 
 export default ProductCart;
 const styles = StyleSheet.create({
   itemContainer__all: {
+    height: 245,
     width: (width - 60) / 2,
     marginBottom: 15,
-    borderRadius: 10,
+    borderRadius: 6,
     paddingBottom: 10,
     backgroundColor: '#fff',
     shadowColor: '#000',
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   itemContainer: {
-    width: 120,
+    width: 140,
+    height: 240,
     marginRight: 10,
     marginTop: 15,
     marginBottom: 5,
@@ -60,19 +62,23 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   itemImage: {
-    width: '100%',
-    height: 120,
+    width: '90%',
+    height: 180,
+    marginTop: 10,
+    marginLeft: '5%',
     borderTopLeftRadius: 7,
     borderTopRightRadius: 7,
   },
   itemName: {
     fontSize: 14,
-    paddingHorizontal: 5,
+    fontWeight: 'bold',
+    textAlign: 'center',
     color: '#484848',
-    marginVertical: 4,
+    paddingVertical: 3,
+    paddingHorizontal: 5,
   },
   itemPrice: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
     fontSize: 14,
     fontWeight: '600',
     color: 'rgba(68, 108, 179, 1)',
