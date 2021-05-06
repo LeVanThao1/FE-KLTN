@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 // import Feed from '../screens/feed';
 // import Cart from '../screens/cart';
 import Notification from '../screens/notification';
@@ -11,7 +10,7 @@ import {COLORS} from "../constants/themes";
 
 import {Icon} from 'native-base';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
