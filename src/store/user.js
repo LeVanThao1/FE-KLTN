@@ -22,10 +22,10 @@ export class User {
   @observable
   likes = [];
 
-  constructor(info, cart, post, subOrders, likes, postCurrent, bookCurrent) {
+  constructor(info, cart, posts, subOrders, likes, postCurrent, bookCurrent) {
     this.cart = cart;
     this.info = info;
-    this.posts = post;
+    this.posts = posts;
     this.subOrders = subOrders;
     this.likes = likes;
     this.postCurrent = postCurrent;

@@ -56,8 +56,10 @@ import ListStoreFound from '../screens/listStoreFound';
 import StoreDetail from '../screens/myStore/storeDetail';
 import * as Notifi from '../utils/notifications';
 import PostFb from '../screens/post/posts';
+import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
+import {COLORS} from "../constants/themes";
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -71,7 +73,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'My home',
           headerTitle: () => <HeaderLogo navigation={navigation} />,
           headerStyle: {
-            backgroundColor: 'rgba(68, 108, 179, 1)',
+            backgroundColor: COLORS.primary,
           },
         }}
       />
@@ -82,7 +84,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'search',
           headerTitle: () => <HeaderStack navigation={navigation} />,
           headerStyle: {
-            backgroundColor: 'rgba(68, 108, 179, 1)',
+            backgroundColor: COLORS.primary,
           },
         }}
       />
@@ -105,6 +107,13 @@ const HomeStack = ({navigation, initialRoute}) => {
           component={rt.component}
           options={{
             title: rt.title,
+            headerStyle: {
+              backgroundColor: COLORS.primary,
+            },
+            headerTitleAlign: 'center',
+            headerTitleStyle : {
+              color: COLORS.white
+            }
             // headerTitle: () =>
             //   rt.header && <HeaderStack navigation={navigation} />,
           }}
@@ -255,6 +264,12 @@ const routes = [
     title: 'Chi tiết bài viết',
     header: false,
     component: PostOne,
+  },
+  {
+    name: 'PostOfFeed',
+    title: 'Chi tiết bài viết',
+    header: false,
+    component: PostOfFeed,
   },
   {
     name: 'ChangePassword',

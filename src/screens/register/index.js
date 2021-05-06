@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {REGISTER} from '../../query/user';
+import {COLORS} from "../../constants/themes";
 import {
   emailValidator,
   nameValidator,
@@ -19,6 +20,7 @@ import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {NOTIFI} from '../../constants';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
+
 export default function Register({navigation}) {
   const [register, {called, loading, data, error}] = useMutation(REGISTER, {
     onCompleted: async (data) => {
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

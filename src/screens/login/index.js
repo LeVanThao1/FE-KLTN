@@ -4,7 +4,7 @@ import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Button, Spinner} from 'native-base';
 import React, {useContext, useState} from 'react';
 import {Icon} from 'native-base';
-
+import {COLORS} from "../../constants/themes";
 import {
   StyleSheet,
   Text,
@@ -22,6 +22,7 @@ import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
 import {Notification} from '../../utils/notifications';
+
 const Login = ({navigation}) => {
   const [userID, setUserID] = React.useState({
     value: '',
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

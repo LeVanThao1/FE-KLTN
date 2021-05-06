@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {Icon} from 'native-base';
+import {COLORS} from '../../constants/themes';
 
 export default function AccountManager({navigation}) {
   return useObserver(() => {
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     padding: 4,
   },
   headerIcon: {
@@ -150,14 +151,14 @@ const styles = StyleSheet.create({
   },
   manager_item_wrap: {
     flexDirection: 'row',
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 0.6,
     paddingVertical: 8,
     paddingLeft: 16,
   },
   manager_item_icon: {
     fontSize: 20,
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
     marginRight: 16,
   },
   manager_item_text: {

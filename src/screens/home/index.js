@@ -18,6 +18,8 @@ import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
 import {styles} from './styles';
 import Voice from '@react-native-community/voice';
+import {COLORS} from '../../constants/themes';
+
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -254,7 +256,7 @@ const Home = ({navigation}) => {
                     justifyContent: 'center',
                     width: '100%',
                   }}>
-                  <Spinner color="rgba(68, 108, 179, 1)" />
+                  <Spinner color={COLORS.primary} />
                 </View>
               )}
               {/* {books &&
@@ -273,7 +275,7 @@ const Home = ({navigation}) => {
             </View>
           </View>
         ) : (
-          <Spinner color="rgba(68, 108, 179, 1)" />
+          <Spinner color={COLORS.primary} />
         )}
       </ScrollView>
     );

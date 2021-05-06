@@ -65,8 +65,8 @@ export const stylesPost = StyleSheet.create({
 
   iconEnter: {
     position: 'absolute',
-    right: 0,
-    top: 15,
+    right: 12,
+    top: 2,
   },
 
   name: {
@@ -78,14 +78,29 @@ export const stylesPost = StyleSheet.create({
     opacity: 0.6,
   },
 
+  // addCmt: {
+  //   width: '100%',
+  // },
+
+  cmtInfo: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+  },
+
+  addComment: {
+    width: '100%',
+  },
   comment: {
+    width: '90%',
     borderRadius: 50,
-    flex: 1,
     borderWidth: 0.1,
     paddingHorizontal: 20,
     marginLeft: 20,
     height: 35,
-    width: '100%',
   },
 
   avt: {
