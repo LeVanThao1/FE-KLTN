@@ -6,6 +6,7 @@ import {Shop} from './shop';
 import {Notification} from './notification';
 import {Order} from './order';
 import {Comment} from './comment';
+import {CreateBook} from './createBook';
 
 export const stores = {
   auth: new Auth(false, '', ''),
@@ -16,6 +17,42 @@ export const stores = {
   notification: new Notification([], [], []),
   order: new Order(undefined),
   comment: new Comment(undefined, undefined),
+  createBook: new CreateBook(
+    {
+      value: '',
+      error: '',
+    },
+    {
+      value: '',
+      error: '',
+    },
+    {
+      value: '',
+      error: '',
+    },
+    {
+      value: '',
+      error: '',
+    },
+    {
+      value: 0,
+      error: '',
+    },
+    {
+      value: '',
+      error: '',
+    },
+    {
+      value: 0,
+      error: '',
+    },
+    {
+      value: 0,
+      error: '',
+    },
+    undefined,
+    undefined,
+  ),
 };
 
 export const storeInstance = stores;

@@ -183,13 +183,15 @@ export const styles = StyleSheet.create({
   },
   txtMaxWidth: {
     width: '100%',
-    height: 30,
+    height: 35,
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: '#fff',
     borderRadius: 6,
     borderWidth: 0.2,
     marginVertical: 4,
+    position: 'relative',
+    paddingRight: 35,
   },
 });
 export const stylesTable = StyleSheet.create({

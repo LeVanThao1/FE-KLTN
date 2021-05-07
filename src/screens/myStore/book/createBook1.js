@@ -1,6 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Icon, Input, Text, View} from 'native-base';
+import {Icon, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useRef, useState} from 'react';
 import {
   TextInput,
@@ -30,9 +30,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import Voice from '@react-native-community/voice';
-import InputName from './inputName';
-import InpurAuthor from './inputAuthor';
-import InputAuthor from './inputAuthor';
+
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -235,78 +233,78 @@ const CreateBook = ({navigation}) => {
         if (!isNaN(tamp)) return +tamp;
       })[0];
     };
-    // function onSpeechStart(e) {}
-    // function onSpeechResults(e) {
-    //   console.log('onSpeechResults: ', e);
-    //   if (field === 'name') {
-    //     console.log(1);
-    //     setName({...name, value: e.value[0]});
-    //     queryData(GET_RECOMMENT_BY_NAME, {
-    //       name: e.value[0],
-    //       type: 'unsignedName',
-    //     })
-    //       .then(({data}) => {
-    //         setBooksRecomment(data.getRecommentByName);
-    //         setType('unsignedName');
-    //       })
-    //       .catch((err) => console.log(err));
-    //   }
-    //   if (field === 'author') {
-    //     setAuthor({...author, value: e.value[0]});
-    //     queryData(GET_RECOMMENT_BY_NAME, {name: e.value[0], type: 'author'})
-    //       .then(({data}) => {
-    //         setBooksRecomment(data.getRecommentByName);
-    //         setType('unsignedName');
-    //       })
-    //       .catch((err) => console.log(err));
-    //   }
-    //   if (field === 'year') {
-    //     setYear({...year, value: e.value[0].replace('.', '')});
-    //   }
-    //   if (field === 'publisher') {
-    //     setPublisher({...publisher, value: e.value[0]});
-    //   }
-    //   if (field === 'numPrint') {
-    //     setNumPrint({...numPrint, value: filterNumber(e.value)});
-    //   }
-    //   if (field === 'description') {
-    //     setDescription({...description, value: e.value[0]});
-    //   }
-    //   if (field === 'price') {
-    //     setPrice({...price, value: filterNumber(e.value)});
-    //   }
-    //   if (field === 'amount') {
-    //     setAmount({...amount, value: filterNumber(e.value)});
-    //   }
-    // }
-    // function onSpeechPartialResults(e) {}
-    // function onSpeechVolumeChanged(e) {}
-    // function onSpeechEnd(e) {
-    //   console.log('end', e);
-    //   // setField(false);
-    // }
-    // function onSpeechError(e) {
-    //   console.log('error', e);
-    //   setField(false);
-    // }
-    // useEffect(() => {
-    //   Voice.onSpeechStart = onSpeechStart;
-    //   Voice.onSpeechEnd = onSpeechEnd;
-    //   Voice.onSpeechError = onSpeechError;
-    //   Voice.onSpeechResults = onSpeechResults;
-    //   Voice.onSpeechPartialResults = onSpeechPartialResults;
-    //   Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
-    //   return () => {
-    //     Voice.destroy().then(Voice.removeAllListeners);
-    //   };
-    // }, [field]);
-    // const voice = async () => {
-    //   await Voice.start('vi-VN');
-    // };
-    // const stop = async () => {
-    //   setField(false);
-    //   await Voice.stop();
-    // };
+    function onSpeechStart(e) {}
+    function onSpeechResults(e) {
+      console.log('onSpeechResults: ', e);
+      if (field === 'name') {
+        console.log(1);
+        setName({...name, value: e.value[0]});
+        queryData(GET_RECOMMENT_BY_NAME, {
+          name: e.value[0],
+          type: 'unsignedName',
+        })
+          .then(({data}) => {
+            setBooksRecomment(data.getRecommentByName);
+            setType('unsignedName');
+          })
+          .catch((err) => console.log(err));
+      }
+      if (field === 'author') {
+        setAuthor({...author, value: e.value[0]});
+        queryData(GET_RECOMMENT_BY_NAME, {name: e.value[0], type: 'author'})
+          .then(({data}) => {
+            setBooksRecomment(data.getRecommentByName);
+            setType('unsignedName');
+          })
+          .catch((err) => console.log(err));
+      }
+      if (field === 'year') {
+        setYear({...year, value: e.value[0].replace('.', '')});
+      }
+      if (field === 'publisher') {
+        setPublisher({...publisher, value: e.value[0]});
+      }
+      if (field === 'numPrint') {
+        setNumPrint({...numPrint, value: filterNumber(e.value)});
+      }
+      if (field === 'description') {
+        setDescription({...description, value: e.value[0]});
+      }
+      if (field === 'price') {
+        setPrice({...price, value: filterNumber(e.value)});
+      }
+      if (field === 'amount') {
+        setAmount({...amount, value: filterNumber(e.value)});
+      }
+    }
+    function onSpeechPartialResults(e) {}
+    function onSpeechVolumeChanged(e) {}
+    function onSpeechEnd(e) {
+      console.log('end', e);
+      // setField(false);
+    }
+    function onSpeechError(e) {
+      console.log('error', e);
+      setField(false);
+    }
+    useEffect(() => {
+      Voice.onSpeechStart = onSpeechStart;
+      Voice.onSpeechEnd = onSpeechEnd;
+      Voice.onSpeechError = onSpeechError;
+      Voice.onSpeechResults = onSpeechResults;
+      Voice.onSpeechPartialResults = onSpeechPartialResults;
+      Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+      return () => {
+        Voice.destroy().then(Voice.removeAllListeners);
+      };
+    }, [field]);
+    const voice = async () => {
+      await Voice.start('vi-VN');
+    };
+    const stop = async () => {
+      setField(false);
+      await Voice.stop();
+    };
     return (
       <ScrollView>
         <View style={styles.container_product}>
@@ -316,8 +314,7 @@ const CreateBook = ({navigation}) => {
             {/* name */}
             <View style={styles.name}>
               <Text>Tên sản phẩm *</Text>
-              <InputName />
-              {/* <View>
+              <View>
                 <TextInput
                   style={styles.txtMaxWidth}
                   placeholder="Nhập tên sản phẩm"
@@ -334,6 +331,7 @@ const CreateBook = ({navigation}) => {
                   }}
                   onEndEditing={() => {}}
                 />
+
                 {field === 'name' ? (
                   <TouchableOpacity
                     style={{
@@ -441,7 +439,7 @@ const CreateBook = ({navigation}) => {
                       </TouchableOpacity>
                     ))}
                   </ScrollView>
-                )} */}
+                )}
             </View>
             <View>
               <Text>Danh mục sách *</Text>
@@ -470,8 +468,7 @@ const CreateBook = ({navigation}) => {
             {/* author */}
             <View style={styles.horizontal}>
               <Text>Tác giả *</Text>
-              <InputAuthor />
-              {/* <TextInput
+              <TextInput
                 style={styles.txtInput}
                 placeholder="Nhập tên tác giả"
                 value={author.value}
@@ -556,7 +553,7 @@ const CreateBook = ({navigation}) => {
                       </TouchableOpacity>
                     ))}
                   </ScrollView>
-                )} */}
+                )}
             </View>
             {/* year */}
             <View style={styles.horizontal}>

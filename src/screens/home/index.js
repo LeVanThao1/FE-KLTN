@@ -77,7 +77,12 @@ const Home = ({navigation}) => {
     useEffect(() => {
       function onSpeechStart(e) {}
       function onSpeechResults(e) {
-        console.log('onSpeechResults: ', e);
+        console.log(
+          'onSpeechResults: ',
+          e.value,
+          e.value[0].replace('.', ''),
+          typeof +e.value[0].replace('.', ''),
+        );
       }
       function onSpeechPartialResults(e) {}
       function onSpeechVolumeChanged(e) {}
