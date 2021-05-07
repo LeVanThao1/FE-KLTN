@@ -184,7 +184,7 @@ const Payment = ({navigation}) => {
                           style={{
                             textAlign: 'right',
                             fontSize: 14,
-                            color: 'rgba(68, 108, 179, 1)',
+                            color: '#f44f4f',
                           }}>
                           {ship ? ship[i] + ' đ' : 'Chưa xác định'}
                         </Text>
@@ -197,10 +197,7 @@ const Payment = ({navigation}) => {
                       Tổng số tiền ({ct.amount} sản phẩm):
                     </Text>
                     <Text
-                      style={
-                        (styles.price,
-                        {fontSize: 14, color: 'rgba(68, 108, 179, 1)'})
-                      }>
+                      style={(styles.price, {fontSize: 14, color: '#f44f4f'})}>
                       {ct.amount * ct.book.price + (ship ? ship[i] : 0)} đ
                     </Text>
                   </View>
@@ -269,14 +266,14 @@ const styles = StyleSheet.create({
     // height: 40,
     alignItems: 'center',
     borderBottomWidth: 1.2,
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    borderBottomColor: '#f44f4f',
   },
   location: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
   },
 
   shipping_title: {
@@ -323,7 +320,7 @@ const styles = StyleSheet.create({
   sumary: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
   },
   price: {
     fontSize: 12,

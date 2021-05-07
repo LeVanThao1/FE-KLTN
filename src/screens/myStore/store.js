@@ -134,9 +134,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                  <Separator bordered style={{backgroundColor: '#f44f4f'}}>
                     <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
                     {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
                   </Separator>
@@ -160,7 +158,7 @@ const Store = ({navigation}) => {
                   <Separator
                     bordered
                     style={{
-                      backgroundColor: 'rgba(68, 108, 179, 1)',
+                      backgroundColor: '#f44f4f',
                     }}>
                     <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
                   </Separator>
@@ -185,9 +183,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                  <Separator bordered style={{backgroundColor: '#f44f4f'}}>
                     <Text style={{color: '#fff'}}>+ Tài chính</Text>
                   </Separator>
                 </CollapseHeader>
@@ -325,7 +321,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
     marginBottom: 20,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
 });
 

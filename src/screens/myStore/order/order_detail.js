@@ -158,7 +158,7 @@ const OrderDetailStore = ({navigation, route}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: 'rgba(68, 108, 179, 1)',
+                  color: '#f44f4f',
                   textAlign: 'right',
                 }}>
                 Thành tiền:{' '}
@@ -199,7 +199,7 @@ const OrderDetailStore = ({navigation, route}) => {
               <Text
                 style={{
                   color: '#fff',
-                  backgroundColor: 'rgba(68, 108, 179, 1)',
+                  backgroundColor: '#f44f4f',
                   textAlign: 'center',
                   width: '50%',
                   alignSelf: 'center',

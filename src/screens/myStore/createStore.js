@@ -72,7 +72,7 @@ const CreateStore = ({navigation}) => {
             text: `Tạo cửa hàng thành công`,
             type: 'success',
             position: 'top',
-            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+            style: {backgroundColor: '#f44f4f', color: '#ffffff'},
           });
           AsyncStorage.clear().then(() => {
             auth.setLogout();

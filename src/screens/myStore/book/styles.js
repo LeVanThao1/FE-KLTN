@@ -20,7 +20,8 @@ export const styles = StyleSheet.create({
     // color: rgba(68, 108, 179, 1),
   },
   title: {
-    margin: 15,
+    marginVertical: 5,
+    marginHorizontal: 12,
   },
   name: {
     marginVertical: 8,
@@ -83,7 +84,7 @@ export const styles = StyleSheet.create({
 
   listRecomment: {
     position: 'absolute',
-    top: 60,
+    top: 65,
     width: Dimensions.get('screen').width - 40,
     bottom: 0,
     zIndex: 999,
@@ -107,6 +108,7 @@ export const styles = StyleSheet.create({
   content: {
     width: '100%',
     flexDirection: 'row',
+    marginLeft: 8,
   },
   content_main: {
     width: '100%',
@@ -116,26 +118,27 @@ export const styles = StyleSheet.create({
   content_name: {
     fontSize: 13,
     fontWeight: 'bold',
-    width: Dimensions.get('screen').width - 130,
+    width: Dimensions.get('screen').width - 138,
   },
   content_description: {
     fontSize: 13,
-    width: Dimensions.get('screen').width - 130,
+    width: Dimensions.get('screen').width - 138,
   },
   content_author: {
     fontSize: 13,
-    width: Dimensions.get('screen').width - 130,
+    width: Dimensions.get('screen').width - 138,
   },
 
   horizontal: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
   },
   textarea: {
     // padding: -3?0,
     // marginTop: -10,
+    position: 'relative',
     padding: 10,
     textAlignVertical: 'top', // hack android
     height: 130,
@@ -144,6 +147,7 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
     color: '#333',
     backgroundColor: '#fff',
+    paddingRight: 35,
   },
   txtInput: {
     width: '60%',
@@ -183,13 +187,15 @@ export const styles = StyleSheet.create({
   },
   txtMaxWidth: {
     width: '100%',
-    height: 30,
+    height: 35,
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: '#fff',
     borderRadius: 6,
     borderWidth: 0.2,
     marginVertical: 4,
+    paddingRight: 40,
+    position: 'relative',
   },
 });
 export const stylesTable = StyleSheet.create({

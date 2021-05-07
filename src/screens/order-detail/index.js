@@ -95,7 +95,7 @@ const OrderDetail = ({navigation, route}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: 'rgba(68, 108, 179, 1)',
+                  color: '#f44f4f',
                   textAlign: 'right',
                 }}>
                 Thành tiền: {subOrder?.detail?.price * subOrder?.detail?.amount}

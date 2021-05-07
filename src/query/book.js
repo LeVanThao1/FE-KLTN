@@ -55,6 +55,16 @@ export const GET_BOOKS_STORE = gql`
       book {
         id
         name
+        year
+        publisher
+        numberOfReprint
+        description
+        images
+        author
+        category {
+          id
+          name
+        }
       }
       category {
         id

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.75,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,
