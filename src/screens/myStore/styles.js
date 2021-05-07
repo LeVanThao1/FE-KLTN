@@ -223,7 +223,7 @@ export const stylesPost = StyleSheet.create({
   titlePost: {
     fontWeight: 'bold',
     paddingBottom: 10,
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
     fontSize: 18,
   },
 
@@ -291,7 +291,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   detail: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
   },
 
   addpost: {
@@ -331,6 +331,6 @@ export const stylesPost = StyleSheet.create({
     width: '50%',
     textAlign: 'center',
     color: '#fff',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
 });

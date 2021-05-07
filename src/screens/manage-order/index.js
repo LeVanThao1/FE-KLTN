@@ -37,10 +37,9 @@ const ManageOrder = ({navigation}) => {
                   book: {name, images},
                   amount,
                   price,
-                  
                 },
                 status,
-                createdAt
+                createdAt,
               }) => ({id, name, images, amount, price, status, createdAt}),
             ),
           );
@@ -88,7 +87,7 @@ const ManageOrder = ({navigation}) => {
       ],
       amount = 1,
       price = 100000,
-      createdAt
+      createdAt,
     }) {
       return (
         <TouchableOpacity
@@ -103,7 +102,7 @@ const ManageOrder = ({navigation}) => {
               borderRadius: 4,
               padding: 10,
               marginBottom: 8,
-              backgroundColor: "#ffffff"
+              backgroundColor: '#ffffff',
             }}>
             <View>
               <Image
@@ -123,13 +122,16 @@ const ManageOrder = ({navigation}) => {
                 style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
                 Đơn giá: {price}
               </Text>
-              <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                <Text
-                  style={{fontSize: 14, color: '#333333'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 14, color: '#333333'}}>
                   {createdAt.slice(0, 10)}
                 </Text>
-                <Text
-                  style={{fontSize: 16, color: 'rgba(68, 108, 179, 1)'}}>
+                <Text style={{fontSize: 16, color: '#f44f4f'}}>
                   Tổng tiền: {amount * price}
                 </Text>
               </View>
@@ -150,7 +152,7 @@ const ManageOrder = ({navigation}) => {
             />
           </View>
         </View>
-        <View style={{height: 46, backgroundColor: "#ffffff"}}>
+        <View style={{height: 46, backgroundColor: '#ffffff'}}>
           <ScrollView horizontal>
             <Tab name="Đang chờ" status="WAITING" />
             <Tab name="Đã xác nhận" status="CONFIRMED" />
@@ -170,14 +172,14 @@ const ManageOrder = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ededed"
+    backgroundColor: '#ededed',
 
     // alignItems: 'center',
   },
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
   searchGroup: {
     position: 'relative',
@@ -213,13 +215,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: 'rgba(68, 108, 179, 1)',
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
+    borderBottomColor: '#f44f4f',
     borderBottomWidth: 2,
   },
   orderContainer: {
     flex: 1,
-    padding: 12
+    padding: 12,
   },
 });
 

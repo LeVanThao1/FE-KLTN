@@ -60,7 +60,7 @@ const Profile = ({navigation}) => {
           text: 'Thay đổi thành công',
           type: 'success',
           position: 'top',
-          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          style: {backgroundColor: '#f44f4f', color: '#ffffff'},
         });
         setInfo({
           ...info,
@@ -145,7 +145,7 @@ const Profile = ({navigation}) => {
                 <Icon
                   type="MaterialIcons"
                   name="camera-alt"
-                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+                  style={{fontSize: 25, color: '#f44f4f'}}></Icon>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleChoosePhoto(true)}
@@ -162,7 +162,7 @@ const Profile = ({navigation}) => {
                 <Icon
                   type="MaterialIcons"
                   name="photo-library"
-                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+                  style={{fontSize: 25, color: '#f44f4f'}}></Icon>
               </TouchableOpacity>
             </View>
           </View>
@@ -218,7 +218,7 @@ const Profile = ({navigation}) => {
                   style={{
                     ...styles.label,
                     width: '100%',
-                    color: 'rgba(68, 108, 179, 1)',
+                    color: '#f44f4f',
                   }}>
                   Thay đổi mật khẩu
                 </Text>
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     padding: 8,
   },
   headerIcon: {
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.2,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

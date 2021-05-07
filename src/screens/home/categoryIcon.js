@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   icon: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
     transform: [{scaleX: 1}],
   },
 });

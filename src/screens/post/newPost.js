@@ -342,7 +342,7 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: 'rgba(68, 108, 179, 1)',
+                          color: '#f44f4f',
                         }}></Icon>
                     </TouchableOpacity>
                   )}

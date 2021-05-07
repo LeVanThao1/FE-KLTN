@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
   searchGroup: {
     position: 'relative',
@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: 'rgba(68, 108, 179, 1)',
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
+    borderBottomColor: '#f44f4f',
     borderBottomWidth: 2,
   },
   orderContainer: {

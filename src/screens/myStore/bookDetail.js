@@ -123,10 +123,7 @@ const BookDetail = ({navigation, book}) => {
                     color: '#f00',
                   }}>
                   <Text style={stylesPost.detail}>{bookCurrent.price}</Text>
-                  <Text
-                    style={{paddingLeft: 5, color: 'rgba(68, 108, 179, 1)'}}>
-                    VND
-                  </Text>
+                  <Text style={{paddingLeft: 5, color: '#f44f4f'}}>VND</Text>
                 </View>
               </View>
               <View style={stylesPost.elment}>

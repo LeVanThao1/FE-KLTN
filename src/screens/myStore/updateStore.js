@@ -88,7 +88,7 @@ const UpdateStore = ({navigation}) => {
             text: `Cập nhật cửa hàng thành công`,
             type: 'success',
             position: 'top',
-            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+            style: {backgroundColor: '#f44f4f', color: '#ffffff'},
           });
         },
         onError: (err) => {

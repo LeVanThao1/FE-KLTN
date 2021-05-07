@@ -43,7 +43,7 @@ const StoreCart = ({data}) => {
           <Text
             style={{
               fontSize: 14,
-              color: 'rgba(68, 108, 179, 1)',
+              color: '#f44f4f',
               fontWeight: 'bold',
               textAlign: 'right',
             }}>
