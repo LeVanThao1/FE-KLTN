@@ -30,6 +30,8 @@ import {mutateData, queryData} from '../../common';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {GET_DISTANCE} from '../../query/distance';
+import {COLORS} from '../../constants/themes';
+
 const Payment = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -184,7 +186,7 @@ const Payment = ({navigation}) => {
                           style={{
                             textAlign: 'right',
                             fontSize: 14,
-                            color: 'rgba(68, 108, 179, 1)',
+                            color: COLORS.primary,
                           }}>
                           {ship ? ship[i] + ' đ' : 'Chưa xác định'}
                         </Text>
@@ -199,7 +201,7 @@ const Payment = ({navigation}) => {
                     <Text
                       style={
                         (styles.price,
-                        {fontSize: 14, color: 'rgba(68, 108, 179, 1)'})
+                        {fontSize: 14, color: COLORS.primary})
                       }>
                       {ct.amount * ct.book.price + (ship ? ship[i] : 0)} đ
                     </Text>
@@ -245,7 +247,7 @@ const Payment = ({navigation}) => {
             <View style={styles.button}>
               <Button
                 title="Đặt hàng"
-                color="rgba(68, 108, 179, 1)"
+                color={COLORS.primary}
                 hasTVPreferredFocus={true}
                 onPress={onPress}
               />
@@ -269,14 +271,14 @@ const styles = StyleSheet.create({
     // height: 40,
     alignItems: 'center',
     borderBottomWidth: 1.2,
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    borderBottomColor: COLORS.primary,
   },
   location: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
 
   shipping_title: {
@@ -323,7 +325,7 @@ const styles = StyleSheet.create({
   sumary: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
   price: {
     fontSize: 12,

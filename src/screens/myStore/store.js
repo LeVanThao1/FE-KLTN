@@ -28,6 +28,8 @@ import {transaction} from 'mobx';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+
 
 const Store = ({navigation}) => {
   return useObserver(() => {
@@ -136,7 +138,7 @@ const Store = ({navigation}) => {
                 <CollapseHeader>
                   <Separator
                     bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                    style={{backgroundColor: COLORS.primary}}>
                     <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
                     {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
                   </Separator>
@@ -160,7 +162,7 @@ const Store = ({navigation}) => {
                   <Separator
                     bordered
                     style={{
-                      backgroundColor: 'rgba(68, 108, 179, 1)',
+                      backgroundColor: COLORS.primary,
                     }}>
                     <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
                   </Separator>
@@ -187,7 +189,7 @@ const Store = ({navigation}) => {
                 <CollapseHeader>
                   <Separator
                     bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                    style={{backgroundColor: COLORS.primary}}>
                     <Text style={{color: '#fff'}}>+ Tài chính</Text>
                   </Separator>
                 </CollapseHeader>
@@ -325,7 +327,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
     marginBottom: 20,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
   },
 });
 

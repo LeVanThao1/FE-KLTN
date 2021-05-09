@@ -11,6 +11,8 @@ import {MobXProviderContext} from 'mobx-react';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../../constants';
 import {Notification} from '../../../utils/notifications';
+import {COLORS} from '../../../constants/themes';
+
 
 const Book = ({book}) => {
   return useObserver(() => {
@@ -49,7 +51,6 @@ const Book = ({book}) => {
         },
       });
     };
-
     return (
       <TouchableOpacity
         // key={id}
@@ -71,14 +72,16 @@ const Book = ({book}) => {
             marginVertical: 8,
           }}>
           <View>
-            <Image
+            {book.images.map((img, i) => (
+              <Image
               style={{width: 80, height: 100}}
               source={{
-                uri: book.images
-                  ? book.images
+                uri: img
+                  ? img
                   : 'https://picsum.photos/200/300',
               }}
             />
+            ))}            
           </View>
           <View
             style={{

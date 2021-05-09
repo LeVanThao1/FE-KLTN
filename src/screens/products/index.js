@@ -15,6 +15,7 @@ import ProductCart from '../../components/productCart';
 import {GET_BOOKS, GET_BOOKS_CATEGORY} from '../../query/book';
 import BookByCategory from '../home/bookByCategory';
 import {styles} from './styles';
+import {COLORS} from '../../constants/index';
 
 const Products = ({navigation, route}) => {
   return useObserver(() => {
@@ -276,13 +277,13 @@ const Products = ({navigation, route}) => {
                       justifyContent: 'center',
                       width: '100%',
                     }}>
-                    <Spinner color="rgba(68, 108, 179, 1)" />
+                    <Spinner color={COLORS.primary} />
                   </View>
                 )}
               </>
             )}
 
-            {loading && <Spinner color="rgba(68, 108, 179, 1)" size="small" />}
+            {loading && <Spinner color={COLORS.primary} size="small" />}
           </View>
         </View>
       </ScrollView>

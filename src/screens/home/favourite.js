@@ -2,6 +2,7 @@ import React, {memo, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Images from '../../assets/images/images';
+import { COLORS } from '../../constants';
 
 const MangaList = () => {
   const navigation = useNavigation();
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
   },
   header_text: {
     fontSize: 17,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
   selled: {
     flexDirection: 'row',

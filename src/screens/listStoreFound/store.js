@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'native-base';
 import React, {memo} from 'react';
 import {Dimensions, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import { COLORS } from '../../constants';
 const {width, height} = Dimensions.get('screen');
 const StoreCart = ({data}) => {
   const navigation = useNavigation();
@@ -43,7 +44,7 @@ const StoreCart = ({data}) => {
           <Text
             style={{
               fontSize: 14,
-              color: 'rgba(68, 108, 179, 1)',
+              color: COLORS.primary,
               fontWeight: 'bold',
               textAlign: 'right',
             }}>

@@ -15,7 +15,7 @@ import {useLazyQuery} from '@apollo/client';
 import {GET_BOOKS_CATEGORIES} from '../../query/category';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 
 const History = () => {
   const navigation = useNavigation();
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
   },
   header_text: {
     fontSize: 17,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
   selled: {
     flexDirection: 'row',

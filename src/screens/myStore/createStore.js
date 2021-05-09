@@ -26,6 +26,8 @@ import {introspectionFromSchema} from 'graphql';
 import {transaction} from 'mobx';
 import {Picker} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {COLORS} from '../../constants/themes';
+
 
 import sub, {
   getProvinces,
@@ -72,7 +74,7 @@ const CreateStore = ({navigation}) => {
             text: `Tạo cửa hàng thành công`,
             type: 'success',
             position: 'top',
-            style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+            style: {backgroundColor: COLORS.primary, color: '#ffffff'},
           });
           AsyncStorage.clear().then(() => {
             auth.setLogout();

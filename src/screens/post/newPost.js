@@ -20,7 +20,7 @@ import Images from '../../assets/images/images';
 import {CREATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -240,26 +240,7 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
-              {/* <View>
-                <Text>Tác giả </Text>
-                <TextInput
-                  style={stylesPost.txtInput}
-                  placeholder="Nhập tên tác giả"
-                  value={name.value}
-                  onFocus={() => {
-                    setAuthor({
-                      ...author,
-                      error: '',
-                    });
-                  }}
-                  onChangeText={(value) => {
-                    setAuthor({
-                      ...author,
-                      value: value,
-                    });
-                  }}
-                />
-              </View> */}
+             
               <View style={stylesPost.vertical}>
                 <Text>Danh mục sách</Text>
                 <Form>
@@ -342,7 +323,7 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: 'rgba(68, 108, 179, 1)',
+                          color: COLORS.primary,
                         }}></Icon>
                     </TouchableOpacity>
                   )}

@@ -6,30 +6,6 @@ import {CREATE_COMMENT_POST} from '../../query/comment';
 import {Icon} from 'native-base';
 
 const Comment = ({cmt}) => {
-  // console.log('cmt comment', cmt, 'onpr', onPr);
-
-  // const [createCommentPost] = useMutation(CREATE_COMMENT_POST, {
-  //   onCompleted: (data) => {
-  //     console.log('dataComment', data);
-  //     // const newData = [...postComment].filter(cmt => cmt.id+'' !== )
-  //     // const
-  //   },
-  //   onError: (err) => {
-  //     console.log('gaga', err);
-  //   },
-  // });
-  // const onPress = () => {
-  //   let dataComment = {
-  //     content: cmts,
-  //     type: 'TEXT',
-  //   };
-  //   createCommentPost({
-  //     variables: {
-  //       dataComment,
-  //       postId: postId,
-  //     },
-  //   });
-  // };
 
   return (
     <View>

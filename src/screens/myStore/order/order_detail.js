@@ -19,6 +19,8 @@ import {UPDATE_STATUS_ORDER} from '../../../query/order';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
+import {COLORS} from '../../../constants/themes';
+
 // import {GET_SUB_ORDER} from '../../query/subOrder';
 
 const OrderDetailStore = ({navigation, route}) => {
@@ -82,17 +84,6 @@ const OrderDetailStore = ({navigation, route}) => {
           id: orderStore.id,
         },
       });
-      // mutateData(UPDATE_STATUS_ORDER, {
-      //   dataStatus: orderStore.status,
-      //   id: orderStore.id,
-      // })
-      //   .then(({data}) => {
-      //     // setOrderStore();
-      //     console.log('update status', data);
-      //     setLoading(false);
-      //     setRefreshing(true);
-      //   })
-      //   .catch((err) => console.log(err));
     };
 
     return (
@@ -158,7 +149,7 @@ const OrderDetailStore = ({navigation, route}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: 'rgba(68, 108, 179, 1)',
+                  color: COLORS.primary,
                   textAlign: 'right',
                 }}>
                 Thành tiền:{' '}
@@ -199,7 +190,7 @@ const OrderDetailStore = ({navigation, route}) => {
               <Text
                 style={{
                   color: '#fff',
-                  backgroundColor: 'rgba(68, 108, 179, 1)',
+                  backgroundColor: COLORS.primary,
                   textAlign: 'center',
                   width: '50%',
                   alignSelf: 'center',

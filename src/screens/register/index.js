@@ -19,7 +19,7 @@ import {
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {NOTIFI} from '../../constants';
 import {Notification} from '../../utils/notifications';
-import Toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message'
 
 export default function Register({navigation}) {
   const [register, {called, loading, data, error}] = useMutation(REGISTER, {
@@ -158,7 +158,7 @@ export default function Register({navigation}) {
       <TouchableOpacity
         style={{width: '100%'}}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: 'rgba(68, 108, 179, 1)', fontWeight: 'bold'}}>
+        <Text style={{color: COLORS.primary, fontWeight: 'bold'}}>
           {'Trở lại'}
         </Text>
       </TouchableOpacity>
@@ -288,7 +288,7 @@ export default function Register({navigation}) {
           <Text
             style={{
               ...styles.text,
-              color: 'rgba(68, 108, 179, 1)',
+              color: COLORS.primary,
               fontWeight: 'bold',
             }}>
             Đăng nhập.

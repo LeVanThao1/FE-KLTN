@@ -367,18 +367,7 @@ const UpdateBook = ({navigation, route}) => {
                 <Text>VND</Text>
               </View>
             </View>
-            {/* status */}
-            {/* <View style={styles.status}>
-            <Text>Tình trạng sách (mới)</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TextInput style={styles.input} placeholder="Nhập tình trạng" />
-              <Text>%</Text>
-            </View>
-          </View> */}
-            {/* <Button
-              color="rgba(68, 108, 179, 1)"
-              title="Xác nhận"
-              onPress={onPress}></Button> */}
+
             <TouchableOpacity onPress={onAlert}>
               <Text style={button.btn}>Cập nhật</Text>
             </TouchableOpacity>

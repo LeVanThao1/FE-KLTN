@@ -22,7 +22,7 @@ import {mutateData} from '../../common';
 import {CREATE_COMMENT_BOOK} from '../../query/comment';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 import moment from 'moment';
 import formatMoney from '../../utils/format/index';
 
@@ -426,9 +426,9 @@ const styles = StyleSheet.create({
   },
   showStore: {
     padding: 10,
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
     borderWidth: 0.5,
-    borderColor: 'rgba(68, 108, 179, 1)',
+    borderColor:COLORS.primary,
     // backgroundColor: 'rgba(68, 108, 179, 1)',
     borderRadius: 4,
   },
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   current__price: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
     fontSize: 16,
     textAlign: 'center',
   },
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   icon__heart_active: {
-    color: 'rgba(68, 108, 179, 1)',
+    color: COLORS.primary,
   },
   detail__store: {
     backgroundColor: '#f6f6f6',
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   buy__action_text: {
     paddingVertical: 8,
     paddingHorizontal: 20,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     color: '#ffffff',
     borderRadius: 16,
     fontSize: 16,

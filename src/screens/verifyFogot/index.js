@@ -13,7 +13,7 @@ import {CHECK_OTP_FORGOT, VERIFY} from '../../query/user';
 import {codeValidator} from '../../utils/validations';
 import {deFormatPhone} from '../../utils/support/phoneFormat';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 import Toast from 'react-native-toast-message';
 export default function VerifyForgot({route, navigation}) {
   const [verify, {called, loading, data, error}] = useLazyQuery(
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.75,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

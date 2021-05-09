@@ -18,48 +18,12 @@ import * as ImagePicker from 'react-native-image-picker';
 import {Button} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
+import { COLORS } from '../../constants';
 
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const UserInfo = ({navigation, route}) => {
   const {userName, userAvatar, userPhone, userMail, userAddress} = route.params;
-  // return useObserver(() => {
-  // const {
-  //   stores: {
-  //     auth,
-  //     user: {
-  //       info: {name, avatar, phone, address, email, interests},
-  //     },
-  //   },
-  // } = useContext(MobXProviderContext);
-  // const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
-  //   onCompleted: (data) => {
-  //     console.log(data);
-  //     setUserAvatar(data.uploadSingleFile.uri);
-  //   },
-  //   onError: (err) => {
-  //     console.log(err);
-  //   },
-  // });
-  // const [userAvatar, setUserAvatar] = useState(avatar || defaultAvatar);
-  // const [userName, setUserName] = useState(name);
-  // const [userEmail, setUserEmail] = useState(email);
-  // const [userAddress, setUserAddress] = useState(address);
-  // const [userPhone, setUserPhone] = useState(phone);
-  // const checkEdit = () => {
-  //   return (
-  //     userName != name ||
-  //     userPhone != phone ||
-  //     email != userEmail ||
-  //     address != userAddress
-  //   );
-  // };
-  // const [updateUser, {}] = useMutation(UPDATE_USER_INFO, {
-  //   onCompleted: (data) => {
-  //     // set laij info user
-  //   },
-  //   onError: (err) => console.log(err),
-  // });
 
   return (
     <View style={styles.container}>
@@ -99,10 +63,6 @@ const UserInfo = ({navigation, route}) => {
             <Text style={styles.label}>Email</Text>
             <Text
               style={styles.inputText}
-              // placeholder="Email"
-              // value={userEmail}
-              // onChangeText={(value) => setUserEmail(value)}
-              // editable={!email}>
             >
               {userMail}
             </Text>
@@ -112,33 +72,12 @@ const UserInfo = ({navigation, route}) => {
             <Text style={styles.label}>Địa chỉ</Text>
             <Text
               style={styles.inputText}
-              // placeholder="địa chỉ"
-              // value={userAddress}
-              // onChangeText={(value) => setUserAddress(value)}
             >
               {userAddress}
             </Text>
           </View>
           <Hr />
-          <Hr />
-          {/* {checkEdit ? (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() =>
-                  updateUser({
-                    variables: {
-                      userUpdate: {
-                        name: userName,
-                        avatar: userAvatar,
-                        address: userAddress,
-                        interests: interests,
-                      },
-                    },
-                  })
-                }>
-                
-              </TouchableOpacity>
-            ) : null} */}
+          <Hr />          
         </View>
       </ScrollView>
     </View>
@@ -162,7 +101,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     padding: 8,
   },
   headerIcon: {
@@ -213,7 +152,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.2,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

@@ -8,6 +8,8 @@ import {
   ScrollView,
 } from 'react-native';
 import {Icon} from 'native-base';
+import {COLORS} from '../../constants/themes';
+
 
 const tempImageURL =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     padding: 8,
   },
   headerIcon: {

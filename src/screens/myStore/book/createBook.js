@@ -29,6 +29,8 @@ import {styles} from './styles';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
+import {COLORS} from '../../../constants/themes';
+
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -570,7 +572,7 @@ const CreateBook = ({navigation}) => {
                           name="plus"
                           style={{
                             fontSize: 50,
-                            color: 'rgba(68, 108, 179, 1)',
+                            color: COLORS.primary,
                           }}></Icon>
                       </TouchableOpacity>
                     )
@@ -684,7 +686,7 @@ const CreateBook = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Button
-                style={{color: 'rgba(68, 108, 179, 1)', padding: 0}}
+                style={{backgroundColor: COLORS.primary}}
                 onPress={onAlert}>
                 <Text>Xác nhận</Text>
               </Button>

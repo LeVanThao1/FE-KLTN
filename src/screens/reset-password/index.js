@@ -12,8 +12,10 @@ import {Icon} from 'native-base';
 import {passwordValidator} from '../../utils/validations';
 import {RESET_PASSWORD} from '../../query/user';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 import Toast from 'react-native-toast-message';
+// import {COLORS} from '../../constants/index';
+
 
 export default function ResetPassword({navigation, route}) {
   console.log(token);
@@ -95,7 +97,7 @@ export default function ResetPassword({navigation, route}) {
       <TouchableOpacity
         style={{width: '100%'}}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: 'rgba(68, 108, 179, 1)', fontWeight: 'bold'}}>
+        <Text style={{color: COLORS.primary, fontWeight: 'bold'}}>
           {'Trở lại'}
         </Text>
       </TouchableOpacity>
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

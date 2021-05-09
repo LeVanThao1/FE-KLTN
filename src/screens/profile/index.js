@@ -18,7 +18,8 @@ import {Icon} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
+
 import Toast from 'react-native-toast-message';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
@@ -60,7 +61,7 @@ const Profile = ({navigation}) => {
           text: 'Thay đổi thành công',
           type: 'success',
           position: 'top',
-          style: {backgroundColor: 'rgba(68, 108, 179, 1)', color: '#ffffff'},
+          style: {backgroundColor: COLORS.primary, color: '#ffffff'},
         });
         setInfo({
           ...info,
@@ -145,7 +146,7 @@ const Profile = ({navigation}) => {
                 <Icon
                   type="MaterialIcons"
                   name="camera-alt"
-                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleChoosePhoto(true)}
@@ -162,7 +163,7 @@ const Profile = ({navigation}) => {
                 <Icon
                   type="MaterialIcons"
                   name="photo-library"
-                  style={{fontSize: 25, color: 'rgba(68, 108, 179, 1)'}}></Icon>
+                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
               </TouchableOpacity>
             </View>
           </View>
@@ -218,7 +219,7 @@ const Profile = ({navigation}) => {
                   style={{
                     ...styles.label,
                     width: '100%',
-                    color: 'rgba(68, 108, 179, 1)',
+                    color: COLORS.primary,
                   }}>
                   Thay đổi mật khẩu
                 </Text>
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     padding: 8,
   },
   headerIcon: {
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.2,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

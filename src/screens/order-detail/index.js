@@ -8,7 +8,7 @@ import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
 import {GET_SUB_ORDER} from '../../query/subOrder';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 
 const OrderDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -95,7 +95,7 @@ const OrderDetail = ({navigation, route}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: 'rgba(68, 108, 179, 1)',
+                  color: COLORS.primary,
                   textAlign: 'right',
                 }}>
                 Thành tiền: {subOrder?.detail?.price * subOrder?.detail?.amount}
