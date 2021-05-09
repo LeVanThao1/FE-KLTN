@@ -19,9 +19,9 @@ export const button = StyleSheet.create({
 
   bgAdd: {
     position: 'absolute',
-    top: 80, 
+    top: 80,
     right: 10,
-    width: 47, 
+    width: 47,
     height: 47,
     borderRadius: 50,
     backgroundColor: COLORS.primary,

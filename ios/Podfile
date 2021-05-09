@@ -22,6 +22,8 @@ target 'KLTN' do
 
   pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
 
+  pod 'react-native-speech-to-text', :path => '../node_modules/react-native-google-speech-to-text'
+
   target 'KLTNTests' do
     inherit! :complete
     # Pods for testing

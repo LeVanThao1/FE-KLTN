@@ -50,14 +50,18 @@ const BooksStore = ({navigation}) => {
         setListBook(
           bookStore.map((ct, i) => ({
             id: ct.id ? ct.id : '',
-            name: ct.name ? ct.name : '',
-            categoryId: ct.category.id ? ct.category.id : '',
-            categoryName: ct.category.name ? ct.category.name : '',
-            author: ct.author,
+            name: ct.name ? ct.name : ct.book.name,
+            categoryId: ct.category ? ct.category.id : ct.book.category.id,
+            categoryName: ct.category
+              ? ct.category.name
+              : ct.book.category.name,
+            author: ct.author ? ct.author : ct.book.author,
             price: ct.price ? ct.price : '',
-            publisher: ct.publisher ? ct.publisher : '',
-            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
-            year: ct.year ? ct.year : '',
+            publisher: ct.publisher ? ct.publisher : ct.book.publisher,
+            numberOfReprint: ct.numberOfReprint
+              ? ct.numberOfReprint
+              : ct.book.numberOfReprint,
+            year: ct.year ? ct.year : ct.book.year,
             amount: ct.amount ? ct.amount : '',
             sold: ct.sold ? ct.sold : '',
             description: ct.description ? ct.description : '',
@@ -188,13 +192,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: COLORS.primary,
     borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
-  },
   orderContainer: {
     flex: 1,
-  },
 });
 
 export default memo(BooksStore);

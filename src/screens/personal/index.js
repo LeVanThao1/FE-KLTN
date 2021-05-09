@@ -63,7 +63,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+<<<<<<< HEAD
     backgroundColor: COLORS.primary,
+=======
+    backgroundColor: '#f44f4f',
+>>>>>>> 5496eb3dd2688c985a5aa2c22829045944d17ac1
     padding: 8,
   },
   headerIcon: {

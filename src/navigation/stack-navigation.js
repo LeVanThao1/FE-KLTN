@@ -59,13 +59,17 @@ import PostFb from '../screens/post/posts';
 import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
-import {COLORS} from "../constants/themes";
+import {COLORS} from '../constants/themes';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
   const notification = useNotification();
   return (
-    <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
+    <Stack.Navigator
+      initialRouteName={initialRoute || 'Home'}
+      screenOptions={{
+        headerTintColor: '#fff',
+      }}>
       <Stack.Screen
         name="Home"
         component={Home}

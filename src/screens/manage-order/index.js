@@ -38,10 +38,9 @@ const ManageOrder = ({navigation}) => {
                   book: {name, images},
                   amount,
                   price,
-                  
                 },
                 status,
-                createdAt
+                createdAt,
               }) => ({id, name, images, amount, price, status, createdAt}),
             ),
           );
@@ -89,7 +88,7 @@ const ManageOrder = ({navigation}) => {
       ],
       amount = 1,
       price = 100000,
-      createdAt
+      createdAt,
     }) {
       return (
         <TouchableOpacity
@@ -104,7 +103,7 @@ const ManageOrder = ({navigation}) => {
               borderRadius: 4,
               padding: 10,
               marginBottom: 8,
-              backgroundColor: "#ffffff"
+              backgroundColor: '#ffffff',
             }}>
             <View>
               <Image
@@ -124,9 +123,13 @@ const ManageOrder = ({navigation}) => {
                 style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
                 Đơn giá: {price}
               </Text>
-              <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                <Text
-                  style={{fontSize: 14, color: '#333333'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 14, color: '#333333'}}>
                   {createdAt.slice(0, 10)}
                 </Text>
                 <Text
@@ -151,7 +154,7 @@ const ManageOrder = ({navigation}) => {
             />
           </View>
         </View>
-        <View style={{height: 46, backgroundColor: "#ffffff"}}>
+        <View style={{height: 46, backgroundColor: '#ffffff'}}>
           <ScrollView horizontal>
             <Tab name="Đang chờ" status="WAITING" />
             <Tab name="Đã xác nhận" status="CONFIRMED" />
@@ -171,7 +174,7 @@ const ManageOrder = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ededed"
+    backgroundColor: '#ededed',
 
     // alignItems: 'center',
   },
@@ -220,7 +223,7 @@ const styles = StyleSheet.create({
   },
   orderContainer: {
     flex: 1,
-    padding: 12
+    padding: 12,
   },
 });
 

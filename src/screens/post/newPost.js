@@ -323,11 +323,8 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: COLORS.primary,
                         }}></Icon>
-                    </TouchableOpacity>
                   )}
-                </ScrollView>
               </View>
               <View>
                 <Text>Nhà xuất bản </Text>

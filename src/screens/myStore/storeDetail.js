@@ -69,7 +69,8 @@ const StoreDetail = ({navigation, route}) => {
     useEffect(() => {}, [listItem]);
     console.log('listitem', listItem);
     const ProductItem = ({book}) => (
-      <View style={{width: "50%", justifyContent: "center", alignItems: "center"}}>
+      <View
+        style={{width: '50%', justifyContent: 'center', alignItems: 'center'}}>
         <TouchableOpacity
           style={styles.itemContainer}
           onPress={() =>
@@ -141,7 +142,7 @@ const StoreDetail = ({navigation, route}) => {
                 padding: 10,
                 marginBottom: 16,
                 borderWidth: 0.4,
-                backgroundColor: "#ffffff"
+                backgroundColor: '#ffffff',
               }}>
               Sách của cửa hàng
             </Text>

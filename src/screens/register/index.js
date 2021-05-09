@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {REGISTER} from '../../query/user';
-import {COLORS} from "../../constants/themes";
+import {COLORS} from '../../constants/themes';
 import {
   emailValidator,
   nameValidator,
