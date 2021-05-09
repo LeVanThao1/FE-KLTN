@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
+import formatMoney from '../../../utils/format';
 
 // import {GET_SUB_ORDER} from '../../query/subOrder';
 
@@ -144,7 +145,7 @@ const OrderDetailStore = ({navigation, route}) => {
                 x {orderStore?.detail?.amount}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
-                Giá: {orderStore?.detail?.price}
+                Giá {formatMoney(orderStore?.detail?.price)} VNĐ
               </Text>
               <Text
                 style={{
@@ -152,8 +153,7 @@ const OrderDetailStore = ({navigation, route}) => {
                   color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền:{' '}
-                {orderStore?.detail?.price * orderStore?.detail?.amount}
+                Thành tiền: {formatMoney(orderStore?.detail?.price * orderStore?.detail?.amount)} VNĐ
               </Text>
             </View>
           </View>

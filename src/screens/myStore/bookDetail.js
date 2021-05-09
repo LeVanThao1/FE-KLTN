@@ -21,6 +21,7 @@ import {stylesPost} from './styles';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
+import formatMoney from '../../utils/format';
 
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
@@ -145,7 +146,7 @@ const BookDetail = ({navigation, book}) => {
                     justifyContent: 'space-between',
                     color: '#f00',
                   }}>
-                  <Text style={stylesPost.detail}>{bookCurrent.price}</Text>
+                  <Text style={stylesPost.detail}>{formatMoney(bookCurrent.price)} VNĐ</Text>
                   <Text
                     style={{paddingLeft: 5, color: COLORS.primary}}>
                     VND

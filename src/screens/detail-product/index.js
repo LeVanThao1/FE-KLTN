@@ -55,9 +55,9 @@ const DetailProduct = ({navigation, route}) => {
     } = useContext(MobXProviderContext);
     const {cart, setCart, likes, addToLike, removeToLike} = user;
     const {productId} = route.params;
-    const [book, setBook] = useState(null);
+    const [book, setBook] = useState(undefined);
     const [listItem, setListItem] = useState([]);
-    console.log('book detail', book);
+    // console.log('book detail', book.images);
 
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
@@ -66,8 +66,8 @@ const DetailProduct = ({navigation, route}) => {
       onCompleted: () => {
         addToLike({
           id: productId,
-          name: book.name || null,
-          images: book.images || null,
+          name: book.name || '',
+          images: book.images || [],
           price: book.price,
           amount: book.amount,
           sold: book.sold,
@@ -103,7 +103,7 @@ const DetailProduct = ({navigation, route}) => {
             id: ct.id,
             name: ct.book ? ct.book?.name : ct.name,
             price: ct.price,
-            image: ct.book ? ct.book.images[0] : ct.images[0],
+            image: ct.book ? ct.book.images : ct.images,
             selled: ct.amount,
           })),
         );
@@ -241,6 +241,7 @@ const DetailProduct = ({navigation, route}) => {
         </TouchableOpacity>
       );
     };
+    
     return (
       <View style={styles.container}>
         {!loading && book && (
@@ -248,8 +249,9 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.slide__image_wrap}>
               <SliderBox
                 style={styles.slide__image}
-                images={[...(book ? book.images : []), Images.onepiece1]}
+                images={book?.images}
                 autoplay={true}
+                circleLoop={true}
               />
             </View>
             <View style={styles.detail__content}>
@@ -283,11 +285,19 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
+                    {quantity > 1 ?
                     <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
                       <Text style={{...styles.buy__action_text, fontSize: 18}}>
                         -
                       </Text>
                     </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                    }
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -295,11 +305,23 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
+                    {quantity < book.amount ? 
+                      <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
+                        <Text style={{...styles.buy__action_text, fontSize: 18}}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                      :
+                      (
+                      <TouchableOpacity onPress={
+                        () => setQuantity(quantity)
+                      }>
                       <Text style={{...styles.buy__action_text, fontSize: 18}}>
                         +
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>                      
+                      )
+                    }
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
@@ -443,6 +465,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 280,
   },
+  slide__image: {
+    width: 200,
+    height: 300,
+  },
   detail__content: {
     // paddingTop: 10,
   },
@@ -504,6 +530,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+
   store__avatar: {
     width: 40,
     height: 40,

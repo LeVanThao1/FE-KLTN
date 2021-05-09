@@ -12,6 +12,7 @@ import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../../constants';
 import {Notification} from '../../../utils/notifications';
 import {COLORS} from '../../../constants/themes';
+import formatMoney from '../../../utils/format';
 
 
 const Book = ({book}) => {
@@ -100,7 +101,7 @@ const Book = ({book}) => {
                 Số lượng x{book.amount}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'left'}}>
-                Giá x{book.price}
+                Giá x{formatMoney(book.price)} VNĐ
               </Text>
             </View>
             <Text style={{fontSize: 14, textAlign: 'left'}}>

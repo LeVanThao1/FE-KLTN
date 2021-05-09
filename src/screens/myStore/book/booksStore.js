@@ -194,8 +194,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
+  },
   orderContainer: {
     flex: 1,
+  },
+
 });
 
 export default memo(BooksStore);

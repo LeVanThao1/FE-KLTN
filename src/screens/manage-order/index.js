@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {GET_SUB_ORDERS} from '../../query/subOrder';
 import { COLORS } from '../../constants';
+import formatMoney from '../../utils/format';
 
 const ManageOrder = ({navigation}) => {
   return useObserver(() => {
@@ -118,23 +119,27 @@ const ManageOrder = ({navigation}) => {
                 numberOfLines={1}>
                 {name}
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
-              <Text
-                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
-                Đơn giá: {price}
-              </Text>
-              <View
-                style={{
+              <View style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 14, color: '#333333'}}>
+              <Text style={{fontSize: 14, color: '#333333'}}>
                   {createdAt.slice(0, 10)}
                 </Text>
+              <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
+              </View>
+
+              <Text
+                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
+                Đơn giá: {formatMoney(price)} VNĐ
+              </Text>
+              <View
+                style={{
+                }}>                
                 <Text
-                  style={{fontSize: 16, color: COLORS.primary}}>
-                  Tổng tiền: {amount * price}
+                  style={{fontSize: 16, textAlign:'right', color: COLORS.primary}}>
+                  Tổng tiền: {formatMoney(amount * price)} VNĐ
                 </Text>
               </View>
             </View>

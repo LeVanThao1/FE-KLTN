@@ -83,6 +83,16 @@ export const GET_BOOK = gql`
     book(id: $id) {
       id
       author
+      name
+      images
+      year
+      numberOfReprint
+      publisher
+      description
+      amount
+      price
+      sold
+      createdAt
       comment {
         id
         content
@@ -113,21 +123,12 @@ export const GET_BOOK = gql`
         avatar
         background
         address
-      }
-      name
-      images
-      year
-      numberOfReprint
-      publisher
+      }      
       category {
         id
         name
       }
-      description
-      amount
-      price
-      sold
-      createdAt
+      
     }
   }
 `;

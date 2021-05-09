@@ -9,6 +9,7 @@ import {GET_SUB_ORDER} from '../../query/subOrder';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
 import {COLORS, NOTIFI} from '../../constants';
+import formatMoney from '../../utils/format';
 
 const OrderDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -90,7 +91,7 @@ const OrderDetail = ({navigation, route}) => {
                 x {subOrder?.detail?.amount}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
-                Giá: {subOrder?.detail?.price}
+                Giá: {formatMoney(subOrder?.detail?.price)} VNĐ
               </Text>
               <Text
                 style={{
@@ -98,7 +99,7 @@ const OrderDetail = ({navigation, route}) => {
                   color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền: {subOrder?.detail?.price * subOrder?.detail?.amount}
+                Thành tiền: {formatMoney(subOrder?.detail?.price * subOrder?.detail?.amount)} VNĐ
               </Text>
             </View>
           </View>
