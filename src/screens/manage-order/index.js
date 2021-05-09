@@ -14,6 +14,8 @@ import {
   Image,
 } from 'react-native';
 import {GET_SUB_ORDERS} from '../../query/subOrder';
+import { COLORS } from '../../constants';
+import formatMoney from '../../utils/format';
 
 const ManageOrder = ({navigation}) => {
   return useObserver(() => {
@@ -117,22 +119,27 @@ const ManageOrder = ({navigation}) => {
                 numberOfLines={1}>
                 {name}
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
-              <Text
-                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
-                Đơn giá: {price}
-              </Text>
-              <View
-                style={{
+              <View style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={{fontSize: 14, color: '#333333'}}>
+              <Text style={{fontSize: 14, color: '#333333'}}>
                   {createdAt.slice(0, 10)}
                 </Text>
-                <Text style={{fontSize: 16, color: '#f44f4f'}}>
-                  Tổng tiền: {amount * price}
+              <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
+              </View>
+
+              <Text
+                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
+                Đơn giá: {formatMoney(price)} VNĐ
+              </Text>
+              <View
+                style={{
+                }}>                
+                <Text
+                  style={{fontSize: 16, textAlign:'right', color: COLORS.primary}}>
+                  Tổng tiền: {formatMoney(amount * price)} VNĐ
                 </Text>
               </View>
             </View>
@@ -179,7 +186,7 @@ const styles = StyleSheet.create({
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
   searchGroup: {
     position: 'relative',
@@ -215,8 +222,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: '#f44f4f',
-    borderBottomColor: '#f44f4f',
+    color: COLORS.primary,
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
   },
   orderContainer: {

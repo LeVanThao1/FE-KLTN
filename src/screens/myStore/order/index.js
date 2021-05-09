@@ -15,6 +15,8 @@ import {
 } from 'react-native';
 import {ORDERS_BY_STORE} from '../../../query/order';
 import {queryData} from '../../../common';
+import {COLORS} from '../../../constants/themes';
+
 
 const OrdersByStore = ({navigation}) => {
   return useObserver(() => {
@@ -112,7 +114,7 @@ const OrdersByStore = ({navigation}) => {
                 {/* <Text style={{fontSize: 14, color: '#333333'}}>
                   Ngày đặt hàng {order.createdAt.slice(0, 10)}
                 </Text> */}
-                <Text style={{fontSize: 16, color: '#f44f4f'}}>
+                <Text style={{fontSize: 16, color: COLORS.primary}}>
                   Tổng tiền {order.detail.amount * order.detail.price}
                 </Text>
               </View>
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
   searchGroup: {
     position: 'relative',
@@ -196,8 +198,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: '#f44f4f',
-    borderBottomColor: '#f44f4f',
+    color: COLORS.primary,
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
   },
   orderContainer: {

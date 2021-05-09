@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-
+import ImageView from 'react-native-image-viewing';
 import Images from '../../assets/images/images';
 import {UPDATE_POST} from '../../query/post';
 import {CREATE_COMMENT_POST} from '../../query/comment';
@@ -20,7 +20,8 @@ import Comment from './comment';
 import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
+import formatMoney from '../../utils/format';
 
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -60,7 +61,8 @@ const PostDetail = ({navigation, route}) => {
     };
 
     console.log();
-
+    const [images, setImages] = useState([postCurrent.images])
+    console.log('imge', images)
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -69,15 +71,39 @@ const PostDetail = ({navigation, route}) => {
               <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
                 Hình ảnh
               </Text>
-              <View style={stylesPost.imgBookDetail}>
+              {/* <View style={{wi}}> */}
+              {(postCurrent.images.length > 3) ?  <View style={stylesPost.imgBookDetail}>
+              <ScrollView horizontal={true}>
+                {/* <Text>{postCurrent.images[0]}</Text> */}
+                {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
                 {postCurrent.images.map((img, i) => (
                   <Image
-                    key={i}
+                    // key={i}
                     source={{uri: img}}
                     style={stylesPost.imgBook}
                   />
                 ))}
-              </View>
+                </ScrollView>
+              </View> : 
+              <View style={{width: '100%', flexDirection: 'row', justifyContent: 'center'}}>
+                  {postCurrent.images.map((img, i) => (
+                    <Image
+                      key={i}
+                      source={{uri: img}}
+                      style={stylesPost.imgBook}
+                    />
+                  ))}
+                </View>} 
+              {/* </View> */}
+              {/* <FlatList 
+                horizontal={true}
+                data={images}
+                renderItem={({item, index}) => (
+                     <Image key={index} source={{uri: item}} style={stylesPost.imgBook}/> 
+                  </View>
+                )}r
+                keyExtractor={item => item}
+              /> */}
             </View>
           </ScrollView>
           <View style={stylesPost.content}>
@@ -113,8 +139,11 @@ const PostDetail = ({navigation, route}) => {
                     justifyContent: 'space-between',
                     color: '#f00',
                   }}>
-                  <Text style={stylesPost.detail}>{postCurrent.price}</Text>
-                  <Text style={{paddingLeft: 5, color: '#f44f4f'}}>VND</Text>
+                  <Text style={stylesPost.detail}>{formatMoney(postCurrent.price)} VNĐ</Text>
+                  <Text
+                    style={{paddingLeft: 5, color: COLORS.primary}}>
+                    VND
+                  </Text>
                 </View>
               </View>
               <View style={stylesPost.elment}>

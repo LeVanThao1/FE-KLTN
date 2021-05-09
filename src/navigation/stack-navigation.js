@@ -99,7 +99,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'Danh sách sản phẩm',
           headerTitle: () => <HeaderStack navigation={navigation} />,
           headerStyle: {
-            backgroundColor: '#f44f4f',
+            backgroundColor: COLORS.primary,
           },
           headerLeft: null,
         }}
@@ -115,9 +115,13 @@ const HomeStack = ({navigation, initialRoute}) => {
               backgroundColor: COLORS.primary,
             },
             headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: COLORS.white,
+            headerTitleStyle : {
+              color: COLORS.white
             },
+            headerBackTitleStyle:{
+              color: COLORS.white
+            },
+            headerTintColor: COLORS.white
             // headerTitle: () =>
             //   rt.header && <HeaderStack navigation={navigation} />,
           }}

@@ -28,6 +28,8 @@ import {transaction} from 'mobx';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+
 
 const StoreDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontSize: 14,
     fontWeight: '600',
-    color: '#f44f4f',
+    color: COLORS.primary,
   },
   container_store: {
     flex: 0,
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
     marginBottom: 20,
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
 });
 

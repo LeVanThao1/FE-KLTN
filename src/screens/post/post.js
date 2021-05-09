@@ -26,7 +26,7 @@ import {Icon} from 'native-base';
 import Avatar from './posts/avatar';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 
 const Container = styled.View`
   flex: 1;

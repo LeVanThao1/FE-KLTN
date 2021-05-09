@@ -6,6 +6,7 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+import formatMoney from '../utils/format';
 const {width, height} = Dimensions.get('window');
 
 const ProductCart = ({navigation, book, type}) => (
@@ -19,7 +20,7 @@ const ProductCart = ({navigation, book, type}) => (
     <Text style={styles.itemName} numberOfLines={1}>
       {book.book ? book.book.name : book.name}
     </Text>
-    <Text style={styles.itemPrice}>Giá: {book.price}</Text>
+    <Text style={styles.itemPrice}>Giá: {formatMoney(book.price)} VNĐ</Text>
   </TouchableOpacity>
 );
 
