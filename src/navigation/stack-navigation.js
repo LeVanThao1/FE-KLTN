@@ -9,7 +9,7 @@ import Payment from '../screens/payment/payment';
 import Login from '../screens/login';
 import Register from '../screens/register';
 import ForgotPassword from '../screens/forgot-password';
-import HeaderStack, {HeaderLogo} from '../header';
+import HeaderStack, {HeaderLogo, HeaderMessage} from '../header';
 import Store from '../screens/myStore/store';
 import SreateStore from '../screens/myStore/store';
 import {NavigationContainer} from '@react-navigation/native';
@@ -54,12 +54,15 @@ import OrderDetailStore from '../screens/myStore/order/order_detail';
 import UpdateStore from '../screens/myStore/updateStore';
 import ListStoreFound from '../screens/listStoreFound';
 import StoreDetail from '../screens/myStore/storeDetail';
+import Chatting from '../screens/chatting/chats';
 import * as Notifi from '../utils/notifications';
 import PostFb from '../screens/post/posts';
 import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
 import {COLORS} from '../constants/themes';
+import Room from '../screens/chatting/room';
+import ImagesView from '../screens/chatting/imagesView';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -104,6 +107,18 @@ const HomeStack = ({navigation, initialRoute}) => {
           headerLeft: null,
         }}
       />
+      {/* <Stack.Screen
+        name="Chatting"
+        component={Chatting}
+        options={{
+          title: 'Tin nhắn',
+          headerTitle: () => <HeaderMessage />,
+          headerStyle: {
+            backgroundColor: '#f44f4f',
+          },
+          headerLeft: null,
+        }}
+      /> */}
       {routes.map((rt, i) => (
         <Stack.Screen
           key={i}
@@ -111,6 +126,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           component={rt.component}
           options={{
             title: rt.title,
+            headerShown: rt.show,
             headerStyle: {
               backgroundColor: COLORS.primary,
             },
@@ -132,78 +148,84 @@ const routes = [
     name: 'Detail-Product',
     title: 'Chi tiết sản phẩm',
     header: false,
+    show: true,
     component: DetailProduct,
   },
   {
     name: 'Store',
     title: 'Cửa hàng',
     header: false,
+    show: true,
     component: Store,
   },
   {
     name: 'CreateBook',
     title: 'Tạo sản phẩm',
     header: false,
+    show: true,
     component: CreateBook,
   },
   {
     name: 'CreateStore',
     title: 'Tạo cửa hàng',
     header: false,
+    show: true,
     component: CreateStore,
   },
   {
     name: 'UpdateStore',
     title: 'Cập nhật cửa hàng',
     header: false,
+    show: true,
     component: UpdateStore,
   },
   {
     name: 'StoreDetail',
     title: 'Cửa hàng',
     header: false,
+    show: true,
     component: StoreDetail,
   },
   {
     name: 'ViewAllProduct',
     title: 'Sản phẩm',
     header: false,
+    show: true,
     component: ViewAll,
   },
-  // {
-  //   name: 'StoreManageOrder',
-  //   title: 'Quản lý đơn hàng',
-  //   header: false,
-  //   component: ViewAllOrder,
-  // },
   {
     name: 'Statistics',
     title: 'Thống kê',
     header: false,
+    show: true,
     component: Statistics,
   },
   {
     name: 'Revenue',
     title: 'Doanh thu',
     header: false,
+    show: true,
     component: Revenue,
   },
   {
     name: 'Payment',
     title: 'Thanh toán',
     header: false,
+    show: true,
     component: Payment,
   },
   {
     name: 'Andress',
     title: 'Địa chỉ',
     header: false,
+    show: true,
     component: Address,
   },
   {
     name: 'PostUser',
     title: 'Bài viết cá nhân',
     header: false,
+    show: true,
     component: Post,
   },
 
@@ -211,24 +233,28 @@ const routes = [
     name: 'NewPost',
     title: 'Tạo bài viết',
     header: false,
+    show: true,
     component: NewPost,
   },
   {
     name: 'UpdatePost',
     title: 'Cập nhật bài viết',
     header: false,
+    show: true,
     component: UpdatePost,
   },
   {
     name: 'Personal',
     title: 'Quản lý cá nhân',
     header: false,
+    show: true,
     component: AccountManager,
   },
   {
     name: 'Profile',
     title: 'Thông tin cá nhân',
     header: false,
+    show: true,
     component: Profile,
   },
 
@@ -236,6 +262,7 @@ const routes = [
     name: 'UserInfo',
     title: 'Thông tin người dùng',
     header: false,
+    show: true,
     component: UserInfo,
   },
 
@@ -243,42 +270,45 @@ const routes = [
     name: 'Contact',
     title: 'Liên hệ',
     header: false,
+    show: true,
     component: Contact,
   },
-  {name: 'Cart', title: 'Giỏ hàng', header: false, component: Cart},
-
-  // {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
-  {name: 'Feed', title: 'Bài đăng', header: false, component: Feed},
-
+  {name: 'Cart', title: 'Giỏ hàng', header: false, show: true, component: Cart},
+  {name: 'Feed', title: 'Bài đăng', header: false, show: true, component: Feed},
   {
     name: 'BookDetail',
     title: 'Chi tiết sách',
     header: false,
+    show: true,
     component: BookDetail,
   },
   {
     name: 'PostDetail',
     title: 'Chi tiết bài viết',
     header: false,
+    show: true,
     component: PostDetail,
   },
-  {name: 'Post', title: 'Bài đăng', header: false, component: Post},
+  {name: 'Post', title: 'Bài đăng', header: false, show: true, component: Post},
   {
     name: 'PostOne',
     title: 'Chi tiết bài viết',
     header: false,
+    show: true,
     component: PostOne,
   },
   {
     name: 'PostOfFeed',
     title: 'Chi tiết bài viết',
     header: false,
+    show: true,
     component: PostOfFeed,
   },
   {
     name: 'ChangePassword',
     title: 'Thay đổi mật khẩu',
     header: false,
+    show: true,
     component: ChangePassword,
   },
 
@@ -286,56 +316,78 @@ const routes = [
     name: 'OrdersByStore',
     title: 'Quản lý đơn hàng',
     header: false,
+    show: true,
     component: OrdersByStore,
   },
   {
     name: 'OrderDetailStore',
     title: 'Chi tiết đơn hàng',
     header: false,
+    show: true,
     component: OrderDetailStore,
   },
   {
     name: 'ManageOrder',
     title: 'Đơn hàng của bạn',
     header: false,
+    show: true,
     component: ManageOrder,
   },
   {
     name: 'OrderDetail',
     title: 'Chi tiết đơn hàng',
     header: false,
+    show: true,
     component: OrderDetail,
   },
   {
     name: 'WishList',
     title: 'Sản phẩm yêu thích',
     header: false,
+    show: true,
     component: WishList,
   },
   {
     name: 'BooksStore',
     title: 'Quản lý sách',
     header: false,
+    show: true,
     component: BooksStore,
   },
-
-  // {
-  //   name: 'ViewSearch',
-  //   title: 'Tất cả sản phẩm',
-  //   header: false,
-  //   component: ViewSearch,
-  // },
   {
     name: 'Notification',
     title: 'Thông báo',
     header: false,
+    show: true,
     component: Notification,
   },
   {
     name: 'ListStoreFound',
     title: 'Tìm quanh đây',
     header: false,
+    show: true,
     component: ListStoreFound,
+  },
+  {
+    name: 'Chatting',
+    title: 'Tin nhắn',
+    header: false,
+    show: true,
+    component: Chatting,
+  },
+  {
+    name: 'Room',
+    title: 'Tin nhắn',
+    header: false,
+    show: false,
+    component: Room,
+  },
+  {
+    name: 'ImagesView',
+    title: 'Tất cả hình ảnh',
+    header: false,
+    show: true,
+    component: ImagesView,
   },
 ];
 const AuthStack = () => {

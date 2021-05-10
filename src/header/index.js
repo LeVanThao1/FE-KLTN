@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {SEARCH_BOOK} from '../query/book';
 import {useLazyQuery} from '@apollo/client';
@@ -15,7 +16,8 @@ import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../utils/notifications';
-import {NOTIFI} from '../constants';
+import {COLORS, NOTIFI} from '../constants';
+import {useNavigation} from '@react-navigation/native';
 
 const HeaderStack = ({navigation}) => {
   return useObserver(() => {
@@ -86,7 +88,8 @@ const HeaderStack = ({navigation}) => {
   });
 };
 
-export const HeaderLogo = ({navigation}) => {
+export const HeaderLogo = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView>
       <View style={styles.container__header}>
@@ -123,7 +126,65 @@ export const HeaderLogo = ({navigation}) => {
               }}
             />
           </View>
-          <Icon name="message1" style={styles.message} type="AntDesign" />
+          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
+            <Icon name="message1" style={styles.message} type="AntDesign" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export const HeaderMessage = () => {
+  return (
+    <SafeAreaView>
+      <View style={styles.container__header}>
+        <View style={styles.header__menu}>
+          <Icon name="menu" style={styles.icon} />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../assets/images/dinosaurRevert.png')}
+              style={{
+                height: 40,
+                resizeMode: 'contain',
+                padding: 0,
+                marginLeft: -8,
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 30,
+                color: '#fff',
+                fontWeight: 'bold',
+                padding: 0,
+                marginRight: -8,
+                marginLeft: -8,
+              }}>
+              DINO{' '}
+            </Text>
+            <Image
+              source={require('../assets/images/dinosaur.png')}
+              style={{
+                height: 40,
+                resizeMode: 'contain',
+                padding: 0,
+                marginLeft: -8,
+              }}
+            />
+          </View>
+          <View style={styles.container}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log('new');
+                // navigation.navigate('')
+              }}>
+              <Icon
+                type="Entypo"
+                name="new-message"
+                style={{color: '#fff', fontSize: 25}}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -174,6 +235,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     left: 10,
     zIndex: 1,
+  },
+  container: {
+    backgroundColor: COLORS.primary,
   },
 });
 
