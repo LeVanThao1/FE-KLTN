@@ -17,6 +17,8 @@ import {NOTIFI} from '../../constants';
 import {DELETE_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
 import {Notification} from '../../utils/notifications';
 import {styles, stylesTable} from './styles';
+import {COLORS} from '../../constants/themes';
+
 
 const ViewAll = () => {
   return useObserver(() => {
@@ -32,23 +34,6 @@ const ViewAll = () => {
       {
         onCompleted: async (data) => {
           setBookStore(data.books);
-          // setListBook(
-          //   data?.books.map((ct, i) => ({
-          //     id: ct.id,
-          //     name: ct.name,
-          //     categoryId: ct.category.id,
-          //     categoryName: ct.category.name,
-          //     price: ct.price,
-          //     publisher: ct.publisher,
-          //     numberOfReprint: ct.numberOfReprint,
-          //     year: ct.year,
-          //     amount: ct.amount,
-          //     sold: ct.sold,
-          //     description: ct.description,
-          //     // images: ct.images? ct.img : [],
-          //     // comment: ct.comment ? ct.comment : ''
-          //   })),
-          // );
         },
         onError: (err) => {
           Toast.show(Notification(NOTIFI.error, err.message));

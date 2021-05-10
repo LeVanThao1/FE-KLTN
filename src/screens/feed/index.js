@@ -18,7 +18,6 @@ const Feed = () => {
     useEffect(() => {
       queryData(GET_POSTS, {id: null})
         .then(({data}) => {
-          console.log(data);
           setPosts(data.posts);
           setLoading(false);
           setRefreshing(false);

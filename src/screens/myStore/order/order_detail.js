@@ -19,6 +19,9 @@ import {UPDATE_STATUS_ORDER} from '../../../query/order';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
+import {COLORS} from '../../../constants/themes';
+import formatMoney from '../../../utils/format';
+
 // import {GET_SUB_ORDER} from '../../query/subOrder';
 
 const OrderDetailStore = ({navigation, route}) => {
@@ -82,17 +85,6 @@ const OrderDetailStore = ({navigation, route}) => {
           id: orderStore.id,
         },
       });
-      // mutateData(UPDATE_STATUS_ORDER, {
-      //   dataStatus: orderStore.status,
-      //   id: orderStore.id,
-      // })
-      //   .then(({data}) => {
-      //     // setOrderStore();
-      //     console.log('update status', data);
-      //     setLoading(false);
-      //     setRefreshing(true);
-      //   })
-      //   .catch((err) => console.log(err));
     };
 
     return (
@@ -153,16 +145,15 @@ const OrderDetailStore = ({navigation, route}) => {
                 x {orderStore?.detail?.amount}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
-                Giá: {orderStore?.detail?.price}
+                Giá {formatMoney(orderStore?.detail?.price)} VNĐ
               </Text>
               <Text
                 style={{
                   fontSize: 16,
-                  color: '#f44f4f',
+                  color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền:{' '}
-                {orderStore?.detail?.price * orderStore?.detail?.amount}
+                Thành tiền: {formatMoney(orderStore?.detail?.price * orderStore?.detail?.amount)} VNĐ
               </Text>
             </View>
           </View>
@@ -199,7 +190,7 @@ const OrderDetailStore = ({navigation, route}) => {
               <Text
                 style={{
                   color: '#fff',
-                  backgroundColor: '#f44f4f',
+                  backgroundColor: COLORS.primary,
                   textAlign: 'center',
                   width: '50%',
                   alignSelf: 'center',

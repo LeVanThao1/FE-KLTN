@@ -1,4 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
+import {COLORS} from '../../constants/index';
 const {width, height} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   home__container: {
@@ -15,9 +16,9 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: '#f44f4f',
+    color: COLORS.primary,
     fontWeight: 'bold',
-    borderBottomColor: '#f44f4f',
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 3,
     width: 88,
   },
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   filterActiveButtonContainer: {
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 4,
