@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS} from '../../constants/themes'
+import {COLORS} from '../../constants/themes';
 import CartDetail from './CartDetail';
 
 export default function Cart({navigation}) {
@@ -42,7 +42,7 @@ export default function Cart({navigation}) {
         {cart && cart.length > 0 ? (
           <ScrollView style={styles.body}>
             {cart.map((ct, i) => (
-              <CartDetail data={ct} />
+              <CartDetail data={ct} key={i} />
             ))}
           </ScrollView>
         ) : (
@@ -58,8 +58,7 @@ export default function Cart({navigation}) {
 
             <TouchableOpacity
               style={styles.footerPayment}
-              onPress={() => navigation.navigate('Payment')}
-            >
+              onPress={() => navigation.navigate('Payment')}>
               <Text style={styles.footerPaymentText}>Mua hàng</Text>
             </TouchableOpacity>
           </View>
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#ededed',
-    padding: 12
+    padding: 12,
   },
   header: {
     width: '100%',
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderColor: COLORS.primary,
     borderWidth: 0.2,
-    backgroundColor: "#ffffff"
+    backgroundColor: '#ffffff',
   },
   footerTotal: {
     height: '100%',
