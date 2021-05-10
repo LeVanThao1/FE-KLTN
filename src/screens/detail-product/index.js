@@ -130,6 +130,9 @@ const DetailProduct = ({navigation, route}) => {
     const [updateCart, {load}] = useMutation(UPDATE_CART, {
       onCompleted: async (dt) => {
         setCart(dt.updateCart);
+        Toast.show(
+          Notification(NOTIFI.success, 'Đã thêm sản phẩm vào giỏ hàng'),
+        );
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -241,7 +244,7 @@ const DetailProduct = ({navigation, route}) => {
         </TouchableOpacity>
       );
     };
-    
+
     return (
       <View style={styles.container}>
         {!loading && book && (
@@ -285,19 +288,22 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
-                    {quantity > 1 ?
-                    <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                    :
-                    <TouchableOpacity onPress={() => setQuantity(quantity)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                    }
+                    {quantity > 1 ? (
+                      <TouchableOpacity
+                        onPress={() => setQuantity(quantity - 1)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -305,23 +311,22 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    {quantity < book.amount ? 
-                      <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
-                        <Text style={{...styles.buy__action_text, fontSize: 18}}>
+                    {quantity < book.amount ? (
+                      <TouchableOpacity
+                        onPress={() => setQuantity(quantity + 1)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
                           +
                         </Text>
                       </TouchableOpacity>
-                      :
-                      (
-                      <TouchableOpacity onPress={
-                        () => setQuantity(quantity)
-                      }>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
-                        +
-                      </Text>
-                    </TouchableOpacity>                      
-                      )
-                    }
+                    ) : (
+                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
@@ -450,7 +455,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: COLORS.primary,
     borderWidth: 0.5,
-    borderColor:COLORS.primary,
+    borderColor: COLORS.primary,
     // backgroundColor: 'rgba(68, 108, 179, 1)',
     borderRadius: 4,
   },
