@@ -10,6 +10,7 @@ import {
   ToastAndroid,
   Dimensions,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -28,6 +29,8 @@ import {styles} from './styles';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
+import SpeechToText from 'react-native-google-speech-to-text';
+
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -75,7 +78,7 @@ const CreateBook = ({navigation}) => {
       value: 0,
       error: '',
     });
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(true);
 
     const [categori, setCategori] = useState({
       value: category.categories[0].id,
@@ -140,42 +143,45 @@ const CreateBook = ({navigation}) => {
         })
         .catch((err) => console.log(err));
     };
-
     const [createBook, {called, loading, data, error}] = useMutation(
       CREATE_BOOK,
       {
         onCompleted: async (data) => {
-          console.log(data);
-          setBookStore([data.createBook, ...bookStore]);
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
-          // navigation.navigate('BooksStore');
+          // setBookStore([data.createBook, ...bookStore]);
+          navigation.navigate('BooksStore');
         },
         onError: (err) => {
           console.log(err);
-          Toast.show(
-            Notification(NOTIFI.error, 'Có lỗi xảy ra khi thêm sách mới'),
-          );
+          Toast.show(Notification(NOTIFI.error, err.message));
         },
       },
     );
-    const onChangeTextName = (value) => {
+    const onChangeTextName = (value, type) => {
       if (refName.current) {
         clearTimeout(refName.current);
       }
-      setName({
-        error: '',
-        value: value,
-      });
+      if (type === 'unsignedName') {
+        setName({
+          error: '',
+          value: value,
+        });
+      } else {
+        setAuthor({
+          error: '',
+          value: value,
+        });
+      }
       if (value.length === 0) {
         setBooksRecomment(undefined);
         return;
       }
 
       refName.current = setTimeout(() => {
-        queryData(GET_RECOMMENT_BY_NAME, {name: value})
+        queryData(GET_RECOMMENT_BY_NAME, {name: value, type})
           .then(({data}) => {
             setBooksRecomment(data.getRecommentByName);
-            setType(true);
+            setType(type);
           })
           .catch((err) => console.log(err));
       }, 300);
@@ -215,71 +221,198 @@ const CreateBook = ({navigation}) => {
       setImages(images.filter((ig, i) => index !== i));
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
-    console.log(book);
+
+    // const [field, setField] = useState(false);
+    const filterNumber = (data) => {
+      console.log(typeof data);
+      if (!isNaN(data.replace('.', ''))) return +data.replace('.', '');
+      else {
+        const tamp = data
+          .replace(/[àáâãăạảấầẩẫậắằẳẵặ]/g, 'a')
+          .replace(/[ÀÁÂÃĂẠẢẤẦẨẪẬẮẰẲẴẶ]/g, 'A')
+          .replace(/[òóôõơọỏốồổỗộớờởỡợ]/g, 'o')
+          .replace(/[ÒÓÔÕƠỌỎỐỒỔỖỘỚỜỞỠỢ]/g, 'O')
+          .replace(/[èéêẹẻẽếềểễệ]/g, 'e')
+          .replace(/[ÈÉÊẸẺẼẾỀỂỄỆ]/g, 'E')
+          .replace(/[ùúũưụủứừửữự]/g, 'u')
+          .replace(/[ÙÚŨƯỤỦỨỪỬỮỰ]/g, 'U')
+          .replace(/[ìíĩỉị]/g, 'i')
+          .replace(/[ÌÍĨỈỊ]/g, 'I')
+          .replace(/[ýỳỵỷỹ]/g, 'y')
+          .replace(/[ÝỲỴỶỸ]/g, 'Y')
+          .replace(/đ/g, 'd')
+          .replace(/Đ/g, 'D')
+          .replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, '')
+          .replace(/\u02C6|\u0306|\u031B/g, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+
+        switch (tamp) {
+          case 'khong':
+            return 0;
+          case 'mot':
+            return 1;
+          case 'hai':
+            return 2;
+          case 'ba':
+            return 3;
+          case 'bon':
+            return 4;
+          case 'buon':
+            return 4;
+          case 'nam':
+            return 5;
+          case 'sau':
+            return 6;
+          case 'bay':
+            return 7;
+          case 'tam':
+            return 8;
+          case 'chin':
+            return 9;
+          case 'chinh':
+            return 9;
+          case 'muoi':
+            return 10;
+          default:
+            Toast.show(Notification(NOTIFI.error, 'Vui lòng nhập số'));
+        }
+      }
+      return '';
+    };
+    const speechToTextHandler = async (field) => {
+      try {
+        const speechToTextData = await SpeechToText.startSpeech(
+          'Please saying something',
+          'vi-VN',
+        );
+        if (field === 'name') setName({error: '', value: speechToTextData});
+        if (field === 'author') setAuthor({error: '', value: speechToTextData});
+        if (field === 'description')
+          setDescription({error: '', value: speechToTextData});
+        if (field === 'year') setYear({error: '', value: speechToTextData});
+        if (field === 'publisher')
+          setPublisher({error: '', value: speechToTextData});
+        if (field === 'price')
+          setPrice({error: '', value: filterNumber(speechToTextData)});
+        if (field === 'amount')
+          setAmount({error: '', value: filterNumber(speechToTextData)});
+        if (field === 'numPrint')
+          setNumPrint({error: '', value: filterNumber(speechToTextData)});
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    };
+
     return (
       <ScrollView>
         <View style={styles.container_product}>
-          {/*  */}
-          <Text style={styles.header}>Thêm 1 sản phẩm mới</Text>
           <View style={styles.title}>
             {/* name */}
             <View style={styles.name}>
               <Text>Tên sản phẩm *</Text>
-              <TextInput
-                style={styles.txtMaxWidth}
-                placeholder="Nhập tên sản phẩm"
-                value={name.value}
-                onFocus={() => {
-                  // setName({
-                  //   ...name,
-                  //   error: '',
-                  // });
-                  // onChangeTextName(name.value);
-                  setType(true);
-                  setBook(undefined);
-                }}
-                onChangeText={(value) => {
-                  onChangeTextName(value);
-                }}
-                onEndEditing={() => {}}
-              />
-              {type && booksRecomment && booksRecomment.length > 0 && (
-                <ScrollView style={styles.listRecomment}>
-                  {booksRecomment.map((bk) => (
-                    <TouchableOpacity
-                      style={styles.recomment}
-                      onPress={() => {
-                        console.log('click click');
-                        setBook(bk);
-                        setName({...name, value: bk.name});
-                        setType(false);
+              <View>
+                <TextInput
+                  style={styles.txtMaxWidth}
+                  placeholder="Nhập tên sản phẩm"
+                  value={name.value}
+                  onFocus={() => {
+                    setIsModalVisible(true);
+                    onChangeTextName(name.value, 'unsignedName');
+                    setName({...name, error: ''});
+                    setType('unsignedName');
+                    setBook(undefined);
+                  }}
+                  onChangeText={(value) => {
+                    onChangeTextName(value, 'unsignedName');
+                  }}
+                  onEndEditing={() => {}}
+                />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    height: '100%',
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('name');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
+              {type === 'unsignedName' &&
+                isModalVisible &&
+                booksRecomment &&
+                booksRecomment.length > 0 && (
+                  <ScrollView style={styles.listRecomment}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'grey',
                       }}>
-                      <Image
-                        source={require('../../../assets/images/dinosaurRevert.png')}
-                        style={{
-                          width: 70,
-                          height: 70,
-                          resizeMode: 'stretch',
-                        }}></Image>
-                      <View style={styles.content}>
-                        <View style={styles.content_main}>
-                          <Text style={styles.content_name} numberOfLines={1}>
-                            {bk.name}
-                          </Text>
-                          <Text style={styles.content_author}>
-                            Tác giả: {bk.author}
-                          </Text>
-                          <Text
-                            style={styles.content_description}
-                            numberOfLines={2}>
-                            Mô tả: {bk.description}
-                          </Text>
+                      <Text>Gợi ý</Text>
+                      <TouchableOpacity
+                        style={{paddingVertical: 3}}
+                        onPress={() => {
+                          setAuthor({...author, value: ''});
+                          setIsModalVisible(false);
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="close"
+                          style={{
+                            fontSize: 22,
+                            // color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                    {booksRecomment.map((bk) => (
+                      <TouchableOpacity
+                        style={styles.recomment}
+                        onPress={() => {
+                          setBook(bk);
+                          setName({...name, value: bk.name});
+                          setAuthor({...author, value: bk.author});
+                          setType(false);
+                        }}>
+                        <Image
+                          source={{uri: bk.images[0]}}
+                          style={{
+                            width: 70,
+                            height: 70,
+                            resizeMode: 'stretch',
+                          }}></Image>
+                        <View style={styles.content}>
+                          <View style={styles.content_main}>
+                            <Text style={styles.content_name} numberOfLines={1}>
+                              {bk.name}
+                            </Text>
+                            <Text style={styles.content_author}>
+                              Tác giả: {bk.author}
+                            </Text>
+                            <Text
+                              style={styles.content_description}
+                              numberOfLines={2}>
+                              Mô tả: {bk.description}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
             </View>
             <View>
               <Text>Danh mục sách *</Text>
@@ -306,92 +439,250 @@ const CreateBook = ({navigation}) => {
             </View>
 
             {/* author */}
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Tác giả *</Text>
-              <TextInput
-                editable={book ? false : true}
-                style={styles.txtInput}
-                placeholder="Nhập tên tác giả"
-                value={book ? book.author : author.value}
-                onFocus={() => {
-                  setAuthor({
-                    ...author,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setAuthor({
-                    ...author,
-                    value: value,
-                  });
-                }}
-              />
+              <View>
+                <TextInput
+                  style={styles.txtMaxWidth}
+                  placeholder="Nhập tên tác giả"
+                  value={author.value}
+                  onFocus={() => {
+                    setIsModalVisible(true);
+                    onChangeTextName(author.value, 'author');
+                    setAuthor({
+                      ...author,
+                      error: '',
+                    });
+                    setType('author');
+                    setBook(undefined);
+                  }}
+                  onChangeText={(value) => {
+                    onChangeTextName(value, 'author');
+                  }}
+                  onEndEditing={() => {
+                    // setIsModalVisible(false);
+                  }}
+                />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    height: '100%',
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('author');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
+              {type === 'author' &&
+                isModalVisible &&
+                booksRecomment &&
+                booksRecomment.length > 0 && (
+                  <ScrollView style={styles.listRecomment}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'grey',
+                      }}>
+                      <Text>Gợi ý</Text>
+                      <TouchableOpacity
+                        style={{paddingVertical: 3}}
+                        onPress={() => {
+                          setName({...name, value: ''});
+                          setIsModalVisible(false);
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="close"
+                          style={{
+                            fontSize: 22,
+                            // color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                    {booksRecomment.map((bk) => (
+                      <TouchableOpacity
+                        style={styles.recomment}
+                        onPress={() => {
+                          console.log('click click');
+                          setBook(bk);
+                          setAuthor({...author, value: bk.author});
+                          setName({...name, value: bk.name});
+                          setType(false);
+                        }}>
+                        <Image
+                          source={{uri: bk.images[0]}}
+                          style={{
+                            width: 70,
+                            height: 70,
+                            resizeMode: 'stretch',
+                          }}></Image>
+                        <View style={styles.content}>
+                          <View style={styles.content_main}>
+                            <Text style={styles.content_name} numberOfLines={1}>
+                              {bk.name}
+                            </Text>
+                            <Text style={styles.content_author}>
+                              Tác giả: {bk.author}
+                            </Text>
+                            <Text
+                              style={styles.content_description}
+                              numberOfLines={2}>
+                              Mô tả: {bk.description}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
             </View>
             {/* year */}
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Năm phát hành *</Text>
-              <TextInput
-                editable={book ? false : true}
-                style={styles.txtInput}
-                placeholder="Nhập năm phát hành"
-                value={book ? book.year : year.value}
-                onFocus={() => {
-                  setYear({
-                    ...year,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setYear({
-                    ...year,
-                    value: value,
-                  });
-                }}
-              />
+              <View>
+                <TextInput
+                  editable={book ? false : true}
+                  style={styles.txtMaxWidth}
+                  placeholder="Nhập năm phát hành"
+                  value={book ? book.year : year.value}
+                  onFocus={() => {
+                    setYear({
+                      ...year,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setYear({
+                      ...year,
+                      value: value,
+                    });
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={book ? true : false}
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    height: '100%',
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('year');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                      color: book ? '#dddddd' : '#000',
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
             </View>
             {/* pulisher */}
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Nhà xuất bản *</Text>
-              <TextInput
-                editable={book ? false : true}
-                style={styles.txtInput}
-                placeholder="Nhập tên nhà xuất bản"
-                value={book ? book.publisher : publisher.value}
-                onFocus={() => {
-                  setPublisher({
-                    ...publisher,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setPublisher({
-                    ...publisher,
-                    value: value,
-                  });
-                }}
-              />
+              <View>
+                <TextInput
+                  editable={book ? false : true}
+                  style={styles.txtMaxWidth}
+                  placeholder="Nhập tên nhà xuất bản"
+                  value={book ? book.publisher : publisher.value}
+                  onFocus={() => {
+                    setPublisher({
+                      ...publisher,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setPublisher({
+                      ...publisher,
+                      value: value,
+                    });
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={book ? true : false}
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    height: '100%',
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('publisher');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                      color: book ? '#ddd' : '#000',
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
             </View>
             {/* number of printed lines */}
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Số lần xuất bản *</Text>
-              <TextInput
-                editable={book ? false : true}
-                style={styles.txtInput}
-                placeholder="Nhập số lần xuất bản"
-                value={book ? book.numberOfReprint + '' : numPrint.value}
-                onFocus={() => {
-                  setNumPrint({
-                    ...numPrint,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setNumPrint({
-                    ...numPrint,
-                    value: Number(value),
-                  });
-                }}
-              />
+              <View>
+                <TextInput
+                  editable={book ? false : true}
+                  style={styles.txtMaxWidth}
+                  placeholder="Nhập số lần xuất bản"
+                  value={book ? book.numberOfReprint + '' : numPrint.value + ''}
+                  onFocus={() => {
+                    setNumPrint({
+                      ...numPrint,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setNumPrint({
+                      ...numPrint,
+                      value: Number(value),
+                    });
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={book ? true : false}
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    height: '100%',
+                    width: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('numPrint');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                      color: book ? '#ddd' : '#000',
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
             </View>
             {/* Image */}
             <View style={styles.name}>
@@ -470,7 +761,7 @@ const CreateBook = ({navigation}) => {
                           name="plus"
                           style={{
                             fontSize: 50,
-                            color: 'rgba(68, 108, 179, 1)',
+                            color: '#f44f4f',
                           }}></Icon>
                       </TouchableOpacity>
                     )
@@ -479,43 +770,66 @@ const CreateBook = ({navigation}) => {
             </View>
             <View style={styles.name}>
               <Text>Mô tả sản phẩm *</Text>
-              <Textarea
-                editable={book ? false : true}
-                containerStyle={styles.textareacont}
-                style={styles.textarea}
-                // onChangeText={this.onChange}
-                // defaultValue={this.state.text}
-                maxLength={200}
-                placeholder={'Nhập mô tả sách'}
-                placeholderTextColor={'#c7c7c7'}
-                underlineColorAndroid={'transparent'}
-                value={book ? book.description : description.value}
-                onFocus={() => {
-                  setDescription({
-                    ...description,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setDescription({
-                    ...description,
-                    value: value,
-                  });
-                }}
-              />
+              <View>
+                <Textarea
+                  editable={book ? false : true}
+                  containerStyle={styles.textareacont}
+                  style={styles.textarea}
+                  // onChangeText={this.onChange}
+                  // defaultValue={this.state.text}
+                  maxLength={200}
+                  placeholder={'Nhập mô tả sách'}
+                  placeholderTextColor={'#c7c7c7'}
+                  underlineColorAndroid={'transparent'}
+                  value={book ? book.description : description.value}
+                  onFocus={() => {
+                    setDescription({
+                      ...description,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setDescription({
+                      ...description,
+                      value: value,
+                    });
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={book ? true : false}
+                  style={{
+                    position: 'absolute',
+                    right: -6,
+                    height: '100%',
+                    width: 30,
+                    top: 10,
+                    // justifyContent: 'center',
+                    // alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    speechToTextHandler('description');
+                  }}>
+                  <Icon
+                    type="FontAwesome"
+                    name="microphone"
+                    style={{
+                      fontSize: 25,
+                      color: book ? '#ddd' : '#000',
+                    }}></Icon>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Số lượng *</Text>
               <View
                 style={{
                   position: 'relative',
-                  width: '50%',
                 }}>
                 <TextInput
-                  style={styles.txtVND}
+                  style={styles.txtMaxWidth}
                   placeholder="Nhập số lượng"
-                  value={amount.value}
+                  value={amount.value + ''}
                   onFocus={() => {
                     setAmount({
                       ...amount,
@@ -529,29 +843,45 @@ const CreateBook = ({navigation}) => {
                     });
                   }}
                 />
-                <Text
+                <View
                   style={{
                     position: 'absolute',
                     right: 10,
-                    top: 8,
-                    fontSize: 14,
+                    height: '100%',
+                    flexDirection: 'row',
+                    // width: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  Quyển
-                </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      marginRight: 7,
+                    }}>
+                    Quyển
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      speechToTextHandler('amount');
+                    }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="microphone"
+                      style={{
+                        fontSize: 25,
+                      }}></Icon>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
             {/*  */}
-            <View style={styles.horizontal}>
+            <View style={styles.name}>
               <Text>Giá sách *</Text>
-              <View
-                style={{
-                  position: 'relative',
-                  width: '50%',
-                }}>
+              <View>
                 <TextInput
-                  style={styles.txtVND}
+                  style={styles.txtMaxWidth}
                   placeholder="Nhập giá sách"
-                  value={price.value}
+                  value={price.value + ''}
                   onFocus={() => {
                     setPrice({
                       ...price,
@@ -565,15 +895,35 @@ const CreateBook = ({navigation}) => {
                     });
                   }}
                 />
-                <Text
+                <View
                   style={{
                     position: 'absolute',
                     right: 10,
-                    top: 8,
-                    fontSize: 14,
+                    height: '100%',
+                    // width: 50,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  VND
-                </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      marginRight: 7,
+                    }}>
+                    VND
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      speechToTextHandler('price');
+                    }}>
+                    <Icon
+                      type="FontAwesome"
+                      name="microphone"
+                      style={{
+                        fontSize: 25,
+                      }}></Icon>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
             <View
@@ -584,7 +934,11 @@ const CreateBook = ({navigation}) => {
                 flexDirection: 'row',
               }}>
               <Button
-                style={{color: 'rgba(68, 108, 179, 1)', padding: 0}}
+                style={{
+                  color: '#f44f4f',
+                  padding: 0,
+                  backgroundColor: '#f44f4f',
+                }}
                 onPress={onAlert}>
                 <Text>Xác nhận</Text>
               </Button>

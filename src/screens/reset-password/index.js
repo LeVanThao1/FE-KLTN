@@ -95,9 +95,7 @@ export default function ResetPassword({navigation, route}) {
       <TouchableOpacity
         style={{width: '100%'}}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: 'rgba(68, 108, 179, 1)', fontWeight: 'bold'}}>
-          {'Trở lại'}
-        </Text>
+        <Text style={{color: '#f44f4f', fontWeight: 'bold'}}>{'Trở lại'}</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Thiết lập lại mật khẩu</Text>
       <View style={{width: '100%'}}>
@@ -221,7 +219,7 @@ const styles = StyleSheet.create({
     color: '#696969',
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

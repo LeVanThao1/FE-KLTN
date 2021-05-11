@@ -40,27 +40,28 @@ const Store = ({navigation}) => {
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState([]);
     const [text, setText] = useState('');
-    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-      onCompleted: async (data) => {
-        console.log('........', data);
-        // setListInfo({
-        //   id: info?.id,
-        //   name: info?.name,
-        // });
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log('get store', err);
-      },
-    });
-    useEffect(() => {
-      store({
-        variables: {
-          id: user.store?.id,
-        },
-      });
-    }, [info]);
-    useEffect(() => {}, [info]);
+    // const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+    //   onCompleted: async (data) => {
+    //     console.log('........', data);
+    //     // setListInfo({
+    //     //   id: info?.id,
+    //     //   name: info?.name,
+    //     // });
+    //   },
+    //   onError: (err) => {
+    //     Toast.show(Notification(NOTIFI.error, err.message));
+    //     console.log('get store', err);
+    //   },
+    // });
+    // useEffect(() => {
+    //   console.log('12133', user.store);
+    //   store({
+    //     variables: {
+    //       id: user.store?.id,
+    //     },
+    //   });
+    // }, [info]);
+    // useEffect(() => {}, [info]);
 
     return !user.info.store ? (
       <View style={styles.createStore}>
@@ -133,9 +134,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                  <Separator bordered style={{backgroundColor: '#f44f4f'}}>
                     <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
                     {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
                   </Separator>
@@ -159,7 +158,7 @@ const Store = ({navigation}) => {
                   <Separator
                     bordered
                     style={{
-                      backgroundColor: 'rgba(68, 108, 179, 1)',
+                      backgroundColor: '#f44f4f',
                     }}>
                     <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
                   </Separator>
@@ -184,9 +183,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: 'rgba(68, 108, 179, 1)'}}>
+                  <Separator bordered style={{backgroundColor: '#f44f4f'}}>
                     <Text style={{color: '#fff'}}>+ Tài chính</Text>
                   </Separator>
                 </CollapseHeader>
@@ -324,7 +321,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
     marginBottom: 20,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
 });
 

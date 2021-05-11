@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     padding: 8,
   },
   headerIcon: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.2,
   },
   button: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

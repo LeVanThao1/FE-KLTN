@@ -59,13 +59,17 @@ import PostFb from '../screens/post/posts';
 import PostOfFeed from '../screens/post/postOfFeed';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../constants';
-import {COLORS} from "../constants/themes";
+import {COLORS} from '../constants/themes';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
   const notification = useNotification();
   return (
-    <Stack.Navigator initialRouteName={initialRoute || 'Home'}>
+    <Stack.Navigator
+      initialRouteName={initialRoute || 'Home'}
+      screenOptions={{
+        headerTintColor: '#fff',
+      }}>
       <Stack.Screen
         name="Home"
         component={Home}
@@ -95,7 +99,7 @@ const HomeStack = ({navigation, initialRoute}) => {
           title: 'Danh sách sản phẩm',
           headerTitle: () => <HeaderStack navigation={navigation} />,
           headerStyle: {
-            backgroundColor: 'rgba(68, 108, 179, 1)',
+            backgroundColor: '#f44f4f',
           },
           headerLeft: null,
         }}
@@ -111,9 +115,9 @@ const HomeStack = ({navigation, initialRoute}) => {
               backgroundColor: COLORS.primary,
             },
             headerTitleAlign: 'center',
-            headerTitleStyle : {
-              color: COLORS.white
-            }
+            headerTitleStyle: {
+              color: COLORS.white,
+            },
             // headerTitle: () =>
             //   rt.header && <HeaderStack navigation={navigation} />,
           }}

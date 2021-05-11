@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {REGISTER} from '../../query/user';
-import {COLORS} from "../../constants/themes";
+import {COLORS} from '../../constants/themes';
 import {
   emailValidator,
   nameValidator,
@@ -158,9 +158,7 @@ export default function Register({navigation}) {
       <TouchableOpacity
         style={{width: '100%'}}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={{color: 'rgba(68, 108, 179, 1)', fontWeight: 'bold'}}>
-          {'Trở lại'}
-        </Text>
+        <Text style={{color: '#f44f4f', fontWeight: 'bold'}}>{'Trở lại'}</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Đăng ký</Text>
       <View style={{width: '100%'}}>
@@ -288,7 +286,7 @@ export default function Register({navigation}) {
           <Text
             style={{
               ...styles.text,
-              color: 'rgba(68, 108, 179, 1)',
+              color: '#f44f4f',
               fontWeight: 'bold',
             }}>
             Đăng nhập.

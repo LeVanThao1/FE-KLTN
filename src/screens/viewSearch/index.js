@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
   header_text: {
     fontSize: 17,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
   },
   selled: {
     flexDirection: 'row',

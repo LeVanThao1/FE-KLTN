@@ -49,18 +49,22 @@ const BooksStore = ({navigation}) => {
         setListBook(
           bookStore.map((ct, i) => ({
             id: ct.id ? ct.id : '',
-            name: ct.name ? ct.name : '',
-            categoryId: ct.category.id ? ct.category.id : '',
-            categoryName: ct.category.name ? ct.category.name : '',
-            author: ct.author,
+            name: ct.name ? ct.name : ct.book.name,
+            categoryId: ct.category ? ct.category.id : ct.book.category.id,
+            categoryName: ct.category
+              ? ct.category.name
+              : ct.book.category.name,
+            author: ct.author ? ct.author : ct.book.author,
             price: ct.price ? ct.price : '',
-            publisher: ct.publisher ? ct.publisher : '',
-            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
-            year: ct.year ? ct.year : '',
+            publisher: ct.publisher ? ct.publisher : ct.book.publisher,
+            numberOfReprint: ct.numberOfReprint
+              ? ct.numberOfReprint
+              : ct.book.numberOfReprint,
+            year: ct.year ? ct.year : ct.book.year,
             amount: ct.amount ? ct.amount : '',
             sold: ct.sold ? ct.sold : '',
-            description: ct.description ? ct.description : '',
-            images: ct.images[0] ? ct.images[0] : [],
+            description: ct.description ? ct.description : ct.book.description,
+            images: ct.images ? ct.images[0] : ct.book.images[0],
             comment: ct.comment ? ct.comment : '',
           })),
         );
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: 'rgba(68, 108, 179, 1)',
+    backgroundColor: '#f44f4f',
   },
   searchGroup: {
     position: 'relative',
@@ -187,8 +191,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: 'rgba(68, 108, 179, 1)',
-    borderBottomColor: 'rgba(68, 108, 179, 1)',
+    color: '#f44f4f',
+    borderBottomColor: '#f44f4f',
     borderBottomWidth: 2,
   },
   orderContainer: {

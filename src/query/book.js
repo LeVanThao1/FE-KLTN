@@ -55,6 +55,16 @@ export const GET_BOOKS_STORE = gql`
       book {
         id
         name
+        year
+        publisher
+        numberOfReprint
+        description
+        images
+        author
+        category {
+          id
+          name
+        }
       }
       category {
         id
@@ -237,8 +247,8 @@ export const GET_BOOKS_CATEGORY = gql`
 `;
 
 export const GET_RECOMMENT_BY_NAME = gql`
-  query getRecommentByName($name: String!) {
-    getRecommentByName(name: $name) {
+  query getRecommentByName($name: String!, $type: String) {
+    getRecommentByName(name: $name, type: $type) {
       id
       name
       author
