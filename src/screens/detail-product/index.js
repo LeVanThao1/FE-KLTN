@@ -24,7 +24,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
 import moment from 'moment';
-import {formatMoney} from '../../utils/format/index';
+import formatMoney from '../../utils/format/index';
 
 const Row = styled.View`
   align-items: center;

@@ -187,7 +187,7 @@ const Statistics = () => {
           borderRadius: 16
         }}
       /> : null}
-      <LineChart
+      {/* <LineChart
     data={{
       labels: ["January", "February", "March", "April", "May", "June"],
       datasets: [
@@ -229,7 +229,7 @@ const Statistics = () => {
       marginVertical: 8,
       borderRadius: 16
     }}
-  />
+  /> */}
       {/* <LineChart
         data={{
           labels: labels,
