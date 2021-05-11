@@ -20,6 +20,8 @@ import sub, {
 } from 'sub-vn';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {isNotEmpty, phoneNumberValidator} from '../../utils/validations';
+import {COLORS} from '../../constants/themes';
+
 
 const Address = ({navigation}) => {
   return useObserver(() => {
@@ -290,7 +292,7 @@ const Address = ({navigation}) => {
         <View>
           <Button
             title="Xác nhận"
-            color="rgba(68, 108, 179, 1)"
+            color={COLORS.primary}
             onPress={onPress}
           />
         </View>

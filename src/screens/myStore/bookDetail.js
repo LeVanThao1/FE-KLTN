@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-
+import {COLORS} from '../../constants/themes';
 import Images from '../../assets/images/images';
 import {UPDATE_POST} from '../../query/post';
 import {CREATE_COMMENT_BOOK, CREATE_COMMENT_POST} from '../../query/comment';
@@ -21,6 +21,7 @@ import {stylesPost} from './styles';
 import {Notification} from '../../utils/notifications';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
+import formatMoney from '../../utils/format';
 
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
@@ -61,6 +62,7 @@ const BookDetail = ({navigation, book}) => {
       });
       setCmts('');
     };
+    console.log('images book detail', book)
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -69,15 +71,37 @@ const BookDetail = ({navigation, book}) => {
               <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
                 Hình ảnh
               </Text>
+              {/* <ScrollView>
+                {bookCurrent.images?.map((img, i) => (
+                  <Image
+                    key={i}
+                    source={{uri: img}}
+                    style={stylesPost.imgBook}
+                  />
+                ))}
+              </ScrollView> */}
+              {(bookCurrent.images.length > 3) ?  
               <View style={stylesPost.imgBookDetail}>
-                {/* {book.images.map((img, i) => ( */}
-                <Image
-                  // key={i}
-                  source={{uri: bookCurrent.images}}
-                  style={stylesPost.imgBook}
-                />
-                {/* ))} */}
-              </View>
+                <ScrollView horizontal={true}>
+                  {bookCurrent.images.map((img, i) => (
+                    <Image
+                      // key={i}
+                      source={{uri: img}}
+                      style={stylesPost.imgBook}
+                    />
+                  ))}
+                </ScrollView>
+              </View> : 
+              <View style={{width: '100%', flexDirection: 'row', justifyContent: 'center'}}>
+                  {bookCurrent.images.map((img, i) => (
+                    <Image
+                      key={i}
+                      source={{uri: img}}
+                      style={stylesPost.imgBook}
+                    />
+                  ))}
+                </View>} 
+           
             </View>
           </ScrollView>
           <View style={stylesPost.content}>
@@ -122,8 +146,11 @@ const BookDetail = ({navigation, book}) => {
                     justifyContent: 'space-between',
                     color: '#f00',
                   }}>
-                  <Text style={stylesPost.detail}>{bookCurrent.price}</Text>
-                  <Text style={{paddingLeft: 5, color: '#f44f4f'}}>VND</Text>
+                  <Text style={stylesPost.detail}>{formatMoney(bookCurrent.price)} VNĐ</Text>
+                  <Text
+                    style={{paddingLeft: 5, color: COLORS.primary}}>
+                    VND
+                  </Text>
                 </View>
               </View>
               <View style={stylesPost.elment}>

@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from '../../constants/themes';
+
 export const stylesPost = StyleSheet.create({
   textDes: {
     height: 'auto',
@@ -129,12 +131,25 @@ export const stylesPost = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
   },
 
   imgBook: {
-    width: '45%',
+    width: 150,
     height: 200,
+    marginRight: 15 ,
     resizeMode: 'cover',
+    shadowColor: 'red',
+    shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 6,
+},
+shadowOpacity: 0.39,
+shadowRadius: 8.30,
+
+elevation: 13,
   },
 
   picker: {
@@ -173,7 +188,7 @@ export const stylesPost = StyleSheet.create({
   titlePost: {
     fontWeight: 'bold',
     paddingBottom: 10,
-    color: '#f44f4f',
+    color: COLORS.primary,
     fontSize: 18,
   },
 
@@ -257,7 +272,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   detail: {
-    color: '#f44f4f',
+    color: COLORS.primary,
   },
 
   addpost: {
@@ -299,6 +314,6 @@ export const stylesPost = StyleSheet.create({
     width: '50%',
     textAlign: 'center',
     color: '#fff',
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
 });

@@ -10,6 +10,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import {COLORS} from '../../constants/index';
 
 const WishList = ({navigation, route}) => {
   return useObserver(() => {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   category_header: {
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
   header_text: {
     fontSize: 17,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#f44f4f',
+    color: COLORS.primary,
   },
   selled: {
     flexDirection: 'row',

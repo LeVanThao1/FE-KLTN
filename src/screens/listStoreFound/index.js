@@ -7,7 +7,7 @@ import StoreCart from './store';
 import GetLocation from 'react-native-get-location';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 const ListStoreFound = ({navigation}) => {
   const [stores, setStores] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   row: {
     width: '100%',
     padding: 16,
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
   },
   searchGroup: {
     position: 'relative',
@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: '#f44f4f',
-    borderBottomColor: '#f44f4f',
+    color: COLORS.primary,
+    borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
   },
   orderContainer: {

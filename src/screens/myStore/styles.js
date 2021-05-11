@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { COLORS } from '../../constants';
 
 export const styles = StyleSheet.create({
   container_view: {margin: 5},
@@ -174,7 +175,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   imgBook: {
-    width: '45%',
+    width: 150,
     height: 200,
     resizeMode: 'cover',
   },
@@ -223,7 +224,7 @@ export const stylesPost = StyleSheet.create({
   titlePost: {
     fontWeight: 'bold',
     paddingBottom: 10,
-    color: '#f44f4f',
+    color: COLORS.primary,
     fontSize: 18,
   },
 
@@ -291,7 +292,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   detail: {
-    color: '#f44f4f',
+    color: COLORS.primary,
   },
 
   addpost: {
@@ -331,6 +332,16 @@ export const stylesPost = StyleSheet.create({
     width: '50%',
     textAlign: 'center',
     color: '#fff',
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
+  },
+  imgBookDetail: {
+    width: '100%',
+    margin: 'auto',
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
   },
 });

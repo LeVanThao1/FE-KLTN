@@ -22,7 +22,7 @@ import {mutateData} from '../../common';
 import {CREATE_COMMENT_BOOK} from '../../query/comment';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 import moment from 'moment';
 import {formatMoney} from '../../utils/format/index';
 
@@ -55,9 +55,9 @@ const DetailProduct = ({navigation, route}) => {
     } = useContext(MobXProviderContext);
     const {cart, setCart, likes, addToLike, removeToLike} = user;
     const {productId} = route.params;
-    const [book, setBook] = useState(null);
+    const [book, setBook] = useState(undefined);
     const [listItem, setListItem] = useState([]);
-    console.log('book detail', book);
+    // console.log('book detail', book.images);
 
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
@@ -66,8 +66,8 @@ const DetailProduct = ({navigation, route}) => {
       onCompleted: () => {
         addToLike({
           id: productId,
-          name: book.name || null,
-          images: book.images || null,
+          name: book.name || '',
+          images: book.images || [],
           price: book.price,
           amount: book.amount,
           sold: book.sold,
@@ -103,7 +103,7 @@ const DetailProduct = ({navigation, route}) => {
             id: ct.id,
             name: ct.book ? ct.book?.name : ct.name,
             price: ct.price,
-            image: ct.book ? ct.book.images[0] : ct.images[0],
+            image: ct.book ? ct.book.images : ct.images,
             selled: ct.amount,
           })),
         );
@@ -130,6 +130,9 @@ const DetailProduct = ({navigation, route}) => {
     const [updateCart, {load}] = useMutation(UPDATE_CART, {
       onCompleted: async (dt) => {
         setCart(dt.updateCart);
+        Toast.show(
+          Notification(NOTIFI.success, 'Đã thêm sản phẩm vào giỏ hàng'),
+        );
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -241,6 +244,7 @@ const DetailProduct = ({navigation, route}) => {
         </TouchableOpacity>
       );
     };
+
     return (
       <View style={styles.container}>
         {!loading && book && (
@@ -248,8 +252,9 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.slide__image_wrap}>
               <SliderBox
                 style={styles.slide__image}
-                images={[...(book ? book.images : []), Images.onepiece1]}
+                images={book?.images}
                 autoplay={true}
+                circleLoop={true}
               />
             </View>
             <View style={styles.detail__content}>
@@ -283,11 +288,22 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
-                    <TouchableOpacity onPress={() => setQuantity(quantity - 1)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
+                    {quantity > 1 ? (
+                      <TouchableOpacity
+                        onPress={() => setQuantity(quantity - 1)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -295,11 +311,22 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
-                      <Text style={{...styles.buy__action_text, fontSize: 18}}>
-                        +
-                      </Text>
-                    </TouchableOpacity>
+                    {quantity < book.amount ? (
+                      <TouchableOpacity
+                        onPress={() => setQuantity(quantity + 1)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                        <Text
+                          style={{...styles.buy__action_text, fontSize: 18}}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
@@ -426,10 +453,10 @@ const styles = StyleSheet.create({
   },
   showStore: {
     padding: 10,
-    color: '#f44f4f',
+    color: COLORS.primary,
     borderWidth: 0.5,
-    borderColor: '#f44f4f',
-    // backgroundColor: '#f44f4f',
+    borderColor: COLORS.primary,
+    // backgroundColor: 'rgba(68, 108, 179, 1)',
     borderRadius: 4,
   },
   store: {
@@ -442,6 +469,10 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     height: 280,
+  },
+  slide__image: {
+    width: 200,
+    height: 300,
   },
   detail__content: {
     // paddingTop: 10,
@@ -460,7 +491,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   current__price: {
-    color: '#f44f4f',
+    color: COLORS.primary,
     fontSize: 16,
     textAlign: 'center',
   },
@@ -484,7 +515,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   icon__heart_active: {
-    color: '#f44f4f',
+    color: COLORS.primary,
   },
   detail__store: {
     backgroundColor: '#f6f6f6',
@@ -504,6 +535,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+
   store__avatar: {
     width: 40,
     height: 40,
@@ -546,7 +578,7 @@ const styles = StyleSheet.create({
   buy__action_text: {
     paddingVertical: 8,
     paddingHorizontal: 20,
-    backgroundColor: '#f44f4f',
+    backgroundColor: COLORS.primary,
     color: '#ffffff',
     borderRadius: 16,
     fontSize: 16,

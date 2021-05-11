@@ -26,6 +26,7 @@ import History from './history';
 import {NotiSuccess} from '../../utils/notifications';
 import {GET_CATEGORIES} from '../../query/category';
 const {width, height} = Dimensions.get('window');
+import formatMoney from '../../utils/format/index';
 
 const Home = ({navigation}) => {
   const ProductItem = ({book}) => (
@@ -41,7 +42,7 @@ const Home = ({navigation}) => {
       <Text style={styles.itemName} numberOfLines={1}>
         {book.book ? book.book.name : book.name}
       </Text>
-      <Text style={styles.itemPrice}>{book.price}</Text>
+      <Text style={styles.itemPrice}>{formatMoney(book.price)}VND</Text>
     </TouchableOpacity>
   );
   return useObserver(() => {
@@ -98,7 +99,7 @@ const Home = ({navigation}) => {
     const [chooseCategory, setChooseCategory] = useState(0);
     const [images, setImages] = useState([
       Images.slider1,
-      Images.slider2,
+      "https://www.khaitam.com/Data/Sites/1/Product/116/hanh-trinh-ve-phuong-dong.jpg",
       Images.slider3,
       Images.slider4,
     ]);
