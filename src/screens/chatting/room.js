@@ -4,7 +4,7 @@ import {Spinner} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {FlatList, ImageBackground, Text, View} from 'react-native';
 import Toast from 'react-native-toast-message';
-import BG from '../../assets/images/dinosaur.png';
+import BG from '../../assets/images/bg.jpg';
 import {queryData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {GET_MESSAGE_GROUP} from '../../query/message';
