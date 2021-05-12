@@ -41,6 +41,9 @@ const OrderDetail = ({navigation, route}) => {
       });
     }, []);
 
+    useEffect(() => {
+      console.log(subOrder);
+    }, [subOrder]);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -91,7 +94,7 @@ const OrderDetail = ({navigation, route}) => {
                 x {subOrder?.detail?.amount}
               </Text>
               <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
-                Giá: {formatMoney(subOrder?.detail?.price)} VNĐ
+                Giá: {formatMoney(subOrder?.detail?.price || 0)} VNĐ
               </Text>
               <Text
                 style={{
@@ -99,7 +102,7 @@ const OrderDetail = ({navigation, route}) => {
                   color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền: {formatMoney(subOrder?.detail?.price * subOrder?.detail?.amount)} VNĐ
+                Thành tiền: {formatMoney(subOrder?.detail?.price * subOrder?.detail?.amount || 0)} VNĐ
               </Text>
             </View>
           </View>

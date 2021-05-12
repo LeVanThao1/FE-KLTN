@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {COLORS} from "../../constants/themes"
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const icon = {
   book: {
@@ -28,32 +27,31 @@ const icon = {
   },
 };
 
-const route = {
-  book: {
-    linkID: 'commentBook',
-    screen: 'Detail-Product',
-    id: 'productId',
-  },
-  post: {
-    linkID: 'commentPost',
-    screen: 'PostUser',
-    id: 'postId',
-  },
-  order: {
-    linkID: 'order',
-    screen: 'OrderDetail',
-    id: 'id',
-  },
-};
-
 const NotificationScreen = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {notification},
     } = useContext(MobXProviderContext);
     const [selected, setSelected] = useState('order');
+    const route = {
+      book: {
+        linkID: item => item.commentBook.book.id,
+        screen: 'Detail-Product',
+        id: 'productId',
+      },
+      post: {
+        linkID: item => item.comment.post.id,
+        screen: 'PostUser',
+        id: 'postId',
+      },
+      order: {
+        linkID: item => item.order.id,
+        screen: 'OrderDetail',
+        id: 'id',
+      },
+    };
     useEffect(() => {
-      //  console.log(noti[selected]);
+       console.log(notification[selected].map(item => item[route[selected].linkID]));
     }, [selected]);
     const SideBarIcon = ({name}) => (
       <TouchableOpacity onPress={() => setSelected(name)}>
@@ -73,7 +71,7 @@ const NotificationScreen = ({navigation}) => {
       </TouchableOpacity>
     );
     const NotificationItem = ({item}) => (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(route[selected].screen, {[route[selected].id]: route[selected].linkID(item)})}>
         <View style={styles.itemContainer}>
           <View style={styles.itemTopContainer}>
             <View style={styles.itemTypeContainer}>
@@ -149,18 +147,15 @@ const styles = StyleSheet.create({
   },
   activeIcon: {
     padding: 12,
-    // trick
     marginLeft: -4,
     color: '#949494',
     fontSize: 22,
   },
-  //
   listContainer: {
     flex: 1,
     borderLeftWidth: 1,
     borderLeftColor: '#e5e5e5',
   },
-  //
   itemContainer: {
     backgroundColor: '#fff',
     paddingVertical: 12,
@@ -195,7 +190,6 @@ const styles = StyleSheet.create({
   },
   itemDescription: {
     color: '#787878',
-    // fontSize: 12,
     marginTop: 12,
   },
   notificationIcon: {
