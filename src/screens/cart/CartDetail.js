@@ -189,7 +189,7 @@ export default function CartDetail({data}) {
                 onPress={() => {
                   Alert.alert(
                     'Loại sản phẩm khỏi giỏ hàng',
-                    'Bạn có chắc muốn loại bỏ sản phẩm khỏi giỏ hàng mình không',
+                    'Bạn có chắc muốn loại bỏ sản phẩm khỏi giỏ hàng mình không?',
                     [
                       {
                         text: 'Đồng ý',
