@@ -3,6 +3,7 @@ import {Spinner, Text} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView} from 'react-native';
 import {queryData} from '../../common';
+import {COLORS} from '../../constants';
 import {GET_POSTS} from '../../query/post';
 import PostOne from '../post/post';
 import PostOfFeed from '../post/postOfFeed';
@@ -46,7 +47,7 @@ const Feed = () => {
             </Text>
           )
         ) : (
-          <Spinner />
+          <Spinner color={COLORS.primary} />
         )}
       </ScrollView>
     );

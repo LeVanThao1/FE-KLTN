@@ -30,7 +30,6 @@ import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
 
-
 const Store = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -65,7 +64,7 @@ const Store = ({navigation}) => {
     // }, [info]);
     // useEffect(() => {}, [info]);
 
-    return !user.info.store ? (
+    return Object.keys(shop.info).length === 0 ? (
       <View style={styles.createStore}>
         <Text style={styles.titleCreate}>Bạn chưa có cửa hàng</Text>
         <Button
@@ -136,9 +135,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: COLORS.primary}}>
+                  <Separator bordered style={{backgroundColor: COLORS.primary}}>
                     <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
                     {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
                   </Separator>
@@ -187,9 +184,7 @@ const Store = ({navigation}) => {
             <View>
               <Collapse>
                 <CollapseHeader>
-                  <Separator
-                    bordered
-                    style={{backgroundColor: COLORS.primary}}>
+                  <Separator bordered style={{backgroundColor: COLORS.primary}}>
                     <Text style={{color: '#fff'}}>+ Tài chính</Text>
                   </Separator>
                 </CollapseHeader>
