@@ -8,19 +8,16 @@ import {queryData} from '../../common';
 import {GET_POSTS_USER} from '../../query/post';
 import {button} from '../style';
 import PostOne from './post';
-const Post = ({navigation, route}) => {
+
+const PostOfUser = ({navigation, postOfUseId}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   return useObserver(() => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
-
     const {posts, setPosts, info} = user;
     const {postComment} = comment;
-    console.log('comment post comemnt',postComment);
-    console.log('comment post',posts);
-
-    const userId = route?.params?.userId || info.id;
+    const userId = postOfUseId;
     const [loading, setLoading] = useState(true);
     useEffect(() => {
       queryData(GET_POSTS_USER, {userId})
@@ -34,15 +31,6 @@ const Post = ({navigation, route}) => {
 
     return (
       <View>
-        <View style={button.bgAdd}>
-          <Icon
-            name="add-circle-outline"
-            style={button.btnAdd}
-            type="Ionicons"
-            onPress={() => navigation.navigate('NewPost')}
-          />
-          {/* </TouchableOpacity> */}
-        </View>
         <ScrollView
           horizontal={false}
           refreshControl={
@@ -72,4 +60,4 @@ const Post = ({navigation, route}) => {
   });
 };
 
-export default Post;
+export default PostOfUser;
