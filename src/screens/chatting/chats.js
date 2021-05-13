@@ -36,7 +36,13 @@ const Chats = ({navigation}) => {
       setSeenMessage,
     } = group;
     const [loading, setLoading] = useState(true);
+    const [loadMore, setLoadMore] = useState(false);
     const [refresh, setRefresh] = useState(false);
+    const [option, setOption] = useState({
+      limit: 20,
+      page: 1,
+    });
+    const [stop, setStop] = useState(false);
     const {data} = useSubscription(RECEIVE_MESSAGE, {
       variables: {
         userId: user.info.id,
@@ -74,9 +80,12 @@ const Chats = ({navigation}) => {
     }, [data]);
     useEffect(() => {
       setLoading(true);
-      queryData(GET_GROUP)
+      queryData(GET_GROUP, option)
         .then(({data}) => {
           setGroups(data.groups);
+          if (data.groups.length < 20) {
+            setStop(true);
+          }
           setLoading(false);
         })
         .catch((err) => {
@@ -85,9 +94,35 @@ const Chats = ({navigation}) => {
           Toast.show(Notification(NOTIFI.error, err.message));
         });
     }, []);
+    useEffect(() => {
+      if (option.page != 1 && !stop) {
+        setLoadMore(true);
+        queryData(GET_GROUP, option)
+          .then(({data}) => {
+            if (data.groups.length > 0) {
+              setGroups((cur) => [...cur, ...data.groups]);
+              if (data.groups.length < 20) {
+                setStop(true);
+              }
+            } else {
+              setOption((cur) => ({
+                ...cur,
+                page: cur.page - 1,
+              }));
+            }
+            setLoadMore(false);
+          })
+          .catch((err) => {
+            setLoadMore(false);
+            console.log(err, 'chat');
+            Toast.show(Notification(NOTIFI.error, err.message));
+          });
+      }
+    }, [option]);
 
     useEffect(() => {
       if (refresh) {
+        setOption({limit: 20, page: 1});
         queryData(GET_GROUP)
           .then(({data}) => {
             setGroups(data.groups);
@@ -210,6 +245,13 @@ const Chats = ({navigation}) => {
                 }
                 data={groups}
                 renderItem={renderItem}
+                onEndReached={() => {
+                  !stop && setOption((cur) => ({...cur, page: cur.page + 1}));
+                }}
+                onEndReachedThreshold={0.1}
+                ListFooterComponent={() =>
+                  loadMore && <Spinner color={COLORS.primary} size="small" />
+                }
                 keyExtractor={(item) => item.id}></FlatList>
             ) : (
               <Text

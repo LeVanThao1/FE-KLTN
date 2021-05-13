@@ -19,7 +19,7 @@ import {Notification} from '../utils/notifications';
 import {COLORS, NOTIFI} from '../constants';
 import {useNavigation} from '@react-navigation/native';
 
-const HeaderStack = ({navigation}) => {
+const HeaderStack = () => {
   return useObserver(() => {
     const {
       stores: {book, category},
@@ -27,6 +27,7 @@ const HeaderStack = ({navigation}) => {
     const {books, textSearch, setTextSearch} = book;
     const {option, setOption, selectCategory} = category;
     const openMenu = () => {};
+    const navigation = useNavigation();
     const ref = useRef(null);
     const [booksSearch, {called, loading, data, error}] = useLazyQuery(
       SEARCH_BOOK,
@@ -68,11 +69,17 @@ const HeaderStack = ({navigation}) => {
       <SafeAreaView>
         <View style={styles.container__header}>
           <View style={styles.header__menu}>
-            <Icon
-              name="menu"
-              onPress={() => navigation.openDrawer()}
-              style={styles.icon}
-            />
+            <TouchableOpacity
+              style={{marginRight: 10}}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <Icon
+                name="arrowleft"
+                type="AntDesign"
+                style={{color: '#fff', fontSize: 26}}
+              />
+            </TouchableOpacity>
             <Icon name="search" style={styles.searchIcon} />
             <TextInput
               style={styles.search}

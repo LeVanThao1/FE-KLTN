@@ -1,6 +1,6 @@
 import {Spinner, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {FlatList, Text, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
 import {GET_BOOKS_CATEGORY} from '../../query/book';
 import ProductCart from '../../components/productCart';
@@ -16,17 +16,32 @@ const BookByCategory = ({navigation, category, type}) => {
 
     return (
       <>
-        <View style={styles.bookByCategory}>
-          {booksCategory[category] &&
-            booksCategory[category].map((bk) => (
-              <ProductCart
-                key={bk.id}
-                book={bk}
-                type={true}
-                navigation={navigation}
-              />
-            ))}
-        </View>
+        {/* <View style={styles.bookByCategory}> */}
+        {
+          booksCategory[category] && (
+            <FlatList
+              contentContainerStyle={styles.bookByCategory}
+              data={booksCategory[category]}
+              keyExtractor={(item, index) => index}
+              renderItem={({item, index}) => (
+                <ProductCart
+                  key={index}
+                  book={item}
+                  type={true}
+                  navigation={navigation}
+                />
+              )}></FlatList>
+          )
+          // booksCategory[category].map((bk) => (
+          //   <ProductCart
+          //     key={bk.id}
+          //     book={bk}
+          //     type={true}
+          //     navigation={navigation}
+          //   />
+          // ))
+        }
+        {/* </View> */}
         {booksCategory[category] ? (
           booksCategory[category].length > 0 ? (
             type ? null : (

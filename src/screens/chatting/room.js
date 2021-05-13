@@ -4,7 +4,7 @@ import {Spinner} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {FlatList, ImageBackground, Text, View} from 'react-native';
 import Toast from 'react-native-toast-message';
-import BG from '../../assets/images/dinosaur.png';
+import BG from '../../assets/images/bg.jpg';
 import {queryData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {GET_MESSAGE_GROUP} from '../../query/message';
@@ -21,22 +21,61 @@ const ChatRoomScreen = ({navigation, route}) => {
     const {messages, setMessagesBegin, groupCurrent, setGroupCurrent} = group;
     const {name, avatar, userIdTo} = route.params;
     const [loading, setLoading] = useState(true);
+    const [loadMore, setLoadMore] = useState(false);
+    const [option, setOption] = useState({
+      limit: 20,
+      page: 1,
+    });
+    const [stop, setStop] = useState(false);
+
     useEffect(() => {
-      if (groupCurrent)
-        queryData(GET_MESSAGE_GROUP, {groupId: groupCurrent})
+      if (groupCurrent) {
+        setLoading(true);
+        queryData(GET_MESSAGE_GROUP, {groupId: groupCurrent, ...option})
           .then(({data}) => {
             setMessagesBegin(data.messagesInGroup);
+            if (data.messagesInGroup.length < 20) {
+              setStop(true);
+            }
             setLoading(false);
           })
           .catch((err) => {
             setLoading(false);
-            console.log(err);
+            console.log(err, 'room');
             Toast.show(Notification(NOTIFI.error, err.message));
           });
+      }
       return () => {
         setGroupCurrent(undefined);
+        setMessagesBegin(undefined);
+        setOption({limit: 20, page: 1});
       };
     }, [groupCurrent]);
+
+    useEffect(() => {
+      if (groupCurrent)
+        if (option.page != 1 && !stop) {
+          setLoadMore(true);
+          queryData(GET_MESSAGE_GROUP, {groupId: groupCurrent, ...option})
+            .then(({data}) => {
+              if (data.messagesInGroup.length > 0) {
+                setMessagesBegin([...messages, ...data.messagesInGroup]);
+                if (data.messagesInGroup.length < 20) {
+                  setStop(true);
+                }
+              } else {
+                setOption((cur) => ({...cur, page: cur.page - 1}));
+                setStop(true);
+              }
+              setLoadMore(false);
+            })
+            .catch((err) => {
+              setLoadMore(false);
+              console.log(err);
+              Toast.show(Notification(NOTIFI.error, err.message));
+            });
+        }
+    }, [option]);
 
     return (
       <View style={{marginBottom: 110}}>
@@ -54,7 +93,14 @@ const ChatRoomScreen = ({navigation, route}) => {
                       userId={user.info.id}
                     />
                   )}
+                  onEndReached={() => {
+                    !stop && setOption((cur) => ({...cur, page: cur.page + 1}));
+                  }}
+                  onEndReachedThreshold={0.1}
                   inverted
+                  ListFooterComponent={() =>
+                    loadMore && <Spinner color={COLORS.primary} size="small" />
+                  }
                 />
               ) : (
                 <Text

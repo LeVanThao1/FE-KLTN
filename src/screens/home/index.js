@@ -3,6 +3,7 @@ import {useObserver} from 'mobx-react-lite';
 import {Spinner} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  FlatList,
   RefreshControl,
   ScrollView,
   Text,
@@ -17,7 +18,7 @@ import {GET_BOOKS_CATEGORY} from '../../query/book';
 import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
 import {styles} from './styles';
-import {COLORS} from '../../constants/themes'
+import {COLORS} from '../../constants/themes';
 
 
 const Home = ({navigation}) => {
@@ -159,7 +160,7 @@ const Home = ({navigation}) => {
               {/* <View style={styles.bookByCategory}> */}
               {selectCategory === 'all' && (
                 <>
-                  <View style={styles.bookByCategory}>
+                  {/* <View style={styles.bookByCategory}>
                     {books &&
                       books.map((bk) => (
                         <ProductCart
@@ -169,7 +170,21 @@ const Home = ({navigation}) => {
                           navigation={navigation}
                         />
                       ))}
-                  </View>
+                  </View> */}
+                  {books && (
+                    <FlatList
+                      contentContainerStyle={styles.bookByCategory}
+                      data={books}
+                      keyExtractor={(item, index) => index}
+                      renderItem={({item, index}) => (
+                        <ProductCart
+                          key={index}
+                          book={item}
+                          type={true}
+                          navigation={navigation}
+                        />
+                      )}></FlatList>
+                  )}
                   {books ? (
                     books.length > 0 ? (
                       <TouchableOpacity
@@ -233,7 +248,7 @@ const Home = ({navigation}) => {
             </View>
           </View>
         ) : (
-          <Spinner color={COLORS.primary}/>
+          <Spinner color={COLORS.primary} />
         )}
       </ScrollView>
     );
