@@ -2,7 +2,7 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import React, {useContext, useState, useEffect, memo} from 'react';
-import {Icon} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 
 import {
   StyleSheet,
@@ -44,7 +44,6 @@ const BooksStore = ({navigation}) => {
           );
         });
     }, []);
-    console.log('book storee', bookStore)
     useEffect(() => {
       if (bookStore) {
         setListBook(
@@ -70,6 +69,7 @@ const BooksStore = ({navigation}) => {
           })),
         );
       }
+      setLoading(false);
     }, [bookStore]);
 
     const [categori, setCategori] = useState([]);
@@ -88,12 +88,11 @@ const BooksStore = ({navigation}) => {
       );
     };
     //
+    useEffect(() => {}, [loading]);
     const renderBook = () => (
       <>
-        {loading == true ? (
-          <View style={{width: '100%', margin: 'auto', marginTop: 20}}>
-            <Text style={{textAlign: 'center'}}>Đang tải dữ liệu</Text>
-          </View>
+        {loading? (         
+          <Spinner color={COLORS.primary} />
         ) : categori.length > 0 ? (
           categori?.map((book, i) => (
             <Book key={i} book={book} />

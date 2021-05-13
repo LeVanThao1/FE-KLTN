@@ -85,7 +85,7 @@ const UserInfo = ({navigation, route}) => {
           <Hr />          
         </View>
         <View>
-        <View style={{backgroundColor: COLORS.primary, padding: 10, marginHorizontal: 10}}>
+        <View style={styles.infoBg}>
           <Text style={{textAlign: 'center', fontSize: 18, color: COLORS.white}}>Bài viết của {lastName(userName)}</Text>
         </View>
           <PostOfUser postOfUseId={userId} />
@@ -176,6 +176,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: 0.75,
   },
+  infoBg: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    marginHorizontal: 10, 
+    opacity: 0.8, 
+    borderRadius: 8
+  }
 });
 
 export default UserInfo;

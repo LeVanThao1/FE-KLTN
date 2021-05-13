@@ -17,14 +17,13 @@ const Post = ({navigation, route}) => {
 
     const {posts, setPosts, info} = user;
     const {postComment} = comment;
-    console.log('comment post comemnt',postComment);
-    console.log('comment post',posts);
 
     const userId = route?.params?.userId || info.id;
     const [loading, setLoading] = useState(true);
     useEffect(() => {
       queryData(GET_POSTS_USER, {userId})
         .then(({data}) => {
+          console.log('data', data)
           setPosts(data.posts);
           setLoading(false);
           setRefreshing(false);

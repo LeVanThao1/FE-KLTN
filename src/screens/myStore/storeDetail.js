@@ -67,7 +67,6 @@ const StoreDetail = ({navigation, route}) => {
       });
     }, [info]);
     useEffect(() => {}, [listItem]);
-    console.log('listitem', listItem);
     const ProductItem = ({book}) => (
       <View
         style={{width: '50%', justifyContent: 'center', alignItems: 'center'}}>

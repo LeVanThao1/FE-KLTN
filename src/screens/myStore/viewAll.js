@@ -80,7 +80,6 @@ const ViewAll = () => {
       },
     });
     const onPress = (value) => {
-      console.log('value', value);
       deleteBook({
         variables: {
           id: value,

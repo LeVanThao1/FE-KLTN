@@ -138,6 +138,7 @@ const PostOne = ({route, post, info, type}) => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
+    console.log('this is post one');
     const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
     const {posts} = user;

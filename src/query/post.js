@@ -111,6 +111,9 @@ export const GET_POST = gql`
           id
           name
           avatar
+          address
+          phone
+          email
         }
         reply {
           id
@@ -119,6 +122,9 @@ export const GET_POST = gql`
             id
             name
             avatar
+            address
+            phone
+            email
           }
         }
         createdAt
@@ -136,6 +142,7 @@ export const GET_POST = gql`
         email
         phone
         avatar
+        address
       }
       name
       year

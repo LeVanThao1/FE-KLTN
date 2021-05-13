@@ -73,7 +73,7 @@ const Book = ({book}) => {
             marginVertical: 8,
           }}>
           <View>
-            {book.images.map((img, i) => (
+            {/* {book.images.map((img, i) => (
               <Image
               style={{width: 80, height: 100}}
               source={{
@@ -82,7 +82,8 @@ const Book = ({book}) => {
                   : 'https://picsum.photos/200/300',
               }}
             />
-            ))}            
+            ))}             */}
+            <Image style={{width: 80, height: 100}} source={{uri: book.images[0]}}/>
           </View>
           <View
             style={{
