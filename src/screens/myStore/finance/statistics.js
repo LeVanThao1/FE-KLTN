@@ -25,31 +25,13 @@ export default function Statistics() {
   const [labels, setLabels] = useState([]);
   const [orders, setOrders] = useState([]);
   const [revenues, setRevenues] = useState([]);
-  const parseData = (labels, amountOrders, saleValues) => {
-    return {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Total Orders',
-          type: 'bar',
-          data: amountOrders,
-          fill: false,
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgba(255, 99, 132, 0.5)',
-          yAxisID: 'y-axis-2',
-        },
-        {
-          label: 'Sales Value',
-          type: 'bar',
-          data: saleValues,
-          fill: false,
-          backgroundColor: 'rgb(54, 162, 235)',
-          borderColor: 'rgba(54, 162, 235, 0.5)',
-          yAxisID: 'y-axis-1',
-        },
-      ],
-    };
-  };
+  const [todayData, setTodayData] = useState({
+    todayOrder: 0,
+    todayRevenue: 0,
+    todayBook: 0,
+  });
+
+  const CHART_HEIGHT = 200;
 
   const config = {
     backgroundColor: '#ffffff',
@@ -112,7 +94,7 @@ export default function Statistics() {
     const nowTime = new Date().toISOString().slice(...options[option].slice);
     dates.push([nowTime, 0, 0]);
     for (let i = 1; i < options[option].loop; i++) {
-      console.log(options[option].previous(dates[i - 1][0]));
+      // console.log(options[option].previous(dates[i - 1][0]));
       dates.push([options[option].previous(dates[i - 1][0]), 0, 0]);
     }
     dates.reverse();
@@ -193,15 +175,40 @@ export default function Statistics() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(labels);
-    console.log(orders);
-    console.log(revenues);
-  });
+  // useEffect(() => {
+  //   console.log(labels);
+  //   console.log(orders);
+  //   console.log(revenues);
+  // });
 
   useEffect(() => {
     transformData(subOrders, option);
   }, [subOrders, option]);
+
+  useEffect(() => {
+    let today = new Date(Date.now()).toISOString().slice(0, 10);
+    let result = subOrders.reduce(
+      (obj, {createdAt, amount, price}) => {
+        if (today === createdAt.slice(0, 10)) {
+          obj.todayOrder += 1;
+          obj.todayRevenue += amount * price;
+          obj.todayBook += amount;
+        }
+        return obj;
+      },
+      {todayOrder: 0, todayRevenue: 0, todayBook: 0},
+    );
+    setTodayData(result);
+  }, [subOrders]);
+
+  function Cart({label, value}) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>{label}</Text>
+        <Text style={styles.cardValue}>{value}</Text>
+      </View>
+    );
+  }
 
   function Tab({name, value}) {
     return (
@@ -214,89 +221,120 @@ export default function Statistics() {
   }
 
   return (
-    <View>
-      <View style={styles.tabContaner}>
+    <View style={{flex: 1}}>
+      <View style={styles.cardContainer}>
+        <Cart label="Đơn Hàng" value={todayData.todayOrder} />
+        <Cart label="Sách Bán" value={todayData.todayBook} />
+        <Cart label="Doanh Thu" value={todayData.todayRevenue} />
+      </View>
+      <View style={styles.tabContainer}>
         <Tab name="Ngày" value="day" />
         <Tab name="Tháng" value="month" />
         <Tab name="Năm" value="year" />
       </View>
-      {/* <View style={{flex: 1}}> */}
-      <ScrollView>
-        <View style={{padding: 12}}>
-          <Text>Doanh thu</Text>
-          <ScrollView horizontal>
-            {subOrders.length && orders.length ? (
-              <LineChart
-                data={{
-                  labels: labels,
-                  datasets: [
-                    {
-                      data: revenues,
-                    },
-                  ],
-                }}
-                width={Math.max(
-                  Dimensions.get('window').width - 24,
-                  options[option].loop * 50,
-                )} // from react-native
-                height={250}
-                yAxisLabel=""
-                yAxisSuffix=""
-                yAxisInterval={1} // optional, defaults to 1
-                chartConfig={config}
-                bezier
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16,
-                }}
-              />
-            ) : null}
-          </ScrollView>
-        </View>
-        <View style={{padding: 12}}>
-          <Text>Đơn hàng</Text>
-          <ScrollView horizontal>
-            {subOrders.length && orders.length ? (
-              <LineChart
-                data={{
-                  labels: labels,
-                  datasets: [
-                    {
-                      data: orders,
-                    },
-                  ],
-                }}
-                width={Math.max(
-                  Dimensions.get('window').width - 24,
-                  options[option].loop * 50,
-                )} // from react-native
-                height={250}
-                yAxisLabel=""
-                yAxisSuffix=""
-                yAxisInterval={3} // optional, defaults to 1
-                chartConfig={config}
-                bezier
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16,
-                }}
-              />
-            ) : null}
-          </ScrollView>
-        </View>
-      </ScrollView>
-      {/* </View> */}
+      <View style={{flex: 1}}>
+        <ScrollView>
+          <View style={styles.chartContainer}>
+            <Text style={styles.chartTitle}>Doanh thu</Text>
+            <ScrollView horizontal>
+              {subOrders.length && orders.length ? (
+                <LineChart
+                  data={{
+                    labels: labels,
+                    datasets: [
+                      {
+                        data: revenues,
+                      },
+                    ],
+                  }}
+                  width={Math.max(
+                    Dimensions.get('window').width - 24,
+                    options[option].loop * 50,
+                  )} // from react-native
+                  height={CHART_HEIGHT}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={config}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                  }}
+                />
+              ) : null}
+            </ScrollView>
+          </View>
+          <View style={styles.chartContainer}>
+            <Text style={styles.chartTitle}>Đơn hàng</Text>
+            <ScrollView horizontal>
+              {subOrders.length && orders.length ? (
+                <LineChart
+                  data={{
+                    labels: labels,
+                    datasets: [
+                      {
+                        data: orders,
+                      },
+                    ],
+                  }}
+                  width={Math.max(
+                    Dimensions.get('window').width - 24,
+                    options[option].loop * 50,
+                  )} // from react-native
+                  height={CHART_HEIGHT}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={3} // optional, defaults to 1
+                  chartConfig={config}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                  }}
+                />
+              ) : null}
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tabContaner: {
+  cardContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 8,
+  },
+  card: {
+    width: '30%',
+    padding: 8,
+    backgroundColor: COLORS.primary,
+    // borderColor: COLORS.primary,
+    // borderWidth: 1,
+    borderRadius: 5,
+  },
+  cardLabel: {
+    width: '100%',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: COLORS.white,
+    marginBottom: 8,
+  },
+  cardValue: {
+    width: '100%',
+    textAlign: 'center',
+    color: COLORS.white,
+  },
+  tabContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
   tab: {
-    margin: 12,
+    margin: 6,
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
@@ -305,12 +343,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   tabSelected: {
-    margin: 12,
+    margin: 6,
     paddingVertical: 8,
     paddingHorizontal: 12,
     fontSize: 16,
     color: COLORS.primary,
     borderBottomColor: COLORS.primary,
     borderBottomWidth: 2,
+  },
+  chartContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  chartTitle: {
+    fontWeight: 'bold',
+    color: COLORS.primary,
   },
 });

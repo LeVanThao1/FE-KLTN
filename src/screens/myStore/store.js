@@ -189,9 +189,6 @@ const Store = ({navigation}) => {
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('Revenue')}>
-                    <Text>Doanh thu</Text>
-                  </ListItem>
                   <ListItem onPress={() => navigation.navigate('Statistics')}>
                     <Text>Thống kê</Text>
                   </ListItem>
