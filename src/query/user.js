@@ -252,29 +252,16 @@ export const UPDATE_CART = gql`
 `;
 export const REFRESH_TOKEN = gql`
   query refreshToken {
-    user {
-      id
-      name
-      phone
-      role
-      avatar
-      email
-      address
-      likes {
+    refreshToken {
+      user {
         id
-        amount
-        price
-        images
-        book {
-          id
-          name
-          images
-        }
         name
-        sold
-      }
-      cart {
-        book {
+        phone
+        role
+        avatar
+        email
+        address
+        likes {
           id
           amount
           price
@@ -285,67 +272,90 @@ export const REFRESH_TOKEN = gql`
             images
           }
           name
-          store {
-            address
-          }
+          sold
         }
-        amount
-        price
-      }
-      notifications {
-        order {
+        store {
+          avatar
+          background
           id
-          title
+          name
           description
-          order {
-            id
-          }
-          seen
-          createdAt
-          updatedAt
+          address
         }
-        book {
-          id
-          title
-          description
-          commentBook {
+        cart {
+          book {
             id
-            content
+            amount
+            price
+            images
             book {
               id
-            }
-            author {
               name
+              images
             }
-            type
-            createdAt
+            name
+            store {
+              address
+            }
           }
-          seen
-          createdAt
+          amount
+          price
         }
-        post {
-          id
-          title
-          description
-          commentPost {
+        notifications {
+          order {
             id
-            content
-            post {
+            title
+            description
+            order {
               id
             }
-            author {
-              name
+            seen
+            createdAt
+            updatedAt
+          }
+          book {
+            id
+            title
+            description
+            commentBook {
+              id
+              content
+              book {
+                id
+              }
+              author {
+                name
+              }
+              type
+              createdAt
             }
-            type
+            seen
             createdAt
           }
-          seen
-          createdAt
+          post {
+            id
+            title
+            description
+            commentPost {
+              id
+              content
+              post {
+                id
+              }
+              author {
+                name
+              }
+              type
+              createdAt
+            }
+            seen
+            createdAt
+          }
         }
       }
+      token
+      refreshToken
     }
-    token
-    refreshToken
   }
 `;
 

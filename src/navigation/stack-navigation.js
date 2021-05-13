@@ -63,6 +63,8 @@ import {NOTIFI} from '../constants';
 import {COLORS} from '../constants/themes';
 import Room from '../screens/chatting/room';
 import ImagesView from '../screens/chatting/imagesView';
+import App from '../screens/app';
+import {createCompatNavigatorFactory} from '@react-navigation/compat';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -131,13 +133,13 @@ const HomeStack = ({navigation, initialRoute}) => {
               backgroundColor: COLORS.primary,
             },
             headerTitleAlign: 'center',
-            headerTitleStyle : {
-              color: COLORS.white
+            headerTitleStyle: {
+              color: COLORS.white,
             },
-            headerBackTitleStyle:{
-              color: COLORS.white
+            headerBackTitleStyle: {
+              color: COLORS.white,
             },
-            headerTintColor: COLORS.white
+            headerTintColor: COLORS.white,
             // headerTitle: () =>
             //   rt.header && <HeaderStack navigation={navigation} />,
           }}
@@ -395,100 +397,135 @@ const routes = [
   },
 ];
 const AuthStack = () => {
-  return useObserver(() => {
-    const {
-      stores: {auth, user, shop, notification},
-    } = useContext(MobXProviderContext);
-    const [loading, setLoading] = useState(true);
-    const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
-      onCompleted: async (data) => {
-        shop.setInfo(data.refreshToken.user.store);
-        user.setCart(data.refreshToken.user.cart);
-        notification.setAllNotification(data.refreshToken.user.notifications);
-        user.setLikes(data.refreshToken.user.likes);
-        delete data.refreshToken.user.likes;
-        delete data.refreshToken.user.notifications;
-        delete data.refreshToken.user.store;
-        delete data.refreshToken.user.cart;
-        user.setInfo(data.refreshToken.user);
-        auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
-        await AsyncStorage.setItem('token', data.refreshToken.token);
-        await AsyncStorage.setItem(
-          'refreshToken',
-          data.refreshToken.refreshToken,
-        );
-      },
-      onError: (err) => {
-        setLoading(false);
-        // Toast.show(Notifi.Notification(NOTIFI.error, err.message));
-      },
-    });
-    const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
-      onCompleted: async (data) => {
-        shop.setInfo(data.profile.store);
-        user.setCart(data.profile.cart);
-        notification.setAllNotification(data.profile.notifications);
-        user.setLikes(data.profile.likes);
-        delete data.profile.likes;
-        delete data.profile.notifications;
-        delete data.profile.store;
-        delete data.profile.cart;
-        user.setInfo(data.profile);
-        auth.setIsAuth(true);
-        setLoading(false);
-      },
-      onError: (err) => {
-        refreshToken();
-        // AsyncStorage.clear().then(() => {
-        //   auth.setLogout();
-        //   setLoading(false);
-        // });
-      },
-    });
+  // return useObserver(() => {
+  //   const {
+  //     stores: {auth, user, shop, notification},
+  //   } = useContext(MobXProviderContext);
+  //   const [loading, setLoading] = useState(true);
+  //   const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
+  //     onCompleted: async (data) => {
+  //       shop.setInfo(data.refreshToken.user.store);
+  //       user.setCart(data.refreshToken.user.cart);
+  //       notification.setAllNotification(data.refreshToken.user.notifications);
+  //       user.setLikes(data.refreshToken.user.likes);
+  //       delete data.refreshToken.user.likes;
+  //       delete data.refreshToken.user.notifications;
+  //       delete data.refreshToken.user.store;
+  //       delete data.refreshToken.user.cart;
+  //       user.setInfo(data.refreshToken.user);
+  //       auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
+  //       await AsyncStorage.setItem('token', data.refreshToken.token);
+  //       await AsyncStorage.setItem(
+  //         'refreshToken',
+  //         data.refreshToken.refreshToken,
+  //       );
+  //     },
+  //     onError: (err) => {
+  //       setLoading(false);
+  //       // Toast.show(Notifi.Notification(NOTIFI.error, err.message));
+  //     },
+  //   });
+  //   const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
+  //     onCompleted: async (data) => {
+  //       shop.setInfo(data.profile.store);
+  //       user.setCart(data.profile.cart);
+  //       notification.setAllNotification(data.profile.notifications);
+  //       user.setLikes(data.profile.likes);
+  //       delete data.profile.likes;
+  //       delete data.profile.notifications;
+  //       delete data.profile.store;
+  //       delete data.profile.cart;
+  //       user.setInfo(data.profile);
+  //       auth.setIsAuth(true);
+  //       setLoading(false);
+  //     },
+  //     onError: (err) => {
+  //       refreshToken();
+  //       // AsyncStorage.clear().then(() => {
+  //       //   auth.setLogout();
+  //       //   setLoading(false);
+  //       // });
+  //     },
+  //   });
 
-    useEffect(() => {
-      AsyncStorage.getItem('token').then((data) => {
-        AsyncStorage.getItem('refreshToken').then((dt) => {
-          if (data && dt) {
-            // auth.setLogin(data,dt)
-            auth.setToken(data);
-            auth.setRefreshToken(dt);
-          } else {
-            setLoading(false);
-          }
-        });
-      });
-    }, []);
-    useEffect(() => {
-      if (auth) {
-        getProfile();
-      }
-    }, [auth]);
-    return (
-      <>
-        {!loading ? (
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name="Login" component={Login} />
-            {/* <Stack.Screen name="Home" component={Home} /> */}
-            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-            <Stack.Screen name="SignUp" component={Register} />
-            <Stack.Screen name="Verify" component={VerifyCode} />
-            <Stack.Screen name="ResetPassword" component={ResetPassword} />
-            <Stack.Screen name="VerifyForgot" component={VerifyForgot} />
-          </Stack.Navigator>
-        ) : (
-          <View style={styles.container}>
-            <Spinner color="blue" />
-          </View>
-        )}
-      </>
-    );
-  });
+  //   useEffect(() => {
+  //     AsyncStorage.getItem('token').then((data) => {
+  //       AsyncStorage.getItem('refreshToken').then((dt) => {
+  //         if (data && dt) {
+  //           // auth.setLogin(data,dt)
+  //           auth.setToken(data);
+  //           auth.setRefreshToken(dt);
+  //         } else {
+  //           setLoading(false);
+  //         }
+  //       });
+  //     });
+  //   }, []);
+  //   useEffect(() => {
+  //     if (auth) {
+  //       getProfile();
+  //     }
+  //   }, [auth]);
+  return (
+    <>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="SignUp" component={Register} />
+        <Stack.Screen name="Verify" component={VerifyCode} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="VerifyForgot" component={VerifyForgot} />
+      </Stack.Navigator>
+    </>
+  );
+  // });
 };
 
+// const AppStack = () => {
+//   // return useObserver(() => {
+//   //   const {
+//   //     stores: {auth},
+//   //   } = useContext(MobXProviderContext);
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="Loading"
+//       screenOptions={{
+//         headerShown: false,
+//       }}>
+//       <Stack.Screen name="Loading" component={Loading} />
+//       <Stack.Screen name="App" component={BottomTabNavigator} />
+//       <Stack.Screen name="Auth" component={AuthStack} />
+//     </Stack.Navigator>
+//   );
+//   // });
+// };
+
+// () => {
+//   return (
+//     <Stack.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//         // headerLeft: null,
+//         headerLeft: false,
+//       }}
+//       initialRouteName="Loading">
+//       <Stack.Screen name="Loading" component={Loading} />
+//       <Stack.Screen
+//         name="App"
+//         component={BottomTabNavigator}
+//         options={{headerLeft: null}}
+//       />
+//       <Stack.Screen
+//         name="Auth"
+//         component={AuthStack}
+//         options={{headerLeft: null}}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -499,6 +536,7 @@ const styles = StyleSheet.create({
 
 export {
   HomeStack,
+  // AppStack,
   // ContactStack,
   AuthStack,
   // PaymentStack,

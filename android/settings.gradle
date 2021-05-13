@@ -1,4 +1,4 @@
-rootProject.name = 'KLTN'
+rootProject.name = 'DinoBo'
 include ':react-native-google-speech-to-text'
 project(':react-native-google-speech-to-text').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-google-speech-to-text/android')
 include ':react-native-get-location'
