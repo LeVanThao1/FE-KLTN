@@ -32,6 +32,7 @@ const PostDetail = ({navigation, route}) => {
     const {postComment, setPostComment} = comment;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
+    console.log('......id post', route.params.postID);
 
     const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
@@ -60,9 +61,7 @@ const PostDetail = ({navigation, route}) => {
       });
     };
 
-    console.log();
     const [images, setImages] = useState([postCurrent.images])
-    console.log('imge', images)
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -78,7 +77,7 @@ const PostDetail = ({navigation, route}) => {
                 {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
                 {postCurrent.images.map((img, i) => (
                   <Image
-                    // key={i}
+                    key={i}
                     source={{uri: img}}
                     style={stylesPost.imgBook}
                   />
@@ -183,7 +182,7 @@ const PostDetail = ({navigation, route}) => {
                   </View>
                 </View>
               </View>
-              {info.id !== route.params.userId ? (
+              {info.id !== postCurrent.author.id ? (
                 <></>
               ) : (
                 <TouchableOpacity
@@ -195,7 +194,7 @@ const PostDetail = ({navigation, route}) => {
                   }>
                   <Text style={stylesPost.btn}>Cập nhật</Text>
                 </TouchableOpacity>
-              )}
+               )}
             </View>
           </View>
         </View>

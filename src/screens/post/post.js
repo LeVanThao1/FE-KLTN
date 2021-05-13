@@ -210,7 +210,7 @@ const PostOne = ({route, post, info, type}) => {
             onPress={() => {
               user.setPostCurrent(post);
               setPostComment(post.comment);
-              navigation.navigate('PostDetail', {userId: post.author.id});
+              navigation.navigate('PostDetail', {postID: post.id});
             }}>
             <View
               style={{

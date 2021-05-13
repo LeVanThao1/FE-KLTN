@@ -142,6 +142,7 @@ const PostOfFeed = ({route, post, info, type}) => {
     const navigation = useNavigation();
     const {posts} = user;
     const {postComment, setPostComment} = comment;
+
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
@@ -183,6 +184,7 @@ const PostOfFeed = ({route, post, info, type}) => {
                   userPhone: post.author.phone ? post.author.phone : '',
                   userMail: post.author.email ? post.author.email : '',
                   userAddress: post.author.address ? post.author.address : '',
+                  userId: post.author.id ? post.author.id : '',
                 })
               }>
               <Row>
@@ -203,7 +205,7 @@ const PostOfFeed = ({route, post, info, type}) => {
             onPress={() => {
               user.setPostCurrent(post);
               setPostComment(post.comment);
-              navigation.navigate('PostDetail', {userId: post.author.id});
+              navigation.navigate('PostDetail', {postID: post.id});
             }}>
             <View
               style={{
