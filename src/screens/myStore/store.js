@@ -36,8 +36,6 @@ const Store = ({navigation}) => {
       stores: {shop, user},
     } = useContext(MobXProviderContext);
     const {info, setInfo} = shop;
-    console.log('shop info', shop.info);
-    console.log('ủe', user);
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState([]);
     const [text, setText] = useState('');
@@ -189,9 +187,6 @@ const Store = ({navigation}) => {
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody>
-                  <ListItem onPress={() => navigation.navigate('Revenue')}>
-                    <Text>Doanh thu</Text>
-                  </ListItem>
                   <ListItem onPress={() => navigation.navigate('Statistics')}>
                     <Text>Thống kê</Text>
                   </ListItem>

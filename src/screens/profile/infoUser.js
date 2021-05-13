@@ -12,19 +12,24 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {useMutation} from '@apollo/client';
+import {split, useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
 import * as ImagePicker from 'react-native-image-picker';
 import {Button} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import { COLORS } from '../../constants';
+import PostOfUser from '../post/postOfUser';
+import Post from '../post';
 
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const UserInfo = ({navigation, route}) => {
-  const {userName, userAvatar, userPhone, userMail, userAddress} = route.params;
-
+  const {userId, userName, userAvatar, userPhone, userMail, userAddress} = route.params;
+  const lastName = (userName) => {
+    let splitName = userName.split(' ');
+    return splitName[splitName.length-1];
+  }
   return (
     <View style={styles.container}>
       <ScrollView style={styles.body}>
@@ -78,6 +83,12 @@ const UserInfo = ({navigation, route}) => {
           </View>
           <Hr />
           <Hr />          
+        </View>
+        <View>
+        <View style={styles.infoBg}>
+          <Text style={{textAlign: 'center', fontSize: 18, color: COLORS.white}}>Bài viết của {lastName(userName)}</Text>
+        </View>
+          <PostOfUser postOfUseId={userId} />
         </View>
       </ScrollView>
     </View>
@@ -165,6 +176,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: 0.75,
   },
+  infoBg: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    marginHorizontal: 10, 
+    opacity: 0.8, 
+    borderRadius: 8
+  }
 });
 
 export default UserInfo;

@@ -138,6 +138,7 @@ const PostOne = ({route, post, info, type}) => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
+    console.log('this is post one');
     const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
     const {posts} = user;
@@ -210,7 +211,7 @@ const PostOne = ({route, post, info, type}) => {
             onPress={() => {
               user.setPostCurrent(post);
               setPostComment(post.comment);
-              navigation.navigate('PostDetail', {userId: post.author.id});
+              navigation.navigate('PostDetail', {postID: post.id});
             }}>
             <View
               style={{

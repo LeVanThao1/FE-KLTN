@@ -20,6 +20,7 @@ import BookByCategory from './bookByCategory';
 import {styles} from './styles';
 import {COLORS} from '../../constants/themes';
 
+
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {

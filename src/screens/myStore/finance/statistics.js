@@ -1,95 +1,111 @@
-import {Text, View} from 'native-base';
-import React,{useEffect, useState} from 'react';
-import {Dimensions} from "react-native";
+import {Text} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   LineChart,
   BarChart,
   PieChart,
   ProgressChart,
   ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
-import {queryData} from "../../../common"
-import {GET_SUB_ORDERS_STORE} from "../../../query/subOrder"
-const Statistics = () => {
+  StackedBarChart,
+} from 'react-native-chart-kit';
+import {queryData} from '../../../common';
+import {GET_SUB_ORDERS_STORE} from '../../../query/subOrder';
+import {COLORS} from '../../../constants/themes';
 
-  const [option, setOption] = useState("day");
+export default function Statistics() {
+  const [subOrders, setSubOrders] = useState([]);
+  const [option, setOption] = useState('day');
   const [labels, setLabels] = useState([]);
   const [orders, setOrders] = useState([]);
   const [revenues, setRevenues] = useState([]);
-  const parseData = (labels, amountOrders, saleValues) => {
-    return {
-      labels: labels,
-      datasets: [
-        {
-          label: "Total Orders",
-          type: "bar",
-          data: amountOrders,
-          fill: false,
-          backgroundColor: "rgb(255, 99, 132)",
-          borderColor: "rgba(255, 99, 132, 0.5)",
-          yAxisID: "y-axis-2",
-        },
-        {
-          label: "Sales Value",
-          type: "bar",
-          data: saleValues,
-          fill: false,
-          backgroundColor: "rgb(54, 162, 235)",
-          borderColor: "rgba(54, 162, 235, 0.5)",
-          yAxisID: "y-axis-1",
-        },
-      ],
-    };
+  const [todayData, setTodayData] = useState({
+    todayOrder: 0,
+    todayRevenue: 0,
+    todayBook: 0,
+  });
+
+  const CHART_HEIGHT = 200;
+
+  const config = {
+    backgroundColor: '#ffffff',
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientTo: '#ffffff',
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    style: {
+      borderRadius: 16,
+    },
+    propsForDots: {
+      r: '4',
+      strokeWidth: '1',
+      stroke: '#ffffff',
+    },
   };
 
-  const transformData = (data, option = "year") => {
-    const previousYear = (currentYear) => {
-      return +currentYear - 1 + "";
-    };
-    const previousMonth = (currentMonth) => {
-      if (currentMonth.slice(5, 7) === "01") {
-        return `${+currentMonth.slice(0, 4) - 1}-${12}`;
-      }
-      return `${currentMonth.slice(0, 4)}-${+currentMonth.slice(5, 7) - 1}`;
-    };
-    const previousDay = (currentDay) => {
-      return new Date(new Date(currentDay).getTime() - 1000 * 60 * 60 * 24)
-        .toISOString()
-        .slice(0, 10);
-    };
-    const options = {
-      year: {
-        slice: [0, 4],
-        loop: 4,
-        previous: previousYear,
-      },
-      month: {
-        slice: [0, 7],
-        loop: 13,
-        previous: previousMonth,
-      },
-      day: {
-        slice: [0, 10],
-        loop: 31,
-        previous: previousDay,
-      },
-    };
+  const previousYear = (currentYear) => {
+    return +currentYear - 1 + '';
+  };
+  const previousMonth = (currentMonth) => {
+    if (currentMonth.slice(5, 7) === '01') {
+      return `${+currentMonth.slice(0, 4) - 1}-${12}`;
+    }
+    return `${currentMonth.slice(0, 4)}-${(
+      '0' +
+      (+currentMonth.slice(5, 7) - 1)
+    ).slice(-2)}`;
+  };
+  const previousDay = (currentDay) => {
+    return new Date(new Date(currentDay).getTime() - 1000 * 60 * 60 * 24)
+      .toISOString()
+      .slice(0, 10);
+  };
+  const options = {
+    year: {
+      slice: [0, 4],
+      display: [0, 4],
+      loop: 4,
+      previous: previousYear,
+    },
+    month: {
+      slice: [0, 7],
+      display: [5, 7],
+      loop: 12,
+      previous: previousMonth,
+    },
+    day: {
+      slice: [0, 10],
+      display: [5, 10],
+      loop: 30,
+      previous: previousDay,
+    },
+  };
+
+  const transformData = (data, option = 'year') => {
+    // console.log(data);
     const dates = [];
     const nowTime = new Date().toISOString().slice(...options[option].slice);
     dates.push([nowTime, 0, 0]);
     for (let i = 1; i < options[option].loop; i++) {
+      // console.log(options[option].previous(dates[i - 1][0]));
       dates.push([options[option].previous(dates[i - 1][0]), 0, 0]);
     }
     dates.reverse();
     // console.log("dates", dates);
-    const value = data.reduce((obj, order) => {
-      let key = order.dateOrder.slice(...options[option].slice);
+    const value = data.reduce((obj, {createdAt, amount, price}) => {
+      let key = createdAt.slice(...options[option].slice);
       if (obj[key]) {
         obj[key][0] += 1;
-        obj[key][1] += order.intoMoney;
+        obj[key][1] += amount * price;
       } else {
-        obj[key] = [1, order.intoMoney];
+        obj[key] = [1, amount * price];
       }
       return obj;
     }, {});
@@ -101,173 +117,246 @@ const Statistics = () => {
         date[2] = value[date[0]][1];
       }
     }
-    const labels = dates.map(([label, value1, value2]) => label);
-    const amountOrders = dates.map(([label, value1, value2]) => value1);
-    const saleValues = dates.map(([label, value1, value2]) => value2);
-    return parseData(labels, amountOrders, saleValues);
+    const labels = dates.map(([label, value1, value2]) =>
+      label.slice(...options[option].display),
+    );
+    const amountSubOrders = dates.map(([label, value1, value2]) => value1);
+    const totalRevenue = dates.map(([label, value1, value2]) => value2);
+    setLabels(labels);
+    setOrders(amountSubOrders);
+    setRevenues(totalRevenue);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     queryData(GET_SUB_ORDERS_STORE).then(({data: {subOrdersByStore}}) => {
-      let subOrders = subOrdersByStore.map(({createdAt, detail}) => ({createdAt, ...detail}));
-      console.log(subOrders);
-      let computeObject = subOrders.reduce((obj, {createdAt, amount, price}) => {
-        let date = createdAt.slice(0, 10);
-        if(obj[date]){
-          obj[date].order += 1;
-          obj[date].revenue += amount * price;
-        }else{
-          obj[date] = {
-            order: 1,
-            revenue: amount * price
-          };
+      let arraySubOrders = subOrdersByStore.map(({createdAt, detail}) => ({
+        createdAt,
+        ...detail,
+      }));
+      setSubOrders(arraySubOrders);
+      //     let subOrders = subOrdersByStore.map(({createdAt, detail}) => ({
+      //       createdAt,
+      //       ...detail,
+      //     }));
+      //     console.log(subOrders);
+      //     let computeObject = subOrders.reduce(
+      //       (obj, {createdAt, amount, price}) => {
+      //         let date = createdAt.slice(0, 10);
+      //         if (obj[date]) {
+      //           obj[date].order += 1;
+      //           obj[date].revenue += amount * price;
+      //         } else {
+      //           obj[date] = {
+      //             order: 1,
+      //             revenue: amount * price,
+      //           };
+      //         }
+      //         return obj;
+      //       },
+      //       {},
+      //     );
+      //     let tempLabels = [];
+      //     let tempOrders = [];
+      //     let tempRevenues = [];
+      //     for (let date in computeObject) {
+      //       tempLabels.push(date);
+      //       tempOrders.push(computeObject[date].order);
+      //       tempRevenues.push(computeObject[date].revenue);
+      //     }
+      //     setLabels(tempLabels);
+      //     setOrders(tempOrders);
+      //     setRevenues(tempRevenues);
+      //     console.log(computeObject);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      // console.log(Date.now());
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(labels);
+  //   console.log(orders);
+  //   console.log(revenues);
+  // });
+
+  useEffect(() => {
+    transformData(subOrders, option);
+  }, [subOrders, option]);
+
+  useEffect(() => {
+    let today = new Date(Date.now()).toISOString().slice(0, 10);
+    let result = subOrders.reduce(
+      (obj, {createdAt, amount, price}) => {
+        if (today === createdAt.slice(0, 10)) {
+          obj.todayOrder += 1;
+          obj.todayRevenue += amount * price;
+          obj.todayBook += amount;
         }
         return obj;
-      }, {});
-      let tempLabels = [];
-      let tempOrders = [];
-      let tempRevenues = [];
-      for (let date in computeObject) {
-        tempLabels.push(date);
-        tempOrders.push(computeObject[date].order);
-        tempRevenues.push(computeObject[date].revenue);
-      }
-      setLabels(tempLabels);
-      setOrders(tempOrders);
-      setRevenues(tempRevenues);
-      console.log(computeObject);
-    }).catch(err => {
-      console.log(err);
-    })
-    console.log(Date.now())
-  },[]);
+      },
+      {todayOrder: 0, todayRevenue: 0, todayBook: 0},
+    );
+    setTodayData(result);
+  }, [subOrders]);
 
-  useEffect(()=>{
-    console.log(labels);
-    console.log(orders);
-    console.log(revenues);
-  })
+  function Cart({label, value}) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.cardLabel}>{label}</Text>
+        <Text style={styles.cardValue}>{value}</Text>
+      </View>
+    );
+  }
+
+  function Tab({name, value}) {
+    return (
+      <TouchableOpacity onPress={() => setOption(value)}>
+        <Text style={value == option ? styles.tabSelected : styles.tab}>
+          {name}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
 
   return (
-    <View style={{padding: 12}}>
-      <Text>Bezier Line Chart</Text>
-      {labels.length && orders.length ? <LineChart
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              data: orders
-            }
-          ]
-        }}
-        width={Dimensions.get("window").width - 24} // from react-native
-        height={220}
-        yAxisLabel="$"
-        yAxisSuffix="k"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={{
-          backgroundColor: "#ffffff",
-          backgroundGradientFrom: "#ffffff",
-          backgroundGradientTo: "#ffffff",
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "1",
-            stroke: "#ffffff"
-          }
-        }}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      /> : null}
-      <LineChart
-    data={{
-      labels: ["January", "February", "March", "April", "May", "June"],
-      datasets: [
-        {
-          data: [
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100,
-            Math.random() * 100
-          ]
-        }
-      ]
-    }}
-    width={Dimensions.get("window").width} // from react-native
-    height={220}
-    yAxisLabel="$"
-    yAxisSuffix="k"
-    yAxisInterval={1} // optional, defaults to 1
-    chartConfig={{
-      backgroundColor: "#e26a00",
-      backgroundGradientFrom: "#fb8c00",
-      backgroundGradientTo: "#ffa726",
-      decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      style: {
-        borderRadius: 16
-      },
-      propsForDots: {
-        r: "6",
-        strokeWidth: "2",
-        stroke: "#ffa726"
-      }
-    }}
-    bezier
-    style={{
-      marginVertical: 8,
-      borderRadius: 16
-    }}
-  />
-      {/* <LineChart
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              data: revenues
-            }
-          ]
-        }}
-        width={Dimensions.get("window").width - 24} // from react-native
-        height={220}
-        yAxisLabel="$"
-        yAxisSuffix="k"
-        yAxisInterval={1} // optional, defaults to 1
-        chartConfig={{
-          backgroundColor: "#ffffff",
-          backgroundGradientFrom: "#ffffff",
-          backgroundGradientTo: "#ffffff",
-          decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "1",
-            stroke: "#ffffff"
-          }
-        }}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      /> */}
+    <View style={{flex: 1}}>
+      <View style={styles.cardContainer}>
+        <Cart label="Đơn Hàng" value={todayData.todayOrder} />
+        <Cart label="Sách Bán" value={todayData.todayBook} />
+        <Cart label="Doanh Thu" value={todayData.todayRevenue} />
+      </View>
+      <View style={styles.tabContainer}>
+        <Tab name="Ngày" value="day" />
+        <Tab name="Tháng" value="month" />
+        <Tab name="Năm" value="year" />
+      </View>
+      <View style={{flex: 1}}>
+        <ScrollView>
+          <View style={styles.chartContainer}>
+            <Text style={styles.chartTitle}>Doanh thu</Text>
+            <ScrollView horizontal>
+              {subOrders.length && orders.length ? (
+                <LineChart
+                  data={{
+                    labels: labels,
+                    datasets: [
+                      {
+                        data: revenues,
+                      },
+                    ],
+                  }}
+                  width={Math.max(
+                    Dimensions.get('window').width - 24,
+                    options[option].loop * 50,
+                  )} // from react-native
+                  height={CHART_HEIGHT}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={config}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                  }}
+                />
+              ) : null}
+            </ScrollView>
+          </View>
+          <View style={styles.chartContainer}>
+            <Text style={styles.chartTitle}>Đơn hàng</Text>
+            <ScrollView horizontal>
+              {subOrders.length && orders.length ? (
+                <LineChart
+                  data={{
+                    labels: labels,
+                    datasets: [
+                      {
+                        data: orders,
+                      },
+                    ],
+                  }}
+                  width={Math.max(
+                    Dimensions.get('window').width - 24,
+                    options[option].loop * 50,
+                  )} // from react-native
+                  height={CHART_HEIGHT}
+                  yAxisLabel=""
+                  yAxisSuffix=""
+                  yAxisInterval={3} // optional, defaults to 1
+                  chartConfig={config}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                  }}
+                />
+              ) : null}
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
-};
+}
 
-export default Statistics;
+const styles = StyleSheet.create({
+  cardContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 8,
+  },
+  card: {
+    width: '30%',
+    padding: 8,
+    backgroundColor: COLORS.primary,
+    // borderColor: COLORS.primary,
+    // borderWidth: 1,
+    borderRadius: 5,
+  },
+  cardLabel: {
+    width: '100%',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: COLORS.white,
+    marginBottom: 8,
+  },
+  cardValue: {
+    width: '100%',
+    textAlign: 'center',
+    color: COLORS.white,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  tab: {
+    margin: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: '#000000',
+    borderBottomColor: '#ffffff',
+    borderBottomWidth: 2,
+  },
+  tabSelected: {
+    margin: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: COLORS.primary,
+    borderBottomColor: COLORS.primary,
+    borderBottomWidth: 2,
+  },
+  chartContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  chartTitle: {
+    fontWeight: 'bold',
+    color: COLORS.primary,
+  },
+});

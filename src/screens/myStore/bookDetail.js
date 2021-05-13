@@ -35,7 +35,7 @@ const BookDetail = ({navigation, book}) => {
 
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
-        console.log('datapost', data.createCommentBook);
+        // console.log('datapost', data.createCommentBook);
         setBookCurrent({
           ...bookCurrent,
           comment: [data.createCommentBook, ...bookCurrent.comment],
