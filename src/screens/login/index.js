@@ -22,8 +22,11 @@ import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
 import {Notification} from '../../utils/notifications';
+import {StackActions} from '@react-navigation/compat';
+import {useNavigation} from '@react-navigation/native';
 
 const Login = ({navigation}) => {
+  // const navigation = useNavigation();
   const [userID, setUserID] = React.useState({
     value: '',
     error: '',
@@ -42,23 +45,25 @@ const Login = ({navigation}) => {
     const [loading, setLoading] = useState(false);
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
       onCompleted: async (data) => {
+        console.log(data);
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
         user.setLikes(data.login.user.likes);
         notification.setAllNotification(data.login.user.notifications);
-        delete data.login.user.notifications;
-        delete data.login.user.store;
-        delete data.login.user.cart;
-        delete data.login.user.likes;
+        const tamp = {...data};
+        // delete tamp.login.user.notifications;
+        // delete tamp.login.user.store;
+        // delete tamp.login.user.cart;
+        // delete tamp.login.user.likes;
         user.setInfo(data?.login.user);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);
         setLoading(false);
+        navigation.navigate({routeName: 'App'});
       },
       onError: (err) => {
-        console.log(err);
         setLoading(false);
         Toast.show(Notification(NOTIFI.error, err.message));
       },
@@ -114,6 +119,7 @@ const Login = ({navigation}) => {
       if (typeLogin) variables.phone = deFormatPhone(userID.value.trim());
       else variables.email = userID.value.trim().toLowerCase();
       setLoading(true);
+      console.log(variables);
       login({
         variables: {
           ...variables,

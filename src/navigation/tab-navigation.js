@@ -6,7 +6,7 @@ import Notification from '../screens/notification';
 import {HomeStack} from './stack-navigation';
 // import Profile from '../screens/profile';
 // import AccountManager from '../screens/account-manager';
-import {COLORS} from "../constants/themes";
+import {COLORS} from '../constants/themes';
 
 import {Icon} from 'native-base';
 
@@ -18,7 +18,7 @@ const BottomTabNavigator = () => {
       tabBarOptions={{
         inactiveTintColor: 'white',
         activeTintColor: COLORS.secondary,
-        activeBackgroundColor:"white",
+        activeBackgroundColor: 'white',
         inactiveBackgroundColor: COLORS.primary,
         style: {
           backgroundColor: COLORS.primary,
@@ -26,7 +26,7 @@ const BottomTabNavigator = () => {
       }}
       screenOptions={({route}) => ({
         style: {
-          paddingVertical: 8
+          paddingVertical: 8,
         },
         tabBarIcon: ({color, size}) => {
           const icons = {
@@ -51,7 +51,7 @@ const BottomTabNavigator = () => {
               type: 'MaterialIcons',
             },
           };
-          
+
           return (
             <Icon
               name={icons[route.name].name}
@@ -61,8 +61,8 @@ const BottomTabNavigator = () => {
             />
           );
         },
-      })}      
-      >
+      })}
+      initialRouteName="Home">
       <Tab.Screen
         name="Home"
         component={() => <HomeStack initialRoute="Home" />}

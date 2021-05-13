@@ -101,7 +101,7 @@ const HeaderRoom = ({name, avatar, userId, isNew}) => {
                   }}
                   onPress={() => {
                     menu.hide();
-                    navigation.navigate('ProfileOther', {userId});
+                    navigation.navigate('UserInfo', {id: userId});
                   }}>
                   Xem trang cá nhân
                 </MenuItem>

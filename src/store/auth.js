@@ -6,7 +6,7 @@ export class Auth {
 
   @observable
   token = '';
-  
+
   @observable
   refreshToken = '';
 
@@ -35,8 +35,8 @@ export class Auth {
   @action
   setLogin = (token, refreshToken) => {
     this.isAuth = true;
-    this.token = value;
-    this.refreshToken = value;
+    this.token = token;
+    this.refreshToken = refreshToken;
   };
 
   setLogout = () => {
