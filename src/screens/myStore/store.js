@@ -36,8 +36,6 @@ const Store = ({navigation}) => {
       stores: {shop, user},
     } = useContext(MobXProviderContext);
     const {info, setInfo} = shop;
-    console.log('shop info', shop.info);
-    console.log('ủe', user);
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState([]);
     const [text, setText] = useState('');

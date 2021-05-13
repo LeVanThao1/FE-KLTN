@@ -2,7 +2,7 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import React, {useContext, useState, useEffect} from 'react';
-import {Icon} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 
 import {
   StyleSheet,
@@ -49,10 +49,15 @@ const OrdersByStore = ({navigation}) => {
     }, [selectedStatus]);
 
     const renderSubOrders = () => {
-      console.log(selectedStatus);
-      return subOrders
+      // console.log(selectedStatus);
+      return (<View>
+        {!loading ? (subOrders
         ?.filter((so) => so.status === selectedStatus)
-        .map((so) => <SubOrder {...so} order={so} key={so.id} />);
+        .map((so) => <SubOrder {...so} order={so} key={so.id} />)
+        ): (
+          <Spinner color={COLORS.primary} />
+        )}
+      </View>)
       // console.log('sub order ..', x);
     };
 
@@ -98,13 +103,20 @@ const OrdersByStore = ({navigation}) => {
                 numberOfLines={1}>
                 {order.user.name}
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'right'}}>
-                x {order.detail.amount}
-              </Text>
-              <Text
-                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
-                Đơn giá {order.detail.price}
-              </Text>
+              <View numberOfLines={1}>     
+                <Text style={{fontSize: 14, textAlign: 'left', fontStyle: 'italic'}} numberOfLines={1}>
+                  {order.detail.book.name}
+                </Text>    
+              </View>           
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={{fontSize: 14, textAlign: 'right'}}>
+                  x {order.detail.amount}
+                </Text>
+                <Text
+                  style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
+                  Đơn giá {order.detail.price}
+                </Text>
+              </View>  
               <View
                 style={{
                   flexDirection: 'row',
