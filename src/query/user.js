@@ -127,6 +127,50 @@ export const VERIFY = gql`
     }
   }
 `;
+
+export const GET_PROFILE_USER = gql`
+  query profileUserOther($id: ID!) {
+    profileUserOther(id: $id) {
+      profile {
+        id
+        email
+        name
+        avatar
+        dateOfBirth
+        gender
+        phone
+        address
+      }
+      post {
+        id
+        title
+        description
+        year
+        images
+        bookWanna
+        numberOfReprint
+        author {
+          id
+          name
+          avatar
+        }
+        price
+        comment {
+          id
+          content
+          author {
+            id
+            name
+            avatar
+          }
+          createdAt
+        }
+        createdAt
+      }
+    }
+  }
+`;
+
 export const GET_USER = gql`
   query profile {
     profile {

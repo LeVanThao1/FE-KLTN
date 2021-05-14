@@ -65,6 +65,7 @@ import Room from '../screens/chatting/room';
 import ImagesView from '../screens/chatting/imagesView';
 import App from '../screens/app';
 import {createCompatNavigatorFactory} from '@react-navigation/compat';
+import UpdateProfile from '../screens/profile/updateProfile';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -262,6 +263,14 @@ const routes = [
     header: false,
     show: true,
     component: Profile,
+  },
+
+  {
+    name: 'UpdateProfile',
+    title: 'Cập nhật thông tin cá nhân',
+    header: false,
+    show: true,
+    component: UpdateProfile,
   },
 
   {

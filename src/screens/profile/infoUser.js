@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import DatePicker from 'react-native-datepicker';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,88 +11,142 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {split, useMutation} from '@apollo/client';
-import {UPDATE_USER_INFO} from '../../query/user';
-import * as ImagePicker from 'react-native-image-picker';
-import {Button} from 'native-base';
+import {useLazyQuery, useMutation} from '@apollo/client';
+import {UPDATE_USER_INFO, GET_PROFILE_USER} from '../../query/user';
+import ImagePicker from 'react-native-image-crop-picker';
+import {Icon, Spinner} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
-import { COLORS } from '../../constants';
+import {Notification} from '../../utils/notifications';
+import {COLORS, NOTIFI} from '../../constants';
 import PostOfUser from '../post/postOfUser';
-import Post from '../post';
 
+import Toast from 'react-native-toast-message';
+import {queryData} from '../../common';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
-const UserInfo = ({navigation, route}) => {
-  const {userId, userName, userAvatar, userPhone, userMail, userAddress} = route.params;
-  const lastName = (userName) => {
-    let splitName = userName.split(' ');
-    return splitName[splitName.length-1];
-  }
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.body}>
-        <View style={styles.cover}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: userAvatar || imageURL,
-            }}
-          />
-        </View>
+const Profile = ({navigation, route}) => {
+  return useObserver(() => {
+    const {
+      stores: {
+        auth,
+        user: {info, setInfo},
+      },
+    } = useContext(MobXProviderContext);
+    const id = route.params.id;
+    console.log(id);
+    const [userProfile, setUserProfile] = useState(undefined);
+    const [loading, setLoading] = useState(true);
 
-        <Hr />
-        <View style={styles.form}>
-          <View style={styles.row}>
-            <Text style={styles.label}>Tên</Text>
-            <Text style={styles.inputText} placeholder="tên">
-              {userName}
-            </Text>
-          </View>
-          <Hr />
-          <View style={styles.row}>
-            <Text style={styles.label}>Số điện thoại</Text>
-            <Text
-              style={styles.inputText}
-              placeholder="Số điện thoại"
-              value={userPhone}
-              // editable={!phone}
-              // onChangeText={(value) => setUserPhone(value)}
-              // keyboardType="numeric"
-            >
-              {userPhone}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Email</Text>
-            <Text
-              style={styles.inputText}
-            >
-              {userMail}
-            </Text>
-          </View>
-          <Hr />
-          <View style={styles.row}>
-            <Text style={styles.label}>Địa chỉ</Text>
-            <Text
-              style={styles.inputText}
-            >
-              {userAddress}
-            </Text>
-          </View>
-          <Hr />
-          <Hr />          
-        </View>
-        <View>
-        <View style={styles.infoBg}>
-          <Text style={{textAlign: 'center', fontSize: 18, color: COLORS.white}}>Bài viết của {lastName(userName)}</Text>
-        </View>
-          <PostOfUser postOfUseId={userId} />
-        </View>
-      </ScrollView>
-    </View>
-  );
-  // });
+    useEffect(() => {
+      queryData(GET_PROFILE_USER, {id: id})
+        .then(({data}) => {
+          setUserProfile(data.profileUserOther);
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }, [id]);
+
+    useEffect(() => {}, [loading]);
+
+    return (
+      <View style={styles.container}>
+        {!loading ? (
+          <ScrollView style={styles.body}>
+            <View style={styles.cover}>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: userProfile.profile.avatar || imageURL,
+                }}
+              />
+              <View>
+                <Text style={styles.name}>{userProfile.profile.name}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#e6e6e6',
+                  paddingVertical: 10,
+                  paddingHorizontal: 60,
+                  borderRadius: 10,
+                }}>
+                {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
+                <Icon
+                  name="messenger"
+                  type="Fontisto"
+                  style={{fontSize: 20, padding: 0, marginRight: 20}}
+                />
+                <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
+                {/* </View> */}
+              </View>
+            </View>
+
+            <Hr />
+            <View style={styles.form}>
+              {/* <Hr /> */}
+              <View style={styles.row}>
+                <Icon
+                  name="phone-alt"
+                  type="FontAwesome5"
+                  style={styles.icon}
+                />
+                <Text style={styles.inputText}>
+                  {userProfile.profile.phone}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Icon name="mail" type="Entypo" style={styles.icon} />
+                <Text style={styles.inputText}>
+                  {userProfile.profile.email}
+                </Text>
+              </View>
+              {/* <Hr /> */}
+              <View style={styles.row}>
+                <Icon
+                  name="map-marker-alt"
+                  type="FontAwesome5"
+                  style={styles.icon}
+                />
+                <Text style={styles.inputText}>
+                  {' '}
+                  {userProfile.profile.address}
+                </Text>
+              </View>
+              <Hr />
+
+              <Hr />
+              {info.id === userProfile.profile.id ? (
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate('UpdateProfile')}>
+                  <Text style={styles.buttonText}>Cập nhật thông tin</Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )}
+            </View>
+            <View>
+              {/* <View style={styles.infoBg}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 18,
+                    color: COLORS.white,
+                  }}></Text>
+              </View> */}
+              <Hr />
+              <PostOfUser postOfUseId={id} />
+            </View>
+          </ScrollView>
+        ) : (
+          <Spinner size="small" color={COLORS.primary} />
+        )}
+      </View>
+    );
+  });
 };
 
 function Hr() {
@@ -105,8 +158,17 @@ function Hr() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
+    height: '100%',
+    paddingTop: 30,
+  },
+  icon: {
+    fontSize: 20,
+  },
+  name: {
+    color: '#111',
+    fontSize: 24,
+    padding: 20,
   },
   header: {
     width: '100%',
@@ -127,27 +189,33 @@ const styles = StyleSheet.create({
   },
   cover: {
     width: '100%',
-    height: 200,
+    // height: 220,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 0.2,
     borderBottomColor: '#696969',
   },
-  image: {width: 128, height: 128, borderRadius: 64},
+  image: {
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+  },
   form: {
     width: '100%',
+    paddingHorizontal: 35,
   },
   row: {
     width: '100%',
-    borderBottomColor: '#696969',
-    borderBottomWidth: 0.2,
+    // borderBottomColor: '#696969',
+    // borderBottomWidth: 0.2,
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    backgroundColor: '#ffffff',
+    // backgroundColor: '#ffffff',
   },
   label: {
-    width: 150,
+    width: 130,
     fontWeight: '500',
     fontSize: 16,
     color: '#000000',
@@ -159,8 +227,10 @@ const styles = StyleSheet.create({
     color: '#000000',
     letterSpacing: 1,
     padding: 10,
-    borderLeftColor: '#696969',
-    borderLeftWidth: 0.2,
+    marginLeft: 20,
+    fontWeight: 'bold',
+    // borderLeftColor: '#696969',
+    // borderLeftWidth: 0.2,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -176,13 +246,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: 0.75,
   },
-  infoBg: {
-    backgroundColor: COLORS.primary,
-    padding: 10,
-    marginHorizontal: 10, 
-    opacity: 0.8, 
-    borderRadius: 8
-  }
 });
 
-export default UserInfo;
+export default Profile;
