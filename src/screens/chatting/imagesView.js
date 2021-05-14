@@ -41,6 +41,9 @@ const ImagesView = () => {
             console.log(err);
             Toast.show(Notification(NOTIFI.error, err.message));
           });
+      else {
+        setLoading(false);
+      }
     }, [groupCurrent]);
 
     return (

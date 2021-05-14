@@ -27,8 +27,9 @@ export class Group {
   };
   @action
   setMessages = (value, roomId) => {
-    this.messages = [value, ...this.messages];
-    if (roomId) {
+    if (this.messages) this.messages = [value, ...this.messages];
+    else this.messages = [value];
+    if (roomId && this.groups) {
       const oldData = [...this.groups].filter((it) => {
         return it.id + '' !== roomId + '';
       });
