@@ -16,6 +16,7 @@ import {useLazyQuery} from '@apollo/client';
 import Toast from 'react-native-toast-message';
 import BottomTabNavigator from '../../navigation/tab-navigation';
 import {AuthStack} from '../../navigation/stack-navigation';
+import {queryData} from '../../common';
 const Loading = (props) => {
   // const navigation = useNavigation();
   return useObserver(() => {
@@ -25,47 +26,52 @@ const Loading = (props) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      AsyncStorage.getItem('token').then((data) => {
-        AsyncStorage.getItem('refreshToken').then((dt) => {
-          if (data && dt) {
-            // auth.setLogin(data,dt)
-            refreshToken();
-          } else {
-            AsyncStorage.clear().then(() => {
-              auth.setLogout();
-            });
-            setLoading(false);
-          }
-        });
-      });
-    }, []);
-    const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
-      onCompleted: async (data) => {
-        console.log(data);
-        shop.setInfo(data.refreshToken.user.store);
-        user.setCart(data.refreshToken.user.cart);
-        notification.setAllNotification(data.refreshToken.user.notifications);
-        user.setLikes(data.refreshToken.user.likes);
-        delete data.refreshToken.user.likes;
-        delete data.refreshToken.user.notifications;
-        delete data.refreshToken.user.store;
-        delete data.refreshToken.user.cart;
-        user.setInfo(data.refreshToken.user);
-        auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
-        await AsyncStorage.setItem('token', data.refreshToken.token);
-        await AsyncStorage.setItem(
-          'refreshToken',
-          data.refreshToken.refreshToken,
-        );
+      if (auth.isAuth) {
         setLoading(false);
-      },
-      onError: (err) => {
-        console.log(err, 'loading');
+      } else {
+        AsyncStorage.getItem('token').then((data) => {
+          AsyncStorage.getItem('refreshToken').then((dt) => {
+            if (data && dt) {
+              // auth.setLogin(data,dt)
+              queryData(REFRESH_TOKEN)
+                .then(({data}) => {
+                  shop.setInfo(data.refreshToken.user.store);
+                  user.setCart(data.refreshToken.user.cart);
+                  notification.setAllNotification(
+                    data.refreshToken.user.notifications,
+                  );
+                  user.setLikes(data.refreshToken.user.likes);
+                  delete data.refreshToken.user.likes;
+                  delete data.refreshToken.user.notifications;
+                  delete data.refreshToken.user.store;
+                  delete data.refreshToken.user.cart;
+                  user.setInfo(data.refreshToken.user);
+                  auth.setLogin(
+                    data.refreshToken.token,
+                    data.refreshToken.refreshToken,
+                  );
+                  AsyncStorage.setItem('token', data.refreshToken.token);
+                  AsyncStorage.setItem(
+                    'refreshToken',
+                    data.refreshToken.refreshToken,
+                  );
+                  setLoading(false);
+                })
+                .catch((err) => {
+                  console.log(err, 'loading');
 
-        setLoading(false);
-        // Toast.show(Notifi.Notification(NOTIFI.error, err.message));
-      },
-    });
+                  setLoading(false);
+                });
+            } else {
+              AsyncStorage.clear().then(() => {
+                auth.setLogout();
+              });
+              setLoading(false);
+            }
+          });
+        });
+      }
+    }, []);
     return (
       <NavigationContainer>
         {loading ? (
