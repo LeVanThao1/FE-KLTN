@@ -179,12 +179,7 @@ const PostOfFeed = ({route, post, info, type}) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('UserInfo', {
-                  userAvatar: post.author.avatar ? post.author.avatar : [],
-                  userName: post.author.name ? post.author.name : '',
-                  userPhone: post.author.phone ? post.author.phone : '',
-                  userMail: post.author.email ? post.author.email : '',
-                  userAddress: post.author.address ? post.author.address : '',
-                  userId: post.author.id ? post.author.id : '',
+                  id: post.author.id ? post.author.id : '',
                 })
               }>
               <Row>
@@ -198,7 +193,7 @@ const PostOfFeed = ({route, post, info, type}) => {
                   </Row>
                 </View>
               </Row>
-            </TouchableOpacity>            
+            </TouchableOpacity>
           </PostHeader>
           <BreakLine />
           <TouchableOpacity

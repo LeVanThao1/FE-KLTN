@@ -23,7 +23,7 @@ import {COLORS, NOTIFI} from '../../constants';
 import Toast from 'react-native-toast-message';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
-const Profile = ({navigation}) => {
+const UpdateProfile = ({navigation}) => {
   return useObserver(() => {
     const {
       stores: {
@@ -47,7 +47,6 @@ const Profile = ({navigation}) => {
     const [userEmail, setUserEmail] = useState(info.email);
     const [userAddress, setUserAddress] = useState(info.address);
     const [userPhone, setUserPhone] = useState(info.phone);
-    console.log(info);
     const checkEdit = () => {
       return (
         userName != info.name ||
@@ -136,8 +135,6 @@ const Profile = ({navigation}) => {
                   paddingHorizontal: 0,
                   paddingVertical: 0,
                   margin: 0,
-                  marginTop: -20,
-
                   // width: 70,
                   // height: 30,
                   alignItems: 'center',
@@ -157,7 +154,6 @@ const Profile = ({navigation}) => {
                   // paddingHorizontal: 10,
                   // paddingVertical: 5,
                   margin: 0,
-                  marginTop: -20,
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: 50,
@@ -170,58 +166,84 @@ const Profile = ({navigation}) => {
                   style={{fontSize: 25, color: COLORS.primary}}></Icon>
               </TouchableOpacity>
             </View>
-            <View>
-              <Text style={styles.name}>{userName}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#e6e6e6',
-                paddingVertical: 10,
-                paddingHorizontal: 60,
-                borderRadius: 10,
-              }}>
-              {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
-              <Icon
-                name="messenger"
-                type="Fontisto"
-                style={{fontSize: 20, padding: 0, marginRight: 20}}
-              />
-              <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
-              {/* </View> */}
-            </View>
           </View>
 
           <Hr />
           <View style={styles.form}>
-            {/* <Hr /> */}
             <View style={styles.row}>
-              <Icon name="phone-alt" type="FontAwesome5" style={styles.icon} />
-              <Text style={styles.inputText}>{userPhone}</Text>
-            </View>
-            <View style={styles.row}>
-              <Icon name="mail" type="Entypo" style={styles.icon} />
-              <Text style={styles.inputText}>{userEmail}</Text>
-            </View>
-            {/* <Hr /> */}
-            <View style={styles.row}>
-              <Icon
-                name="map-marker-alt"
-                type="FontAwesome5"
-                style={styles.icon}
+              <Text style={styles.label}>Tên</Text>
+              <TextInput
+                style={styles.inputText}
+                placeholder="tên"
+                value={userName}
+                onChangeText={(value) => setUserName(value)}
               />
-              <Text style={styles.inputText}> {userAddress}</Text>
             </View>
             <Hr />
-
+            <View style={styles.row}>
+              <Text style={styles.label}>Số điện thoại</Text>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Số điện thoại"
+                value={userPhone}
+                editable={!info.phone}
+                onChangeText={(value) => setUserPhone(value)}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Email"
+                value={userEmail}
+                onChangeText={(value) => setUserEmail(value)}
+                editable={!info.email}
+              />
+            </View>
+            <Hr />
+            <View style={styles.row}>
+              <Text style={styles.label}>Địa chỉ</Text>
+              <TextInput
+                style={styles.inputText}
+                placeholder="địa chỉ"
+                value={userAddress}
+                onChangeText={(value) => setUserAddress(value)}
+              />
+            </View>
             <Hr />
             <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate('UpdateProfile')}>
-              <Text style={styles.buttonText}>Cập nhật thông tin</Text>
+              onPress={() => navigation.navigate('ChangePassword')}>
+              <View style={styles.row}>
+                <Text
+                  style={{
+                    ...styles.label,
+                    width: '100%',
+                    color: COLORS.primary,
+                  }}>
+                  Thay đổi mật khẩu
+                </Text>
+              </View>
             </TouchableOpacity>
+            <Hr />
+            {checkEdit() ? (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  updateUser({
+                    variables: {
+                      userUpdate: {
+                        name: userName,
+                        avatar: avatarUpload,
+                        address: userAddress,
+                        interests: info.interests,
+                      },
+                    },
+                  })
+                }>
+                <Text style={styles.buttonText}>Xác nhận thay đổi</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </ScrollView>
       </View>
@@ -238,17 +260,8 @@ function Hr() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
-    height: '100%',
-    paddingTop: 30,
-  },
-  icon: {
-    fontSize: 20,
-  },
-  name: {
-    color: '#111',
-    fontSize: 24,
-    padding: 20,
   },
   header: {
     width: '100%',
@@ -265,36 +278,31 @@ const styles = StyleSheet.create({
   headerTitle: {padding: 8, fontSize: 24, color: '#ffffff', flex: 1},
   body: {
     flex: 1,
-    width: '85%',
+    width: '100%',
   },
   cover: {
     width: '100%',
-    // height: 220,
-    padding: 20,
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 0.2,
     borderBottomColor: '#696969',
   },
-  image: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
-  },
+  image: {width: 128, height: 128, borderRadius: 64},
   form: {
     width: '100%',
   },
   row: {
     width: '100%',
-    // borderBottomColor: '#696969',
-    // borderBottomWidth: 0.2,
+    borderBottomColor: '#696969',
+    borderBottomWidth: 0.2,
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    // backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
   },
   label: {
-    width: 130,
+    width: 150,
     fontWeight: '500',
     fontSize: 16,
     color: '#000000',
@@ -306,10 +314,8 @@ const styles = StyleSheet.create({
     color: '#000000',
     letterSpacing: 1,
     padding: 10,
-    marginLeft: 20,
-    fontWeight: 'bold',
-    // borderLeftColor: '#696969',
-    // borderLeftWidth: 0.2,
+    borderLeftColor: '#696969',
+    borderLeftWidth: 0.2,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -327,4 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default UpdateProfile;

@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'native-base';
-import {COLORS} from "../../constants/themes"
+import {COLORS} from '../../constants/themes';
 
 const icon = {
   book: {
@@ -35,23 +35,25 @@ const NotificationScreen = ({navigation}) => {
     const [selected, setSelected] = useState('order');
     const route = {
       book: {
-        linkID: item => item.commentBook.book.id,
+        linkID: (item) => item.commentBook.book.id,
         screen: 'Detail-Product',
         id: 'productId',
       },
       post: {
-        linkID: item => item.comment.post.id,
+        linkID: (item) => item.comment.post.id,
         screen: 'PostUser',
-        id: 'postId',
+        id: 'postID',
       },
       order: {
-        linkID: item => item.order.id,
+        linkID: (item) => item.order.id,
         screen: 'OrderDetail',
         id: 'id',
       },
     };
     useEffect(() => {
-       console.log(notification[selected].map(item => item[route[selected].linkID]));
+      console.log(
+        notification[selected].map((item) => item[route[selected].linkID]),
+      );
     }, [selected]);
     const SideBarIcon = ({name}) => (
       <TouchableOpacity onPress={() => setSelected(name)}>
@@ -71,7 +73,12 @@ const NotificationScreen = ({navigation}) => {
       </TouchableOpacity>
     );
     const NotificationItem = ({item}) => (
-      <TouchableOpacity onPress={() => navigation.navigate(route[selected].screen, {[route[selected].id]: route[selected].linkID(item)})}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(route[selected].screen, {
+            [route[selected].id]: route[selected].linkID(item),
+          })
+        }>
         <View style={styles.itemContainer}>
           <View style={styles.itemTopContainer}>
             <View style={styles.itemTypeContainer}>
