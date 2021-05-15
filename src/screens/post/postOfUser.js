@@ -6,7 +6,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
 import {GET_POSTS_USER} from '../../query/post';
-import {button} from '../style';
+import {button} from './style';
 import PostOne from './post';
 
 const PostOfUser = ({navigation, posts}) => {
@@ -27,16 +27,7 @@ const PostOfUser = ({navigation, posts}) => {
 
   return (
     <View>
-      <ScrollView
-        horizontal={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
-              setRefreshing(true);
-            }}
-          />
-        }>
+      <ScrollView horizontal={false}>
         {/* {!loading ? ( */}
         {posts && posts.length > 0 ? (
           posts.map((pt) => <PostOne key={pt.id} post={pt} type={true} />)

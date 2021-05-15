@@ -452,3 +452,8 @@ export const RESET_PASSWORD = gql`
     }
   }
 `;
+export const UPDATE_AVATAR = gql`
+  mutation updateAvatar($file: Upload!) {
+    updateAvatar(file: $file)
+  }
+`;

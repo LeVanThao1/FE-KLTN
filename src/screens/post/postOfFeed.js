@@ -173,7 +173,7 @@ const PostOfFeed = ({route, post, info, type}) => {
     };
     useEffect(() => {}, [post]);
     return (
-      <View style={{paddingHorizontal: 14, paddingVertical: 6}}>
+      <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <Container>
           <PostHeader>
             <TouchableOpacity

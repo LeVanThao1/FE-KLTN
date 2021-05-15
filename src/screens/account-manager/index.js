@@ -23,7 +23,7 @@ export default function AccountManager({navigation}) {
         },
       },
     } = useContext(MobXProviderContext);
-    const ManagerItem = ({label, icon, url, isLogout}) => {
+    const ManagerItem = ({label, icon, url, isLogout, type}) => {
       return !url ? (
         <TouchableOpacity
           style={styles.manager_item}
@@ -49,7 +49,7 @@ export default function AccountManager({navigation}) {
             <Icon
               style={styles.manager_item_icon}
               name={icon}
-              type="AntDesign"
+              type={type ? type : 'AntDesign'}
             />
             <Text style={styles.manager_item_text}>{label}</Text>
           </View>
@@ -77,11 +77,6 @@ export default function AccountManager({navigation}) {
                 icon="user"
                 url="Profile"
               />
-              <ManagerItem
-                label="Bài viết cá nhân"
-                icon="logout"
-                url="PostUser"
-              />
               <ManagerItem label="Cửa hàng" icon="book" url="Store" />
               <ManagerItem
                 label="Quản lý đơn hàng mua"
@@ -94,9 +89,10 @@ export default function AccountManager({navigation}) {
                 url="Cart"
               />
               <ManagerItem
-                label="Tìm cửa hàng gần tôi"
-                icon="shoppingcart"
+                label="Cửa hàng gần bạn"
+                icon="location"
                 url="ListStoreFound"
+                type="Entypo"
               />
               <ManagerItem label="Wishlist" icon="hearto" url="WishList" />
               <ManagerItem label="Đăng xuất" icon="logout" url="" />

@@ -1,4 +1,5 @@
 import {useLazyQuery} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Spinner, Text, View, Icon} from 'native-base';
@@ -6,15 +7,16 @@ import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
 import {GET_POSTS_USER} from '../../query/post';
-import {button} from '../style';
+import {button} from './style';
 import PostOne from './post';
-const Post = ({navigation, route}) => {
+import {COLORS} from '../../constants';
+const Post = ({route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   return useObserver(() => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
-
+    const navigation = useNavigation();
     const {posts, setPosts, info} = user;
     const {postComment} = comment;
 
@@ -23,7 +25,7 @@ const Post = ({navigation, route}) => {
     useEffect(() => {
       queryData(GET_POSTS_USER, {userId})
         .then(({data}) => {
-          console.log('data', data)
+          console.log('data', data);
           setPosts(data.posts);
           setLoading(false);
           setRefreshing(false);
@@ -33,15 +35,13 @@ const Post = ({navigation, route}) => {
 
     return (
       <View>
-        <View style={button.bgAdd}>
-          <Icon
-            name="add-circle-outline"
-            style={button.btnAdd}
-            type="Ionicons"
-            onPress={() => navigation.navigate('NewPost')}
-          />
+        <TouchableOpacity
+          style={button.bgAdd}
+          onPress={() => navigation.navigate('NewPost')}>
+          <Icon name="plus" style={button.btnAdd} type="AntDesign" />
+          <Text style={{fontSize: 15, color: '#fff'}}>Thêm bài viết</Text>
           {/* </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
         <ScrollView
           horizontal={false}
           refreshControl={
@@ -63,7 +63,7 @@ const Post = ({navigation, route}) => {
               </Text>
             )
           ) : (
-            <Spinner />
+            <Spinner size="small" color={COLORS.primary} />
           )}
         </ScrollView>
       </View>

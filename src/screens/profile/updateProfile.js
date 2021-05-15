@@ -12,15 +12,16 @@ import {
   ScrollView,
 } from 'react-native';
 import {useMutation} from '@apollo/client';
-import {UPDATE_USER_INFO} from '../../query/user';
+import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Icon} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
 
 import Toast from 'react-native-toast-message';
+import {mutateData} from '../../common';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const UpdateProfile = ({navigation}) => {
@@ -42,11 +43,12 @@ const UpdateProfile = ({navigation}) => {
       },
     });
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
-    const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
+    // const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
     const [userName, setUserName] = useState(info.name);
     const [userEmail, setUserEmail] = useState(info.email);
     const [userAddress, setUserAddress] = useState(info.address);
     const [userPhone, setUserPhone] = useState(info.phone);
+    const [loading, setLoading] = useState(false);
     const checkEdit = () => {
       return (
         userName != info.name ||
@@ -66,7 +68,6 @@ const UpdateProfile = ({navigation}) => {
         setInfo({
           ...info,
           name: userName,
-          avatar: avatarUpload,
           address: userAddress,
         });
       },
@@ -83,15 +84,25 @@ const UpdateProfile = ({navigation}) => {
           height: 720,
           // includeBase64: true,
         }).then((response) => {
-          upload({
-            variables: {
-              file: new ReactNativeFile({
-                uri: response.path,
-                name: 'avatar',
-                type: response.mime,
-              }),
-            },
-          });
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
         });
       } else {
         ImagePicker.openCamera({
@@ -99,17 +110,25 @@ const UpdateProfile = ({navigation}) => {
           height: 720,
           // includeBase64: true,
         }).then((response) => {
-          console.log(response, Object.keys(response));
-          setUserAvatar(response.path);
-          upload({
-            variables: {
-              file: new ReactNativeFile({
-                uri: response.path,
-                name: 'avatar',
-                type: response.mime,
-              }),
-            },
-          });
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
         });
       }
     };
@@ -118,11 +137,20 @@ const UpdateProfile = ({navigation}) => {
         <ScrollView style={styles.body}>
           <View style={styles.cover}>
             <Image
-              style={styles.image}
+              style={{...styles.image, opacity: !loading ? 1 : 0.5}}
               source={{
-                uri: userAvatar || imageURL,
+                uri: info.avatar,
               }}
             />
+            {loading && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 35,
+                }}>
+                <Spinner size="small" color={COLORS.primary} />
+              </View>
+            )}
             <View
               style={{
                 flexDirection: 'row',
