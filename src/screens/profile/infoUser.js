@@ -35,7 +35,6 @@ const Profile = ({navigation, route}) => {
       },
     } = useContext(MobXProviderContext);
     const id = route.params.id;
-    console.log(id);
     const [userProfile, setUserProfile] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
@@ -47,6 +46,8 @@ const Profile = ({navigation, route}) => {
         })
         .catch((err) => console.log(err));
     }, [id]);
+
+    console.log(userProfile);
 
     useEffect(() => {}, [loading]);
 
@@ -172,7 +173,7 @@ const Profile = ({navigation, route}) => {
                   }}></Text>
               </View> */}
               {/* <Hr /> */}
-              <PostOfUser postOfUseId={id} />
+              <PostOfUser posts={userProfile.post} />
             </View>
           </ScrollView>
         ) : (

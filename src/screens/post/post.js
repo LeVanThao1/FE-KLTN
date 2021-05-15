@@ -133,7 +133,7 @@ const User = styled.Image`
   border-width: ${(props) => (props.story ? '3px' : 0)};
 `;
 //
-const PostOne = ({route, post, info, type}) => {
+const PostOne = ({route, post, type}) => {
   return useObserver(() => {
     const {
       stores: {user, comment},
@@ -141,7 +141,7 @@ const PostOne = ({route, post, info, type}) => {
     console.log('this is post one');
     const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
-    const {posts} = user;
+    const {info, posts} = user;
     const {postComment, setPostComment} = comment;
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
