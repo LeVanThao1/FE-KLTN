@@ -42,7 +42,10 @@ const ChatMessage = (props) => {
           visible={visible}
           onRequestClose={() => setIsVisible(false)}
           FooterComponent={({imageIndex}) => (
-            <ImageFooter imageIndex={imageIndex} imagesCount={images.length} />
+            <ImageFooter
+              imageIndex={imageIndex}
+              imagesCount={message.images.length}
+            />
           )}
         />
       )}

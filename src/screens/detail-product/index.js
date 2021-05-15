@@ -469,6 +469,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     height: 280,
+    marginTop: 12,
   },
   slide__image: {
     width: 200,
