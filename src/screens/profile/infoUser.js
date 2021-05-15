@@ -163,7 +163,7 @@ const Profile = ({navigation, route}) => {
                 </TouchableOpacity>
               ) : null}
             </View>
-            <View>
+            <View style={{marginTop: 5}}>
               {/* <View style={styles.infoBg}>
                 <Text
                   style={{

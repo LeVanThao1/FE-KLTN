@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,15 +14,17 @@ import {
 } from 'react-native';
 import BG from '../../assets/images/bg.jpg';
 import {useMutation} from '@apollo/client';
-import {UPDATE_USER_INFO} from '../../query/user';
+import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Icon} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
 
 import Toast from 'react-native-toast-message';
+import Post from '../post';
+import {mutateData} from '../../common';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const Profile = ({navigation}) => {
@@ -33,23 +35,14 @@ const Profile = ({navigation}) => {
         user: {info, setInfo},
       },
     } = useContext(MobXProviderContext);
-    const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
-      onCompleted: (data) => {
-        console.log(data);
-        setAvatarUpload(data.uploadSingleFile.url);
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log(err);
-      },
-    });
+
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
-    const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
+    // const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
     const [userName, setUserName] = useState(info.name);
     const [userEmail, setUserEmail] = useState(info.email);
     const [userAddress, setUserAddress] = useState(info.address);
     const [userPhone, setUserPhone] = useState(info.phone);
-    console.log(info);
+    const [loading, setLoading] = useState(false);
     const checkEdit = () => {
       return (
         userName != info.name ||
@@ -58,27 +51,9 @@ const Profile = ({navigation}) => {
         info.address != userAddress
       );
     };
-    const [updateUser, {}] = useMutation(UPDATE_USER_INFO, {
-      onCompleted: (data) => {
-        Toast.show({
-          text: 'Thay đổi thành công',
-          type: 'success',
-          position: 'top',
-          style: {backgroundColor: COLORS.primary, color: '#ffffff'},
-        });
-        setInfo({
-          ...info,
-          name: userName,
-          avatar: avatarUpload,
-          address: userAddress,
-        });
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log(err);
-      },
-    });
-
+    // useEffect(() => {
+    //   setUserAvatar(info.avatar);
+    // }, [info.avatar]);
     const handleChoosePhoto = (type) => {
       if (type) {
         ImagePicker.openPicker({
@@ -86,15 +61,26 @@ const Profile = ({navigation}) => {
           height: 720,
           // includeBase64: true,
         }).then((response) => {
-          upload({
-            variables: {
-              file: new ReactNativeFile({
-                uri: response.path,
-                name: 'avatar',
-                type: response.mime,
-              }),
-            },
-          });
+          // setUserAvatar(response.path);
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
         });
       } else {
         ImagePicker.openCamera({
@@ -102,17 +88,25 @@ const Profile = ({navigation}) => {
           height: 720,
           // includeBase64: true,
         }).then((response) => {
-          console.log(response, Object.keys(response));
-          setUserAvatar(response.path);
-          upload({
-            variables: {
-              file: new ReactNativeFile({
-                uri: response.path,
-                name: 'avatar',
-                type: response.mime,
-              }),
-            },
-          });
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
         });
       }
     };
@@ -144,13 +138,22 @@ const Profile = ({navigation}) => {
                   borderColor: '#fff',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  backgroundColor: '#fff',
                 }}>
                 <Image
-                  style={styles.image}
+                  style={{...styles.image, opacity: !loading ? 1 : 0.5}}
                   source={{
-                    uri: userAvatar || imageURL,
+                    uri: info.avatar || defaultAvatar,
                   }}
                 />
+                {loading && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                    }}>
+                    <Spinner size="small" color={COLORS.primary} />
+                  </View>
+                )}
               </View>
               <View
                 style={{
@@ -237,6 +240,9 @@ const Profile = ({navigation}) => {
               onPress={() => navigation.navigate('UpdateProfile')}>
               <Text style={styles.buttonText}>Cập nhật thông tin</Text>
             </TouchableOpacity>
+          </View>
+          <View style={{marginTop: 5}}>
+            <Post />
           </View>
         </ScrollView>
       </View>

@@ -173,7 +173,7 @@ const PostOne = ({route, post, type}) => {
     };
     useEffect(() => {}, [post]);
     return (
-      <View style={{paddingHorizontal: 14, paddingVertical: 6}}>
+      <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <Container>
           <PostHeader>
             <TouchableOpacity
@@ -187,7 +187,14 @@ const PostOne = ({route, post, type}) => {
                 })
               }>
               <Row>
-                <User source={{uri: post.author.avatar}} />
+                <User
+                  source={{
+                    uri:
+                      post.author.id === user.info.id
+                        ? user.info.avatar
+                        : post.author.avatar,
+                  }}
+                />
                 <View style={{paddingLeft: 10}}>
                   <UserName>{post.author.name}</UserName>
                   <Row>

@@ -20,7 +20,6 @@ import BookByCategory from './bookByCategory';
 import {styles} from './styles';
 import {COLORS} from '../../constants/themes';
 
-
 const Home = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -175,10 +174,10 @@ const Home = ({navigation}) => {
                     <FlatList
                       contentContainerStyle={styles.bookByCategory}
                       data={books}
-                      keyExtractor={(item, index) => index}
+                      keyExtractor={(item, index) => index.toString()}
                       renderItem={({item, index}) => (
                         <ProductCart
-                          key={index}
+                          key={index.toString()}
                           book={item}
                           type={true}
                           navigation={navigation}
