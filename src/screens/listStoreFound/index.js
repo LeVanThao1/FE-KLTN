@@ -15,7 +15,8 @@ const ListStoreFound = ({navigation}) => {
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 15000,
+      timeout: 20000,
+      maximumAge: 1000,
     })
       .then((location) => {
         queryData(GET_STORES_LOCATION, {
