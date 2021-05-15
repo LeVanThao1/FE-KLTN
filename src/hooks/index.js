@@ -9,8 +9,8 @@ import {
 } from '../query/notification';
 import {NOTIFI} from '../constants';
 import {Notification} from '../utils/notifications';
-// cai nay la t lam nhan thong bao user ne. m lma admin thi cung nhu ri thoi. tao ra 1 cai hook thoi
-// hientai admin chi moi nhan thong bao cua uc tao sach cua store
+import RNReactNativeSoundToast from 'react-native-sound-toast';
+
 export const useNotification = () => {
   return useObserver(() => {
     const {
@@ -36,22 +36,23 @@ export const useNotification = () => {
     });
 
     useEffect(() => {
-      if (dataPost) {
+      if (dataPost && dataPost?.receiveNotificationCommentPost) {
         setPost([dataPost.receiveNotificationCommentPost, ...post]);
-        if (dataPost.receiveNotificationCommentPost)
-          Toast.show(
-            Notification(
-              NOTIFI.info,
-              dataPost.receiveNotificationCommentPost.title,
-              dataPost.receiveNotificationCommentPost.description,
-            ),
-          );
+        RNReactNativeSoundToast.playSound('notification', 'wav');
+        Toast.show(
+          Notification(
+            NOTIFI.info,
+            dataPost.receiveNotificationCommentPost.title,
+            dataPost.receiveNotificationCommentPost.description,
+          ),
+        );
       }
     }, [dataPost]);
 
     useEffect(() => {
-      if (dataBook) {
+      if (dataBook && dataBook?.receiveNotificationCommentBook) {
         setBook([dataBook.receiveNotificationCommentBook, ...book]);
+        RNReactNativeSoundToast.playSound('notification', 'wav');
         Toast.show(
           Notification(
             NOTIFI.info,
@@ -63,8 +64,9 @@ export const useNotification = () => {
     }, [dataBook]);
 
     useEffect(() => {
-      if (dataOrder) {
+      if (dataOrder && dataOrder?.receiveNotificationOrder) {
         setOrder([dataOrder.receiveNotificationOrder, ...order]);
+        RNReactNativeSoundToast.playSound('notification', 'wav');
         Toast.show(
           Notification(
             NOTIFI.info,
