@@ -21,6 +21,7 @@ import NewMessageButton from './components/NewMessageButton';
 import moment from 'moment';
 import {RECEIVE_MESSAGE, SEEN_MESSAGE, SEND_MESSAGE} from '../../query/message';
 import {useSubscription} from '@apollo/client';
+import RNReactNativeSoundToast from 'react-native-sound-toast';
 const {width, height} = Dimensions.get('screen');
 const Chats = ({navigation}) => {
   return useObserver(() => {
@@ -71,6 +72,7 @@ const Chats = ({navigation}) => {
           } else {
             setGroups([data.receiveMessage.to, ...groups]);
           }
+          RNReactNativeSoundToast.playSound('message', 'wav');
         }
       }
 

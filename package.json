@@ -57,6 +57,7 @@
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^2.18.1",
+    "react-native-sound-toast": "^1.0.5",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^2.16.0",
     "react-native-table-component": "^1.2.1",
