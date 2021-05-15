@@ -47,7 +47,7 @@ const Profile = ({navigation, route}) => {
         .catch((err) => console.log(err));
     }, [id]);
 
-    useEffect(() => {}, [loading]);
+    // useEffect(() => {}, [loading]);
 
     return (
       <View style={styles.container}>
