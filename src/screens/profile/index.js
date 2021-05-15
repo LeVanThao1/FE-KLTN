@@ -21,7 +21,7 @@ import {ReactNativeFile} from 'apollo-upload-client';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
-
+import ImageView from 'react-native-image-viewing';
 import Toast from 'react-native-toast-message';
 import Post from '../post';
 import {mutateData} from '../../common';
@@ -35,7 +35,7 @@ const Profile = ({navigation}) => {
         user: {info, setInfo},
       },
     } = useContext(MobXProviderContext);
-
+    const [visible, setIsVisible] = useState(false);
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
     // const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
     const [userName, setUserName] = useState(info.name);
@@ -113,6 +113,12 @@ const Profile = ({navigation}) => {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>
+          <ImageView
+            images={[{uri: info.avatar}]}
+            imageIndex={0}
+            visible={visible}
+            onRequestClose={() => setIsVisible(false)}
+          />
           <View style={{marginHorizontal: 12}}>
             <ImageBackground
               source={BG}
@@ -140,12 +146,14 @@ const Profile = ({navigation}) => {
                   justifyContent: 'center',
                   backgroundColor: '#fff',
                 }}>
-                <Image
-                  style={{...styles.image, opacity: !loading ? 1 : 0.5}}
-                  source={{
-                    uri: info.avatar || defaultAvatar,
-                  }}
-                />
+                <TouchableOpacity onPress={() => setIsVisible(true)}>
+                  <Image
+                    style={{...styles.image, opacity: !loading ? 1 : 0.5}}
+                    source={{
+                      uri: info.avatar || defaultAvatar,
+                    }}
+                  />
+                </TouchableOpacity>
                 {loading && (
                   <View
                     style={{

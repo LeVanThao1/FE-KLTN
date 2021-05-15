@@ -24,6 +24,7 @@ import PostOfUser from '../post/postOfUser';
 import BG from '../../assets/images/bg.jpg';
 import Toast from 'react-native-toast-message';
 import {queryData} from '../../common';
+import ImageView from 'react-native-image-viewing';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const Profile = ({navigation, route}) => {
@@ -35,6 +36,7 @@ const Profile = ({navigation, route}) => {
       },
     } = useContext(MobXProviderContext);
     const id = route.params.id;
+    const [visible, setIsVisible] = useState(false);
     const [userProfile, setUserProfile] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
@@ -55,6 +57,12 @@ const Profile = ({navigation, route}) => {
       <View style={styles.container}>
         {!loading ? (
           <ScrollView style={styles.body}>
+            <ImageView
+              images={[{uri: userProfile.profile.avatar}]}
+              imageIndex={0}
+              visible={visible}
+              onRequestClose={() => setIsVisible(false)}
+            />
             <View style={{marginHorizontal: 12}}>
               <ImageBackground
                 source={BG}
@@ -80,13 +88,16 @@ const Profile = ({navigation, route}) => {
                     borderColor: '#fff',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundColor: '#fff',
                   }}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: userProfile.profile.avatar || imageURL,
-                    }}
-                  />
+                  <TouchableOpacity onPress={() => setIsVisible(true)}>
+                    <Image
+                      style={styles.image}
+                      source={{
+                        uri: userProfile.profile.avatar || imageURL,
+                      }}
+                    />
+                  </TouchableOpacity>
                 </View>
                 <View style={{marginTop: 60}}>
                   <Text style={styles.name}>{userProfile.profile.name}</Text>
