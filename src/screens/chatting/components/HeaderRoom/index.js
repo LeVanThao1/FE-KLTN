@@ -28,7 +28,7 @@ const HeaderRoom = ({name, avatar, userId, isNew}) => {
         <TouchableOpacity
           style={{marginRight: 10}}
           onPress={() => {
-            navigation.navigate('Chatting');
+            navigation.goBack();
           }}>
           <Icon
             name="arrowleft"

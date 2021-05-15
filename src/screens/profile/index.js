@@ -10,7 +10,9 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
+import BG from '../../assets/images/bg.jpg';
 import {useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -117,84 +119,97 @@ const Profile = ({navigation}) => {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>
-          <View style={styles.cover}>
-            <Image
-              style={styles.image}
-              source={{
-                uri: userAvatar || imageURL,
+          <View style={{marginHorizontal: 12}}>
+            <ImageBackground
+              source={BG}
+              style={{
+                width: '100%',
+                height: 170,
+                position: 'relative',
+                marginTop: 12,
               }}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() => handleChoosePhoto(false)}
+              imageStyle={{
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+              }}></ImageBackground>
+            <View style={styles.cover}>
+              <View
                 style={{
-                  paddingHorizontal: 0,
-                  paddingVertical: 0,
-                  margin: 0,
-                  marginTop: -20,
+                  position: 'absolute',
+                  width: 148,
+                  height: 148,
+                  borderRadius: 148,
+                  borderWidth: 4,
+                  top: -80,
+                  borderColor: '#fff',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  style={styles.image}
+                  source={{
+                    uri: userAvatar || imageURL,
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  // marginTop: 20,
+                  // backgroundColor: 'blue',
+                  width: 180,
+                  marginTop: 25,
+                }}>
+                <TouchableOpacity
+                  onPress={() => handleChoosePhoto(false)}
+                  style={{
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
+                    margin: 0,
+                    // marginTop: -20,
 
-                  // width: 70,
-                  // height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 50,
-                  height: 40,
-                  backgroundColor: 'transparent',
-                }}>
-                <Icon
-                  type="MaterialIcons"
-                  name="camera-alt"
-                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleChoosePhoto(true)}
-                style={{
-                  // paddingHorizontal: 10,
-                  // paddingVertical: 5,
-                  margin: 0,
-                  marginTop: -20,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 50,
-                  height: 40,
-                  backgroundColor: 'transparent',
-                }}>
-                <Icon
-                  type="MaterialIcons"
-                  name="photo-library"
-                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Text style={styles.name}>{userName}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#e6e6e6',
-                paddingVertical: 10,
-                paddingHorizontal: 60,
-                borderRadius: 10,
-              }}>
-              {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
-              <Icon
-                name="messenger"
-                type="Fontisto"
-                style={{fontSize: 20, padding: 0, marginRight: 20}}
-              />
-              <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
-              {/* </View> */}
+                    // width: 70,
+                    // height: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 40,
+                    height: 40,
+                    backgroundColor: COLORS.primary,
+                    borderRadius: 40,
+                  }}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="camera-alt"
+                    style={{fontSize: 25, color: '#fff'}}></Icon>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleChoosePhoto(true)}
+                  style={{
+                    // paddingHorizontal: 10,
+                    // paddingVertical: 5,
+                    margin: 0,
+                    // marginTop: -20,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 40,
+                    height: 40,
+                    backgroundColor: COLORS.primary,
+                    borderRadius: 40,
+                  }}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="photo-library"
+                    style={{fontSize: 25, color: '#fff'}}></Icon>
+                </TouchableOpacity>
+              </View>
+              <View style={{marginVertical: 10}}>
+                <Text style={styles.name}>{userName}</Text>
+              </View>
             </View>
           </View>
 
-          <Hr />
+          {/* <Hr /> */}
           <View style={styles.form}>
             {/* <Hr /> */}
             <View style={styles.row}>
@@ -214,9 +229,9 @@ const Profile = ({navigation}) => {
               />
               <Text style={styles.inputText}> {userAddress}</Text>
             </View>
-            <Hr />
+            {/* <Hr />
 
-            <Hr />
+            <Hr /> */}
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate('UpdateProfile')}>
@@ -240,15 +255,17 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     height: '100%',
-    paddingTop: 30,
+    // paddingTop: 30,
   },
   icon: {
     fontSize: 20,
+    color: COLORS.primary,
   },
   name: {
     color: '#111',
     fontSize: 24,
-    padding: 20,
+    // padding: 20,
+    fontWeight: 'bold',
   },
   header: {
     width: '100%',
@@ -265,24 +282,34 @@ const styles = StyleSheet.create({
   headerTitle: {padding: 8, fontSize: 24, color: '#ffffff', flex: 1},
   body: {
     flex: 1,
-    width: '85%',
+    width: '100%',
   },
   cover: {
     width: '100%',
-    // height: 220,
-    padding: 20,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 0.2,
-    borderBottomColor: '#696969',
+    paddingBottom: 20,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   image: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
+    width: 140,
+    height: 140,
+    borderRadius: 140,
+    // resizeMode: 'cover',
+    // borderWidth: 3,
+    // borderColor: '#fff',
   },
   form: {
-    width: '100%',
+    // width: '100%',
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginHorizontal: 12,
+    borderRadius: 5,
+    paddingVertical: 7,
+    paddingLeft: 15,
+    marginTop: 10,
   },
   row: {
     width: '100%',
@@ -307,7 +334,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     padding: 10,
     marginLeft: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     // borderLeftColor: '#696969',
     // borderLeftWidth: 0.2,
   },
@@ -315,14 +342,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 12,
+    // padding: 12,
     borderRadius: 5,
-    marginVertical: 20,
-    marginHorizontal: 20,
+    marginVertical: 10,
+    // marginHorizontal: 20,
+    paddingVertical: 10,
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     letterSpacing: 0.75,
   },
 });
