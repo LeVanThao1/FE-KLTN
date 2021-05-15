@@ -138,7 +138,7 @@ const Profile = ({navigation, route}) => {
                   }}></Text>
               </View> */}
               <Hr />
-              <PostOfUser postOfUseId={id} />
+              <PostOfUser posts={userProfile.post} />
             </View>
           </ScrollView>
         ) : (
