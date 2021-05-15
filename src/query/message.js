@@ -18,6 +18,27 @@ export const GET_MESSAGE_GROUP = gql`
     }
   }
 `;
+export const GET_MESSAGE_USERID = gql`
+  query messagesByUserID($userId: ID!) {
+    messagesByUserID(userId: $userId) {
+      id
+      content
+      images
+      datetime
+      from {
+        id
+        name
+        avatar
+      }
+      to {
+        id
+      }
+      type
+      seen
+      createdAt
+    }
+  }
+`;
 export const SEND_MESSAGE = gql`
   mutation sendMessage($dataMessage: dataCreateMessage!) {
     sendMessage(dataMessage: $dataMessage) {

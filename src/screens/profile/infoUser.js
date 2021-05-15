@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {UPDATE_USER_INFO, GET_PROFILE_USER} from '../../query/user';
@@ -20,7 +21,7 @@ import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
 import PostOfUser from '../post/postOfUser';
-
+import BG from '../../assets/images/bg.jpg';
 import Toast from 'react-native-toast-message';
 import {queryData} from '../../common';
 const defaultAvatar =
@@ -53,38 +54,73 @@ const Profile = ({navigation, route}) => {
       <View style={styles.container}>
         {!loading ? (
           <ScrollView style={styles.body}>
-            <View style={styles.cover}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: userProfile.profile.avatar || imageURL,
-                }}
-              />
-              <View>
-                <Text style={styles.name}>{userProfile.profile.name}</Text>
-              </View>
-              <View
+            <View style={{marginHorizontal: 12}}>
+              <ImageBackground
+                source={BG}
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#e6e6e6',
-                  paddingVertical: 10,
-                  paddingHorizontal: 60,
-                  borderRadius: 10,
-                }}>
-                {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
-                <Icon
-                  name="messenger"
-                  type="Fontisto"
-                  style={{fontSize: 20, padding: 0, marginRight: 20}}
-                />
-                <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
-                {/* </View> */}
+                  width: '100%',
+                  height: 170,
+                  position: 'relative',
+                  marginTop: 12,
+                }}
+                imageStyle={{
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}></ImageBackground>
+              <View style={styles.cover}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    width: 148,
+                    height: 148,
+                    borderRadius: 148,
+                    borderWidth: 4,
+                    top: -80,
+                    borderColor: '#fff',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: userProfile.profile.avatar || imageURL,
+                    }}
+                  />
+                </View>
+                <View style={{marginTop: 60}}>
+                  <Text style={styles.name}>{userProfile.profile.name}</Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: '#e6e6e6',
+                    paddingVertical: 10,
+                    paddingHorizontal: 25,
+                    borderRadius: 10,
+                    width: 130,
+                  }}
+                  onPress={() => {
+                    navigation.navigate('Room', {
+                      name: userProfile.profile.name,
+                      avatar: userProfile.profile.avatar,
+                      userIdTo: userProfile.profile.id,
+                    });
+                  }}>
+                  {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
+                  <Icon
+                    name="messenger"
+                    type="Fontisto"
+                    style={{fontSize: 20, ...styles.icon}}
+                  />
+                  <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
+                  {/* </View> */}
+                </TouchableOpacity>
               </View>
             </View>
 
-            <Hr />
+            {/* <Hr /> */}
             <View style={styles.form}>
               {/* <Hr /> */}
               <View style={styles.row}>
@@ -115,18 +151,16 @@ const Profile = ({navigation, route}) => {
                   {userProfile.profile.address}
                 </Text>
               </View>
-              <Hr />
+              {/* <Hr /> */}
 
-              <Hr />
+              {/* <Hr /> */}
               {info.id === userProfile.profile.id ? (
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => navigation.navigate('UpdateProfile')}>
                   <Text style={styles.buttonText}>Cập nhật thông tin</Text>
                 </TouchableOpacity>
-              ) : (
-                <></>
-              )}
+              ) : null}
             </View>
             <View>
               {/* <View style={styles.infoBg}>
@@ -137,7 +171,7 @@ const Profile = ({navigation, route}) => {
                     color: COLORS.white,
                   }}></Text>
               </View> */}
-              <Hr />
+              {/* <Hr /> */}
               <PostOfUser postOfUseId={id} />
             </View>
           </ScrollView>
@@ -160,15 +194,16 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     height: '100%',
-    paddingTop: 30,
   },
   icon: {
     fontSize: 20,
+    color: COLORS.primary,
   },
   name: {
     color: '#111',
     fontSize: 24,
-    padding: 20,
+    padding: 15,
+    fontWeight: 'bold',
   },
   header: {
     width: '100%',
@@ -186,24 +221,31 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     width: '100%',
+    // paddingTop: 30,
   },
   cover: {
     width: '100%',
-    // height: 220,
-    padding: 20,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 0.2,
-    borderBottomColor: '#696969',
+    paddingBottom: 20,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   image: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
+    width: 140,
+    height: 140,
+    borderRadius: 140,
   },
   form: {
-    width: '100%',
-    paddingHorizontal: 35,
+    // width: '100%',
+    marginTop: 12,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginHorizontal: 12,
+    borderRadius: 5,
+    paddingVertical: 7,
+    paddingLeft: 15,
   },
   row: {
     width: '100%',
@@ -228,7 +270,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     padding: 10,
     marginLeft: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     // borderLeftColor: '#696969',
     // borderLeftWidth: 0.2,
   },

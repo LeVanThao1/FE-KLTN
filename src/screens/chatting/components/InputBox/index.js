@@ -15,6 +15,7 @@ import {mutateData} from '../../../../common';
 import {COLORS, NOTIFI} from '../../../../constants';
 import {
   SEND_MESSAGE,
+  SEND_MESSAGE_GET_TO,
   SEND_MESSAGE_IMAGE,
   SEND_MESSAGE_IMAGE_GET_TO,
 } from '../../../../query/message';
@@ -24,12 +25,19 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {ReactNativeFile} from 'apollo-upload-client';
 import SpeechToText from 'react-native-google-speech-to-text';
 import {useNavigation} from '@react-navigation/native';
-const InputBox = ({roomId, userId}) => {
+const InputBox = ({userId}) => {
   return useObserver(() => {
     const {
       stores: {group},
     } = useContext(MobXProviderContext);
-    const {messages, setMessages, setGroups, groups, setGroupCurrent} = group;
+    const {
+      messages,
+      setMessages,
+      setGroups,
+      groups,
+      setGroupCurrent,
+      groupCurrent,
+    } = group;
     const [message, setMessage] = useState('');
     const handleChoosePhoto = () => {
       ImagePicker.openPicker({
@@ -48,12 +56,12 @@ const InputBox = ({roomId, userId}) => {
         mutateData(SEND_MESSAGE_IMAGE, {
           dataMessageImage: {
             files,
-            to: roomId,
-            user: roomId ? null : userId,
+            to: groupCurrent,
+            user: groupCurrent ? null : userId,
           },
         })
           .then(({data}) => {
-            setMessages(data.sendMessageImage, roomId);
+            setMessages(data.sendMessageImage, groupCurrent);
           })
           .catch((err) => {
             console.log(err);
@@ -65,7 +73,7 @@ const InputBox = ({roomId, userId}) => {
         width: 1024,
         height: 720,
       }).then((res) => {
-        if (roomId) {
+        if (groupCurrent) {
           mutateData(SEND_MESSAGE_IMAGE, {
             dataMessageImage: {
               files: [
@@ -75,11 +83,11 @@ const InputBox = ({roomId, userId}) => {
                   type: res.mime,
                 }),
               ],
-              to: roomId,
+              to: groupCurrent,
             },
           })
             .then(({data}) => {
-              setMessages(data.sendMessageImage, roomId);
+              setMessages(data.sendMessageImage, groupCurrent);
             })
             .catch((err) => {
               console.log(err);
@@ -98,8 +106,8 @@ const InputBox = ({roomId, userId}) => {
             },
           })
             .then(({data}) => {
-              setMessages([data.sendMessageImage]);
-              setGroupCurrent(sendMessage.to.id);
+              setMessages(data.sendMessageImage);
+              setGroupCurrent(sendMessageImage.to.id);
             })
             .catch((err) => {
               console.log(err);
@@ -109,18 +117,18 @@ const InputBox = ({roomId, userId}) => {
     };
     const onSendPress = async () => {
       try {
-        if (roomId) {
+        if (groupCurrent) {
           const {
             data: {sendMessage},
           } = await mutateData(SEND_MESSAGE, {
             dataMessage: {
-              to: roomId,
+              to: groupCurrent,
               content: message,
               type: 'TEXT',
-              user: roomId ? null : userId,
+              user: groupCurrent ? null : userId,
             },
           });
-          setMessages(sendMessage, roomId);
+          setMessages(sendMessage, groupCurrent);
           setMessage('');
         } else {
           const {
@@ -132,7 +140,7 @@ const InputBox = ({roomId, userId}) => {
               user: userId,
             },
           });
-          setMessages([sendMessage]);
+          setMessages(sendMessage);
           setGroupCurrent(sendMessage.to.id);
           setMessage('');
         }
@@ -216,7 +224,7 @@ const InputBox = ({roomId, userId}) => {
             </View>
           </View>
           <TouchableOpacity
-            onPress={speechToTextHandler}
+            onPress={!message.trim() ? speechToTextHandler : onPress}
             style={{
               flexDirection: 'column',
               alignItems: 'center',

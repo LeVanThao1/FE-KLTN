@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 import BG from '../../assets/images/bg.jpg';
 import {queryData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
-import {GET_MESSAGE_GROUP} from '../../query/message';
+import {GET_MESSAGE_GROUP, GET_MESSAGE_USERID} from '../../query/message';
 import {Notification} from '../../utils/notifications';
 import HeaderRoom from './components/HeaderRoom';
 import InputBox from './components/InputBox';
@@ -30,6 +30,7 @@ const ChatRoomScreen = ({navigation, route}) => {
 
     useEffect(() => {
       if (groupCurrent) {
+        console.log(1);
         setLoading(true);
         queryData(GET_MESSAGE_GROUP, {groupId: groupCurrent, ...option})
           .then(({data}) => {
@@ -44,13 +45,31 @@ const ChatRoomScreen = ({navigation, route}) => {
             console.log(err, 'room');
             Toast.show(Notification(NOTIFI.error, err.message));
           });
+      } else {
+        queryData(GET_MESSAGE_USERID, {userId: userIdTo})
+          .then(({data}) => {
+            console.log(data.messagesByUserID);
+            setMessagesBegin(data.messagesByUserID);
+            if (data.messagesByUserID.length < 20) {
+              setStop(true);
+            }
+
+            setGroupCurrent(data.messagesByUserID[0].to.id);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+            // console.log(err, 'room');
+            // Toast.show(Notification(NOTIFI.error, err.message));
+          });
       }
       return () => {
         setGroupCurrent(undefined);
         setMessagesBegin(undefined);
         setOption({limit: 20, page: 1});
       };
-    }, [groupCurrent]);
+    }, []);
 
     useEffect(() => {
       if (groupCurrent)
@@ -103,17 +122,10 @@ const ChatRoomScreen = ({navigation, route}) => {
                   }
                 />
               ) : (
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 16,
-                    paddingTop: 10,
-                  }}>
-                  Chưa có tin nhắn
-                </Text>
+                <View style={{flex: 1}}></View>
               )}
 
-              <InputBox roomId={groupCurrent} userId={userIdTo} />
+              <InputBox userId={userIdTo} />
             </>
           ) : (
             <Spinner color={COLORS.primary} size="small" />
