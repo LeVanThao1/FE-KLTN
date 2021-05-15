@@ -138,18 +138,18 @@ export const stylesPost = StyleSheet.create({
   imgBook: {
     width: 150,
     height: 200,
-    marginRight: 15 ,
+    marginRight: 15,
     resizeMode: 'cover',
     shadowColor: 'red',
-    shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 6,
-},
-shadowOpacity: 0.39,
-shadowRadius: 8.30,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.39,
+    shadowRadius: 8.3,
 
-elevation: 13,
+    elevation: 13,
   },
 
   picker: {
@@ -308,12 +308,14 @@ elevation: 13,
     backgroundColor: '#fff',
   },
   btn: {
-    paddingHorizontal: 10,
-    padding: 10,
-    marginHorizontal: 85,
-    width: '50%',
+    // paddingHorizontal: 10,
+    // padding: 10,
+    // marginHorizontal: 85,
+    // width: '50%',
     textAlign: 'center',
     color: '#fff',
-    backgroundColor: COLORS.primary,
+    fontSize: 14,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
 });
