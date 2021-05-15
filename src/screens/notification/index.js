@@ -40,8 +40,8 @@ const NotificationScreen = ({navigation}) => {
         id: 'productId',
       },
       post: {
-        linkID: (item) => item.comment.post.id,
-        screen: 'PostUser',
+        linkID: (item) => item.commentPost.post.id,
+        screen: 'PostDetail',
         id: 'postID',
       },
       order: {
