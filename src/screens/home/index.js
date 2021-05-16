@@ -228,7 +228,7 @@ const Home = ({navigation}) => {
                     justifyContent: 'center',
                     width: '100%',
                   }}>
-                  <Spinner color={COLORS.primary} />
+                  <Spinner size="small" color={COLORS.primary} />
                 </View>
               )}
               {/* {books &&
