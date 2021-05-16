@@ -232,7 +232,7 @@ const PostDetail = ({navigation, route}) => {
                     <Text>{postCurrent?.description}</Text>
                   </View>
                 </View>
-                {postCurrent.comment?.map((cmt, i) => (
+                {/* {postCurrent.comment?.map((cmt, i) => (
                   <Comment key={i} cmt={cmt} />
                 ))}
                 <View style={stylesPost.addCmt}>
@@ -242,6 +242,52 @@ const PostDetail = ({navigation, route}) => {
                       style={stylesPost.avtcmt}
                     />
                     <View style={stylesPost.addComment}>
+                      <TextInput
+                        style={stylesPost.comment}
+                        placeholder="Thêm bình luận"
+                        value={cmts}
+                        onFocus={() => {}}
+                        onChangeText={(value) => {
+                          setCmts(value);
+                        }}
+                      />
+                      <Icon
+                        name="ios-arrow-forward-circle-outline"
+                        type="Ionicons"
+                        style={stylesPost.iconEnter}
+                        onPress={onPress}
+                      />
+                    </View>
+                  </View>
+                </View> */}
+                <View
+                  style={{
+                    backgroundColor: '#fff',
+                    marginVertical: 10,
+                    borderRadius: 10,
+                  }}>
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      marginBottom: 5,
+                      borderBottomColor: COLORS.primary,
+                      borderBottomWidth: 1,
+                      marginHorizontal: 10,
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      paddingBottom: 5,
+                    }}>
+                    Bình luận
+                  </Text>
+                  {postCurrent.comment?.map((cmt, i) => (
+                    <Comment key={i} cmt={cmt} />
+                  ))}
+                  <View style={stylesPost.addCmt}>
+                    <View style={stylesPost.person}>
+                      <Image
+                        source={{uri: info.avatar}}
+                        style={stylesPost.avtcmt}
+                      />
                       <TextInput
                         style={stylesPost.comment}
                         placeholder="Thêm bình luận"

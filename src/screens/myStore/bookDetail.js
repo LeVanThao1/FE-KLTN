@@ -71,21 +71,22 @@ const BookDetail = ({navigation, book}) => {
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
           <ScrollView showsVerticalScrollIndicator>
+            <Text
+              style={{fontWeight: 'bold', marginHorizontal: 12, marginTop: 10}}>
+              Hình ảnh
+            </Text>
             <View style={stylesPost.textImg}>
-              <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
-                Hình ảnh
-              </Text>
               <ImageView
                 images={bookCurrent.images.map((t) => ({uri: t}))}
                 imageIndex={index}
                 visible={visible}
                 onRequestClose={() => setIsVisible(false)}
-                // FooterComponent={({imageIndex}) => (
-                //   <ImageFooter
-                //     imageIndex={imageIndex}
-                //     imagesCount={post.images.length}
-                //   />
-                // )}
+                FooterComponent={({imageIndex}) => (
+                  <ImageFooter
+                    imageIndex={imageIndex}
+                    imagesCount={bookCurrent.images.length}
+                  />
+                )}
               />
               {/* <ScrollView>
                 {bookCurrent.images?.map((img, i) => (
@@ -96,31 +97,8 @@ const BookDetail = ({navigation, book}) => {
                   />
                 ))}
               </ScrollView> */}
-              {bookCurrent.images.length > 3 ? (
-                <View style={stylesPost.imgBookDetail}>
-                  <ScrollView horizontal={true}>
-                    {bookCurrent.images.map((img, i) => (
-                      <TouchableOpacity
-                        onPress={() => {
-                          setIndex(i);
-                          setIsVisible(true);
-                        }}>
-                        <Image
-                          // key={i}
-                          source={{uri: img}}
-                          style={stylesPost.imgBook}
-                        />
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              ) : (
-                <View
-                  style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                  }}>
+              <View style={stylesPost.imgBookDetail}>
+                <ScrollView horizontal={true}>
                   {bookCurrent.images.map((img, i) => (
                     <TouchableOpacity
                       onPress={() => {
@@ -128,14 +106,14 @@ const BookDetail = ({navigation, book}) => {
                         setIsVisible(true);
                       }}>
                       <Image
-                        key={i}
+                        // key={i}
                         source={{uri: img}}
                         style={stylesPost.imgBook}
                       />
                     </TouchableOpacity>
                   ))}
-                </View>
-              )}
+                </ScrollView>
+              </View>
             </View>
           </ScrollView>
           <View style={stylesPost.content}>
@@ -199,35 +177,51 @@ const BookDetail = ({navigation, book}) => {
                   <Text>{bookCurrent.description}</Text>
                 </View>
               </View>
-              {bookComment?.map((cmt, i) => (
-                <Comment key={i} cmt={cmt} />
-              ))}
-              <View style={stylesPost.addCmt}>
-                <View style={stylesPost.person}>
-                  <View style={stylesPost.info}>
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  marginVertical: 10,
+                  borderRadius: 10,
+                }}>
+                <Text
+                  style={{
+                    marginTop: 10,
+                    marginBottom: 5,
+                    borderBottomColor: COLORS.primary,
+                    borderBottomWidth: 1,
+                    marginHorizontal: 10,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    paddingBottom: 5,
+                  }}>
+                  Bình luận
+                </Text>
+                {bookComment?.map((cmt, i) => (
+                  <Comment key={i} cmt={cmt} />
+                ))}
+                <View style={stylesPost.addCmt}>
+                  <View style={stylesPost.person}>
                     <Image
                       source={{uri: info.avatar}}
                       style={stylesPost.avtcmt}
                     />
-                    <View style={stylesPost.addComment}>
-                      <TextInput
-                        style={stylesPost.comment}
-                        placeholder="Thêm bình luận"
-                        value={cmts}
-                        onFocus={() => {}}
-                        onChangeText={(value) => {
-                          setCmts(value);
-                        }}
-                      />
-                    </View>
+                    <TextInput
+                      style={stylesPost.comment}
+                      placeholder="Thêm bình luận"
+                      value={cmts}
+                      onFocus={() => {}}
+                      onChangeText={(value) => {
+                        setCmts(value);
+                      }}
+                    />
+                    <Icon
+                      name="ios-arrow-forward-circle-outline"
+                      type="Ionicons"
+                      style={stylesPost.iconEnter}
+                      onPress={onPress}
+                    />
                   </View>
                 </View>
-                <Icon
-                  name="ios-arrow-forward-circle-outline"
-                  type="Ionicons"
-                  style={stylesPost.iconEnter}
-                  onPress={onPress}
-                />
               </View>
 
               <TouchableOpacity

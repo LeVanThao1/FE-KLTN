@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {COLORS} from '../../constants';
-
+const {width} = Dimensions.get('screen');
 export const styles = StyleSheet.create({
   container_view: {margin: 5},
   container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff'},
@@ -64,7 +64,9 @@ export const stylesPost = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
+    marginTop: 5,
     justifyContent: 'space-between',
+    width: width - 24 - 40,
   },
 
   vertical: {
@@ -117,12 +119,12 @@ export const stylesPost = StyleSheet.create({
 
   addComment: {
     position: 'relative',
-    width: '90%',
+    width: '85%',
   },
 
   iconEnter: {
     position: 'absolute',
-    right: 0,
+    right: -25,
     top: 15,
   },
 
@@ -137,10 +139,11 @@ export const stylesPost = StyleSheet.create({
 
   comment: {
     borderRadius: 50,
-    flex: 1,
+    // flex: 1,
     borderWidth: 0.1,
     paddingHorizontal: 20,
-    marginLeft: 20,
+    paddingRight: 40,
+    marginLeft: 10,
     height: 35,
     width: '100%',
   },
@@ -172,19 +175,20 @@ export const stylesPost = StyleSheet.create({
   },
 
   imgBookDetail: {
-    width: '100%',
-    margin: 'auto',
+    // width: '100%',
+    // margin: 'auto',
     paddingVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 8,
   },
 
   imgBook: {
     width: 150,
     height: 200,
     resizeMode: 'cover',
-    marginHorizontal: 8,
+    marginHorizontal: 4,
   },
 
   img: {
@@ -270,7 +274,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   textImg: {
-    marginVertical: 10,
+    marginVertical: 7,
   },
 
   textCount: {
@@ -278,8 +282,8 @@ export const stylesPost = StyleSheet.create({
   },
   textContent: {
     width: '100%',
-    marginLeft: 10,
-    paddingBottom: 10,
+    marginLeft: 0,
+    paddingBottom: 0,
   },
   text: {
     // paddingLeft: 10,
@@ -306,7 +310,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   addpost: {
-    padding: 10,
+    // padding: 10,
   },
 
   rowBetween: {
@@ -346,13 +350,14 @@ export const stylesPost = StyleSheet.create({
     borderRadius: 10,
   },
   imgBookDetail: {
-    width: '100%',
-    margin: 'auto',
+    // width: '100%',
+    // margin: 'auto',
     paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderTopWidth: 1,
+    marginHorizontal: 12,
   },
 });

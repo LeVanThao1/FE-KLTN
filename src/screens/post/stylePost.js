@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {COLORS} from '../../constants/themes';
-
+const {width} = Dimensions.get('screen');
 export const stylesPost = StyleSheet.create({
   textDes: {
     height: 'auto',
@@ -16,7 +16,9 @@ export const stylesPost = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
+    marginTop: 5,
     justifyContent: 'space-between',
+    width: width - 24 - 40,
   },
 
   vertical: {
@@ -67,8 +69,8 @@ export const stylesPost = StyleSheet.create({
 
   iconEnter: {
     position: 'absolute',
-    right: 12,
-    top: 2,
+    right: -25,
+    top: 15,
   },
 
   name: {
@@ -97,12 +99,14 @@ export const stylesPost = StyleSheet.create({
     width: '100%',
   },
   comment: {
-    width: '90%',
     borderRadius: 50,
+    // flex: 1,
     borderWidth: 0.1,
     paddingHorizontal: 20,
-    marginLeft: 20,
+    paddingRight: 40,
+    marginLeft: 10,
     height: 35,
+    width: '100%',
   },
 
   avt: {
@@ -138,7 +142,8 @@ export const stylesPost = StyleSheet.create({
   imgBook: {
     width: 150,
     height: 200,
-    marginRight: 15,
+    // marginRight: 15,
+    marginHorizontal: 4,
     resizeMode: 'cover',
     shadowColor: 'red',
     shadowColor: '#000',
@@ -150,6 +155,7 @@ export const stylesPost = StyleSheet.create({
     shadowRadius: 8.3,
 
     elevation: 13,
+    marginBottom: 10,
   },
 
   picker: {
@@ -160,7 +166,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   content: {
-    padding: 10,
+    // padding: 10,
     // borderTopColor: '#111',
     // borderTopWidth: 0.2,
     // marginTop: 15,
