@@ -18,14 +18,17 @@ import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
 import styled from 'styled-components';
-import {mutateData} from '../../common';
+import {mutateData, queryData} from '../../common';
 import {CREATE_COMMENT_BOOK} from '../../query/comment';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
 import moment from 'moment';
 import formatMoney from '../../utils/format/index';
-
+import {stylesPost} from '../post/stylePost';
+import Comment from '../post/comment';
+import ImageView from 'react-native-image-viewing';
+import ImageFooter from '../chatting/components/ImageFooter';
 const Row = styled.View`
   align-items: center;
   flex-direction: row;
@@ -53,15 +56,19 @@ const DetailProduct = ({navigation, route}) => {
     const {
       stores: {user},
     } = useContext(MobXProviderContext);
-    const {cart, setCart, likes, addToLike, removeToLike} = user;
+    const {cart, setCart, likes, addToLike, removeToLike, info} = user;
     const {productId} = route.params;
     const [book, setBook] = useState(undefined);
-    const [listItem, setListItem] = useState([]);
-    // console.log('book detail', book.images);
-
+    const [loading, setLoading] = useState(true);
     const [isHeart, setIsHeart] = useState(
       likes && likes.filter((lk) => lk.id + '' === productId + '').length > 0,
     );
+    const [quantity, setQuantity] = React.useState(1);
+    const [comment, onChangeComment] = React.useState('');
+    const [visible, setIsVisible] = useState(false);
+    const [index, setIndex] = useState(0);
+    const [images, setImages] = useState([]);
+
     const [addLike] = useMutation(ADD_TO_LIKE, {
       onCompleted: () => {
         addToLike({
@@ -95,24 +102,6 @@ const DetailProduct = ({navigation, route}) => {
         console.log(err);
       },
     });
-    const [getBook, {called, loading, data, error}] = useLazyQuery(GET_BOOK, {
-      onCompleted: async (data) => {
-        setBook(data.book);
-        setListItem(
-          data.book.store.books.map((ct, i) => ({
-            id: ct.id,
-            name: ct.book ? ct.book?.name : ct.name,
-            price: ct.price,
-            image: ct.book ? ct.book.images : ct.images,
-            selled: ct.amount,
-          })),
-        );
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log(err);
-      },
-    });
     const address = book?.store.address;
     const Province = (add) => {
       const tempAddress = add.split(',');
@@ -120,11 +109,20 @@ const DetailProduct = ({navigation, route}) => {
       return tempAddress[length - 1];
     };
     useEffect(() => {
-      getBook({
-        variables: {
-          id: productId,
-        },
-      });
+      queryData(GET_BOOK, {
+        id: productId,
+      })
+        .then(({data}) => {
+          setBook(data.book);
+
+          setImages(data.book.book ? data.book.book.images : data.book.images);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          Toast.show(Notification(NOTIFI.error, 'Have error'));
+        });
     }, [productId]);
 
     const [updateCart, {load}] = useMutation(UPDATE_CART, {
@@ -177,8 +175,7 @@ const DetailProduct = ({navigation, route}) => {
           Toast.show(Notification(NOTIFI.error, err));
         });
     };
-    const [quantity, setQuantity] = React.useState(1);
-    const [comment, onChangeComment] = React.useState('');
+
     const addToCart = () => {
       const found = cart.some((ct) => ct.book.id + '' === productId + '');
       if (found) {
@@ -219,43 +216,45 @@ const DetailProduct = ({navigation, route}) => {
         });
       }
     };
-    const renderProduct = ({item}) => {
-      return (
-        <TouchableOpacity
-          style={styles.list_product}
-          onPress={() =>
-            navigation.push('Detail-Product', {productId: item.id})
-          }>
-          <Image
-            source={{uri: item.image}}
-            style={{width: 80, height: 100}}
-            // onPress={() => ProductHandler()}
-          />
-          <View>
-            <Text style={styles.name} numberOfLines={1}>
-              {item.name}
-            </Text>
-            <View style={styles.content}>
-              <Text style={{color: '#f57f1a', fontSize: 12}}>
-                {item.price}đ
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      );
-    };
 
     return (
       <View style={styles.container}>
         {!loading && book && (
           <ScrollView>
             <View style={styles.slide__image_wrap}>
-              <SliderBox
+              {/* <SliderBox
                 style={styles.slide__image}
                 images={book?.images}
                 autoplay={true}
                 circleLoop={true}
+              /> */}
+              <ImageView
+                images={images.map((t) => ({uri: t}))}
+                imageIndex={index}
+                visible={visible}
+                onRequestClose={() => setIsVisible(false)}
+                FooterComponent={({imageIndex}) => (
+                  <ImageFooter
+                    imageIndex={imageIndex}
+                    imagesCount={images.length}
+                  />
+                )}
               />
+              <ScrollView horizontal={true}>
+                {images.map((img, i) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIndex(i);
+                      setIsVisible(true);
+                    }}>
+                    <Image
+                      // key={i}
+                      source={{uri: img}}
+                      style={stylesPost.imgBook}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
             </View>
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
@@ -288,22 +287,33 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={styles.detail__buying}>
                   <Text>Số lượng sẵn có : {book.amount}</Text>
                   <View style={styles.product__quantity}>
-                    {quantity > 1 ? (
-                      <TouchableOpacity
-                        onPress={() => setQuantity(quantity - 1)}>
-                        <Text
-                          style={{...styles.buy__action_text, fontSize: 18}}>
-                          -
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
-                        <Text
-                          style={{...styles.buy__action_text, fontSize: 18}}>
-                          -
-                        </Text>
-                      </TouchableOpacity>
-                    )}
+                    <View
+                      style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: COLORS.primary,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        display: 'flex',
+                        borderRadius: 30,
+                      }}>
+                      {quantity > 1 ? (
+                        <TouchableOpacity
+                          onPress={() => setQuantity(quantity - 1)}>
+                          <Text
+                            style={{...styles.buy__action_text, fontSize: 18}}>
+                            -
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                          <Text
+                            style={{...styles.buy__action_text, fontSize: 18}}>
+                            -
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
                     <TextInput
                       style={styles.input__quantity}
                       keyboardType="numeric"
@@ -311,31 +321,50 @@ const DetailProduct = ({navigation, route}) => {
                       // editable={false}
                       onChangeText={setQuantity}
                     />
-                    {quantity < book.amount ? (
-                      <TouchableOpacity
-                        onPress={() => setQuantity(quantity + 1)}>
-                        <Text
-                          style={{...styles.buy__action_text, fontSize: 18}}>
-                          +
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity onPress={() => setQuantity(quantity)}>
-                        <Text
-                          style={{...styles.buy__action_text, fontSize: 18}}>
-                          +
-                        </Text>
-                      </TouchableOpacity>
-                    )}
+                    <View
+                      style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: COLORS.primary,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        display: 'flex',
+                        borderRadius: 30,
+                      }}>
+                      {quantity < book.amount ? (
+                        <TouchableOpacity
+                          onPress={() => setQuantity(quantity + 1)}>
+                          <Text
+                            style={{...styles.buy__action_text, fontSize: 18}}>
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity onPress={() => setQuantity(quantity)}>
+                          <Text
+                            style={{...styles.buy__action_text, fontSize: 18}}>
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
                   </View>
                 </View>
                 <View style={styles.control__buy_action}>
-                  <TouchableOpacity onPress={addToCart}>
-                    <Text
-                      style={{...styles.buy__action_text, fontWeight: '500'}}>
-                      Thêm vào giỏ hàng
-                    </Text>
-                  </TouchableOpacity>
+                  <View
+                    style={{
+                      backgroundColor: COLORS.primary,
+                      paddingVertical: 6,
+                      paddingHorizontal: 15,
+                      borderRadius: 10,
+                    }}>
+                    <TouchableOpacity onPress={addToCart}>
+                      <Text
+                        style={{...styles.buy__action_text, fontWeight: '500'}}>
+                        Thêm vào giỏ hàng
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
               <View style={styles.viewStore}>
@@ -385,51 +414,49 @@ const DetailProduct = ({navigation, route}) => {
                   {book.description ? book.description : book.book.description}
                 </Text>
               </View>
-              <View style={styles.detail__book_rate}>
-                <View style={styles.detail__book_commnet}>
-                  <TextInput
-                    style={styles.comment}
-                    value={comment}
-                    // editable={false}
-                    placeholder="Nhập bình luận của bạn"
-                    onChangeText={onChangeComment}
-                  />
-                  <TouchableOpacity onPress={onComment}>
-                    <Text
-                      style={{
-                        ...styles.buy__action_text,
-                        fontSize: 14,
-                        fontWeight: '500',
-                      }}>
-                      Bình luận
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                {book.comment.length > 0 && (
-                  <View style={styles.book__comment_wrap}>
-                    {book.comment.map((cm, i) => (
-                      <View style={styles.comment__user} key={i}>
-                        <View style={styles.store__wrapper}>
-                          <Image
-                            style={styles.user__avatar}
-                            source={{
-                              uri: cm.author.avatar,
-                            }}
-                          />
-                          <Text style={styles.user__name}>
-                            {cm.author.name}
-                          </Text>
-                        </View>
-                        <Text style={styles.comment__user_content}>
-                          {cm.content}
-                        </Text>
-                        <Text style={styles.comment__user_date}>
-                          {moment(moment(cm.createdAt)._d).fromNow()}
-                        </Text>
-                      </View>
-                    ))}
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  marginVertical: 10,
+                  borderRadius: 10,
+                }}>
+                <Text
+                  style={{
+                    marginTop: 10,
+                    marginBottom: 5,
+                    borderBottomColor: COLORS.primary,
+                    borderBottomWidth: 1,
+                    marginHorizontal: 10,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    paddingBottom: 5,
+                  }}>
+                  Bình luận
+                </Text>
+                {book.comment?.map((cmt, i) => (
+                  <Comment key={i} cmt={cmt} />
+                ))}
+                <View style={stylesPost.addCmt}>
+                  <View style={stylesPost.person}>
+                    <Image
+                      source={{uri: info.avatar}}
+                      style={stylesPost.avtcmt}
+                    />
+                    <TextInput
+                      style={stylesPost.comment}
+                      placeholder="Thêm bình luận"
+                      value={comment}
+                      onFocus={() => {}}
+                      onChangeText={onChangeComment}
+                    />
+                    <Icon
+                      name="ios-arrow-forward-circle-outline"
+                      type="Ionicons"
+                      style={stylesPost.iconEnter}
+                      onPress={onComment}
+                    />
                   </View>
-                )}
+                </View>
               </View>
             </View>
           </ScrollView>
@@ -468,7 +495,7 @@ const styles = StyleSheet.create({
   slide__image_wrap: {
     width: '100%',
     backgroundColor: 'white',
-    height: 280,
+    // height: 280,
     marginTop: 12,
   },
   slide__image: {
@@ -482,6 +509,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingVertical: 10,
+    paddingTop: 5,
     marginBottom: 10,
     paddingHorizontal: 5,
   },
@@ -545,12 +573,13 @@ const styles = StyleSheet.create({
   },
   detail__buy_control: {
     paddingVertical: 5,
+    paddingHorizontal: 10,
     backgroundColor: 'white',
   },
   detail__buying: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
     alignItems: 'center',
     backgroundColor: 'white',
     marginBottom: 10,
@@ -577,17 +606,17 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buy__action_text: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    backgroundColor: COLORS.primary,
+    // paddingVertical: 5,
+    // paddingHorizontal: 12,
+    // backgroundColor: COLORS.primary,
     color: '#ffffff',
-    borderRadius: 16,
+    // borderRadius: 16,
     fontSize: 16,
     fontWeight: 'bold',
   },
   control__buy_action: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: 5,
     paddingBottom: 14,
   },
@@ -636,7 +665,7 @@ const styles = StyleSheet.create({
   },
   detail__book_description: {
     backgroundColor: 'white',
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
   detail__book_description_title: {
@@ -663,7 +692,7 @@ const styles = StyleSheet.create({
   detail__book_rate: {
     backgroundColor: 'white',
     paddingVertical: 10,
-    paddingHorizontal: 5,
+    // paddingHorizontal: 5,
   },
   rate__start_wrap: {
     width: '60%',

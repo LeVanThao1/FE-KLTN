@@ -87,38 +87,38 @@ const UpdateBook = ({navigation, route}) => {
         value: value,
       });
     };
-    const [updateBook, {called, loading, data, error}] = useMutation(
-      UPDATE_BOOK,
-      {
-        onCompleted: async (data) => {
-          console.log(bookStore.length);
-          const newData = [...bookStore].filter(
-            (bt) => bt.id + '' !== bookId + '',
-          );
-          const bookUpdate = {
-            id: bookId,
-            name: name.value,
-            description: description.value,
-            year: year.value,
-            numberOfReprint: Number(numPrint.value),
-            publisher: publisher.value,
-            category: {
-              id: bookCategoryId,
-              name: bookCategoryName,
-            },
-            images: ['https://picsum.photos/200/300'],
-            amount: Number(amount.value),
-            price: Number(price.value),
-          };
-          shop.setBookStore([bookUpdate, ...newData]);
-          navigation.goBack();
-        },
-        onError: (err) => {
-          Toast.show(Notification(NOTIFI.error, err.message));
-          console.log(err);
-        },
-      },
-    );
+    // const [updateBook, {called, loading, data, error}] = useMutation(
+    //   UPDATE_BOOK,
+    //   {
+    //     onCompleted: async (data) => {
+    //       console.log(bookStore.length);
+    //       const newData = [...bookStore].filter(
+    //         (bt) => bt.id + '' !== bookId + '',
+    //       );
+    //       const bookUpdate = {
+    //         id: bookId,
+    //         name: name.value,
+    //         description: description.value,
+    //         year: year.value,
+    //         numberOfReprint: Number(numPrint.value),
+    //         publisher: publisher.value,
+    //         category: {
+    //           id: bookCategoryId,
+    //           name: bookCategoryName,
+    //         },
+    //         images: ['https://picsum.photos/200/300'],
+    //         amount: Number(amount.value),
+    //         price: Number(price.value),
+    //       };
+    //       shop.setBookStore([bookUpdate, ...newData]);
+    //       navigation.goBack();
+    //     },
+    //     onError: (err) => {
+    //       Toast.show(Notification(NOTIFI.error, err.message));
+    //       console.log(err);
+    //     },
+    //   },
+    // );
     const onAlert = () => {
       Alert.alert('Đồng ý cập nhật ?', 'Lựa chọn', [
         {text: 'Đồng ý', onPress: () => onPress()},
@@ -132,19 +132,54 @@ const UpdateBook = ({navigation, route}) => {
         year: year.value,
         numberOfReprint: Number(numPrint.value),
         publisher: publisher.value,
-        category: categori.value,
-        // images: ['https://picsum.photos/200/300'],
+        category: categori.value ? categori.value : bookCurrent.categoryId,
+        images: imagesUpload,
         amount: Number(amount.value),
         price: Number(price.value),
       };
-      updateBook({
-        variables: {
-          dataBook,
-          id: bookCurrent.id,
-        },
-      });
-
-      // navigation.goBack();
+      // updateBook({
+      //   variables: {
+      //     dataBook,
+      //     id: bookCurrent.id,
+      //   },
+      // });
+      mutateData(UPDATE_BOOK, {
+        dataBook,
+        id: bookCurrent.id,
+      })
+        .then(({data}) => {
+          const dataUpdate = {
+            categoryId: bookCurrent.categoryId,
+            categoryName: bookCurrent.categoryName,
+            name: name.value,
+            description: description.value,
+            year: year.value,
+            numberOfReprint: Number(numPrint.value),
+            publisher: publisher.value,
+            category: categori.value ? categori.value : bookCurrent.categoryId,
+            images: imagesUpload,
+            amount: Number(amount.value),
+            price: Number(price.value),
+          };
+          const findIndex = [...bookStore].findIndex(
+            (dt) => dt.id + '' == bookCurrent.id + '',
+          );
+          shop.setBookStore([
+            ...[...bookStore].slice(0, findIndex),
+            {...bookStore[findIndex], ...dataUpdate},
+            ...[...bookStore].slice(findIndex + 1),
+          ]);
+          setBookCurrent({
+            ...bookStore[findIndex],
+            ...dataUpdate,
+          });
+          Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
+          navigation.goBack();
+        })
+        .catch((err) => {
+          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
+          console.log(err);
+        });
     };
 
     const removeImages = (index) => {
@@ -182,11 +217,14 @@ const UpdateBook = ({navigation, route}) => {
               setImagesUpload((cur) => [...cur, ...tamp]);
             })
             .catch((err) => {
-              // Toast.show(Notification(NOTIFI.error, err.message));
+              Toast.show(Notification(NOTIFI.error, 'Have error'));
               console.log('update book', err);
             });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, 'Have error'));
+        });
     };
 
     return (
@@ -197,8 +235,8 @@ const UpdateBook = ({navigation, route}) => {
             <ScrollView
               style={{flexDirection: 'row', marginVertical: 10}}
               horizontal={true}>
-              {bookCurrent.images.length > 0 &&
-                bookCurrent.images.map((r, i) => (
+              {images.length > 0 &&
+                images.map((r, i) => (
                   <View key={i}>
                     <Image
                       style={{
@@ -561,7 +599,8 @@ const styles = StyleSheet.create({
   },
 
   textContent: {
-    marginLeft: 10,
+    // marginLeft: 10,
+    marginBottom: 5,
   },
 
   horizontal: {

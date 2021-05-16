@@ -247,73 +247,7 @@ const UpdatePost = ({route, navigation}) => {
               </View> */}
             </View>
             {/*  */}
-            <View style={stylesPost.vertical}>
-              <Text>Hình ảnh *</Text>
-              <ScrollView
-                style={{flexDirection: 'row', marginVertical: 10}}
-                horizontal={true}>
-                {postCurrent.images.length > 0 &&
-                  postCurrent.images.map((r, i) => (
-                    <View key={i}>
-                      <Image
-                        style={{
-                          width: 100,
-                          height: 100,
-                          marginRight: 10,
-                          position: 'relative',
-                        }}
-                        source={{uri: r}}
-                      />
-                      <TouchableOpacity
-                        onPress={() => removeImages(i)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          right: 10,
-                        }}>
-                        <Icon
-                          type="AntDesign"
-                          name="closecircleo"
-                          style={{
-                            fontSize: 22,
-                            color: 'red',
-                          }}></Icon>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                {postCurrent.images.length < 10 && (
-                  <TouchableOpacity
-                    onPress={handleChoosePhoto}
-                    style={{
-                      // paddingHorizontal: 10,
-                      // paddingVertical: 5,
-                      margin: 0,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 100,
-                      height: 100,
-                      backgroundColor: '#fff',
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 1,
-                      },
-                      shadowOpacity: 0.18,
-                      shadowRadius: 1.0,
 
-                      elevation: 1,
-                    }}>
-                    <Icon
-                      type="FontAwesome5"
-                      name="plus"
-                      style={{
-                        fontSize: 50,
-                        color: '#f44f4f',
-                      }}></Icon>
-                  </TouchableOpacity>
-                )}
-              </ScrollView>
-            </View>
             {/*  */}
           </ScrollView>
           <View style={stylesPost.content}>
