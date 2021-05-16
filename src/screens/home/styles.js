@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 10,
-    marginTop: 20,
+    marginTop: 8,
   },
   seeMoreContainer: {
     marginVertical: 6,
