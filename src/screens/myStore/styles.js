@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { COLORS } from '../../constants';
+import {COLORS} from '../../constants';
 
 export const styles = StyleSheet.create({
   container_view: {margin: 5},
@@ -90,6 +90,12 @@ export const stylesPost = StyleSheet.create({
     width: '100%',
   },
 
+  main: {
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+  },
+
   infocmt: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -178,6 +184,7 @@ export const stylesPost = StyleSheet.create({
     width: 150,
     height: 200,
     resizeMode: 'cover',
+    marginHorizontal: 8,
   },
 
   img: {
@@ -272,6 +279,7 @@ export const stylesPost = StyleSheet.create({
   textContent: {
     width: '100%',
     marginLeft: 10,
+    paddingBottom: 10,
   },
   text: {
     // paddingLeft: 10,
@@ -289,6 +297,8 @@ export const stylesPost = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 8,
+    // borderBottomColor: '#eee',
+    // borderBottomWidth: 0.2,
   },
 
   detail: {
@@ -333,6 +343,7 @@ export const stylesPost = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     backgroundColor: COLORS.primary,
+    borderRadius: 10,
   },
   imgBookDetail: {
     width: '100%',

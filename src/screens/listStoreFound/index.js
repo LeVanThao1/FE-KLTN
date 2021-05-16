@@ -15,21 +15,28 @@ const ListStoreFound = ({navigation}) => {
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 15000,
+      timeout: 20000,
+      maximumAge: 1000,
     })
       .then((location) => {
         queryData(GET_STORES_LOCATION, {
           lng: location.longitude,
           lat: location.latitude,
-        }).then(({data}) => {
-          setStores(data.locationsStores);
-          setLoading(false);
-        });
+        })
+          .then(({data}) => {
+            setStores(data.locationsStores);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+          });
       })
       .catch((error) => {
         const {code, message} = error;
         console.warn(code, message);
-        Toast.show(Notification(NOTIFI.error, message));
+        setLoading(false);
+        // Toast.show(Notification(NOTIFI.error, message));
       });
   }, []);
   const renderStore = () => (
@@ -38,7 +45,7 @@ const ListStoreFound = ({navigation}) => {
         <View style={{width: '100%', margin: 'auto', marginTop: 20}}>
           <Text style={{textAlign: 'center'}}>Đang quét</Text>
         </View>
-      ) : stores.length > 0 ? (
+      ) : stores?.length > 0 ? (
         stores?.map((store, i) => (
           <StoreCart key={i} data={store} />
           // delete={onPress(book.id)}

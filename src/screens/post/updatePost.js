@@ -14,20 +14,21 @@ import {
 import Textarea from 'react-native-textarea';
 import Toast from 'react-native-toast-message';
 import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {ReactNativeFile} from 'extract-files';
 import Images from '../../assets/images/images';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 import {UPDATE_POST} from '../../query/post';
 import {Notification} from '../../utils/notifications';
 import {stylesPost} from './stylePost';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {mutateData} from '../../common';
+import {ReactNativeFile} from 'extract-files';
 
 const UpdatePost = ({route, navigation}) => {
   return useObserver(() => {
     const {
       stores: {user, category},
     } = useContext(MobXProviderContext);
-    const {posts, postCurrent} = user;
+    const {posts, postCurrent, setPostCurrent} = user;
     const {postId} = route.params;
     const [title, setTitle] = useState({
       value: postCurrent.title ? postCurrent.title : '',
@@ -65,32 +66,30 @@ const UpdatePost = ({route, navigation}) => {
         : '0',
       error: '',
     });
+    const [loading, setLoading] = useState(false);
+    const [images, setImages] = useState(
+      postCurrent.images ? postCurrent.images : [],
+    );
+    const [imagesUpload, setImagesUpload] = useState(
+      postCurrent.images ? postCurrent.images : [],
+    );
 
-    const [image, setImage] = useState({
-      value: postCurrent.images ? postCurrent.images : '',
-      error: '',
-    });
-
-    console.log('imgs', image.value);
     const onChange = (value) => {
       setCategori({
         value: value,
       });
     };
 
-    const [imagesUpload, setImageUpload] = useState([]);
-    const [images, setImages] = useState([]);
-    const [upload] = useMutation(UPLOAD_MULTI_FILE, {
-      onCompleted: (data) => {
-        const tamp = data.uploadMultiFile.map((dt) => dt.url);
-        setImageUpload([...imagesUpload, ...tamp]);
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log('manage', err);
-      },
-    });
-
+    const onAlert = () => {
+      Alert.alert('Đồng ý cập nhật', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => onUpdate()},
+        {text: 'Hủy'},
+      ]);
+    };
+    const removeImages = (index) => {
+      setImages(images.filter((ig, i) => index !== i));
+      setImagesUpload(imagesUpload.filter((ig, i) => index !== i));
+    };
     const handleChoosePhoto = () => {
       ImagePicker.openPicker({
         multiple: true,
@@ -114,52 +113,19 @@ const UpdatePost = ({route, navigation}) => {
                 type: r.mime,
               }),
           );
-          upload({
-            variables: {
-              files,
-            },
-          });
+          mutateData(UPLOAD_MULTI_FILE, {
+            files,
+          })
+            .then(({data}) => {
+              const tamp = data.uploadMultiFile.map((dt) => dt.url);
+              setImagesUpload((cur) => [...cur, ...tamp]);
+            })
+            .catch((err) => {
+              // Toast.show(Notification(NOTIFI.error, err.message));
+              console.log('update book', err);
+            });
         })
         .catch((err) => console.log(err));
-    };
-
-    const removeImages = (index) => {
-      setImages(images.filter((ig, i) => index !== i));
-      setImageUpload(imagesUpload.filter((ig, i) => index !== i));
-    };
-
-    const [updatePost, {called, loading, data, error}] = useMutation(
-      UPDATE_POST,
-      {
-        onCompleted: async (data) => {
-          const newData = [...posts].filter((p) => p.id + '' !== postId + '');
-
-          let dataPost = {
-            title: title.value,
-            description: description.value,
-            bookWanna: [bookWanna.value],
-            images: ['https://picsum.photos/200/300'],
-            publisher: publisher.value,
-            numberOfReprint: Number(numberOfReprint.value),
-            // category: categori.value,
-            year: year.value,
-            price: Number(price.value),
-          };
-          user.setPosts([dataPost, ...newData]);
-          Toast.show(Notification(NOTIFI.error, 'Cập nhật thành công'));
-        },
-        onError: (err) => {
-          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
-          console.log(err);
-        },
-      },
-    );
-
-    const onAlert = () => {
-      Alert.alert('Đồng ý cập nhật', 'Lựa chọn', [
-        {text: 'Đồng ý', onPress: () => onUpdate()},
-        {text: 'Hủy'},
-      ]);
     };
 
     const onUpdate = () => {
@@ -167,27 +133,110 @@ const UpdatePost = ({route, navigation}) => {
         title: title.value,
         description: description.value,
         bookWanna: [bookWanna.value],
-        images: ['https://picsum.photos/200/300'],
+        images: imagesUpload,
         publisher: publisher.value,
         numberOfReprint: Number(numberOfReprint.value),
         // category: categori.value,
         year: year.value,
         price: Number(price.value),
       };
-      updatePost({
-        variables: {
-          dataPost,
-          id: postId,
-        },
-      });
+      mutateData(UPDATE_POST, {
+        dataPost,
+        id: postId,
+      })
+        .then(({data}) => {
+          const findIndex = [...posts].findIndex(
+            (dt) => dt.id + '' == postId + '',
+          );
+          console.log(findIndex);
+          user.setPosts([
+            ...[...posts].slice(0, findIndex),
+            {...posts[findIndex], ...dataPost},
+            ...[...posts].slice(findIndex + 1),
+          ]);
+          setPostCurrent({...posts[findIndex], ...dataPost});
+          Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
+          navigation.goBack();
+        })
+        .catch((err) => {
+          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
+          console.log(err);
+        });
     };
+
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
           <ScrollView showsVerticalScrollIndicator>
             <View style={stylesPost.textImg}>
               <Text>Hình ảnh</Text>
-              <View style={stylesPost.imgBookDetail}>
+
+              <ScrollView
+                style={{flexDirection: 'row', marginVertical: 10}}
+                horizontal={true}>
+                {images.length > 0 &&
+                  images.map((r, i) => (
+                    <View key={i}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 100,
+                          marginRight: 10,
+                          position: 'relative',
+                        }}
+                        source={{uri: r}}
+                      />
+                      <TouchableOpacity
+                        onPress={() => removeImages(i)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 10,
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="closecircleo"
+                          style={{
+                            fontSize: 22,
+                            color: 'red',
+                          }}></Icon>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                {images.length < 10 && (
+                  <TouchableOpacity
+                    onPress={handleChoosePhoto}
+                    style={{
+                      // paddingHorizontal: 10,
+                      // paddingVertical: 5,
+                      margin: 0,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 100,
+                      height: 100,
+                      backgroundColor: '#fff',
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 1,
+                      },
+                      shadowOpacity: 0.18,
+                      shadowRadius: 1.0,
+
+                      elevation: 1,
+                    }}>
+                    <Icon
+                      type="FontAwesome5"
+                      name="plus"
+                      style={{
+                        fontSize: 50,
+                        color: COLORS.primary,
+                      }}></Icon>
+                  </TouchableOpacity>
+                )}
+              </ScrollView>
+
+              {/* <View style={stylesPost.imgBookDetail}>
                 {postCurrent.images?.map((img, i) => (
                   <Image
                     key={i}
@@ -195,7 +244,7 @@ const UpdatePost = ({route, navigation}) => {
                     style={stylesPost.imgBook}
                   />
                 ))}
-              </View>
+              </View> */}
             </View>
             {/*  */}
             <View style={stylesPost.vertical}>
@@ -329,10 +378,10 @@ const UpdatePost = ({route, navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
+                <Text>Năm phát hành</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm xuất bản"
+                  placeholder="Nhập năm phát hành"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -425,7 +474,13 @@ const UpdatePost = ({route, navigation}) => {
                 underlineColorAndroid={'transparent'}
                 placeholder="Nhập mô tả"
               />
-              <TouchableOpacity style={{width: '100%'}} onPress={onAlert}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: COLORS.primary,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                }}
+                onPress={onAlert}>
                 <Text style={stylesPost.btn}>Cập nhật</Text>
               </TouchableOpacity>
             </View>
