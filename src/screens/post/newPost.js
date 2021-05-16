@@ -240,26 +240,6 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
-              {/* <View>
-                <Text>Tác giả </Text>
-                <TextInput
-                  style={stylesPost.txtInput}
-                  placeholder="Nhập tên tác giả"
-                  value={name.value}
-                  onFocus={() => {
-                    setAuthor({
-                      ...author,
-                      error: '',
-                    });
-                  }}
-                  onChangeText={(value) => {
-                    setAuthor({
-                      ...author,
-                      value: value,
-                    });
-                  }}
-                />
-              </View> */}
               <View style={stylesPost.vertical}>
                 <Text>Danh mục sách</Text>
                 <Form>

@@ -140,19 +140,14 @@ const UpdateBook = ({navigation, route}) => {
     return (
       <ScrollView>
         <View style={styles.container_product}>
-          {/*  */}
           <Text style={styles.header}>Thông tin sản phẩm</Text>
           <View style={styles.title}>
-            {/* name */}
-            <View style={styles.name}>
-              <Text>Mã sản phẩm</Text>
-              <Text>{bookId}</Text>
-            </View>
             <View style={styles.name}>
               <Text>Tên sản phẩm</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Nhập tên sản phẩm"
+                autoFocus={true}
                 defaultValue={name.value}
                 value={name.value}
                 onFocus={() => {
@@ -213,7 +208,6 @@ const UpdateBook = ({navigation, route}) => {
                 }}
               />
             </View>
-            {/* year */}
             <View style={styles.name}>
               <Text>Năm phát hành</Text>
               <TextInput
@@ -278,14 +272,6 @@ const UpdateBook = ({navigation, route}) => {
             </View>
             {/* Image */}
             <View style={styles.container}></View>
-
-            {/* <Button title="Choose Photo" onPress={handleChoosePhoto} />
-            <ImageView
-              images={images.map((im) => ({uri: im}))}
-              imageIndex={0}
-              visible={false}
-              // onRequestClose={() => setIsVisible(false)}
-            /> */}
             <View style={styles.des}>
               <Text>Mô tả sản phẩm</Text>
               <Textarea

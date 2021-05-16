@@ -11,7 +11,6 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing';
 import {DELETE_POST} from '../../query/post';
 import {GET_COMMENT_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
@@ -27,6 +26,9 @@ import Avatar from './posts/avatar';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
+
+import ImageView from 'react-native-image-viewing';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
 
 const Container = styled.View`
   flex: 1;
@@ -87,6 +89,8 @@ const PostFooter = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  border-color: #e6e6e6;
+  border-top-width: 1px;
 `;
 const TextCount = styled.Text`
   font-size: 11px;
@@ -122,7 +126,7 @@ const Overlay = styled.View`
 
 const ViewImg = styled.View`
   width: 100%;
-  height: 100%;
+  height: 210px;
 `;
 //
 const User = styled.Image`
@@ -138,10 +142,12 @@ const PostOfFeed = ({route, post, info, type}) => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
-    const [visible, setIsVisible] = useState(false);
+    console.log('post feed', post);
     const navigation = useNavigation();
     const {posts} = user;
     const {postComment, setPostComment} = comment;
+    const [visible, setIsVisible] = useState(false);
+    const [index, setIndex] = useState(0);
 
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
@@ -172,8 +178,22 @@ const PostOfFeed = ({route, post, info, type}) => {
       });
     };
     useEffect(() => {}, [post]);
+    console.log('hahaha');
+    console.log('test img view', post.images);
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
+        <ImageView
+          images={post.images.map((t) => ({uri: t}))}
+          imageIndex={index}
+          visible={visible}
+          onRequestClose={() => setIsVisible(false)}
+          // FooterComponent={({imageIndex}) => (
+          //   <ImageFooter
+          //     imageIndex={imageIndex}
+          //     imagesCount={post.images.length}
+          //   />
+          // )}
+        />
         <Container>
           <PostHeader>
             <TouchableOpacity
@@ -205,45 +225,97 @@ const PostOfFeed = ({route, post, info, type}) => {
             <View
               style={{
                 paddingVertical: 8,
-                borderBottomColor: '#000000',
-                borderBottomWidth: 0.5,
+                // borderBottomColor: '#000000',
+                // borderBottomWidth: 0.5,
               }}>
               <PostTitle>{post.title}</PostTitle>
               <PostDescription>{post.description}</PostDescription>
+            </View>
+          </TouchableOpacity>
 
-              {post.images.length < 3 ? (
-                <PhotoGroup>
-                  {post.images.map((img, i) => (
+          <View>
+            <View>
+              <ImageView
+                images={post.images.map((t) => ({uri: t}))}
+                imageIndex={index}
+                visible={visible}
+                onRequestClose={() => setIsVisible(false)}
+                FooterComponent={({imageIndex}) => (
+                  <ImageFooter
+                    imageIndex={imageIndex}
+                    imagesCount={post.images.length}
+                  />
+                )}
+              />
+            </View>
+            {post.images.length < 3 ? (
+              <PhotoGroup>
+                {post.images.map((img, i) => (
+                  <PhotoContainer>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIndex(i);
+                        setIsVisible(true);
+                      }}>
+                      {/* <PostPhoto source={{uri: img}} /> */}
+                      <PostPhoto
+                        // style={{opacity: !loading ? 1 : 0.5}}
+                        source={{
+                          uri: img,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </PhotoContainer>
+                  // cai cong 3 ak ha u h ma lam cai + do la sao bam, neu h bam la no hien thi 1 list luon
+                  // cai onPress ảnh thêm vào chỗ nào cùng dc à thấy chưa, vaixz lz roiof ko click dc anhr dods
+                ))}
+              </PhotoGroup>
+            ) : (
+              //
+              <PhotoGroup>
+                {post.images.slice(0, 1).map((img, i) => (
+                  <>
                     <PhotoContainer>
-                      <PostPhoto source={{uri: img}} />
+                      {/* <PostPhoto source={{uri: img}} /> */}
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <PostPhoto key={i} source={{uri: img}} />
+                      </TouchableOpacity>
                     </PhotoContainer>
-                  ))}
-                </PhotoGroup>
-              ) : (
-                <PhotoGroup>
-                  {post.images.slice(0, 1).map((img, i) => (
-                    <PhotoContainer>
-                      <PostPhoto source={{uri: img}} />
-                    </PhotoContainer>
-                  ))}
-                  {
                     <PhotoContainer>
                       <OverlayGroup>
-                        <PostPhoto source={{uri: post.images[2]}} />
-                        <Overlay>
-                          <Text style={{color: '#ffffff', fontSize: 22}}>
-                            + {post.images.length - 1}
-                          </Text>
-                        </Overlay>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setIndex(1);
+                            setIsVisible(true);
+                          }}>
+                          <PostPhoto source={{uri: post.images[1]}} />
+                          <Overlay>
+                            <Text style={{color: '#ffffff', fontSize: 22}}>
+                              + {post.images.length - 1}
+                            </Text>
+                          </Overlay>
+                        </TouchableOpacity>
                       </OverlayGroup>
                     </PhotoContainer>
-                  }
-                </PhotoGroup>
-              )}
-            </View>
+                  </>
+                ))}
+              </PhotoGroup>
+            )}
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              user.setPostCurrent(post);
+              setPostComment(post.comment);
+              navigation.navigate('PostDetail', {postID: post.id});
+            }}>
             <PostFooter>
               <TextCount>{post.comment.length} Bình luận</TextCount>
-              <Button onPress={() => console.log('onPresssssssssssssssss')}>
+              {/* <Button onPress={() => console.log('onPresssssssssssssssss')}> */}
+              <View style={{flexDirection: 'row'}}>
                 <Icon
                   type="MaterialCommunityIcons"
                   name="comment-outline"
@@ -251,7 +323,8 @@ const PostOfFeed = ({route, post, info, type}) => {
                   style={{color: '#333333', fontSize: 20, marginRight: 8}}
                 />
                 <Text>Bình luận</Text>
-              </Button>
+              </View>
+              {/* </Button> */}
             </PostFooter>
           </TouchableOpacity>
         </Container>

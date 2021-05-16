@@ -25,7 +25,6 @@ const Post = ({route}) => {
     useEffect(() => {
       queryData(GET_POSTS_USER, {userId})
         .then(({data}) => {
-          console.log('data', data);
           setPosts(data.posts);
           setLoading(false);
           setRefreshing(false);

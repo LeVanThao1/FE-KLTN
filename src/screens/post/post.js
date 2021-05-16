@@ -11,7 +11,6 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing';
 import {DELETE_POST} from '../../query/post';
 import {GET_COMMENT_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
@@ -27,6 +26,9 @@ import Avatar from './posts/avatar';
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
+
+import ImageView from 'react-native-image-viewing';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
 
 const Container = styled.View`
   flex: 1;
@@ -138,11 +140,11 @@ const PostOne = ({route, post, type}) => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
-    console.log('this is post one');
-    const [visible, setIsVisible] = useState(false);
     const navigation = useNavigation();
     const {info, posts} = user;
     const {postComment, setPostComment} = comment;
+    const [visible, setIsVisible] = useState(false);
+    const [index, setIndex] = useState(0);
     const postId = post?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
@@ -172,6 +174,7 @@ const PostOne = ({route, post, type}) => {
       });
     };
     useEffect(() => {}, [post]);
+    console.log('test img view', post.images);
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <Container>
@@ -228,34 +231,73 @@ const PostOne = ({route, post, type}) => {
               }}>
               <PostTitle>{post.title}</PostTitle>
               <PostDescription>{post.description}</PostDescription>
-
+              <ImageView
+                images={post.images.map((t) => ({uri: t}))}
+                imageIndex={index}
+                visible={visible}
+                onRequestClose={() => setIsVisible(false)}
+                FooterComponent={({imageIndex}) => (
+                  <ImageFooter
+                    imageIndex={imageIndex}
+                    imagesCount={post.images.length}
+                  />
+                )}
+              />
               {post.images.length < 3 ? (
                 <PhotoGroup>
                   {post.images.map((img, i) => (
                     <PhotoContainer>
-                      <PostPhoto source={{uri: img}} />
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        {/* <PostPhoto source={{uri: img}} /> */}
+                        <PostPhoto
+                          // style={{opacity: !loading ? 1 : 0.5}}
+                          source={{
+                            uri: img,
+                          }}
+                        />
+                      </TouchableOpacity>
                     </PhotoContainer>
+                    // cai cong 3 ak ha u h ma lam cai + do la sao bam, neu h bam la no hien thi 1 list luon
+                    // cai onPress ảnh thêm vào chỗ nào cùng dc à thấy chưa, vaixz lz roiof ko click dc anhr dods
                   ))}
                 </PhotoGroup>
               ) : (
+                //
                 <PhotoGroup>
                   {post.images.slice(0, 1).map((img, i) => (
-                    <PhotoContainer>
-                      <PostPhoto source={{uri: img}} />
-                    </PhotoContainer>
+                    <>
+                      <PhotoContainer>
+                        {/* <PostPhoto source={{uri: img}} /> */}
+                        <TouchableOpacity
+                          onPress={() => {
+                            setIndex(i);
+                            setIsVisible(true);
+                          }}>
+                          <PostPhoto key={i} source={{uri: img}} />
+                        </TouchableOpacity>
+                      </PhotoContainer>
+                      <PhotoContainer>
+                        <OverlayGroup>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setIndex(1);
+                              setIsVisible(true);
+                            }}>
+                            <PostPhoto source={{uri: post.images[1]}} />
+                            <Overlay>
+                              <Text style={{color: '#ffffff', fontSize: 22}}>
+                                + {post.images.length - 1}
+                              </Text>
+                            </Overlay>
+                          </TouchableOpacity>
+                        </OverlayGroup>
+                      </PhotoContainer>
+                    </>
                   ))}
-                  {
-                    <PhotoContainer>
-                      <OverlayGroup>
-                        <PostPhoto source={{uri: post.images[1]}} />
-                        <Overlay>
-                          <Text style={{color: '#ffffff', fontSize: 22}}>
-                            + {post.images.length - 1}
-                          </Text>
-                        </Overlay>
-                      </OverlayGroup>
-                    </PhotoContainer>
-                  }
                 </PhotoGroup>
               )}
             </View>
