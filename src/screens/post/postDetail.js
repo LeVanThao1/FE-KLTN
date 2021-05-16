@@ -21,7 +21,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-import ImageView from 'react-native-image-viewing';
 import Images from '../../assets/images/images';
 import {GET_POST, UPDATE_POST} from '../../query/post';
 import {CREATE_COMMENT_POST} from '../../query/comment';
@@ -33,6 +32,9 @@ import {COLORS, NOTIFI} from '../../constants';
 import formatMoney from '../../utils/format';
 import {queryData} from '../../common';
 
+import ImageView from 'react-native-image-viewing';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
+
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
@@ -42,6 +44,8 @@ const PostDetail = ({navigation, route}) => {
     const {postComment, setPostComment} = comment;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
+    const [visible, setIsVisible] = useState(false);
+    const [index, setIndex] = useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
 
     const postID = route?.params?.postID;
@@ -104,17 +108,35 @@ const PostDetail = ({navigation, route}) => {
                   Hình ảnh
                 </Text>
                 {/* <View style={{wi}}> */}
+                <ImageView
+                  images={postCurrent.images.map((t) => ({uri: t}))}
+                  imageIndex={index}
+                  visible={visible}
+                  onRequestClose={() => setIsVisible(false)}
+                  FooterComponent={({imageIndex}) => (
+                    <ImageFooter
+                      imageIndex={imageIndex}
+                      imagesCount={postCurrent.images.length}
+                    />
+                  )}
+                />
                 {postCurrent?.images.length > 3 ? (
                   <View style={stylesPost.imgBookDetail}>
                     <ScrollView horizontal={true}>
                       {/* <Text>{postCurrent.images[0]}</Text> */}
                       {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
                       {postCurrent?.images.map((img, i) => (
-                        <Image
-                          key={i}
-                          source={{uri: img}}
-                          style={stylesPost.imgBook}
-                        />
+                        <TouchableOpacity
+                          onPress={() => {
+                            setIndex(i);
+                            setIsVisible(true);
+                          }}>
+                          <Image
+                            key={i}
+                            source={{uri: img}}
+                            style={stylesPost.imgBook}
+                          />
+                        </TouchableOpacity>
                       ))}
                     </ScrollView>
                   </View>
@@ -126,11 +148,17 @@ const PostDetail = ({navigation, route}) => {
                       justifyContent: 'center',
                     }}>
                     {postCurrent?.images.map((img, i) => (
-                      <Image
-                        key={i}
-                        source={{uri: img}}
-                        style={stylesPost.imgBook}
-                      />
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <Image
+                          key={i}
+                          source={{uri: img}}
+                          style={stylesPost.imgBook}
+                        />
+                      </TouchableOpacity>
                     ))}
                   </View>
                 )}
@@ -148,57 +176,61 @@ const PostDetail = ({navigation, route}) => {
             </ScrollView>
             <View style={stylesPost.content}>
               <View style={stylesPost.text}>
-                <View style={stylesPost.titleCenter}>
-                  <Text style={stylesPost.txtBold}>Tiêu đề </Text>
-                  <Text style={stylesPost.titlePost}>{postCurrent?.title}</Text>
-                </View>
-                <View style={stylesPost.titleCenter}>
-                  <Text style={stylesPost.txtBold}>Thông tin sách</Text>
-                </View>
-                <View style={stylesPost.horizontal}>
-                  <Text>Nhà xuất bản </Text>
-                  <Text style={stylesPost.detail}>
-                    {postCurrent?.publisher}
-                  </Text>
-                </View>
-
-                <View style={stylesPost.horizontal}>
-                  <Text>Số lần xuất bản </Text>
-                  <Text style={stylesPost.detail}>
-                    {postCurrent?.numberOfReprint}
-                  </Text>
-                </View>
-                <View style={stylesPost.horizontal}>
-                  <Text>Năm xuất bản </Text>
-                  <Text style={stylesPost.detail}>{postCurrent?.year}</Text>
-                </View>
-                <View style={stylesPost.horizontal}>
-                  <Text>Giá sách</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      color: '#f00',
-                    }}>
-                    <Text style={stylesPost.detail}>
-                      {formatMoney(postCurrent?.price)}
-                    </Text>
-                    <Text style={{paddingLeft: 5, color: COLORS.primary}}>
-                      VND
+                <View style={stylesPost.main}>
+                  <View style={stylesPost.titleCenter}>
+                    <Text style={stylesPost.txtBold}>Tiêu đề </Text>
+                    <Text style={stylesPost.titlePost}>
+                      {postCurrent?.title}
                     </Text>
                   </View>
-                </View>
-                <View style={stylesPost.elment}>
-                  <Text>Sách muốn đổi </Text>
-                  <Text style={stylesPost.detail}>
-                    {postCurrent?.bookWanna}
-                  </Text>
-                </View>
+                  <View style={stylesPost.titleCenter}>
+                    <Text style={stylesPost.txtBold}>Thông tin sách</Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Nhà xuất bản </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.publisher}
+                    </Text>
+                  </View>
 
-                <Text style={stylesPost.textContent}>Mô tả</Text>
-                <View style={stylesPost.textDes}>
-                  <Text>{postCurrent?.description}</Text>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Số lần xuất bản </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.numberOfReprint}
+                    </Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Năm xuất bản </Text>
+                    <Text style={stylesPost.detail}>{postCurrent?.year}</Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Giá sách</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        color: '#f00',
+                      }}>
+                      <Text style={stylesPost.detail}>
+                        {formatMoney(postCurrent?.price)}
+                      </Text>
+                      <Text style={{paddingLeft: 5, color: COLORS.primary}}>
+                        VND
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={stylesPost.elment}>
+                    <Text>Sách muốn đổi </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.bookWanna}
+                    </Text>
+                  </View>
+
+                  <Text style={stylesPost.textContent}>Mô tả</Text>
+                  <View style={stylesPost.textDes}>
+                    <Text>{postCurrent?.description}</Text>
+                  </View>
                 </View>
                 {postCurrent.comment?.map((cmt, i) => (
                   <Comment key={i} cmt={cmt} />

@@ -1,33 +1,40 @@
 import React, {PureComponent, PropTypes} from 'react';
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import moment from 'moment';
 import {stylesPost} from './stylePost';
 import {CREATE_COMMENT_POST} from '../../query/comment';
 import {Icon} from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const Comment = ({cmt}) => {
-  const navigation = useNavigation()
-  console.log('cmt', cmt)
+  const navigation = useNavigation();
   return (
     <View>
-      <TouchableOpacity onPress={() => 
-        navigation.navigate('UserInfo', {
-          userId: cmt.author.id ? cmt.author.id : '',
-          userAvatar: cmt.author.avatar ? cmt.author.avatar : [],
-          userName: cmt.author.name ? cmt.author.name : '',
-          userPhone: cmt.author.phone ? cmt.author.phone : '',
-          userMail: cmt.author.email ? cmt.author.email : '',
-          userAddress: cmt.author.address ? cmt.author.address : '',
-        })
-      }>
-      <View style={stylesPost.infocmt}>
-        <Image source={{uri: cmt.author.avatar}} style={stylesPost.avtcmt} />
-        <View style={stylesPost.userCmt}>
-          <Text style={stylesPost.name}>{cmt.author.name}</Text>
-          <Text style={stylesPost.time}>{cmt.content}</Text>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('UserInfo', {
+            userId: cmt.author.id ? cmt.author.id : '',
+            userAvatar: cmt.author.avatar ? cmt.author.avatar : [],
+            userName: cmt.author.name ? cmt.author.name : '',
+            userPhone: cmt.author.phone ? cmt.author.phone : '',
+            userMail: cmt.author.email ? cmt.author.email : '',
+            userAddress: cmt.author.address ? cmt.author.address : '',
+          })
+        }>
+        <View style={stylesPost.infocmt}>
+          <Image source={{uri: cmt.author.avatar}} style={stylesPost.avtcmt} />
+          <View style={stylesPost.userCmt}>
+            <Text style={stylesPost.name}>{cmt.author.name}</Text>
+            <Text style={stylesPost.time}>{cmt.content}</Text>
+          </View>
         </View>
-      </View>
       </TouchableOpacity>
     </View>
   );

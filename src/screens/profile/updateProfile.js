@@ -199,39 +199,46 @@ const UpdateProfile = ({navigation}) => {
           <Hr />
           <View style={styles.form}>
             <View style={styles.row}>
-              <Text style={styles.label}>Tên</Text>
+              <Icon
+                style={styles.icon}
+                name="rename-box"
+                type="MaterialCommunityIcons"
+              />
               <TextInput
                 style={styles.inputText}
-                placeholder="tên"
+                placeholder="Tên"
+                // autoFocus={true}
                 value={userName}
                 onChangeText={(value) => setUserName(value)}
               />
             </View>
-            <Hr />
             <View style={styles.row}>
-              <Text style={styles.label}>Số điện thoại</Text>
+              <Icon name="phone-alt" type="FontAwesome5" style={styles.icon} />
               <TextInput
                 style={styles.inputText}
                 placeholder="Số điện thoại"
                 value={userPhone}
-                editable={!info.phone}
+                // editable={!info.phone}
                 onChangeText={(value) => setUserPhone(value)}
                 keyboardType="numeric"
               />
             </View>
             <View style={styles.row}>
-              <Text style={styles.label}>Email</Text>
+              <Icon name="mail" type="Entypo" style={styles.icon} />
               <TextInput
                 style={styles.inputText}
                 placeholder="Email"
                 value={userEmail}
                 onChangeText={(value) => setUserEmail(value)}
-                editable={!info.email}
+                // editable={!info.email}
               />
             </View>
-            <Hr />
             <View style={styles.row}>
-              <Text style={styles.label}>Địa chỉ</Text>
+              <Icon
+                name="map-marker-alt"
+                type="FontAwesome5"
+                style={styles.icon}
+              />
               <TextInput
                 style={styles.inputText}
                 placeholder="địa chỉ"
@@ -248,6 +255,7 @@ const UpdateProfile = ({navigation}) => {
                     ...styles.label,
                     width: '100%',
                     color: COLORS.primary,
+                    fontWeight: 'bold',
                   }}>
                   Thay đổi mật khẩu
                 </Text>
@@ -291,6 +299,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  icon: {
+    fontSize: 20,
+    paddingHorizontal: 20,
+  },
   header: {
     width: '100%',
     flexDirection: 'row',
@@ -319,6 +331,7 @@ const styles = StyleSheet.create({
   image: {width: 128, height: 128, borderRadius: 64},
   form: {
     width: '100%',
+    paddingHorizontal: 20,
   },
   row: {
     width: '100%',
@@ -328,6 +341,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
     backgroundColor: '#ffffff',
+    borderRadius: 6,
   },
   label: {
     width: 150,
@@ -342,8 +356,9 @@ const styles = StyleSheet.create({
     color: '#000000',
     letterSpacing: 1,
     padding: 10,
-    borderLeftColor: '#696969',
-    borderLeftWidth: 0.2,
+    paddingLeft: 20,
+    // borderLeftColor: '#696969',
+    // borderLeftWidth: 0.2,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -356,7 +371,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     letterSpacing: 0.75,
   },
 });

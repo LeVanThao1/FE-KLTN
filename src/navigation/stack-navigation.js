@@ -37,6 +37,7 @@ import ManageOrder from '../screens/manage-order';
 import OrderDetail from '../screens/order-detail';
 import {useNotification} from '../hooks';
 import BookDetail from '../screens/myStore/bookDetail';
+import UpdateBook from '../screens/myStore/book/updateBook';
 import PostDetail from '../screens/post/postDetail';
 import PostOne from '../screens/post/post';
 import ViewSearch from '../screens/viewSearch';
@@ -297,6 +298,14 @@ const routes = [
     show: true,
     component: BookDetail,
   },
+  {
+    name: 'UpdateBook',
+    title: 'Cập nhật sách',
+    header: false,
+    show: true,
+    component: UpdateBook,
+  },
+
   {
     name: 'PostDetail',
     title: 'Chi tiết bài viết',

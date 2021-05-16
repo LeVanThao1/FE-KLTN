@@ -1,5 +1,5 @@
 import {Text, View, Button, Icon} from 'native-base';
-import React, {memo, useContext} from 'react';
+import React, {memo, useContext, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TouchableOpacity, Image, Alert} from 'react-native';
@@ -13,7 +13,6 @@ import {NOTIFI} from '../../../constants';
 import {Notification} from '../../../utils/notifications';
 import {COLORS} from '../../../constants/themes';
 import formatMoney from '../../../utils/format';
-
 
 const Book = ({book}) => {
   return useObserver(() => {
@@ -52,6 +51,9 @@ const Book = ({book}) => {
         },
       });
     };
+
+    const [search, setSearch] = useState(undefined);
+
     return (
       <TouchableOpacity
         // key={id}
@@ -83,7 +85,10 @@ const Book = ({book}) => {
               }}
             />
             ))}             */}
-            <Image style={{width: 80, height: 100}} source={{uri: book.images[0]}}/>
+            <Image
+              style={{width: 80, height: 100}}
+              source={{uri: book.images[0]}}
+            />
           </View>
           <View
             style={{
@@ -92,31 +97,56 @@ const Book = ({book}) => {
               paddingHorizontal: 18,
             }}>
             <Text
-              style={{fontSize: 20, fontWeight: 'bold', color: '#000000'}}
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: COLORS.secondary,
+              }}
               numberOfLines={1}>
               {book.name}
             </Text>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                color: COLORS.secondary,
+              }}>
               <Text style={{fontSize: 14, textAlign: 'left'}}>
                 Số lượng x{book.amount}
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'left'}}>
-                Giá x{formatMoney(book.price)} VNĐ
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: 'left',
+                  color: COLORS.secondary,
+                }}>
+                Giá {formatMoney(book.price)} VNĐ
               </Text>
             </View>
-            <Text style={{fontSize: 14, textAlign: 'left'}}>
+            <Text
+              style={{
+                fontSize: 12,
+                textAlign: 'left',
+                color: COLORS.secondary,
+              }}>
               Tác giả: {book.author}
             </Text>
 
-            <Text style={{fontSize: 14, textAlign: 'left'}}>NXB:Kim Đồng</Text>
+            <Text
+              style={{
+                fontSize: 12,
+                textAlign: 'left',
+                color: COLORS.secondary,
+              }}>
+              NXB:Kim Đồng
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
               <Text
-                style={{fontSize: 14, color: '#000000', width: '80%'}}
+                style={{fontSize: 12, color: '#000000', width: '80%'}}
                 numberOfLines={1}>
                 Mô tả: {book.description}
               </Text>
@@ -127,10 +157,7 @@ const Book = ({book}) => {
                   name="delete"
                   type="MaterialIcons"
                   style={{
-                    width: 15,
-                    height: 15,
-                    textAlign: 'center',
-                    padding: 0,
+                    fontSize: 16,
                   }}
                 />
               </Button>

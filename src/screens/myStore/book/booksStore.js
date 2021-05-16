@@ -30,7 +30,7 @@ const BooksStore = ({navigation}) => {
     const [selectedStatus, setSelectedStatus] = useState('ALL');
 
     const {bookStore, setBookStore} = shop;
-    const [listBook, setListBook] = useState([]);
+    const [listBook, setListBook] = useState(undefined);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
       queryData(GET_BOOKS_STORE, {store: shop.info.id})
@@ -69,15 +69,18 @@ const BooksStore = ({navigation}) => {
           })),
         );
       }
-      setLoading(false);
+      // setLoading(false);
     }, [bookStore]);
 
-    const [categori, setCategori] = useState([]);
+    const [categori, setCategori] = useState(undefined);
 
     useEffect(() => {
-      setCategori(listBook);
-      setLoading(false);
+      if (listBook !== undefined) setCategori(listBook);
     }, [listBook]);
+
+    useEffect(() => {
+      if (categori !== undefined) setLoading(false);
+    }, [categori]);
 
     const onPressTab = (name, status) => {
       setSelectedStatus(status);
@@ -87,21 +90,21 @@ const BooksStore = ({navigation}) => {
           : listBook.filter((b) => b.categoryName === name),
       );
     };
-    //
-    useEffect(() => {}, [loading]);
     const renderBook = () => (
       <>
-        {loading? (         
-          <Spinner color={COLORS.primary} />
-        ) : categori.length > 0 ? (
-          categori?.map((book, i) => (
-            <Book key={i} book={book} />
-            // delete={onPress(book.id)}
-          ))
+        {!loading ? (
+          categori?.length > 0 ? (
+            categori?.map((book, i) => (
+              <Book key={i} book={book} />
+              // delete={onPress(book.id)}
+            ))
+          ) : (
+            <View style={{padding: 20}}>
+              <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>
+            </View>
+          )
         ) : (
-          <View style={{padding: 20}}>
-            <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>
-          </View>
+          <Spinner color={COLORS.primary} />
         )}
       </>
     );
@@ -117,12 +120,24 @@ const BooksStore = ({navigation}) => {
       );
     }
 
+    const [search, setSearch] = useState('');
+
+    const onChangeSearch = (value) => {
+      console.log('target');
+    };
+    console.log(listBook);
+
     return (
       <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.searchGroup}>
             <Icon name="search" style={styles.searchIcon} />
-            <TextInput style={styles.searchInput} placeholder="Nhập tên sách" />
+            <TextInput
+              style={styles.searchInput}
+              value={search}
+              placeholder="Nhập tên sách"
+              onChange={(value) => onChangeSearch(value)}
+            />
           </View>
         </View>
         <View style={{height: 46}}>
@@ -197,7 +212,6 @@ const styles = StyleSheet.create({
   orderContainer: {
     flex: 1,
   },
-
 });
 
 export default memo(BooksStore);

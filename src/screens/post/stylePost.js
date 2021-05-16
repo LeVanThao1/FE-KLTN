@@ -239,6 +239,7 @@ export const stylesPost = StyleSheet.create({
 
   txtBold: {
     fontWeight: 'bold',
+    paddingVertical: 10,
   },
 
   textImg: {
@@ -258,6 +259,11 @@ export const stylesPost = StyleSheet.create({
     // flexDirection: 'row',
     // justifyContent: 'space-between',
   },
+  main: {
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+  },
   elment: {
     paddingVertical: 8,
     // borderBottomWidth: 0.5,
@@ -269,6 +275,8 @@ export const stylesPost = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
+    // borderBottomColor: '#333',
+    // borderBottomWidth: 0.5,
   },
 
   detail: {

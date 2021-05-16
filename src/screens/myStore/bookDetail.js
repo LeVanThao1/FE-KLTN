@@ -23,6 +23,9 @@ import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
 import formatMoney from '../../utils/format';
 
+import ImageView from 'react-native-image-viewing';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
+
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
     const {
@@ -32,6 +35,8 @@ const BookDetail = ({navigation, book}) => {
     const {bookComment, setBookComment} = comment;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
+    const [visible, setIsVisible] = useState(false);
+    const [index, setIndex] = useState(0);
 
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
@@ -62,7 +67,6 @@ const BookDetail = ({navigation, book}) => {
       });
       setCmts('');
     };
-    console.log('images book detail', book)
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
@@ -71,6 +75,18 @@ const BookDetail = ({navigation, book}) => {
               <Text style={{fontWeight: 'bold', paddingHorizontal: 10}}>
                 Hình ảnh
               </Text>
+              <ImageView
+                images={bookCurrent.images.map((t) => ({uri: t}))}
+                imageIndex={index}
+                visible={visible}
+                onRequestClose={() => setIsVisible(false)}
+                // FooterComponent={({imageIndex}) => (
+                //   <ImageFooter
+                //     imageIndex={imageIndex}
+                //     imagesCount={post.images.length}
+                //   />
+                // )}
+              />
               {/* <ScrollView>
                 {bookCurrent.images?.map((img, i) => (
                   <Image
@@ -80,87 +96,108 @@ const BookDetail = ({navigation, book}) => {
                   />
                 ))}
               </ScrollView> */}
-              {(bookCurrent.images.length > 3) ?  
-              <View style={stylesPost.imgBookDetail}>
-                <ScrollView horizontal={true}>
+              {bookCurrent.images.length > 3 ? (
+                <View style={stylesPost.imgBookDetail}>
+                  <ScrollView horizontal={true}>
+                    {bookCurrent.images.map((img, i) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <Image
+                          // key={i}
+                          source={{uri: img}}
+                          style={stylesPost.imgBook}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
                   {bookCurrent.images.map((img, i) => (
-                    <Image
-                      // key={i}
-                      source={{uri: img}}
-                      style={stylesPost.imgBook}
-                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIndex(i);
+                        setIsVisible(true);
+                      }}>
+                      <Image
+                        key={i}
+                        source={{uri: img}}
+                        style={stylesPost.imgBook}
+                      />
+                    </TouchableOpacity>
                   ))}
-                </ScrollView>
-              </View> : 
-              <View style={{width: '100%', flexDirection: 'row', justifyContent: 'center'}}>
-                  {bookCurrent.images.map((img, i) => (
-                    <Image
-                      key={i}
-                      source={{uri: img}}
-                      style={stylesPost.imgBook}
-                    />
-                  ))}
-                </View>} 
-           
+                </View>
+              )}
             </View>
           </ScrollView>
           <View style={stylesPost.content}>
             <View style={stylesPost.text}>
-              <View style={stylesPost.titleCenter}>
-                <Text style={stylesPost.txtBold}>Tên sách</Text>
-                <Text style={stylesPost.titlePost}>{bookCurrent.name}</Text>
-              </View>
-              {/* <View style={stylesPost.titleCenter}>
+              <View style={stylesPost.main}>
+                <View style={stylesPost.titleCenter}>
+                  <Text style={stylesPost.txtBold}>Tên sách</Text>
+                  <Text style={stylesPost.titlePost}>{bookCurrent.name}</Text>
+                </View>
+                {/* <View style={stylesPost.titleCenter}>
                 <Text style={stylesPost.txtBold}>Thông tin sách</Text>
               </View> */}
-              <View style={stylesPost.horizontal}>
-                <Text>Danh mục </Text>
-                <Text style={stylesPost.detail}>
-                  {bookCurrent.categoryName}
-                </Text>
-              </View>
-              <View style={stylesPost.horizontal}>
-                <Text>Tác giả </Text>
-                <Text style={stylesPost.detail}>{bookCurrent.author}</Text>
-              </View>
-              <View style={stylesPost.horizontal}>
-                <Text>Nhà xuất bản </Text>
-                <Text style={stylesPost.detail}>{bookCurrent.publisher}</Text>
-              </View>
-              <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
-                <Text style={stylesPost.detail}>
-                  {bookCurrent.numberOfReprint}
-                </Text>
-              </View>
-              <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
-                <Text style={stylesPost.detail}>{bookCurrent.year}</Text>
-              </View>
-              <View style={stylesPost.horizontal}>
-                <Text>Giá sách</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    color: '#f00',
-                  }}>
-                  <Text style={stylesPost.detail}>{formatMoney(bookCurrent.price)} VNĐ</Text>
-                  <Text
-                    style={{paddingLeft: 5, color: COLORS.primary}}>
-                    VND
+                <View style={stylesPost.horizontal}>
+                  <Text>Danh mục </Text>
+                  <Text style={stylesPost.detail}>
+                    {bookCurrent.categoryName}
                   </Text>
                 </View>
-              </View>
-              <View style={stylesPost.elment}>
-                <Text>Sách muốn đổi </Text>
-                <Text style={stylesPost.detail}>asdas</Text>
-              </View>
+                <View style={stylesPost.horizontal}>
+                  <Text>Tác giả </Text>
+                  <Text style={stylesPost.detail}>{bookCurrent.author}</Text>
+                </View>
+                <View style={stylesPost.horizontal}>
+                  <Text>Nhà xuất bản </Text>
+                  <Text style={stylesPost.detail}>{bookCurrent.publisher}</Text>
+                </View>
+                <View style={stylesPost.horizontal}>
+                  <Text>Số lần xuất bản </Text>
+                  <Text style={stylesPost.detail}>
+                    {bookCurrent.numberOfReprint}
+                  </Text>
+                </View>
+                <View style={stylesPost.horizontal}>
+                  <Text>Năm xuất bản </Text>
+                  <Text style={stylesPost.detail}>{bookCurrent.year}</Text>
+                </View>
+                <View style={stylesPost.horizontal}>
+                  <Text>Giá sách</Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      color: '#f00',
+                    }}>
+                    <Text style={stylesPost.detail}>
+                      {formatMoney(bookCurrent.price)} VNĐ
+                    </Text>
+                    {/* <Text style={{paddingLeft: 5, color: COLORS.primary}}>
+                    VND
+                  </Text> */}
+                  </View>
+                </View>
+                <View style={stylesPost.elment}>
+                  <Text>Sách muốn đổi </Text>
+                  <Text style={stylesPost.detail}>asdas</Text>
+                </View>
 
-              <Text style={stylesPost.textContent}>Mô tả</Text>
-              <View style={stylesPost.textDes}>
-                <Text>{bookCurrent.description}</Text>
+                <Text style={stylesPost.textContent}>Mô tả</Text>
+                <View style={stylesPost.textDes}>
+                  <Text>{bookCurrent.description}</Text>
+                </View>
               </View>
               {bookComment?.map((cmt, i) => (
                 <Comment key={i} cmt={cmt} />
@@ -195,11 +232,11 @@ const BookDetail = ({navigation, book}) => {
 
               <TouchableOpacity
                 style={{width: '100%'}}
-                onPress={
-                  () => navigation.navigate('UpdatePost')
-                  // setBookCurrent(book)
-                }>
-                <Text style={stylesPost.btn}>Cập nhật</Text>
+                onPress={() => {
+                  // setBookCurrent(book);
+                  navigation.navigate('UpdateBook');
+                }}>
+                <Text style={stylesPost.btn}>Cập nhật sách</Text>
               </TouchableOpacity>
             </View>
           </View>

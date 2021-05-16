@@ -15,6 +15,7 @@ export const COLORS = {
   primary: '#20b389',
   primary: '#00b052',
   secondary: '#454c5d', // Gray
+  secondary: '#111',
 
   // colors
   black: '#1E1F20',
