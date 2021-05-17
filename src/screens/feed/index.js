@@ -39,7 +39,12 @@ const Feed = () => {
         {!loading ? (
           posts && posts.length > 0 ? (
             posts.map((pt) => (
-              <PostOfFeed key={pt.id} post={pt} info={user.info} type={false} />
+              <PostOfFeed
+                key={pt.id + ''}
+                post={pt}
+                info={user.info}
+                type={false}
+              />
             ))
           ) : (
             <Text style={{textAlign: 'center', marginTop: 20}}>
