@@ -9,6 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
 import {Icon, ListItem, Separator, Button} from 'native-base';
@@ -29,8 +30,8 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
-
-
+import formatMoney from '../../utils/format';
+const {width} = Dimensions.get('screen');
 const StoreDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
@@ -69,7 +70,11 @@ const StoreDetail = ({navigation, route}) => {
     useEffect(() => {}, [listItem]);
     const ProductItem = ({book}) => (
       <View
-        style={{width: '50%', justifyContent: 'center', alignItems: 'center'}}>
+        style={{
+          width: (width - 55) / 2,
+          // justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <TouchableOpacity
           style={styles.itemContainer}
           onPress={() =>
@@ -82,7 +87,9 @@ const StoreDetail = ({navigation, route}) => {
           <Text style={styles.itemName} numberOfLines={1}>
             {book.book ? book.book.name : book.name}
           </Text>
-          <Text style={styles.itemPrice}>Giá {book.price}</Text>
+          <Text style={styles.itemPrice}>
+            Giá {formatMoney(book.price)} VNĐ
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -162,23 +169,27 @@ const styles = StyleSheet.create({
   listBook: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   itemContainer: {
-    width: 165,
+    width: (width - 55) / 2,
     height: 240,
     marginHorizontal: 4,
     // marginLeft: 14,
     marginVertical: 6,
-    paddingVertical: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     borderColor: '#5a5a5a',
     borderWidth: 0.2,
     backgroundColor: '#fff',
     borderRadius: 4,
   },
   itemImage: {
-    width: '85%',
+    width: (width - 88) / 2,
     height: 180,
-    marginHorizontal: 10,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    // marginHorizontal: 10,
   },
   itemName: {
     fontSize: 14,
@@ -194,6 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.primary,
+    textAlign: 'center',
   },
   container_store: {
     flex: 0,

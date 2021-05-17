@@ -15,8 +15,8 @@ export const stylesPost = StyleSheet.create({
   person: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    marginTop: 5,
+    padding: 10,
+    // marginTop: 5,
     justifyContent: 'space-between',
     width: width - 24 - 40,
   },
@@ -70,7 +70,7 @@ export const stylesPost = StyleSheet.create({
   iconEnter: {
     position: 'absolute',
     right: -25,
-    top: 15,
+    top: 13,
   },
 
   name: {

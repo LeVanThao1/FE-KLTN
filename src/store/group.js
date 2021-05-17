@@ -10,13 +10,19 @@ export class Group {
   @observable
   messages = undefined;
 
-  constructor(groups, groupCurrent, messages) {
+  @observable
+  isActive = undefined;
+  constructor(groups, groupCurrent, messages, isActive) {
     this.groups = groups;
     this.groupCurrent = groupCurrent;
     this.messages = messages;
+    this.isActive = isActive;
     makeObservable(this);
   }
-
+  @action
+  setIsActive = (value) => {
+    this.isActive = value;
+  };
   @action
   setGroups = (value) => {
     this.groups = value;

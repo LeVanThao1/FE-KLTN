@@ -35,6 +35,7 @@ const Chats = ({navigation}) => {
       groupCurrent,
       setMessages,
       setSeenMessage,
+      setIsActive,
     } = group;
     const [loading, setLoading] = useState(true);
     const [loadMore, setLoadMore] = useState(false);
@@ -44,43 +45,44 @@ const Chats = ({navigation}) => {
       page: 1,
     });
     const [stop, setStop] = useState(false);
-    const {data} = useSubscription(RECEIVE_MESSAGE, {
-      variables: {
-        userId: user.info.id,
-      },
-    });
-    useEffect(() => {
-      if (data) {
-        if (groupCurrent) {
-          setMessages(data.receiveMessage);
-          queryData(SEEN_MESSAGE, {id: data.receiveMessage.id})
-            .then((dt) => {
-              console.log(dt.data);
-              setSeenMessage(dt.data.seenMessage, groupCurrent);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          if (
-            groups.find((it) => it.id + '' === data.receiveMessage.to.id + '')
-          ) {
-            const tamp = [...groups].filter(
-              (it) => it.id + '' !== data.receiveMessage.to.id + '',
-            );
-            setGroups([data.receiveMessage.to, ...tamp]);
-          } else {
-            setGroups([data.receiveMessage.to, ...groups]);
-          }
-          RNReactNativeSoundToast.playSound('message', 'wav');
-        }
-      }
+    // const {data} = useSubscription(RECEIVE_MESSAGE, {
+    //   variables: {
+    //     userId: user.info.id,
+    //   },
+    // });
+    // useEffect(() => {
+    //   if (data) {
+    //     if (groupCurrent) {
+    //       setMessages(data.receiveMessage);
+    //       queryData(SEEN_MESSAGE, {id: data.receiveMessage.id})
+    //         .then((dt) => {
+    //           console.log(dt.data);
+    //           setSeenMessage(dt.data.seenMessage, groupCurrent);
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         });
+    //     } else {
+    //       if (
+    //         groups.find((it) => it.id + '' === data.receiveMessage.to.id + '')
+    //       ) {
+    //         const tamp = [...groups].filter(
+    //           (it) => it.id + '' !== data.receiveMessage.to.id + '',
+    //         );
+    //         setGroups([data.receiveMessage.to, ...tamp]);
+    //       } else {
+    //         setGroups([data.receiveMessage.to, ...groups]);
+    //       }
+    //       RNReactNativeSoundToast.playSound('message', 'wav');
+    //     }
+    //   }
 
-      return () => {
-        // cleanup;
-      };
-    }, [data]);
+    //   return () => {
+    //     // cleanup;
+    //   };
+    // }, [data]);
     useEffect(() => {
+      setIsActive(true);
       setLoading(true);
       queryData(GET_GROUP, option)
         .then(({data}) => {
@@ -95,6 +97,9 @@ const Chats = ({navigation}) => {
           console.log(err);
           Toast.show(Notification(NOTIFI.error, err.message));
         });
+      return () => {
+        setIsActive(false);
+      };
     }, []);
     useEffect(() => {
       if (option.page != 1 && !stop) {
