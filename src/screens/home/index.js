@@ -216,6 +216,7 @@ const Home = ({navigation}) => {
                   (ct) =>
                     selectCategory + '' === ct.id + '' && (
                       <BookByCategory
+                        key={ct.id}
                         navigation={navigation}
                         category={ct.id}
                       />

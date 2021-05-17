@@ -22,10 +22,10 @@ const BookByCategory = ({navigation, category, type}) => {
             <FlatList
               contentContainerStyle={styles.bookByCategory}
               data={booksCategory[category]}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item, index) => index.toString()}
               renderItem={({item, index}) => (
                 <ProductCart
-                  key={index}
+                  key={index.toString()}
                   book={item}
                   type={true}
                   navigation={navigation}

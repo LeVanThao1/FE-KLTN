@@ -251,7 +251,7 @@ const PostOfFeed = ({route, post, info, type}) => {
             {post.images.length < 3 ? (
               <PhotoGroup>
                 {post.images.map((img, i) => (
-                  <PhotoContainer>
+                  <PhotoContainer key={i.toString()}>
                     <TouchableOpacity
                       onPress={() => {
                         setIndex(i);
@@ -274,7 +274,7 @@ const PostOfFeed = ({route, post, info, type}) => {
               //
               <PhotoGroup>
                 {post.images.slice(0, 1).map((img, i) => (
-                  <>
+                  <View key={i.toString()}>
                     <PhotoContainer>
                       {/* <PostPhoto source={{uri: img}} /> */}
                       <TouchableOpacity
@@ -301,7 +301,7 @@ const PostOfFeed = ({route, post, info, type}) => {
                         </TouchableOpacity>
                       </OverlayGroup>
                     </PhotoContainer>
-                  </>
+                  </View>
                 ))}
               </PhotoGroup>
             )}
