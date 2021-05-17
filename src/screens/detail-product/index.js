@@ -240,7 +240,12 @@ const DetailProduct = ({navigation, route}) => {
                   />
                 )}
               />
-              <ScrollView horizontal={true}>
+              <ScrollView
+                horizontal={true}
+                contentContainerStyle={{
+                  marginTop: 8,
+                  paddingHorizontal: 4,
+                }}>
                 {images.map((img, i) => (
                   <TouchableOpacity
                     onPress={() => {
@@ -424,7 +429,7 @@ const DetailProduct = ({navigation, route}) => {
                   style={{
                     marginTop: 10,
                     marginBottom: 5,
-                    borderBottomColor: COLORS.primary,
+                    borderBottomColor: '#888',
                     borderBottomWidth: 1,
                     marginHorizontal: 10,
                     fontSize: 16,

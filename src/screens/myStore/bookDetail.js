@@ -187,7 +187,7 @@ const BookDetail = ({navigation, book}) => {
                   style={{
                     marginTop: 10,
                     marginBottom: 5,
-                    borderBottomColor: COLORS.primary,
+                    borderBottomColor: '#888',
                     borderBottomWidth: 1,
                     marginHorizontal: 10,
                     fontSize: 16,

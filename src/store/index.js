@@ -16,7 +16,7 @@ export const stores = {
   notification: new Notification([], [], []),
   order: new Order(undefined),
   comment: new Comment(undefined, undefined),
-  group: new Group(undefined, undefined, undefined),
+  group: new Group(undefined, undefined, undefined, undefined),
 };
 
 export const storeInstance = stores;

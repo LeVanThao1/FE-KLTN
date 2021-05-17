@@ -10,12 +10,23 @@ import {
 import {NOTIFI} from '../constants';
 import {Notification} from '../utils/notifications';
 import RNReactNativeSoundToast from 'react-native-sound-toast';
+import {RECEIVE_MESSAGE, SEEN_MESSAGE} from '../query/message';
+import {queryData} from '../common';
 
 export const useNotification = () => {
   return useObserver(() => {
     const {
-      stores: {notification, user},
+      stores: {notification, user, group},
     } = useContext(MobXProviderContext);
+    const {
+      groups,
+      setGroups,
+      setGroupCurrent,
+      groupCurrent,
+      setMessages,
+      setSeenMessage,
+      isActive,
+    } = group;
     const {setOrder, setPost, setBook, post, book, order} = notification;
     const {data: dataPost} = useSubscription(COMMENTS_POST_NOTIFICATION, {
       variables: {
@@ -34,7 +45,51 @@ export const useNotification = () => {
         userId: user.info.id,
       },
     });
+    const {data} = useSubscription(RECEIVE_MESSAGE, {
+      variables: {
+        userId: user.info.id,
+      },
+    });
+    useEffect(() => {
+      if (data) {
+        if (!isActive) {
+          Toast.show(
+            Notification(
+              NOTIFI.info,
+              `${data.receiveMessage.from.name} đã gửi bạn tin nhắn`,
+            ),
+          );
+          RNReactNativeSoundToast.playSound('message', 'wav');
+        } else {
+          if (groupCurrent) {
+            setMessages(data.receiveMessage);
+            queryData(SEEN_MESSAGE, {id: data.receiveMessage.id})
+              .then((dt) => {
+                setSeenMessage(dt.data.seenMessage, groupCurrent);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            if (
+              groups.find((it) => it.id + '' === data.receiveMessage.to.id + '')
+            ) {
+              const tamp = [...groups].filter(
+                (it) => it.id + '' !== data.receiveMessage.to.id + '',
+              );
+              setGroups([data.receiveMessage.to, ...tamp]);
+            } else {
+              setGroups([data.receiveMessage.to, ...groups]);
+            }
+            RNReactNativeSoundToast.playSound('message', 'wav');
+          }
+        }
+      }
 
+      return () => {
+        // cleanup;
+      };
+    }, [data]);
     useEffect(() => {
       if (dataPost && dataPost?.receiveNotificationCommentPost) {
         setPost([dataPost.receiveNotificationCommentPost, ...post]);
