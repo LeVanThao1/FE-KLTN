@@ -31,6 +31,7 @@ import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {GET_DISTANCE} from '../../query/distance';
 import {COLORS} from '../../constants/themes';
+import formatMoney from '../../utils/format';
 
 const Payment = ({navigation}) => {
   return useObserver(() => {
@@ -52,7 +53,7 @@ const Payment = ({navigation}) => {
     }, [cart]);
 
     useEffect(() => {
-      if (infoOrder && infoOrder.address.length > 0) {
+      if (infoOrder && infoOrder?.address?.length > 0) {
         queryData(GET_DISTANCE, {
           origin: infoOrder.address,
           destination: cart.map((ct) => ct.book.store.address),
@@ -200,10 +201,12 @@ const Payment = ({navigation}) => {
                     </Text>
                     <Text
                       style={
-                        (styles.price,
-                        {fontSize: 14, color: COLORS.primary})
+                        (styles.price, {fontSize: 14, color: COLORS.primary})
                       }>
-                      {ct.amount * ct.book.price + (ship ? ship[i] : 0)} đ
+                      {formatMoney(
+                        ct.amount * ct.book.price + (ship ? ship[i] : 0),
+                      )}{' '}
+                      VNĐ
                     </Text>
                   </View>
                 </View>
@@ -227,7 +230,7 @@ const Payment = ({navigation}) => {
               <View style={styles.row}>
                 <Text>Tổng tiền hàng</Text>
                 <Text style={(styles.price, {fontSize: 14, color: '#111'})}>
-                  {total} đ
+                  {formatMoney(total)} VNĐ
                 </Text>
               </View>
               {/* <View style={styles.row}>
@@ -239,7 +242,10 @@ const Payment = ({navigation}) => {
               <View style={styles.row}>
                 <Text style={styles.sumary}>Tổng thanh toán</Text>
                 <Text style={styles.sumary}>
-                  {ship ? total + ship.reduce((a, b) => a + b, 0) : total} đ
+                  {formatMoney(
+                    ship ? total + ship.reduce((a, b) => a + b, 0) : total,
+                  )}{' '}
+                  VNĐ
                 </Text>
               </View>
             </View>

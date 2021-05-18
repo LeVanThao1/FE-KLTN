@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import {COLORS} from '../../constants/themes';
+import formatMoney from '../../utils/format';
 import CartDetail from './CartDetail';
 
 export default function Cart({navigation}) {
@@ -52,7 +53,10 @@ export default function Cart({navigation}) {
           <View style={styles.footer}>
             <View style={styles.footerTotal}>
               <Text style={styles.footerTotalText}>
-                Tổng tiền: <Text style={styles.footerTotalPrice}>{total}</Text>
+                Tổng tiền:{' '}
+                <Text style={styles.footerTotalPrice}>
+                  {formatMoney(total)} VNĐ
+                </Text>
               </Text>
             </View>
 
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     flexDirection: 'row',
-    height: 60,
+    height: 50,
     borderColor: COLORS.primary,
     borderWidth: 0.2,
     backgroundColor: '#ffffff',
@@ -107,12 +111,12 @@ const styles = StyleSheet.create({
   footerTotal: {
     height: '100%',
     color: '#000000',
-    width: '60%',
+    width: '68%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   footerTotalText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     letterSpacing: 0.5,
   },
@@ -120,13 +124,13 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   footerPayment: {
-    width: '40%',
+    width: '32%',
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   footerPaymentText: {
-    fontSize: 18,
+    fontSize: 15,
     color: '#ffffff',
     letterSpacing: 0.5,
   },

@@ -17,7 +17,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
-
+import formatMoney from '../../utils/format';
 const imageURL =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 export default function CartDetail({data}) {
@@ -152,7 +152,7 @@ export default function CartDetail({data}) {
                 </Text>
               </TouchableOpacity>
               <Text style={{fontSize: 14, color: COLORS.primary}}>
-                {data.book.price}đ
+                {formatMoney(data.book.price)} VNĐ
               </Text>
             </View>
             <View

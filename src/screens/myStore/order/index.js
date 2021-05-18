@@ -16,8 +16,7 @@ import {
 import {ORDERS_BY_STORE} from '../../../query/order';
 import {queryData} from '../../../common';
 import {COLORS} from '../../../constants/themes';
-
-
+import formatMoney from '../../../utils/format';
 const OrdersByStore = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -50,14 +49,17 @@ const OrdersByStore = ({navigation}) => {
 
     const renderSubOrders = () => {
       // console.log(selectedStatus);
-      return (<View>
-        {!loading ? (subOrders
-        ?.filter((so) => so.status === selectedStatus)
-        .map((so) => <SubOrder {...so} order={so} key={so.id} />)
-        ): (
-          <Spinner color={COLORS.primary} />
-        )}
-      </View>)
+      return (
+        <View>
+          {!loading ? (
+            subOrders
+              ?.filter((so) => so.status === selectedStatus)
+              .map((so) => <SubOrder {...so} order={so} key={so.id} />)
+          ) : (
+            <Spinner color={COLORS.primary} />
+          )}
+        </View>
+      );
       // console.log('sub order ..', x);
     };
 
@@ -97,37 +99,71 @@ const OrdersByStore = ({navigation}) => {
               />
             </View>
             <View
-              style={{flex: 1, justifyContent: 'space-between', padding: 8}}>
-              <Text
+              style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                padding: 8,
+                paddingVertical: 0,
+              }}>
+              {/* <Text
                 style={{fontSize: 16, fontWeight: 'bold', color: '#000000'}}
                 numberOfLines={1}>
                 {order.user.name}
-              </Text>
-              <View numberOfLines={1}>     
-                <Text style={{fontSize: 14, textAlign: 'left', fontStyle: 'italic'}} numberOfLines={1}>
-                  {order.detail.book.name}
-                </Text>    
-              </View>           
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontSize: 14, textAlign: 'right'}}>
-                  x {order.detail.amount}
-                </Text>
+              </Text> */}
+              <View numberOfLines={1}>
                 <Text
-                  style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
-                  Đơn giá {order.detail.price}
+                  style={{fontSize: 15, textAlign: 'left', fontWeight: 'bold'}}
+                  numberOfLines={1}>
+                  {order.detail.book.name}
                 </Text>
-              </View>  
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
+                <Text style={{fontSize: 14, color: '#333333'}}>
+                  {order.createdAt.slice(0, 10)}
+                </Text>
+                <Text style={{fontSize: 14, textAlign: 'right'}}>
+                  x {order.detail.amount}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text
+                  style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
+                  Đơn giá: {formatMoney(order.detail.price)} VNĐ
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text style={{fontSize: 14, textAlign: 'right'}}>
+                  Phí vận chuyển: {formatMoney(order.ship || 0)} VNĐ
+                </Text>
+              </View>
+              <View
+                style={
+                  {
+                    // flexDirection: 'row',
+                    // justifyContent: 'space-between',
+                    // alignItems: 'center',
+                  }
+                }>
                 {/* <Text style={{fontSize: 14, color: '#333333'}}>
                   Ngày đặt hàng {order.createdAt.slice(0, 10)}
                 </Text> */}
-                <Text style={{fontSize: 16, color: COLORS.primary}}>
-                  Tổng tiền {order.detail.amount * order.detail.price}
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: COLORS.primary,
+                    textAlign: 'right',
+                  }}>
+                  Tổng tiền{' '}
+                  {formatMoney(
+                    order.detail.amount * order.detail.price +
+                      (order.ship || 0),
+                  )}{' '}
+                  VNĐ
                 </Text>
               </View>
             </View>
