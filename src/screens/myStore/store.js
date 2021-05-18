@@ -37,30 +37,34 @@ const Store = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const {info, setInfo} = shop;
     const navigation = useNavigation();
-    const [listInfo, setListInfo] = useState([]);
+    const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
-    // const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-    //   onCompleted: async (data) => {
-    //     console.log('........', data);
-    //     // setListInfo({
-    //     //   id: info?.id,
-    //     //   name: info?.name,
-    //     // });
-    //   },
-    //   onError: (err) => {
-    //     Toast.show(Notification(NOTIFI.error, err.message));
-    //     console.log('get store', err);
-    //   },
-    // });
-    // useEffect(() => {
-    //   console.log('12133', user.store);
-    //   store({
-    //     variables: {
-    //       id: user.store?.id,
-    //     },
-    //   });
-    // }, [info]);
-    // useEffect(() => {}, [info]);
+    // useEffect(() => {}, []);
+
+    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+      onCompleted: async (data) => {
+        console.log('....data...', data);
+        setListInfo({
+          id: data?.store.id,
+          name: data?.store.name,
+          description: data?.store.description,
+          address: data?.store.address
+        });
+      },
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log('get store', err);
+      },
+    });
+    useEffect(() => {
+      store({
+        variables: {
+          id: shop.info.id,
+        },
+      });
+    }, [info]);
+    useEffect(() => {}, [listInfo]);
+
 
     return Object.keys(shop.info).length === 0 ? (
       <View style={styles.createStore}>
@@ -79,6 +83,7 @@ const Store = ({navigation}) => {
           </ImageBackground>
         </View>
         <View style={styles.container_store}>
+          <View style={styles.infoStore}>
           <View style={styles.content}>
             <Text>Tên shop </Text>
             <Text
@@ -93,7 +98,8 @@ const Store = ({navigation}) => {
                   width: '100%',
                 })
               }>
-              {info?.name}
+              {/* {info?.name} */}
+              {listInfo?.name}
             </Text>
           </View>
           <View style={styles.address}>
@@ -128,6 +134,7 @@ const Store = ({navigation}) => {
               {info?.description}
             </Text>
           </View>
+          </View>
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
             <View>
@@ -138,7 +145,7 @@ const Store = ({navigation}) => {
                     {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
                   </Separator>
                 </CollapseHeader>
-                <CollapseBody>
+                <CollapseBody style={{backgroundColor: COLORS.grayLight}}>
                   <ListItem onPress={() => navigation.navigate('CreateBook')}>
                     <Text>Thêm sản phẩm</Text>
                   </ListItem>
@@ -153,7 +160,7 @@ const Store = ({navigation}) => {
           <View style={styles.order}>
             <View>
               <Collapse>
-                <CollapseHeader>
+                <CollapseHeader style={{backgroundColor: COLORS.grayLight}}>
                   <Separator
                     bordered
                     style={{
@@ -162,7 +169,7 @@ const Store = ({navigation}) => {
                     <Text style={{color: '#fff'}}>+ Quản lý đơn hàng</Text>
                   </Separator>
                 </CollapseHeader>
-                <CollapseBody>
+                <CollapseBody style={{backgroundColor: COLORS.grayLight}}>
                   <ListItem
                     onPress={() => navigation.navigate('OrdersByStore')}>
                     <Text>Quản lý đơn hàng</Text>
@@ -186,7 +193,7 @@ const Store = ({navigation}) => {
                     <Text style={{color: '#fff'}}>+ Tài chính</Text>
                   </Separator>
                 </CollapseHeader>
-                <CollapseBody>
+                <CollapseBody style={{backgroundColor: COLORS.grayLight}}>
                   <ListItem onPress={() => navigation.navigate('Statistics')}>
                     <Text>Thống kê</Text>
                   </ListItem>
@@ -214,7 +221,13 @@ const styles = StyleSheet.create({
     flex: 0,
     margin: 10,
     padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8
     // width: '90%',
+  },
+
+  infoStore: {
+
   },
 
   createStore: {

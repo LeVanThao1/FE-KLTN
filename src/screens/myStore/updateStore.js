@@ -8,10 +8,11 @@ import {
   View,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button} from 'native-base';
+import {Icon, ListItem, Separator, Spinner, Button} from 'native-base';
 import {
   Collapse,
   CollapseHeader,
@@ -28,6 +29,9 @@ import {transaction} from 'mobx';
 import {Picker} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../../constants/themes';
+import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
+import ImagePicker from 'react-native-image-crop-picker';
+import {ReactNativeFile} from 'apollo-upload-client';
 
 import sub, {
   getProvinces,
@@ -37,6 +41,7 @@ import sub, {
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+import { UPLOAD_SINGLE_FILE } from '../../query/upload';
 
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
@@ -46,6 +51,7 @@ const UpdateStore = ({navigation}) => {
     const {info, setInfo} = shop;
     const navigation = useNavigation();
     const add = info.address.split(',');
+    console.log(add);
     const [name, setName] = useState({
       value: info ? info.name : '',
       error: '',
@@ -144,7 +150,19 @@ const UpdateStore = ({navigation}) => {
         {text: 'Hủy'},
       ]);
     };
-    console.log('shop update', user.info.store.id);
+    console.log('user update', user.info);
+    console.log('shop update', shop.info);
+
+    const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
+      onCompleted: (data) => {
+        setAvatarUpload(data.uploadSingleFile.url);
+      },
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log(err);
+      },
+    });
+    const [avatarUpload, setAvatarUpload] = useState(info.avatar);
 
     const onPress = () => {
       // if (validateSubmit) {
@@ -155,25 +173,81 @@ const UpdateStore = ({navigation}) => {
         provinces.value,
         ward.value,
         address.value,
-      );
+      );      
 
       let dataStore = {
-        avatar: 'https://picsum.photos/200',
-        background: 'https://picsum.photos/id/237/200/300',
+        avatar: avatarUpload,
+        // // background: 'https://picsum.photos/id/237/200/300',
         name: name.value,
         description: description.value,
         address: `${address.value}, ${ward.value.split('-')[1]}, ${
           districts.value.split('-')[1]
         }, ${provinces.value.split('-')[1]}`,
-        owner: user.info.id,
+        // owner: user.info.id,
       };
       updateStore({
         variables: {
           dataStore,
-          id: user.info.store.id,
+          id: shop.info.id
         },
       });
       // }
+    };
+
+    const handleChoosePhoto = (type) => {
+      if (type) {
+        ImagePicker.openPicker({
+          width: 1024,
+          height: 720,
+          // includeBase64: true,
+        }).then((response) => {
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
+        });
+      } else {
+        ImagePicker.openCamera({
+          width: 1024,
+          height: 720,
+          // includeBase64: true,
+        }).then((response) => {
+          setLoading(true);
+          mutateData(UPDATE_AVATAR, {
+            file: new ReactNativeFile({
+              uri: response.path,
+              name: 'avatar',
+              type: response.mime,
+            }),
+          })
+            .then(({data}) => {
+              setInfo({
+                ...info,
+                avatar: data.updateAvatar,
+              });
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              console.log(err);
+            });
+        });
+      }
     };
     return (
       <ScrollView>
@@ -184,12 +258,67 @@ const UpdateStore = ({navigation}) => {
         </View> */}
 
         <View style={styles.container_store}>
-          <View>
-            <Text>Thêm avatar nha</Text>
+        <View style={styles.cover}>
+            <Image
+              style={{...styles.imageAvt, opacity: !loading ? 1 : 0.5}}
+              source={{
+                uri: info.avatar,
+              }}
+            />
+            {loading && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 35,
+                }}>
+                <Spinner size="small" color={COLORS.primary} />
+              </View>
+            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() => handleChoosePhoto(false)}
+                style={{
+                  paddingHorizontal: 0,
+                  paddingVertical: 0,
+                  margin: 0,
+                  // width: 70,
+                  // height: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 50,
+                  height: 40,
+                  backgroundColor: 'transparent',
+                }}>
+                <Icon
+                  type="MaterialIcons"
+                  name="camera-alt"
+                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleChoosePhoto(true)}
+                style={{
+                  // paddingHorizontal: 10,
+                  // paddingVertical: 5,
+                  margin: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 50,
+                  height: 40,
+                  backgroundColor: 'transparent',
+                }}>
+                <Icon
+                  type="MaterialIcons"
+                  name="photo-library"
+                  style={{fontSize: 25, color: COLORS.primary}}></Icon>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View>
-            <Text>Thêm background nha</Text>
-          </View>
+
           <View style={styles.content}>
             <Text style={{fontSize: 16}}>Tên shop </Text>
             <TextInput
@@ -320,9 +449,9 @@ const UpdateStore = ({navigation}) => {
               }}
             />
           </View>
-          <Button style={styles.btnCreate} onPress={onAlert}>
+          <TouchableOpacity style={styles.btnCreate} onPress={onAlert}>
             <Text style={styles.txtCreate}>Cập nhật cửa hàng</Text>
-          </Button>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -353,14 +482,29 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   btnCreate: {
-    alignSelf: 'center',
-    padding: 15,
-    borderRadius: 4,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    borderRadius: 5,
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  txtCreate: {
+    color: 'white',
+    fontSize: 14,
+    letterSpacing: 0.75,
   },
 
-  txtCreate: {
-    color: '#fff',
+  cover: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 0.2,
+    borderBottomColor: '#696969',
   },
+  imageAvt: {width: 128, height: 128, borderRadius: 64},
 
   image: {
     // flex: 1,

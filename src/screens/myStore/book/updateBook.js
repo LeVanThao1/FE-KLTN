@@ -337,7 +337,7 @@ const UpdateBook = ({navigation, route}) => {
                       selectedValue={categori.value}
                       onValueChange={onChange}>
                       {category.categories.map((ct, i) => (
-                        <Picker.Item label={ct.name} value={ct.id} />
+                        <Picker.Item key={i} label={ct.name} value={ct.id} />
                       ))}
                     </Picker>
                   </Item>

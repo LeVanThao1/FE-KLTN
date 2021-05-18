@@ -1,5 +1,5 @@
 import {Text, View, Button, Icon} from 'native-base';
-import React, {memo, useContext, useState} from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TouchableOpacity, Image, Alert} from 'react-native';
@@ -51,8 +51,6 @@ const Book = ({book}) => {
         },
       });
     };
-
-    const [search, setSearch] = useState(undefined);
 
     return (
       <TouchableOpacity

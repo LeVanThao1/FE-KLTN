@@ -142,7 +142,6 @@ const PostOfFeed = ({route, post, info, type}) => {
     const {
       stores: {user, comment},
     } = useContext(MobXProviderContext);
-    console.log('post feed', post);
     const navigation = useNavigation();
     const {posts} = user;
     const {postComment, setPostComment} = comment;
@@ -178,8 +177,7 @@ const PostOfFeed = ({route, post, info, type}) => {
       });
     };
     useEffect(() => {}, [post]);
-    console.log('hahaha');
-    console.log('test img view', post.images);
+
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <ImageView
@@ -274,7 +272,7 @@ const PostOfFeed = ({route, post, info, type}) => {
               //
               <PhotoGroup>
                 {post.images.slice(0, 1).map((img, i) => (
-                  <View key={i.toString()}>
+                  <>
                     <PhotoContainer>
                       {/* <PostPhoto source={{uri: img}} /> */}
                       <TouchableOpacity
@@ -301,7 +299,7 @@ const PostOfFeed = ({route, post, info, type}) => {
                         </TouchableOpacity>
                       </OverlayGroup>
                     </PhotoContainer>
-                  </View>
+                  </>
                 ))}
               </PhotoGroup>
             )}

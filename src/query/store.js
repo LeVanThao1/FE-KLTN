@@ -73,7 +73,7 @@ export const CREATE_STORE = gql`
 
 export const UPDATE_STORE = gql`
   mutation updateStore($dataStore: storeUpdate!, $id: ID!) {
-    updateStore(dataStore: $dataStore) {
+    updateStore(dataStore: $dataStore, id: $id) {
       message
     }
   }
