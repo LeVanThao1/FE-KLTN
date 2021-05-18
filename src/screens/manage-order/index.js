@@ -14,8 +14,9 @@ import {
   Image,
 } from 'react-native';
 import {GET_SUB_ORDERS} from '../../query/subOrder';
-import { COLORS } from '../../constants';
+import {COLORS} from '../../constants';
 import formatMoney from '../../utils/format';
+import {queryData} from '../../common';
 
 const ManageOrder = ({navigation}) => {
   return useObserver(() => {
@@ -25,35 +26,53 @@ const ManageOrder = ({navigation}) => {
     const [selectedStatus, setSelectedStatus] = useState('WAITING');
     const [subOrders, setSubOrders] = useState([]);
 
-    const [getSubOrders, {called, loading, data, error}] = useLazyQuery(
-      GET_SUB_ORDERS,
-      {
-        onCompleted: async (data) => {
-          const {subOrdersByUser} = data;
-          // console.log('subOrdersByUser', subOrdersByUser);
-          setSubOrders(
-            subOrdersByUser.map(
-              ({
-                id,
-                detail: {
-                  book: {name, images},
-                  amount,
-                  price,
-                },
-                status,
-                createdAt,
-              }) => ({id, name, images, amount, price, status, createdAt}),
-            ),
-          );
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      },
-    );
+    // const [getSubOrders, {called, loading, data, error}] = useLazyQuery(
+    //   GET_SUB_ORDERS,
+    //   {
+    //     onCompleted: async (data) => {
+    //       const {subOrdersByUser} = data;
+    //       // console.log('subOrdersByUser', subOrdersByUser);
+    //       setSubOrders(
+    //         subOrdersByUser.map(
+    //           ({
+    //             id,
+    //             detail: {
+    //               book: {name, images},
+    //               amount,
+    //               price,
+    //             },
+    //             status,
+    //             createdAt,
+    //           }) => ({id, name, images, amount, price, status, createdAt}),
+    //         ),
+    //       );
+    //     },
+    //     onError: (err) => {
+    //       console.log(err);
+    //     },
+    //   },
+    // );
 
     useEffect(() => {
-      getSubOrders();
+      // getSubOrders();
+      queryData(GET_SUB_ORDERS).then(({data}) => {
+        const {subOrdersByUser} = data;
+        setSubOrders(
+          subOrdersByUser.map(
+            ({
+              id,
+              detail: {
+                book: {name, images},
+                amount,
+                price,
+              },
+              status,
+              createdAt,
+              ship,
+            }) => ({id, name, images, amount, price, status, createdAt, ship}),
+          ),
+        );
+      });
     }, []);
 
     useEffect(() => {
@@ -90,6 +109,7 @@ const ManageOrder = ({navigation}) => {
       amount = 1,
       price = 100000,
       createdAt,
+      ship = 0,
     }) {
       return (
         <TouchableOpacity
@@ -113,33 +133,47 @@ const ManageOrder = ({navigation}) => {
               />
             </View>
             <View
-              style={{flex: 1, justifyContent: 'space-between', padding: 8}}>
+              style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                padding: 8,
+                paddingVertical: 0,
+              }}>
               <Text
                 style={{fontSize: 16, fontWeight: 'bold', color: '#000000'}}
                 numberOfLines={1}>
                 {name}
               </Text>
-              <View style={{
+              <View
+                style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-              <Text style={{fontSize: 14, color: '#333333'}}>
+                <Text style={{fontSize: 14, color: '#333333'}}>
                   {createdAt.slice(0, 10)}
                 </Text>
-              <Text style={{fontSize: 14, textAlign: 'right'}}>x {amount}</Text>
+                <Text style={{fontSize: 14, textAlign: 'right'}}>
+                  x {amount}
+                </Text>
               </View>
 
               <Text
                 style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
                 Đơn giá: {formatMoney(price)} VNĐ
               </Text>
-              <View
-                style={{
-                }}>                
+              <Text
+                style={{fontSize: 14, color: '#000000', textAlign: 'right'}}>
+                Phí vận chuyển: {formatMoney(ship)} VNĐ
+              </Text>
+              <View style={{}}>
                 <Text
-                  style={{fontSize: 16, textAlign:'right', color: COLORS.primary}}>
-                  Tổng tiền: {formatMoney(amount * price)} VNĐ
+                  style={{
+                    fontSize: 16,
+                    textAlign: 'right',
+                    color: COLORS.primary,
+                  }}>
+                  Tổng tiền: {formatMoney(amount * price + ship)} VNĐ
                 </Text>
               </View>
             </View>

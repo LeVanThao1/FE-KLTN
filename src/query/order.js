@@ -82,6 +82,7 @@ export const ORDERS_BY_STORE = gql`
       store {
         id
       }
+      ship
       statusPayment
       dateOfPayment
       receivedDate

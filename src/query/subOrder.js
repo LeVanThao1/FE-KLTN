@@ -17,6 +17,7 @@ export const GET_SUB_ORDERS = gql`
         amount
         price
       }
+      ship
       address
       phone
       status
@@ -55,6 +56,7 @@ export const GET_SUB_ORDER = gql`
         amount
         price
       }
+      ship
       address
       phone
       status
