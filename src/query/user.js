@@ -288,6 +288,9 @@ export const UPDATE_CART = gql`
           images
         }
         name
+        store {
+          address
+        }
       }
       amount
       price

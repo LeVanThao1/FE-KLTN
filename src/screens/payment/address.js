@@ -22,7 +22,6 @@ import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {isNotEmpty, phoneNumberValidator} from '../../utils/validations';
 import {COLORS} from '../../constants/themes';
 
-
 const Address = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -47,7 +46,7 @@ const Address = ({navigation}) => {
       error: '',
     });
     const [phone, setPhone] = useState({
-      value: infoOrder ? deFormatPhone(infoOrder.phone) : '',
+      value: infoOrder?.phone ? deFormatPhone(infoOrder?.phone) : '',
       error: '',
     });
     const [andress, setAndress] = useState({
@@ -180,7 +179,12 @@ const Address = ({navigation}) => {
             <Picker
               note
               mode="dropdown"
-              style={{width: '100%', borderWidth: 1, borderColor: '#696969'}}
+              style={{
+                width: '100%',
+                borderWidth: 1,
+                borderColor: '#696969',
+                marginVertical: -7,
+              }}
               selectedValue={provinces.value}
               placeholder="Chọn tỉnh / thành phố"
               onValueChange={(value) =>
@@ -214,7 +218,7 @@ const Address = ({navigation}) => {
             <Picker
               note
               mode="dropdown"
-              style={{width: '100%'}}
+              style={{width: '100%', marginVertical: -7}}
               selectedValue={districts.value}
               placeholder="Chọn quận / huyện"
               onValueChange={(value) =>
@@ -251,7 +255,7 @@ const Address = ({navigation}) => {
             <Picker
               note
               mode="dropdown"
-              style={{width: '100%'}}
+              style={{width: '100%', marginVertical: -7}}
               selectedValue={ward.value}
               placeholder="Chọn xã / thôn"
               onValueChange={(value) => setWard({value: value, error: ''})}>
@@ -290,11 +294,7 @@ const Address = ({navigation}) => {
           <Text style={styles.err}>{andress.error}</Text>
         </View>
         <View>
-          <Button
-            title="Xác nhận"
-            color={COLORS.primary}
-            onPress={onPress}
-          />
+          <Button title="Xác nhận" color={COLORS.primary} onPress={onPress} />
         </View>
       </ScrollView>
     );
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: '#f0f0f0',
     width: '100%',
-    padding: 10,
+    padding: 5,
     paddingHorizontal: 16,
     borderRadius: 5,
     borderWidth: 0.2,

@@ -130,7 +130,12 @@ const OrderDetailStore = ({navigation, route}) => {
               />
             </View>
             <View
-              style={{flex: 1, justifyContent: 'space-between', padding: 8}}>
+              style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                padding: 8,
+                paddingVertical: 0,
+              }}>
               <Text
                 style={{
                   fontSize: 16,
@@ -141,11 +146,28 @@ const OrderDetailStore = ({navigation, route}) => {
                 numberOfLines={1}>
                 {orderStore?.detail?.book?.name}
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 14, color: '#333333'}}>
+                  {orderStore?.createdAt.slice(0, 10)}
+                </Text>
+                <Text style={{fontSize: 14, textAlign: 'right'}}>
+                  x {orderStore?.detail?.amount}
+                </Text>
+              </View>
+
+              {/* <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
                 x {orderStore?.detail?.amount}
+              </Text> */}
+              <Text style={{fontSize: 14, textAlign: 'right'}}>
+                Giá: {formatMoney(orderStore?.detail?.price)} VNĐ
               </Text>
-              <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 8}}>
-                Giá {formatMoney(orderStore?.detail?.price)} VNĐ
+              <Text style={{fontSize: 14, textAlign: 'right', marginBottom: 5}}>
+                Phí vận chuyển: {formatMoney(orderStore?.ship || 0)} VNĐ
               </Text>
               <Text
                 style={{
@@ -153,7 +175,12 @@ const OrderDetailStore = ({navigation, route}) => {
                   color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền: {formatMoney(orderStore?.detail?.price * orderStore?.detail?.amount)} VNĐ
+                Thành tiền:{' '}
+                {formatMoney(
+                  orderStore?.detail?.price * orderStore?.detail?.amount +
+                    (orderStore?.ship || 0),
+                )}{' '}
+                VNĐ
               </Text>
             </View>
           </View>
