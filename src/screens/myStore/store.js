@@ -63,7 +63,7 @@ const Store = ({navigation}) => {
         },
       });
     }, [info]);
-    useEffect(() => {}, [listInfo]);
+    useEffect(() => {}, [info]);
 
 
     return Object.keys(shop.info).length === 0 ? (
@@ -99,7 +99,7 @@ const Store = ({navigation}) => {
                 })
               }>
               {/* {info?.name} */}
-              {listInfo?.name}
+              {info?.name}
             </Text>
           </View>
           <View style={styles.address}>
