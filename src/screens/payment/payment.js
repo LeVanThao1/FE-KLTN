@@ -50,6 +50,9 @@ const Payment = ({navigation}) => {
       if (cart) {
         setTotal(cart.reduce((a, b) => a + b.book.price * b.amount, 0));
       }
+      return () => {
+        setInfoOrder(undefined);
+      };
     }, [cart]);
 
     useEffect(() => {
