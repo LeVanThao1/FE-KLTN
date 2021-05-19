@@ -115,6 +115,7 @@ const Address = ({navigation}) => {
       return count === 0;
     };
     const onPress = () => {
+      console.log(ward);
       if (validateSubmit()) {
         setInfoOrder({
           name: name.value,
@@ -130,6 +131,7 @@ const Address = ({navigation}) => {
         navigation.goBack();
       }
     };
+    console.log(ward, districts, provinces);
     return (
       <ScrollView style={styles.container}>
         <View style={styles.field}>
@@ -187,9 +189,18 @@ const Address = ({navigation}) => {
               }}
               selectedValue={provinces.value}
               placeholder="Chọn tỉnh / thành phố"
-              onValueChange={(value) =>
-                setProvinces({value: value, error: ''})
-              }>
+              onValueChange={(value) => {
+                setProvinces({value: value, error: ''});
+                const districts = getDistrictsByProvinceCode(
+                  value.split('-')[0],
+                )[0];
+                setDistricts({
+                  value: districts.code + '-' + districts.name,
+                  error: '',
+                });
+                const ward = getWardsByDistrictCode(districts.code)[0];
+                setWard({value: ward.code + '-' + ward.name, error: ''});
+              }}>
               {/* {!provinces.value && (
                 <Picker.Item
                   key={'tt'}
@@ -221,9 +232,11 @@ const Address = ({navigation}) => {
               style={{width: '100%', marginVertical: -7}}
               selectedValue={districts.value}
               placeholder="Chọn quận / huyện"
-              onValueChange={(value) =>
-                setDistricts({value: value, error: ''})
-              }>
+              onValueChange={(value) => {
+                setDistricts({value: value, error: ''});
+                const ward = getWardsByDistrictCode(value.split('-')[0])[0];
+                setWard({value: ward.code + '-' + ward.name, error: ''});
+              }}>
               {/* {!districts.value && (
                 <Picker.Item
                   key={'qh'}
@@ -258,7 +271,10 @@ const Address = ({navigation}) => {
               style={{width: '100%', marginVertical: -7}}
               selectedValue={ward.value}
               placeholder="Chọn xã / thôn"
-              onValueChange={(value) => setWard({value: value, error: ''})}>
+              onValueChange={(value) => {
+                console.log(value);
+                setWard({value: value, error: ''});
+              }}>
               {/* {!ward.value && (
                 <Picker.Item
                   key={'xt'}
