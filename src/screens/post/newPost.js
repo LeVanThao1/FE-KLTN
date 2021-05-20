@@ -20,7 +20,7 @@ import Images from '../../assets/images/images';
 import {CREATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
-import {NOTIFI} from '../../constants';
+import {COLORS, NOTIFI} from '../../constants';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -36,10 +36,10 @@ const NewPost = ({navigation}) => {
       value: '',
       error: '',
     });
-    // const [author, setAuthor] = useState({
-    //   value: '',
-    //   error: '',
-    // });
+    const [author, setAuthor] = useState({
+      value: '',
+      error: '',
+    });
     const [description, setDescription] = useState({
       value: '',
       error: '',
@@ -369,10 +369,10 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
+                <Text>Năm phát hành </Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm xuất bản"
+                  placeholder="Nhập năm phát hành"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -461,7 +461,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                   // defaultValue={this.state.text}
-                  maxLength={120}
+                  maxLength={400}
                   placeholder={'Nhập mô tả sách'}
                   placeholderTextColor={'#c7c7c7'}
                   underlineColorAndroid={'transparent'}
@@ -469,7 +469,11 @@ const NewPost = ({navigation}) => {
                   placeholder="Nhập mô tả"
                 />
               </View>
-              <TouchableOpacity style={{width: '100%'}} onPress={onAlert}>
+              <TouchableOpacity style={{
+                  backgroundColor: COLORS.primary,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                }} onPress={onAlert}>
                 <Text style={stylesPost.btn}>Đăng bài</Text>
               </TouchableOpacity>
             </View>

@@ -17,6 +17,7 @@ export const COLORS = {
   secondary: '#454c5d', // Gray
   secondary: '#111',
 
+  aplbe: '#20b389',
   // colors
   black: '#1E1F20',
   white: '#FFFFFF',

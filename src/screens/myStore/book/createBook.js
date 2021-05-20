@@ -30,6 +30,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
+import { useScrollToTop } from '@react-navigation/native';
 
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
@@ -37,6 +38,11 @@ const CreateBook = ({navigation}) => {
       stores: {category, shop},
     } = useContext(MobXProviderContext);
     const {setBookStore, bookStore} = shop;
+    const ref = React.useRef(null);
+
+    // useScrollToTop(React.useRef({
+    //   scrollToTop: () => ref.current?.scrollTo(0, 0),
+    // }));
     const [product, setProduct] = useState({
       value: '',
       error: '',
@@ -149,7 +155,36 @@ const CreateBook = ({navigation}) => {
         onCompleted: async (data) => {
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
           // setBookStore([data.createBook, ...bookStore]);
-          navigation.navigate('BooksStore');
+          setName({
+            ...name,
+            value: ''
+          });
+          setAuthor({
+            ...author,
+            value: ''
+          });
+          setNumPrint({
+            ...numPrint,
+            value: 0
+          });
+          setDescription({
+            ...description,
+            value: ''
+          });
+          setPublisher({
+            ...publisher,
+            value: ''
+          });
+          setAmount({
+            ...amount,
+            value: 0
+          });
+          setPrice({
+            ...price,
+            value: 0
+          });
+          ref.current.scrollTop(0);
+
         },
         onError: (err) => {
           console.log(err);
@@ -306,12 +341,12 @@ const CreateBook = ({navigation}) => {
     };
 
     return (
-      <ScrollView>
+      <ScrollView ref={ref}>
         <View style={styles.container_product}>
           <View style={styles.title}>
             {/* name */}
             <View style={styles.name}>
-              <Text>Tên sản phẩm *</Text>
+              <Text>Tên sách *</Text>
               <View>
                 <TextInput
                   style={styles.txtMaxWidth}
