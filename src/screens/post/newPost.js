@@ -20,7 +20,7 @@ import Images from '../../assets/images/images';
 import {CREATE_POST} from '../../query/post';
 import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
-import {COLORS, NOTIFI} from '../../constants';
+import {COLORS, NOTIFI, SIZES} from '../../constants';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -132,7 +132,38 @@ const NewPost = ({navigation}) => {
         onCompleted: async (data) => {
           setPosts([data.createPost, ...posts]);
           Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
-          navigation.goBack();
+          setName({
+            ...name,
+            value: ''
+          });
+          setTitle({
+            ...author,
+            value: ''
+          });
+          setNumPrint({
+            ...numPrint,
+            value: 0
+          });
+          setDescription({
+            ...description,
+            value: ''
+          });
+          setPublisher({
+            ...publisher,
+            value: ''
+          });
+          setBookWanna({
+            ...bookWanna,
+            value: [],
+          });
+          setYear({
+            ...year,
+            value: ''
+          });
+          setPrice({
+            ...price,
+            value: 0
+          });
         },
         onError: (err) => {
           console.log(err);
@@ -469,12 +500,15 @@ const NewPost = ({navigation}) => {
                   placeholder="Nhập mô tả"
                 />
               </View>
-              <TouchableOpacity style={{
-                  backgroundColor: COLORS.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
-                }} onPress={onAlert}>
-                <Text style={stylesPost.btn}>Đăng bài</Text>
+              <TouchableOpacity  style={{
+                marginTop: 10,
+                paddingTop: 10,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }} onPress={onAlert}>
+                <Text style={{marginTop: 10, alignItems: 'center', borderRadius: 6, width: SIZES.acceptBtn,
+                padding: 10, textAlign: 'center', backgroundColor: COLORS.primary, color: COLORS.white}}>Đăng bài</Text>
               </TouchableOpacity>
             </View>
           </View>

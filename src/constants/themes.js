@@ -40,6 +40,7 @@ export const SIZES = {
   radius: 12,
   padding: 24,
 
+  acceptBtn: 150,
   // font sizes
   largeTitle: 50,
   h1: 30,

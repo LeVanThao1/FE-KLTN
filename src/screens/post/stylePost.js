@@ -290,7 +290,7 @@ export const stylesPost = StyleSheet.create({
   },
 
   addpost: {
-    padding: 10,
+    padding: 20,
   },
 
   rowBetween: {
