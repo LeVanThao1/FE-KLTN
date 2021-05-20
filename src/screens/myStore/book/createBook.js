@@ -30,6 +30,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
+import { useScrollToTop } from '@react-navigation/native';
 
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
@@ -37,6 +38,11 @@ const CreateBook = ({navigation}) => {
       stores: {category, shop},
     } = useContext(MobXProviderContext);
     const {setBookStore, bookStore} = shop;
+    const ref = React.useRef(null);
+
+    // useScrollToTop(React.useRef({
+    //   scrollToTop: () => ref.current?.scrollTo(0, 0),
+    // }));
     const [product, setProduct] = useState({
       value: '',
       error: '',
@@ -149,7 +155,36 @@ const CreateBook = ({navigation}) => {
         onCompleted: async (data) => {
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
           // setBookStore([data.createBook, ...bookStore]);
-          navigation.navigate('BooksStore');
+          setName({
+            ...name,
+            value: ''
+          });
+          setAuthor({
+            ...author,
+            value: ''
+          });
+          setNumPrint({
+            ...numPrint,
+            value: 0
+          });
+          setDescription({
+            ...description,
+            value: ''
+          });
+          setPublisher({
+            ...publisher,
+            value: ''
+          });
+          setAmount({
+            ...amount,
+            value: 0
+          });
+          setPrice({
+            ...price,
+            value: 0
+          });
+          ref.current.scrollTop(0);
+
         },
         onError: (err) => {
           console.log(err);
@@ -192,29 +227,75 @@ const CreateBook = ({navigation}) => {
         {text: 'Hủy'},
       ]);
     };
-    const onPress = () => {
-      let dataBook = {
-        name: name.value,
 
-        amount: amount.value,
-        price: price.value,
-      };
-      if (book) {
-        dataBook.book = book.id;
-      } else {
-        dataBook.description = description.value;
-        dataBook.year = year.value;
-        dataBook.numberOfReprint = numPrint.value;
-        dataBook.publisher = publisher.value;
-        dataBook.category = categori.value;
-        dataBook.images = imagesUpload;
-        dataBook.author = author.value;
+    const validateCreate = () => {
+      if (name.value < 3) {
+        setName({
+          ...name,
+          error: 'Tên sách phải dài hơn 3 ký tự',
+        });
+        return name.error;
       }
-      createBook({
-        variables: {
-          dataBook,
-        },
-      });
+      if (author.value < 3) {
+        setAuthor({
+          ...author,
+          error: 'Tên tác giả phải dài hơn 3 ký tự',
+        });
+        return false;
+      }
+      if (description.value < 30) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 30 ký tự',
+        });
+        return false;
+      }
+      if (!amount.value) {
+        setAmount({
+          ...amount,
+          error: 'Vui lòng nhập số lượng sách',
+        });
+        return false;
+      }
+      if (!price.value) {
+        setPrice({
+          ...price,
+          error: 'Vui lòng nhập giá sách',
+        });
+        return false;
+      }
+      return true;
+    };
+
+    // console.log('valuidate', validateCreate())
+    const onPress = () => {
+      if(validateCreate() === true) {      
+        let dataBook = {
+          name: name.value,
+  
+          amount: amount.value,
+          price: price.value,
+        };
+        if (book) {
+          dataBook.book = book.id;
+        } else {
+          dataBook.description = description.value;
+          dataBook.year = year.value;
+          dataBook.numberOfReprint = numPrint.value;
+          dataBook.publisher = publisher.value;
+          dataBook.category = categori.value;
+          dataBook.images = imagesUpload;
+          dataBook.author = author.value;
+        }
+        createBook({
+          variables: {
+            dataBook,
+          },
+        });      
+      }
+      else {
+        Toast.show(Notification(NOTIFI.error, validateCreate()));
+      }
     };
 
     const removeImages = (index) => {
@@ -306,12 +387,12 @@ const CreateBook = ({navigation}) => {
     };
 
     return (
-      <ScrollView>
+      <ScrollView ref={ref}>
         <View style={styles.container_product}>
           <View style={styles.title}>
             {/* name */}
             <View style={styles.name}>
-              <Text>Tên sản phẩm *</Text>
+              <Text>Tên sách *</Text>
               <View>
                 <TextInput
                   style={styles.txtMaxWidth}
@@ -551,7 +632,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* year */}
             <View style={styles.name}>
-              <Text>Năm phát hành *</Text>
+              <Text>Năm phát hành</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
@@ -596,7 +677,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* pulisher */}
             <View style={styles.name}>
-              <Text>Nhà xuất bản *</Text>
+              <Text>Nhà xuất bản</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
@@ -641,7 +722,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* number of printed lines */}
             <View style={styles.name}>
-              <Text>Số lần xuất bản *</Text>
+              <Text>Số lần xuất bản</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}

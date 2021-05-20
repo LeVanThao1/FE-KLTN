@@ -54,7 +54,7 @@ const BooksStore = ({navigation}) => {
             categoryName: ct.category
               ? ct.category.name
               : ct.book.category.name,
-            author: ct.author ? ct.author : ct.book.author,
+            author: ct.author ? ct.author : '',
             price: ct.price ? ct.price : '',
             publisher: ct.publisher ? ct.publisher : ct.book.publisher,
             numberOfReprint: ct.numberOfReprint
@@ -143,13 +143,13 @@ const BooksStore = ({navigation}) => {
         <View style={{height: 46}}>
           <ScrollView horizontal>
             <Tab name="Tất cả" status="ALL" />
-            <Tab name="Truyện - Tiểu thuyết" status="NOVEL" />
+            <Tab name="Văn học - Tiểu thuyết" status="LITERARY" />
+            <Tab name="Tâm lý - Tình cảm" status="EMOTIONAL" />
             <Tab name="Truyện tranh" status="COMIC" />
             <Tab name="Tôn giáo - Tâm linh" status="RELIGION" />
             <Tab name="Lịch sử" status="HISTORY" />
             <Tab name="Chính trị – Pháp luật" status="LAW" />
             <Tab name="Khoa học - Công nghệ" status="TECHNOLOGY" />
-            <Tab name="Văn học nghệ thuật" status="LITERARY" />
             <Tab name="Văn hóa - Xã hội" status="SOCIOTY" />
             <Tab name="Giáo trình" status="CURRICULUM" />
           </ScrollView>

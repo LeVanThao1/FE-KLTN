@@ -109,9 +109,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
   },
-  //   manager_wrapp: {
-
-  //   },
+    manager_wrapp: {
+      padding: 8,
+      paddingVertical: 16,
+      backgroundColor: '#fff',
+      borderRadius: 6,
+    },
   header_wrap: {
     width: '100%',
     flexDirection: 'row',
@@ -129,8 +132,11 @@ const styles = StyleSheet.create({
   },
   user_wrap: {
     justifyContent: 'center',
+    padding: 12,
     marginBottom: 16,
+    borderRadius: 6,
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   user__avatar: {
     width: 150,

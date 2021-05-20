@@ -98,9 +98,17 @@ const StoreDetail = ({navigation, route}) => {
         <View style={styles.images}>
           <ImageBackground source={Images.slider1} style={styles.image}>
             <Image source={{uri: info.avatar}} style={styles.avatar} />
+            <TouchableOpacity
+              style={styles.storeChat}
+              onPress={() =>
+                console.log('Chat with shop')
+              }>
+                <Text style={styles.chat}>Nhắn tin</Text>
+            </TouchableOpacity>
           </ImageBackground>
         </View>
         <View style={styles.container_store}>
+        <View style={styles.infoStore}>
           <View style={styles.content}>
             <Text>Tên shop </Text>
             <Text
@@ -139,6 +147,9 @@ const StoreDetail = ({navigation, route}) => {
             <Text>Mô tả shop: </Text>
             <Text style={styles.textarea}>{listItem?.description}</Text>
           </View>
+          </View>
+          </View>
+          <View style={styles.container_product}>          
           <View style={styles.product}>
             <Text
               style={{
@@ -166,6 +177,22 @@ const StoreDetail = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  storeChat: {
+    position: 'absolute',
+    bottom: 16,
+    left: 25,
+    // top: 35,
+    // left: 120,
+  },
+  chat: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    color: COLORS.primary,
+    // borderColor: COLORS.white,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderRadius: 4,
+  },
   listBook: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -211,8 +238,17 @@ const styles = StyleSheet.create({
     flex: 0,
     margin: 10,
     padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8
     // width: '90%',
   },
+
+  container_product: {
+    flex: 0,
+    margin: 10,
+    padding: 10,
+  },
+
   product: {
     textAlign: 'center',
   },
