@@ -11,6 +11,11 @@ export const GET_MESSAGE_GROUP = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       seen
@@ -29,6 +34,11 @@ export const GET_MESSAGE_USERID = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       to {
         id
@@ -50,6 +60,11 @@ export const SEND_MESSAGE = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       seen
@@ -69,6 +84,11 @@ export const SEND_MESSAGE_GET_TO = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       to {
         id
@@ -76,6 +96,11 @@ export const SEND_MESSAGE_GET_TO = gql`
           id
           name
           avatar
+          store {
+            id
+            name
+            avatar
+          }
         }
       }
       type
@@ -96,6 +121,11 @@ export const SEND_MESSAGE_IMAGE = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       seen
@@ -115,6 +145,11 @@ export const SEND_MESSAGE_IMAGE_GET_TO = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       to {
         id
@@ -122,6 +157,11 @@ export const SEND_MESSAGE_IMAGE_GET_TO = gql`
           id
           name
           avatar
+          store {
+            id
+            name
+            avatar
+          }
         }
       }
       type
@@ -142,6 +182,11 @@ export const SEEN_MESSAGE = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       seen
@@ -163,6 +208,11 @@ export const RECEIVE_MESSAGE = gql`
           id
           name
           avatar
+          store {
+            id
+            name
+            avatar
+          }
         }
         lastMassage {
           id
@@ -181,6 +231,11 @@ export const RECEIVE_MESSAGE = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       seen

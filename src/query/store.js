@@ -59,6 +59,9 @@ export const GET_STORE_BY_USER = gql`
         price
         sold
       }
+      owner {
+        id
+      }
     }
   }
 `;

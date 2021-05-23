@@ -52,6 +52,7 @@ const StoreDetail = ({navigation, route}) => {
             address: data?.store.address,
             description: data?.store.description,
             book: data?.store.books,
+            owner: data.store.owner,
           });
         },
         onError: (err) => {
@@ -67,7 +68,7 @@ const StoreDetail = ({navigation, route}) => {
         },
       });
     }, [info]);
-    useEffect(() => {}, [listItem]);
+
     const ProductItem = ({book}) => (
       <View
         style={{
@@ -93,63 +94,73 @@ const StoreDetail = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
     );
+    console.log(listItem.background);
     return (
       <ScrollView>
         <View style={styles.images}>
-          <ImageBackground source={Images.slider1} style={styles.image}>
-            <Image source={{uri: info.avatar}} style={styles.avatar} />
+          <ImageBackground
+            source={
+              listItem.background ? {uri: listItem.background} : Images.slider1
+            }
+            style={styles.image}>
+            <Image source={{uri: listItem.avatar}} style={styles.avatar} />
             <TouchableOpacity
               style={styles.storeChat}
-              onPress={() =>
-                console.log('Chat with shop')
-              }>
-                <Text style={styles.chat}>Nhắn tin</Text>
+              onPress={() => {
+                console.log('Chat with shop');
+                navigation.navigate('Room', {
+                  name: listItem.name,
+                  avatar: listItem.avatar,
+                  userIdTo: listItem.owner.id,
+                });
+              }}>
+              <Text style={styles.chat}>Nhắn tin</Text>
             </TouchableOpacity>
           </ImageBackground>
         </View>
         <View style={styles.container_store}>
-        <View style={styles.infoStore}>
-          <View style={styles.content}>
-            <Text>Tên shop </Text>
-            <Text
-              style={
-                (styles.text,
-                {
+          <View style={styles.infoStore}>
+            <View style={styles.content}>
+              <Text>Tên shop </Text>
+              <Text
+                style={
+                  (styles.text,
+                  {
+                    color: '#333',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#111',
+                    padding: 0,
+                    marginLeft: 10,
+                    width: '100%',
+                  })
+                }>
+                {listItem?.name}
+              </Text>
+            </View>
+            <View style={styles.address}>
+              <Text style={{paddingLeft: 8}}>Địa chỉ cửa hàng </Text>
+              <Text
+                style={{
                   color: '#333',
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: '#111',
-                  padding: 0,
-                  marginLeft: 10,
-                  width: '100%',
-                })
-              }>
-              {listItem?.name}
-            </Text>
+                  borderWidth: 0.3,
+                  borderColor: '#111',
+                  padding: 10,
+                  marginVertical: 5,
+                  marginLeft: 4,
+                  borderRadius: 6,
+                  width: '98%',
+                }}
+                numberOfLines={2}>
+                {listItem?.address}
+              </Text>
+            </View>
+            <View style={styles.des}>
+              <Text>Mô tả shop: </Text>
+              <Text style={styles.textarea}>{listItem?.description}</Text>
+            </View>
           </View>
-          <View style={styles.address}>
-            <Text style={{paddingLeft: 8}}>Địa chỉ cửa hàng </Text>
-            <Text
-              style={{
-                color: '#333',
-                borderWidth: 0.3,
-                borderColor: '#111',
-                padding: 10,
-                marginVertical: 5,
-                marginLeft: 4,
-                borderRadius: 6,
-                width: '98%',
-              }}
-              numberOfLines={2}>
-              {listItem?.address}
-            </Text>
-          </View>
-          <View style={styles.des}>
-            <Text>Mô tả shop: </Text>
-            <Text style={styles.textarea}>{listItem?.description}</Text>
-          </View>
-          </View>
-          </View>
-          <View style={styles.container_product}>          
+        </View>
+        <View style={styles.container_product}>
           <View style={styles.product}>
             <Text
               style={{
@@ -190,8 +201,17 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     // borderColor: COLORS.white,
     backgroundColor: COLORS.white,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   listBook: {
     flexDirection: 'row',
@@ -239,7 +259,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     backgroundColor: '#fff',
-    borderRadius: 8
+    borderRadius: 8,
     // width: '90%',
   },
 
