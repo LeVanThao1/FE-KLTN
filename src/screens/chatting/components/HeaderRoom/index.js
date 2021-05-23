@@ -15,7 +15,7 @@ import styles from './styles';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 const {width, height} = Dimensions.get('screen');
 
-const HeaderRoom = ({name, avatar, userId, isNew}) => {
+const HeaderRoom = ({name, avatar, userId, isNew, storeId}) => {
   const navigation = useNavigation();
   const [menu, setMenu] = useState();
   const openMenu = () => {
@@ -101,7 +101,13 @@ const HeaderRoom = ({name, avatar, userId, isNew}) => {
                   }}
                   onPress={() => {
                     menu.hide();
-                    navigation.navigate('UserInfo', {id: userId});
+                    if (storeId) {
+                      navigation.navigate('StoreDetail', {
+                        id: storeId,
+                      });
+                    } else {
+                      navigation.navigate('UserInfo', {id: userId});
+                    }
                   }}>
                   Xem trang cá nhân
                 </MenuItem>

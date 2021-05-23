@@ -181,16 +181,30 @@ const Chats = ({navigation}) => {
                 });
             }
             navigation.navigate('Room', {
-              name: currentUser.name,
-              avatar: currentUser.avatar,
+              name: currentUser?.store?.name
+                ? currentUser?.store?.name
+                : currentUser?.name,
+              avatar: currentUser?.store?.avatar
+                ? currentUser?.store?.avatar
+                : currentUser?.avatar,
               userIdTo: currentUser.id,
+              storeId: currentUser?.store?.id,
             });
           }}>
-          <Image source={{uri: currentUser.avatar}} style={styles.avatar} />
+          <Image
+            source={{
+              uri: currentUser?.store?.avatar
+                ? currentUser?.store?.avatar
+                : currentUser?.avatar,
+            }}
+            style={styles.avatar}
+          />
           <View style={styles.main}>
             <View style={styles.detail}>
               <Text style={styles.name} numberOfLines={1}>
-                {currentUser.name}
+                {currentUser?.store?.name
+                  ? currentUser?.store?.name
+                  : currentUser?.name}
               </Text>
               {!checkIsMyMessage() && !item.lastMassage.seen && (
                 <Image

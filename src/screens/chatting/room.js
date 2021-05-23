@@ -19,7 +19,7 @@ const ChatRoomScreen = ({navigation, route}) => {
       stores: {group, user},
     } = useContext(MobXProviderContext);
     const {messages, setMessagesBegin, groupCurrent, setGroupCurrent} = group;
-    const {name, avatar, userIdTo} = route.params;
+    const {name, avatar, userIdTo, storeId} = route.params;
     const [loading, setLoading] = useState(true);
     const [loadMore, setLoadMore] = useState(false);
     const [option, setOption] = useState({
@@ -98,7 +98,12 @@ const ChatRoomScreen = ({navigation, route}) => {
 
     return (
       <View style={{marginBottom: 110}}>
-        <HeaderRoom name={name} avatar={avatar} userId={userIdTo} />
+        <HeaderRoom
+          name={name}
+          avatar={avatar}
+          userId={userIdTo}
+          storeId={storeId}
+        />
         <ImageBackground style={{width: '100%', height: '100%'}} source={BG}>
           {!loading ? (
             <>

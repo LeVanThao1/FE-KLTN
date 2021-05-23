@@ -22,6 +22,7 @@ const ChatMessage = (props) => {
       return moment(date).format('hh:mm a DD/MM');
     }
   };
+  console.log(message.from?.store?.avatar);
   return (
     <View
       style={{
@@ -31,7 +32,11 @@ const ChatMessage = (props) => {
       }}>
       {!isMyMessage() && (
         <Image
-          source={{uri: message.from.avatar}}
+          source={{
+            uri: message.from.store?.avatar
+              ? message.from.store?.avatar
+              : message.from.avatar,
+          }}
           style={{width: 20, height: 20, borderRadius: 20, marginRight: 2}}
         />
       )}
@@ -100,7 +105,11 @@ const ChatMessage = (props) => {
       </View>
       {isMyMessage() && (
         <Image
-          source={{uri: message.from.avatar}}
+          source={{
+            uri: message.from.store?.avatar
+              ? message.from.store?.avatar
+              : message.from.avatar,
+          }}
           style={{width: 20, height: 20, borderRadius: 20, marginLeft: 2}}
         />
       )}

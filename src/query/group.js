@@ -8,6 +8,11 @@ export const GET_GROUP = gql`
         id
         name
         avatar
+        store {
+          id
+          name
+          avatar
+        }
       }
       lastMassage {
         id
