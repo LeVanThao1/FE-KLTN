@@ -62,3 +62,27 @@ export const COMMENTS_ORDER_NOTIFICATION = gql`
     }
   }
 `;
+
+export const SEEN_NOTIFICATION_BOOK = gql`
+mutation seenNotificationBook($id: ID!) {
+  seenNotificationBook(id: $id) {
+    message
+  }
+}
+`;
+
+export const SEEN_NOTIFICATION_POST = gql`
+mutation seenNotificationPost($id: ID!) {
+  seenNotificationPost(id: $id) {
+    message
+  }
+}
+`;
+
+export const SEEN_NOTIFICATION_ORDER = gql`
+mutation seenNotificationOrder($id: ID!) {
+  seenNotificationOrder(id: $id) {
+    message
+  }
+}
+`;
