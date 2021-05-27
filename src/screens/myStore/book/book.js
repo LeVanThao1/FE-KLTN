@@ -109,14 +109,19 @@ const Book = ({book}) => {
                 justifyContent: 'space-between',
                 color: COLORS.secondary,
               }}>
-              <Text style={{fontSize: 14, textAlign: 'left'}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: 'left',
+                  color: COLORS.primary,
+                }}>
                 Số lượng x{book.amount}
               </Text>
               <Text
                 style={{
                   fontSize: 14,
                   textAlign: 'left',
-                  color: COLORS.secondary,
+                  color: COLORS.primary,
                 }}>
                 Giá {formatMoney(book.price)} VNĐ
               </Text>
@@ -148,17 +153,26 @@ const Book = ({book}) => {
                 numberOfLines={1}>
                 Mô tả: {book.description}
               </Text>
-              <Button
-                style={{width: 50, height: 30, marginTop: -10}}
+              <TouchableOpacity
+                style={{
+                  width: 40,
+                  height: 30,
+                  marginTop: -10,
+                  backgroundColor: COLORS.primary,
+                }}
                 onPress={() => onAlert(book.id)}>
                 <Icon
                   name="delete"
                   type="MaterialIcons"
                   style={{
                     fontSize: 16,
+                    color: COLORS.white,
+                    textAlign: 'center',
+                    alignItem: 'center',
+                    top: '20%',
                   }}
                 />
-              </Button>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

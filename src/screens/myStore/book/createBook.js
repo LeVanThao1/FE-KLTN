@@ -632,7 +632,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* year */}
             <View style={styles.name}>
-              <Text>Năm phát hành</Text>
+              <Text>Năm xuất bản</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}

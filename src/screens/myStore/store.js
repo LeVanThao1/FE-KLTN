@@ -39,8 +39,18 @@ const Store = ({navigation}) => {
     const navigation = useNavigation();
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
-    // useEffect(() => {}, []);
 
+    if(shop.info === null ) return (
+      <View style={styles.createStore}>
+        <Text style={styles.titleCreate}>Bạn chưa có cửa hàng</Text>
+        <TouchableOpacity
+          style={styles.btnCreate}
+          onPress={() => navigation.navigate('CreateStore')}>
+          <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
+        </TouchableOpacity>
+      </View>
+    )
+    else {
     const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
       onCompleted: async (data) => {
         console.log('....data...', data);
@@ -63,19 +73,12 @@ const Store = ({navigation}) => {
         },
       });
     }, [info]);
+  }
     useEffect(() => {}, [info]);
 
+    console.log('info shop',shop.info)
 
-    return Object.keys(shop.info).length === 0 ? (
-      <View style={styles.createStore}>
-        <Text style={styles.titleCreate}>Bạn chưa có cửa hàng</Text>
-        <Button
-          style={styles.btnCreate}
-          onPress={() => navigation.navigate('CreateStore')}>
-          <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
-        </Button>
-      </View>
-    ) : (
+    return  (
       <ScrollView>
         <View style={styles.images}>
           <ImageBackground source={Images.slider1} style={styles.image}>
@@ -244,6 +247,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 15,
     borderRadius: 4,
+    color: '#fff',
+    backgroundColor: COLORS.primary,
   },
 
   txtCreate: {
