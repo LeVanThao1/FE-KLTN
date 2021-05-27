@@ -223,11 +223,11 @@ const PostOfFeed = ({route, post, info, type}) => {
             <View
               style={{
                 paddingVertical: 8,
-                // borderBottomColor: '#000000',
-                // borderBottomWidth: 0.5,
               }}>
               <PostTitle>{post.title}</PostTitle>
-              <PostDescription>{post.description}</PostDescription>
+              <PostDescription numberOfLines={4}>
+                {post.description}
+              </PostDescription>
             </View>
           </TouchableOpacity>
 
@@ -255,17 +255,13 @@ const PostOfFeed = ({route, post, info, type}) => {
                         setIndex(i);
                         setIsVisible(true);
                       }}>
-                      {/* <PostPhoto source={{uri: img}} /> */}
                       <PostPhoto
-                        // style={{opacity: !loading ? 1 : 0.5}}
                         source={{
                           uri: img,
                         }}
                       />
                     </TouchableOpacity>
                   </PhotoContainer>
-                  // cai cong 3 ak ha u h ma lam cai + do la sao bam, neu h bam la no hien thi 1 list luon
-                  // cai onPress ảnh thêm vào chỗ nào cùng dc à thấy chưa, vaixz lz roiof ko click dc anhr dods
                 ))}
               </PhotoGroup>
             ) : (

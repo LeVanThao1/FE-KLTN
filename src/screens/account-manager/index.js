@@ -145,8 +145,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   user_name: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 10,
+    fontWeight: 'bold',
+    color: COLORS.primary,
   },
   manager_item: {
     marginVertical: 0,

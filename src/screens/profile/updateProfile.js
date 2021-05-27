@@ -63,12 +63,14 @@ const UpdateProfile = ({navigation}) => {
           text: 'Thay đổi thành công',
           type: 'success',
           position: 'top',
-          style: {backgroundColor: COLORS.primary, color: '#ffffff'},
+          // style: {backgroundColor: COLORS.primary, color: '#ffffff'},
         });
         setInfo({
           ...info,
           name: userName,
           address: userAddress,
+          email: userEmail,
+          phone: userPhone,
         });
       },
       onError: (err) => {
@@ -218,7 +220,7 @@ const UpdateProfile = ({navigation}) => {
                 style={styles.inputText}
                 placeholder="Số điện thoại"
                 value={userPhone}
-                // editable={!info.phone}
+                editable={!info.phone}
                 onChangeText={(value) => setUserPhone(value)}
                 keyboardType="numeric"
               />
@@ -230,7 +232,7 @@ const UpdateProfile = ({navigation}) => {
                 placeholder="Email"
                 value={userEmail}
                 onChangeText={(value) => setUserEmail(value)}
-                // editable={!info.email}
+                editable={!info.email}
               />
             </View>
             <View style={styles.row}>
@@ -244,6 +246,7 @@ const UpdateProfile = ({navigation}) => {
                 placeholder="địa chỉ"
                 value={userAddress}
                 onChangeText={(value) => setUserAddress(value)}
+                numberOfLines={1}
               />
             </View>
             <Hr />
@@ -265,17 +268,20 @@ const UpdateProfile = ({navigation}) => {
             {checkEdit() ? (
               <TouchableOpacity
                 style={styles.button}
-                onPress={() =>
-                  updateUser({
-                    variables: {
-                      userUpdate: {
-                        name: userName,
-                        avatar: avatarUpload,
-                        address: userAddress,
-                        interests: info.interests,
+                onPress={() => {
+                    updateUser({
+                      variables: {
+                        userUpdate: {
+                          name: userName,
+                          avatar: avatarUpload,
+                          address: userAddress,
+                          email: info.email ? info.email : userEmail,
+                          phone: info.phone ? info.phone : userPhone,
+                          interests: info.interests,
+                        },
                       },
-                    },
-                  })
+                    })                    
+                  }
                 }>
                 <Text style={styles.buttonText}>Xác nhận thay đổi</Text>
               </TouchableOpacity>

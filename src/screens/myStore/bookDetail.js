@@ -67,6 +67,7 @@ const BookDetail = ({navigation, book}) => {
       });
       setCmts('');
     };
+    console.log('0000', bookCurrent);
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>
