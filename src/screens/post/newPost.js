@@ -134,23 +134,23 @@ const NewPost = ({navigation}) => {
           Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
           setName({
             ...name,
-            value: ''
+            value: '',
           });
           setTitle({
             ...author,
-            value: ''
+            value: '',
           });
           setNumPrint({
             ...numPrint,
-            value: 0
+            value: 0,
           });
           setDescription({
             ...description,
-            value: ''
+            value: '',
           });
           setPublisher({
             ...publisher,
-            value: ''
+            value: '',
           });
           setBookWanna({
             ...bookWanna,
@@ -158,11 +158,11 @@ const NewPost = ({navigation}) => {
           });
           setYear({
             ...year,
-            value: ''
+            value: '',
           });
           setPrice({
             ...price,
-            value: 0
+            value: 0,
           });
         },
         onError: (err) => {
@@ -211,7 +211,7 @@ const NewPost = ({navigation}) => {
         name: name.value,
         // author: author.value,
         description: description.value,
-        bookWanna: [bookWanna.value],
+        bookWanna: bookWanna.value,
         images: imagesUpload,
         publisher: publisher.value,
         numberOfReprint: numberOfReprint.value,
@@ -500,15 +500,28 @@ const NewPost = ({navigation}) => {
                   placeholder="Nhập mô tả"
                 />
               </View>
-              <TouchableOpacity  style={{
-                marginTop: 10,
-                paddingTop: 10,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }} onPress={onAlert}>
-                <Text style={{marginTop: 10, alignItems: 'center', borderRadius: 6, width: SIZES.acceptBtn,
-                padding: 10, textAlign: 'center', backgroundColor: COLORS.primary, color: COLORS.white}}>Đăng bài</Text>
+              <TouchableOpacity
+                style={{
+                  marginTop: 10,
+                  paddingTop: 10,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={onAlert}>
+                <Text
+                  style={{
+                    marginTop: 10,
+                    alignItems: 'center',
+                    borderRadius: 6,
+                    width: SIZES.acceptBtn,
+                    padding: 10,
+                    textAlign: 'center',
+                    backgroundColor: COLORS.primary,
+                    color: COLORS.white,
+                  }}>
+                  Đăng bài
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

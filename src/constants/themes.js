@@ -14,6 +14,8 @@ export const COLORS = {
   primary: 'orange',
   primary: '#20b389',
   primary: '#00b052',
+  primary: '#427ef5',
+  primary: '#7a2ba6',
   secondary: '#454c5d', // Gray
   secondary: '#111',
 

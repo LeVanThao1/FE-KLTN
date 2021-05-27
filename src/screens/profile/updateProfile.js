@@ -244,6 +244,7 @@ const UpdateProfile = ({navigation}) => {
                 placeholder="địa chỉ"
                 value={userAddress}
                 onChangeText={(value) => setUserAddress(value)}
+                numberOfLines={1}
               />
             </View>
             <Hr />

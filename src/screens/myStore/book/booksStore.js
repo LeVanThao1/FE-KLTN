@@ -46,21 +46,21 @@ const BooksStore = ({navigation}) => {
     }, []);
     useEffect(() => {
       if (bookStore) {
+        console.log('1111', bookStore);
+
         setListBook(
           bookStore.map((ct, i) => ({
             id: ct.id ? ct.id : '',
-            name: ct.name ? ct.name : ct.book.name,
+            name: ct.name ? ct.name : '',
             categoryId: ct.category ? ct.category.id : ct.book.category.id,
             categoryName: ct.category
               ? ct.category.name
               : ct.book.category.name,
             author: ct.author ? ct.author : '',
             price: ct.price ? ct.price : '',
-            publisher: ct.publisher ? ct.publisher : ct.book.publisher,
-            numberOfReprint: ct.numberOfReprint
-              ? ct.numberOfReprint
-              : ct.book.numberOfReprint,
-            year: ct.year ? ct.year : ct.book.year,
+            publisher: ct.publisher ? ct.publisher : '',
+            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
+            year: ct.year ? ct.year : '',
             amount: ct.amount ? ct.amount : '',
             sold: ct.sold ? ct.sold : '',
             description: ct.description ? ct.description : '',
