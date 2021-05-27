@@ -11,6 +11,12 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {COLORS} from '../../constants/themes';
+import {mutateData} from '../../common';
+import {
+  SEEN_NOTIFICATION_BOOK,
+  SEEN_NOTIFICATION_ORDER,
+  SEEN_NOTIFICATION_POST,
+} from '../../query/notification';
 
 const icon = {
   book: {
@@ -38,16 +44,19 @@ const NotificationScreen = ({navigation}) => {
         linkID: (item) => item.commentBook.book.id,
         screen: 'Detail-Product',
         id: 'productId',
+        mutate: SEEN_NOTIFICATION_BOOK,
       },
       post: {
         linkID: (item) => item.commentPost.post.id,
         screen: 'PostDetail',
         id: 'postID',
+        mutate: SEEN_NOTIFICATION_POST,
       },
       order: {
         linkID: (item) => item.order.id,
         screen: 'OrderDetail',
         id: 'id',
+        mutate: SEEN_NOTIFICATION_ORDER,
       },
     };
     useEffect(() => {
@@ -74,12 +83,55 @@ const NotificationScreen = ({navigation}) => {
     );
     const NotificationItem = ({item}) => (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
+          if (!item.seen) {
+            console.log(item.id);
+            mutateData(route[selected].mutate, {id: item.id})
+              .then(({data}) => {
+                if (selected == 'post') {
+                  const findIndex = notification.post.findIndex(
+                    (dt) => dt.id + '' === item.id + '',
+                  );
+                  notification.setPost([
+                    ...notification.post.slice(0, findIndex),
+                    {...notification.post[findIndex], seen: true},
+                    ...notification.post.slice(findIndex + 1),
+                  ]);
+                }
+                if (selected == 'order') {
+                  const findIndex = notification.order.findIndex(
+                    (dt) => dt.id + '' === item.id + '',
+                  );
+                  notification.setOrder([
+                    ...notification.order.slice(0, findIndex),
+                    {...notification.order[findIndex], seen: true},
+                    ...notification.order.slice(findIndex + 1),
+                  ]);
+                }
+                if (selected == 'book') {
+                  const findIndex = notification.book.findIndex(
+                    (dt) => dt.id + '' === item.id + '',
+                  );
+                  notification.setBook([
+                    ...notification.book.slice(0, findIndex),
+                    {...notification.book[findIndex], seen: true},
+                    ...notification.book.slice(findIndex + 1),
+                  ]);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
           navigation.navigate(route[selected].screen, {
             [route[selected].id]: route[selected].linkID(item),
-          })
-        }>
-        <View style={styles.itemContainer}>
+          });
+        }}>
+        <View
+          style={{
+            ...styles.itemContainer,
+            backgroundColor: !item.seen ? '#e2f7dc' : '#fff',
+          }}>
           <View style={styles.itemTopContainer}>
             <View style={styles.itemTypeContainer}>
               <Icon
