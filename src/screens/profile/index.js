@@ -110,6 +110,7 @@ const Profile = ({navigation}) => {
         });
       }
     };
+    console.log(info)
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>
@@ -178,10 +179,6 @@ const Profile = ({navigation}) => {
                     paddingHorizontal: 0,
                     paddingVertical: 0,
                     margin: 0,
-                    // marginTop: -20,
-
-                    // width: 70,
-                    // height: 30,
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: 40,
@@ -215,7 +212,7 @@ const Profile = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               <View style={{marginVertical: 10}}>
-                <Text style={styles.name}>{userName}</Text>
+                <Text style={styles.name}>{info.name}</Text>
               </View>
             </View>
           </View>
@@ -225,11 +222,11 @@ const Profile = ({navigation}) => {
             {/* <Hr /> */}
             <View style={styles.row}>
               <Icon name="phone-alt" type="FontAwesome5" style={styles.icon} />
-              <Text style={styles.inputText}>{userPhone}</Text>
+              <Text style={styles.inputText}>{info.phone}</Text>
             </View>
             <View style={styles.row}>
               <Icon name="mail" type="Entypo" style={styles.icon} />
-              <Text style={styles.inputText}>{userEmail}</Text>
+              <Text style={styles.inputText}>{info.email}</Text>
             </View>
             {/* <Hr /> */}
             <View style={styles.row}>
@@ -238,7 +235,7 @@ const Profile = ({navigation}) => {
                 type="FontAwesome5"
                 style={styles.icon}
               />
-              <Text style={styles.inputText}> {userAddress}</Text>
+              <Text style={styles.inputText}> {info.address}</Text>
             </View>
             {/* <Hr />
 

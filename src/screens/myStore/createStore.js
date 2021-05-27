@@ -1,4 +1,4 @@
-import React, {useState, memo, useContext, useEffect} from 'react';
+import React, {useState, memo, useContext, useEffect, useRef} from 'react';
 import {
   Image,
   ImageBackground,
@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import Textarea from 'react-native-textarea';
 import {Icon, ListItem, Separator, Button} from 'native-base';
@@ -37,6 +38,10 @@ import sub, {
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+
+import ImagePicker from 'react-native-image-crop-picker';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {ReactNativeFile} from 'extract-files';
 
 const CreateStore = ({navigation}) => {
   return useObserver(() => {
@@ -125,6 +130,72 @@ const CreateStore = ({navigation}) => {
       }
       return count === 0;
     };
+
+    const refName = useRef(null);
+    const [imagesUpload, setImageUpload] = useState([]);
+    const [images, setImages] = useState([]);
+    const onChange = (value) => {
+      setCategori({
+        value: value,
+      });
+    };
+
+    const [visibleToast, setvisibleToast] = useState(false);
+
+    useEffect(() => setvisibleToast(false), [visibleToast]);
+    const [type, setType] = useState(false);
+    const handleButtonPress = () => {
+      setvisibleToast(true);
+    };
+    // const [photo, setPhoto] = useState(null);
+    const [upload] = useMutation(UPLOAD_MULTI_FILE, {
+      onCompleted: (data) => {
+        const tamp = data.uploadMultiFile.map((dt) => dt.url);
+        setImageUpload([...imagesUpload, ...tamp]);
+      },
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log('manage', err);
+      },
+    });
+
+    const handleChoosePhoto = () => {
+      ImagePicker.openPicker({
+        multiple: true,
+        maxFiles: 10,
+        mediaType: 'photo',
+      })
+        .then((res) => {
+          if (res.length > 10 || res.length + images.length > 10) {
+            console.log(
+              'Vượt quá giới hạn cho phép. Giới hạn cho phép 10 hình ảnh',
+            );
+            return;
+          }
+          const tamp = res.map((r) => r.path);
+          setImages([...images, ...tamp]);
+          const files = res.map(
+            (r) =>
+              new ReactNativeFile({
+                uri: r.path,
+                name: 'product',
+                type: r.mime,
+              }),
+          );
+          upload({
+            variables: {
+              files,
+            },
+          });
+        })
+        .catch((err) => console.log(err));
+    };
+
+    const removeImages = (index) => {
+      setImages(images.filter((ig, i) => index !== i));
+      setImageUpload(imagesUpload.filter((ig, i) => index !== i));
+    };
+
     const onPress = () => {
       if (validateSubmit) {
         let dataStore = {
@@ -156,10 +227,8 @@ const CreateStore = ({navigation}) => {
         <View style={styles.container_store}>
           <View>
             <Text>Thêm avatar nha</Text>
-          </View>
-          <View>
-            <Text>Thêm background nha</Text>
-          </View>
+          </View>       
+             
           <View style={styles.content}>
             <Text style={{fontSize: 16}}>Tên shop </Text>
             <TextInput
@@ -280,9 +349,9 @@ const CreateStore = ({navigation}) => {
               onChangeText={(value) => setDescription(value)}
             />
           </View>
-          <Button style={styles.btnCreate} onPress={onPress}>
+          <TouchableOpacity style={styles.btnCreate} onPress={onPress}>
             <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
-          </Button>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -316,6 +385,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 15,
     borderRadius: 4,
+    backgroundColor: COLORS.primary,
+    color: '#fff'
   },
 
   txtCreate: {

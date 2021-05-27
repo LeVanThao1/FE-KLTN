@@ -140,9 +140,9 @@ const NewPost = ({navigation}) => {
             ...author,
             value: '',
           });
-          setNumPrint({
-            ...numPrint,
-            value: 0,
+          setNumberOfReprint({
+            ...numberOfReprint,
+            value: '0',
           });
           setDescription({
             ...description,
@@ -162,7 +162,7 @@ const NewPost = ({navigation}) => {
           });
           setPrice({
             ...price,
-            value: 0,
+            value: '0',
           });
         },
         onError: (err) => {
