@@ -29,8 +29,18 @@ const Address = ({navigation}) => {
         order: {infoOrder, setInfoOrder},
       },
     } = useContext(MobXProviderContext);
+    useEffect(() => {
+      const provinces = getProvinces()[0];
+      setProvinces({value: provinces.code + '-' + provinces.name, error: ''});
+      const districts = getDistrictsByProvinceCode(provinces.code)[0];
+      setDistricts({value: districts.code + '-' + districts.name, error: ''});
+      const ward = getWardsByDistrictCode(districts.code)[0];
+      setWard({value: districts.code + '-' + districts.name, error: ''});
+    }, []);
     const [provinces, setProvinces] = useState({
-      value: infoOrder ? infoOrder.provinces : undefined,
+      value: infoOrder
+        ? infoOrder.provinces
+        : getProvinces()[0].code + '-' + getProvinces()[0].name,
       error: '',
     });
     const [districts, setDistricts] = useState({
