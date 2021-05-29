@@ -9,14 +9,20 @@ export class Book {
   textSearch = undefined;
   @observable
   booksCategory = undefined;
-  constructor(books, booksSearch, textSearch, booksCategory) {
+  @observable
+  stop = false;
+  constructor(books, booksSearch, textSearch, booksCategory, stop) {
     this.books = books;
     this.booksSearch = booksSearch;
     this.textSearch = textSearch;
     this.booksCategory = booksCategory;
+    this.stop = stop;
     makeObservable(this);
   }
-
+  @action
+  setStop = (value) => {
+    this.stop = value;
+  };
   @action
   setBooks = (value) => {
     this.books = value;

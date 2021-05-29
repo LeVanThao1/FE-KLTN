@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   seeMoreText: {
-    color: '#0e45b4',
+    color: COLORS.primary,
     fontWeight: 'bold',
   },
 });

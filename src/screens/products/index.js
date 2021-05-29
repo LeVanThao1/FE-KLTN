@@ -29,6 +29,8 @@ const Products = ({navigation, route}) => {
       booksCategory,
       setBooksCategory,
       booksSearch,
+      stop,
+      setStop,
     } = book;
     const {
       categories,
@@ -40,7 +42,7 @@ const Products = ({navigation, route}) => {
     } = category;
     const [loading, setLoading] = useState(true);
     const [loadingByCategory, setLoadingByCategory] = useState(false);
-
+    // const [stop, setStop] = useState(false)
     useEffect(() => {
       if (selectCategory === 'all') {
         if (option.page !== 1) {
@@ -49,6 +51,7 @@ const Products = ({navigation, route}) => {
             ...option,
           })
             .then(({data}) => {
+              if (data.books.length < 20) setStop(true);
               if (data.books.length > 0) setBooks([...books, ...data.books]);
               else {
                 setOption({...option, page: option.page - 1});
@@ -68,6 +71,7 @@ const Products = ({navigation, route}) => {
             setLoading(true);
             queryData(GET_BOOKS_CATEGORY, {id: selectCategory, ...option})
               .then(({data}) => {
+                if (data.booksByCategory.length < 20) setStop(true);
                 if (data.booksByCategory.length > 0)
                   setBooksCategory({
                     ...booksCategory,
@@ -93,6 +97,8 @@ const Products = ({navigation, route}) => {
           setLoadingByCategory(true);
           queryData(GET_BOOKS_CATEGORY, {id: selectCategory, ...option})
             .then(({data}) => {
+              if (data.booksByCategory.length < 20) setStop(true);
+              else setStop(false);
               setBooksCategory({
                 ...booksCategory,
                 [selectCategory]: data.booksByCategory,
@@ -104,6 +110,9 @@ const Products = ({navigation, route}) => {
               setLoadingByCategory(false);
             });
         }
+      } else {
+        if (books.length < 10) setStop(true);
+        else setStop(false);
       }
     }, [selectCategory]);
 
@@ -120,6 +129,8 @@ const Products = ({navigation, route}) => {
           page: 1,
         })
           .then(({data}) => {
+            if (data.books.length < 20) setStop(true);
+            else setStop(false);
             setBooks(data.books);
             setRefreshing(false);
           })
@@ -283,7 +294,9 @@ const Products = ({navigation, route}) => {
               </>
             )}
 
-            {loading && <Spinner color={COLORS.primary} size="small" />}
+            {loading && !stop && (
+              <Spinner color={COLORS.primary} size="small" />
+            )}
           </View>
         </View>
       </ScrollView>
