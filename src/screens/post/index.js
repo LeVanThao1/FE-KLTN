@@ -38,7 +38,7 @@ const Post = ({route}) => {
           style={button.bgAdd}
           onPress={() => navigation.navigate('NewPost')}>
           <Icon name="plus" style={button.btnAdd} type="AntDesign" />
-          <Text style={{fontSize: 15, color: '#fff'}}>Thêm bài viết</Text>
+          <Text style={{fontSize: 14, color: '#fff'}}>Thêm bài viết</Text>
           {/* </TouchableOpacity> */}
         </TouchableOpacity>
         <ScrollView

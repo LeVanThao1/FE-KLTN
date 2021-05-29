@@ -232,7 +232,7 @@ const NewPost = ({navigation}) => {
           <View style={stylesPost.content}>
             <View style={stylesPost.text}>
               <View style={stylesPost.vertical}>
-                <Text>Tiêu đề: </Text>
+                <Text>Tiêu đề *</Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tiêu đề"
@@ -252,7 +252,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View>
-                <Text>Tên sách: </Text>
+                <Text>Tên sách * </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên sách"
@@ -428,7 +428,7 @@ const NewPost = ({navigation}) => {
                   }}>
                   <TextInput
                     style={stylesPost.txtVND}
-                    placeholder="Nhập giá sách"
+                    placeholder="Giá sách"
                     value={price.value}
                     onFocus={() => {
                       setPrice({

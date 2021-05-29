@@ -219,10 +219,12 @@ const CreateStore = ({navigation}) => {
       <ScrollView>
         <View style={styles.container_store}>
           <View
-            style={{
-              paddingVertical: 10,
-            }}>
-            <Text>Hình ảnh *</Text>
+            style={
+              {
+                // paddingVertical: 10,
+              }
+            }>
+            <Text>Hình ảnh</Text>
             <ScrollView
               style={{flexDirection: 'row', marginVertical: 10}}
               horizontal={true}>
@@ -261,6 +263,8 @@ const CreateStore = ({navigation}) => {
                   style={{
                     // paddingHorizontal: 10,
                     // paddingVertical: 5,
+                    borderWidth: 1,
+                    borderRadius: 6,
                     margin: 0,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -290,7 +294,7 @@ const CreateStore = ({navigation}) => {
           </View>
 
           <View style={styles.content}>
-            <Text style={{fontSize: 16}}>Tên shop </Text>
+            <Text style={{fontSize: 16}}>Tên shop *</Text>
             <TextInput
               style={styles.titleCreate}
               placeholder="Nhập tên shop"
@@ -311,7 +315,7 @@ const CreateStore = ({navigation}) => {
             />
           </View>
           <View style={styles.field}>
-            <Text>Tỉnh / Thành phố</Text>
+            <Text style={{fontSize: 16}}>Tỉnh / Thành phố *</Text>
             <View
               style={{
                 ...styles.picker,
@@ -338,7 +342,7 @@ const CreateStore = ({navigation}) => {
             <Text style={styles.err}>{provinces.error}</Text>
           </View>
           <View style={styles.field}>
-            <Text>Quận / Huyện</Text>
+            <Text style={{fontSize: 16}}>Quận / Huyện *</Text>
             <View
               style={{
                 ...styles.picker,
@@ -368,7 +372,7 @@ const CreateStore = ({navigation}) => {
             <Text style={styles.err}>{districts.error}</Text>
           </View>
           <View style={styles.field}>
-            <Text>Thị xã/Thôn</Text>
+            <Text style={{fontSize: 16}}>Thị xã/Thôn *</Text>
             <View
               style={{
                 ...styles.picker,
@@ -396,7 +400,7 @@ const CreateStore = ({navigation}) => {
             <Text style={styles.err}>{ward.error}</Text>
           </View>
           <View style={styles.field}>
-            <Text>Địa chỉ cụ thể</Text>
+            <Text style={{fontSize: 16}}>Địa chỉ cụ thể *</Text>
             <TextInput
               style={styles.titleCreate}
               placeholder="Nhập địa chỉ cụ thể"
@@ -447,6 +451,8 @@ const styles = StyleSheet.create({
     padding: 10,
     // alignItems: 'felx-start',
     // width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 6,
   },
 
   createStore: {
@@ -456,7 +462,7 @@ const styles = StyleSheet.create({
 
   titleCreate: {
     width: '100%',
-    height: 35,
+    height: 38,
     fontSize: 14,
     // paddingBottom: 20,
     // marginLeft: 10, de t tao cai store xong da
@@ -490,7 +496,7 @@ const styles = StyleSheet.create({
   content: {
     // flexDirection: 'row',
     // alignItems: 'center',
-    margin: 5,
+    // margin: 5,
     paddingVertical: 10,
     // width: '70%',
   },
@@ -504,7 +510,7 @@ const styles = StyleSheet.create({
   },
   des: {
     flexDirection: 'column',
-    margin: 5,
+    // margin: 5,
     width: '100%',
   },
   textareacont: {
