@@ -69,7 +69,7 @@ export const stylesPost = StyleSheet.create({
 
   iconEnter: {
     position: 'absolute',
-    right: -25,
+    right: -10,
     top: 13,
   },
 
@@ -106,7 +106,7 @@ export const stylesPost = StyleSheet.create({
     paddingRight: 40,
     marginLeft: 10,
     height: 35,
-    width: '100%',
+    width: '95%',
   },
 
   avt: {
@@ -206,7 +206,7 @@ export const stylesPost = StyleSheet.create({
   txtInput: {
     borderWidth: 0.3,
     height: 38,
-    fontSize: 16,
+    // fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginVertical: 4,

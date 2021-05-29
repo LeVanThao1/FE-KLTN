@@ -40,6 +40,8 @@ const Store = ({navigation}) => {
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
 
+    console.log('shopppp', shop);
+
     if (shop.info === null)
       return (
         <View style={styles.createStore}>
@@ -51,30 +53,31 @@ const Store = ({navigation}) => {
           </TouchableOpacity>
         </View>
       );
-    else {
-      const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-        onCompleted: async (data) => {
-          setListInfo({
-            id: data?.store.id,
-            name: data?.store.name,
-            description: data?.store.description,
-            address: data?.store.address,
-          });
-        },
-        onError: (err) => {
-          Toast.show(Notification(NOTIFI.error, err.message));
-          console.log('get store', err);
-        },
-      });
-      useEffect(() => {
-        store({
-          variables: {
-            id: shop.info.id,
-          },
-        });
-      }, [info]);
-    }
-    useEffect(() => {}, [info]);
+    // else {
+    //   const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+    //     onCompleted: async (data) => {
+    //       console.log(data);
+    //       setListInfo({
+    //         id: data?.store.id,
+    //         name: data?.store.name,
+    //         description: data?.store.description,
+    //         address: data?.store.address,
+    //       });
+    //     },
+    //     onError: (err) => {
+    //       Toast.show(Notification(NOTIFI.error, err.message));
+    //       console.log('get store', err);
+    //     },
+    //   });
+    //   useEffect(() => {
+    //     store({
+    //       variables: {
+    //         id: shop.info.id,
+    //       },
+    //     });
+    //   }, [info]);
+    // }
+    // useEffect(() => {}, [info]);
 
     return (
       <ScrollView>
