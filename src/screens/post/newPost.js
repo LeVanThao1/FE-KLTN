@@ -321,7 +321,7 @@ const NewPost = ({navigation}) => {
                             name="closecircleo"
                             style={{
                               fontSize: 22,
-                              color: 'red',
+                              color: COLORS.primary,
                             }}></Icon>
                         </TouchableOpacity>
                       </View>
