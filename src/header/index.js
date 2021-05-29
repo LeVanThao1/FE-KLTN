@@ -24,7 +24,7 @@ const HeaderStack = () => {
     const {
       stores: {book, category},
     } = useContext(MobXProviderContext);
-    const {books, textSearch, setTextSearch} = book;
+    const {books, textSearch, setTextSearch, stop, setStop} = book;
     const {option, setOption, selectCategory} = category;
     const openMenu = () => {};
     const navigation = useNavigation();
@@ -33,6 +33,8 @@ const HeaderStack = () => {
       SEARCH_BOOK,
       {
         onCompleted: async (data) => {
+          if (data.bookByName.length < 20) setStop(true);
+          else setStop(false);
           book.setBooksSearch(data.bookByName);
         },
         onError: (err) => {
@@ -132,7 +134,9 @@ export const HeaderLogo = () => {
               }}
             />
           </View>
-          <TouchableOpacity style={{marginRight: 6}} onPress={() => navigation.navigate('Chatting')}>
+          <TouchableOpacity
+            style={{marginRight: 6}}
+            onPress={() => navigation.navigate('Chatting')}>
             <Icon name="message1" style={styles.message} type="AntDesign" />
           </TouchableOpacity>
         </View>
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#fff',
     // paddingLeft: 20
-    marginLeft: -8
+    marginLeft: -8,
   },
   search: {
     height: 35,
