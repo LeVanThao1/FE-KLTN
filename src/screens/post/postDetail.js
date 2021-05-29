@@ -97,7 +97,6 @@ const PostDetail = ({navigation, route}) => {
       });
     };
 
-    // const [images, setImages] = useState([postCurrent.images])
     return (
       <ScrollView horizontal={false}>
         {!loading ? (
@@ -109,22 +108,20 @@ const PostDetail = ({navigation, route}) => {
                 </Text>
                 {/* <View style={{wi}}> */}
                 <ImageView
-                  images={postCurrent.images.map((t) => ({uri: t}))}
+                  images={postCurrent?.images.map((t) => ({uri: t}))}
                   imageIndex={index}
                   visible={visible}
                   onRequestClose={() => setIsVisible(false)}
                   FooterComponent={({imageIndex}) => (
                     <ImageFooter
                       imageIndex={imageIndex}
-                      imagesCount={postCurrent.images.length}
+                      imagesCount={postCurrent?.images.length}
                     />
                   )}
                 />
                 {postCurrent?.images.length > 3 ? (
                   <View style={stylesPost.imgBookDetail}>
                     <ScrollView horizontal={true}>
-                      {/* <Text>{postCurrent.images[0]}</Text> */}
-                      {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
                       {postCurrent?.images.map((img, i) => (
                         <TouchableOpacity
                           onPress={() => {
@@ -162,21 +159,25 @@ const PostDetail = ({navigation, route}) => {
                     ))}
                   </View>
                 )}
-                {/* </View> */}
-                {/* <FlatList 
-                horizontal={true}
-                data={images}
-                renderItem={({item, index}) => (
-                     <Image key={index} source={{uri: item}} style={stylesPost.imgBook}/> 
-                  </View>
-                )}r
-                keyExtractor={item => item}
-              /> */}
               </View>
             </ScrollView>
             <View style={stylesPost.content}>
               <View style={stylesPost.text}>
                 <View style={stylesPost.main}>
+                  {/* <View style={stylesPost.horizontalName}> */}
+                  <TouchableOpacity
+                    style={stylesPost.horizontalName}
+                    onPress={() =>
+                      navigation.navigate('UserInfo', {
+                        id: postCurrent?.author.id,
+                      })
+                    }>
+                    <Text>Người đăng </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.author.name}
+                    </Text>
+                  </TouchableOpacity>
+                  {/* </View> */}
                   <View style={stylesPost.titleCenter}>
                     <Text style={stylesPost.txtBold}>Tiêu đề </Text>
                     <Text style={stylesPost.titlePost}>

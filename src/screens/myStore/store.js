@@ -40,45 +40,43 @@ const Store = ({navigation}) => {
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
 
-    if(shop.info === null ) return (
-      <View style={styles.createStore}>
-        <Text style={styles.titleCreate}>Bạn chưa có cửa hàng</Text>
-        <TouchableOpacity
-          style={styles.btnCreate}
-          onPress={() => navigation.navigate('CreateStore')}>
-          <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
-        </TouchableOpacity>
-      </View>
-    )
+    if (shop.info === null)
+      return (
+        <View style={styles.createStore}>
+          <Text style={styles.titleCreate}>Bạn chưa có cửa hàng</Text>
+          <TouchableOpacity
+            style={styles.btnCreate}
+            onPress={() => navigation.navigate('CreateStore')}>
+            <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
+          </TouchableOpacity>
+        </View>
+      );
     else {
-    const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-      onCompleted: async (data) => {
-        console.log('....data...', data);
-        setListInfo({
-          id: data?.store.id,
-          name: data?.store.name,
-          description: data?.store.description,
-          address: data?.store.address
-        });
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log('get store', err);
-      },
-    });
-    useEffect(() => {
-      store({
-        variables: {
-          id: shop.info.id,
+      const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
+        onCompleted: async (data) => {
+          setListInfo({
+            id: data?.store.id,
+            name: data?.store.name,
+            description: data?.store.description,
+            address: data?.store.address,
+          });
+        },
+        onError: (err) => {
+          Toast.show(Notification(NOTIFI.error, err.message));
+          console.log('get store', err);
         },
       });
-    }, [info]);
-  }
+      useEffect(() => {
+        store({
+          variables: {
+            id: shop.info.id,
+          },
+        });
+      }, [info]);
+    }
     useEffect(() => {}, [info]);
 
-    console.log('info shop',shop.info)
-
-    return  (
+    return (
       <ScrollView>
         <View style={styles.images}>
           <ImageBackground source={Images.slider1} style={styles.image}>
@@ -87,56 +85,56 @@ const Store = ({navigation}) => {
         </View>
         <View style={styles.container_store}>
           <View style={styles.infoStore}>
-          <View style={styles.content}>
-            <Text>Tên shop </Text>
-            <Text
-              style={
-                (styles.text,
-                {
+            <View style={styles.content}>
+              <Text>Tên shop </Text>
+              <Text
+                style={
+                  (styles.text,
+                  {
+                    color: '#333',
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#111',
+                    padding: 0,
+                    marginLeft: 10,
+                    width: '100%',
+                  })
+                }>
+                {/* {info?.name} */}
+                {info?.name}
+              </Text>
+            </View>
+            <View style={styles.address}>
+              <Text style={{paddingLeft: 10}}>Địa chỉ cửa hàng </Text>
+              <Text
+                style={{
                   color: '#333',
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: '#111',
-                  padding: 0,
-                  marginLeft: 10,
-                  width: '100%',
-                })
-              }>
-              {/* {info?.name} */}
-              {info?.name}
-            </Text>
-          </View>
-          <View style={styles.address}>
-            <Text style={{paddingLeft: 10}}>Địa chỉ cửa hàng </Text>
-            <Text
-              style={{
-                color: '#333',
-                borderWidth: 0.3,
-                borderColor: '#111',
-                padding: 10,
-                marginVertical: 5,
-                marginLeft: 4,
-                borderRadius: 6,
-                width: '98%',
-              }}
-              numberOfLines={2}>
-              {info?.address}
-            </Text>
-          </View>
-          <View style={styles.des}>
-            <Text>Mô tả shop: </Text>
-            <Text
-              // containerStyle={styles.textareacont}
-              style={styles.textarea}
-              // onChangeText={this.onChange}
-              // defaultValue={this.state.text}
-              // maxLength={120}
-              // placeholder={'Description'}
-              // placeholderTextColor={'#c7c7c7'}
-              // underlineColorAndroid={'transparent'}>
-            >
-              {info?.description}
-            </Text>
-          </View>
+                  borderWidth: 0.3,
+                  borderColor: '#111',
+                  padding: 10,
+                  marginVertical: 5,
+                  marginLeft: 4,
+                  borderRadius: 6,
+                  width: '98%',
+                }}
+                numberOfLines={2}>
+                {info?.address}
+              </Text>
+            </View>
+            <View style={styles.des}>
+              <Text>Mô tả shop: </Text>
+              <Text
+                // containerStyle={styles.textareacont}
+                style={styles.textarea}
+                // onChangeText={this.onChange}
+                // defaultValue={this.state.text}
+                // maxLength={120}
+                // placeholder={'Description'}
+                // placeholderTextColor={'#c7c7c7'}
+                // underlineColorAndroid={'transparent'}>
+              >
+                {info?.description}
+              </Text>
+            </View>
           </View>
           {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
@@ -225,13 +223,11 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     backgroundColor: '#fff',
-    borderRadius: 8
+    borderRadius: 8,
     // width: '90%',
   },
 
-  infoStore: {
-
-  },
+  infoStore: {},
 
   createStore: {
     marginHorizontal: 'auto',

@@ -29,7 +29,6 @@ import {Picker} from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../../constants/themes';
 
-
 import sub, {
   getProvinces,
   getDistrictsByProvinceCode,
@@ -56,21 +55,22 @@ const CreateStore = ({navigation}) => {
     });
     const [description, setDescription] = useState('');
     const [provinces, setProvinces] = useState({
-      value: info ? info.provinces : undefined,
+      value: undefined,
       error: '',
     });
     const [districts, setDistricts] = useState({
-      value: info ? info.districts : undefined,
+      value: undefined,
       error: '',
     });
     const [ward, setWard] = useState({
-      value: info ? info.ward : undefined,
+      value: undefined,
       error: '',
     });
-    const [andress, setAndress] = useState({
-      value: info ? info.andress : '',
+    const [address, setAddress] = useState({
+      value: '',
       error: '',
     });
+
     const [createStore, {called, loading, data, error}] = useMutation(
       CREATE_STORE,
       {
@@ -121,9 +121,9 @@ const CreateStore = ({navigation}) => {
         });
         count++;
       }
-      if (!andress.value) {
-        setAndress({
-          ...andress,
+      if (!address.value) {
+        setAddress({
+          ...address,
           error: 'Vui lòng nhập địa chỉ cụ thể',
         });
         count++;
@@ -142,7 +142,7 @@ const CreateStore = ({navigation}) => {
 
     const [visibleToast, setvisibleToast] = useState(false);
 
-    useEffect(() => setvisibleToast(false), [visibleToast]);
+    // useEffect(() => setvisibleToast(false), [visibleToast]);
     const [type, setType] = useState(false);
     const handleButtonPress = () => {
       setvisibleToast(true);
@@ -197,38 +197,98 @@ const CreateStore = ({navigation}) => {
     };
 
     const onPress = () => {
-      if (validateSubmit) {
-        let dataStore = {
-          avatar: 'https://picsum.photos/200',
-          background: 'https://picsum.photos/id/237/200/300',
-          name: name,
-          description: description,
-          address: `${andress.value}, ${ward.value.split('-')[1]}, ${
-            districts.value.split('-')[1]
-          }, ${provinces.value.split('-')[1]}`,
-          owner: user.info.id,
-        };
-        createStore({
-          variables: {
-            dataStore,
-          },
-        });
-        setInfo(dataStore);
-      }
+      // if (validateSubmit) {
+      let dataStore = {
+        avatar: 'https://picsum.photos/200',
+        name: name,
+        description: description,
+        address: `${address.value}, ${ward.value.split('-')[1]}, ${
+          districts.value.split('-')[1]
+        }, ${provinces.value.split('-')[1]}`,
+        owner: user.info.id,
+      };
+      createStore({
+        variables: {
+          dataStore,
+        },
+      });
+      setInfo(dataStore);
+      // }
     };
     return (
       <ScrollView>
-        {/* <View style={styles.images}>
-          <ImageBackground source={Images.slider1} style={styles.image}>
-            <Image source={{uri: info.avatar}} style={styles.avatar} />
-          </ImageBackground>
-        </View> */}
-
         <View style={styles.container_store}>
-          <View>
-            <Text>Thêm avatar nha</Text>
-          </View>       
-             
+          <View
+            style={{
+              paddingVertical: 10,
+            }}>
+            <Text>Hình ảnh *</Text>
+            <ScrollView
+              style={{flexDirection: 'row', marginVertical: 10}}
+              horizontal={true}>
+              {images.length > 0 &&
+                images.map((r, i) => (
+                  <View key={i}>
+                    <Image
+                      style={{
+                        width: 100,
+                        height: 100,
+                        marginRight: 10,
+                        position: 'relative',
+                      }}
+                      source={{uri: r}}
+                    />
+                    <TouchableOpacity
+                      onPress={() => removeImages(i)}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 10,
+                      }}>
+                      <Icon
+                        type="AntDesign"
+                        name="closecircleo"
+                        style={{
+                          fontSize: 22,
+                          color: 'red',
+                        }}></Icon>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              {images.length < 10 && (
+                <TouchableOpacity
+                  onPress={handleChoosePhoto}
+                  style={{
+                    // paddingHorizontal: 10,
+                    // paddingVertical: 5,
+                    margin: 0,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 100,
+                    height: 100,
+                    backgroundColor: '#fff',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 1,
+                    },
+                    shadowOpacity: 0.18,
+                    shadowRadius: 1.0,
+
+                    elevation: 1,
+                  }}>
+                  <Icon
+                    type="FontAwesome5"
+                    name="plus"
+                    style={{
+                      fontSize: 50,
+                      color: '#f44f4f',
+                    }}></Icon>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+          </View>
+
           <View style={styles.content}>
             <Text style={{fontSize: 16}}>Tên shop </Text>
             <TextInput
@@ -236,6 +296,18 @@ const CreateStore = ({navigation}) => {
               placeholder="Nhập tên shop"
               value={name}
               onChangeText={(value) => setName(value)}
+              onFocus={() => {
+                setName({
+                  ...name,
+                  error: '',
+                });
+              }}
+              onChangeText={(value) =>
+                setName({
+                  ...name,
+                  value: value,
+                })
+              }
             />
           </View>
           <View style={styles.field}>
@@ -328,13 +400,13 @@ const CreateStore = ({navigation}) => {
             <TextInput
               style={styles.titleCreate}
               placeholder="Nhập địa chỉ cụ thể"
-              value={andress.value}
-              onChangeText={(value) => setAndress({...andress, value})}
+              value={address.value}
+              onChangeText={(value) => setAddress({...address, value})}
               onFocus={() => {
-                setAndress({...andress, error: ''});
+                setAddress({...address, error: ''});
               }}
             />
-            <Text style={styles.err}>{andress.error}</Text>
+            <Text style={styles.err}>{address.error}</Text>
           </View>
           <View style={styles.des}>
             <Text style={{fontSize: 16}}>Mô tả shop </Text>
@@ -346,7 +418,18 @@ const CreateStore = ({navigation}) => {
               placeholderTextColor={'#c7c7c7'}
               underlineColorAndroid={'transparent'}
               value={description}
-              onChangeText={(value) => setDescription(value)}
+              onFocus={() => {
+                setDescription({
+                  ...description,
+                  error: '',
+                });
+              }}
+              onChangeText={(value) =>
+                setDescription({
+                  ...description,
+                  value: value,
+                })
+              }
             />
           </View>
           <TouchableOpacity style={styles.btnCreate} onPress={onPress}>
@@ -386,7 +469,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 4,
     backgroundColor: COLORS.primary,
-    color: '#fff'
+    color: '#fff',
   },
 
   txtCreate: {

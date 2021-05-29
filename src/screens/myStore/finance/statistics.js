@@ -89,16 +89,13 @@ export default function Statistics() {
   };
 
   const transformData = (data, option = 'year') => {
-    // console.log(data);
     const dates = [];
     const nowTime = new Date().toISOString().slice(...options[option].slice);
     dates.push([nowTime, 0, 0]);
     for (let i = 1; i < options[option].loop; i++) {
-      // console.log(options[option].previous(dates[i - 1][0]));
       dates.push([options[option].previous(dates[i - 1][0]), 0, 0]);
     }
     dates.reverse();
-    // console.log("dates", dates);
     const value = data.reduce((obj, {createdAt, amount, price}) => {
       let key = createdAt.slice(...options[option].slice);
       if (obj[key]) {
@@ -109,10 +106,8 @@ export default function Statistics() {
       }
       return obj;
     }, {});
-    // console.log(value);
     for (let date of dates) {
       if (value[date[0]]) {
-        // console.log(value[date[0]]);
         date[1] = value[date[0]][0];
         date[2] = value[date[0]][1];
       }
@@ -134,52 +129,8 @@ export default function Statistics() {
         ...detail,
       }));
       setSubOrders(arraySubOrders);
-      //     let subOrders = subOrdersByStore.map(({createdAt, detail}) => ({
-      //       createdAt,
-      //       ...detail,
-      //     }));
-      //     console.log(subOrders);
-      //     let computeObject = subOrders.reduce(
-      //       (obj, {createdAt, amount, price}) => {
-      //         let date = createdAt.slice(0, 10);
-      //         if (obj[date]) {
-      //           obj[date].order += 1;
-      //           obj[date].revenue += amount * price;
-      //         } else {
-      //           obj[date] = {
-      //             order: 1,
-      //             revenue: amount * price,
-      //           };
-      //         }
-      //         return obj;
-      //       },
-      //       {},
-      //     );
-      //     let tempLabels = [];
-      //     let tempOrders = [];
-      //     let tempRevenues = [];
-      //     for (let date in computeObject) {
-      //       tempLabels.push(date);
-      //       tempOrders.push(computeObject[date].order);
-      //       tempRevenues.push(computeObject[date].revenue);
-      //     }
-      //     setLabels(tempLabels);
-      //     setOrders(tempOrders);
-      //     setRevenues(tempRevenues);
-      //     console.log(computeObject);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      // console.log(Date.now());
     });
   }, []);
-
-  // useEffect(() => {
-  //   console.log(labels);
-  //   console.log(orders);
-  //   console.log(revenues);
-  // });
 
   useEffect(() => {
     transformData(subOrders, option);

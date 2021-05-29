@@ -28,13 +28,11 @@ const OrdersByStore = ({navigation}) => {
     const {infoOrder, setInfoOrder} = order;
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
-    // console.log('inforOrder', infoOrder);
     useEffect(() => {
       queryData(ORDERS_BY_STORE)
         .then(({data}) => {
           setSubOrders(data.subOrdersByStore);
           setInfoOrder(data.subOrdersByStore);
-          // console.log('data', data.subOrdersByStore);
           setLoading(false);
           setRefreshing(true);
         })
@@ -43,12 +41,9 @@ const OrdersByStore = ({navigation}) => {
 
     useEffect(() => {}, [infoOrder]);
 
-    useEffect(() => {
-      // console.log('selectedStatus', selectedStatus);
-    }, [selectedStatus]);
+    useEffect(() => {}, [selectedStatus]);
 
     const renderSubOrders = () => {
-      // console.log(selectedStatus);
       return (
         <View>
           {!loading ? (
@@ -60,7 +55,6 @@ const OrdersByStore = ({navigation}) => {
           )}
         </View>
       );
-      // console.log('sub order ..', x);
     };
 
     function Tab({name, status}) {
@@ -105,11 +99,6 @@ const OrdersByStore = ({navigation}) => {
                 padding: 8,
                 paddingVertical: 0,
               }}>
-              {/* <Text
-                style={{fontSize: 16, fontWeight: 'bold', color: '#000000'}}
-                numberOfLines={1}>
-                {order.user.name}
-              </Text> */}
               <View numberOfLines={1}>
                 <Text
                   style={{fontSize: 15, textAlign: 'left', fontWeight: 'bold'}}

@@ -174,7 +174,6 @@ const PostOne = ({route, post, type}) => {
       });
     };
     useEffect(() => {}, [post]);
-    console.log('test img view', post.images);
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <Container>

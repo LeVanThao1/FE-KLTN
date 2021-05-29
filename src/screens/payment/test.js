@@ -25,15 +25,6 @@ const Test = () => {
         <TextInput placeholder="Nhập SĐT" />
       </View>
       <View>
-        {/* <RNPickerSelect
-          // onValueChange={(value) => console.log(value)}
-          items={[
-            {label: 'Football', value: 'football'},
-            {label: 'Baseball', value: 'baseball'},
-            {label: 'Hockey', value: 'hockey'},
-          ]}
-        /> */}
-        {/* <Text>Tỉnh/TP</Text>
         <TextInput placeholder="Nhập SĐT" /> */}
       </View>
       <View>

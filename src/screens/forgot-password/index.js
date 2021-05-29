@@ -23,7 +23,6 @@ import {Notification} from '../../utils/notifications';
 export default function ResetPassword({navigation}) {
   const [forgotPassword] = useLazyQuery(FORGOT_PASSWORD, {
     onCompleted: (data) => {
-      console.log(data);
       navigation.navigate('VerifyForgot', {
         type: typeForgot,
         account: account.value,
