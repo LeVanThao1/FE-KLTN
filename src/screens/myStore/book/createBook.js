@@ -30,8 +30,8 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
-import {useScrollToTop} from '@react-navigation/native';
-
+import { useScrollToTop } from '@react-navigation/native';
+import SpeechToText from 'react-native-google-speech-to-text';
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -804,7 +804,7 @@ const CreateBook = ({navigation}) => {
                             name="closecircleo"
                             style={{
                               fontSize: 22,
-                              color: 'red',
+                              color: COLORS.primary,
                             }}></Icon>
                         </TouchableOpacity>
                       </View>

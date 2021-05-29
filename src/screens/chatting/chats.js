@@ -151,15 +151,15 @@ const Chats = ({navigation}) => {
       const formatTime = (date) => {
         if (
           moment().format('L') ===
-          moment(item.lastMassage.createdAt).format('L')
+          moment(date).format('L')
         ) {
-          return moment(item.lastMassage.createdAt).format('HH:MM A');
+          return moment(date).format('hh:mm a');
         } else if (
-          moment().year() !== moment(item.lastMassage.createdAt).year()
+          moment().year() !== moment(date).year()
         ) {
-          return moment(item.lastMassage.createdAt).format('DD/MM/YY');
+          return moment(date).format('DD/MM/YY');
         } else {
-          return moment(item.lastMassage.createdAt).format('DD/MM');
+          return moment(date).format('DD/MM');
         }
       };
       const checkIsMyMessage = () =>
@@ -243,7 +243,7 @@ const Chats = ({navigation}) => {
                     ? 'normal'
                     : 'bold',
                 }}>
-                {formatTime()}
+                {formatTime(item.lastMassage.createdAt)}
               </Text>
             </View>
           </View>
