@@ -132,7 +132,7 @@ export const HeaderLogo = () => {
               }}
             />
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Chatting')}>
+          <TouchableOpacity style={{marginRight: 6}} onPress={() => navigation.navigate('Chatting')}>
             <Icon name="message1" style={styles.message} type="AntDesign" />
           </TouchableOpacity>
         </View>
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#fff',
     // paddingLeft: 20
+    marginLeft: -8
   },
   search: {
     height: 35,
