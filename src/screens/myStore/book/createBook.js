@@ -31,7 +31,7 @@ import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
 import { useScrollToTop } from '@react-navigation/native';
-
+import SpeechToText from 'react-native-google-speech-to-text';
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {

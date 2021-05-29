@@ -62,7 +62,7 @@ export class User {
   };
 
   @action
-  addToLike = (book) => {
+  addToLike = (value) => {
     this.likes = [...this.likes, value];
   };
 
