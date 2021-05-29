@@ -199,7 +199,7 @@ const CreateStore = ({navigation}) => {
     const onPress = () => {
       // if (validateSubmit) {
       let dataStore = {
-        avatar: 'https://picsum.photos/200',
+        // avatar: 'https://picsum.photos/200',
         name: name,
         description: description,
         address: `${address.value}, ${ward.value.split('-')[1]}, ${
@@ -218,77 +218,6 @@ const CreateStore = ({navigation}) => {
     return (
       <ScrollView>
         <View style={styles.container_store}>
-          <View
-            style={{
-              paddingVertical: 10,
-            }}>
-            <Text>Hình ảnh *</Text>
-            <ScrollView
-              style={{flexDirection: 'row', marginVertical: 10}}
-              horizontal={true}>
-              {images.length > 0 &&
-                images.map((r, i) => (
-                  <View key={i}>
-                    <Image
-                      style={{
-                        width: 100,
-                        height: 100,
-                        marginRight: 10,
-                        position: 'relative',
-                      }}
-                      source={{uri: r}}
-                    />
-                    <TouchableOpacity
-                      onPress={() => removeImages(i)}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 10,
-                      }}>
-                      <Icon
-                        type="AntDesign"
-                        name="closecircleo"
-                        style={{
-                          fontSize: 22,
-                          color: 'red',
-                        }}></Icon>
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              {images.length < 10 && (
-                <TouchableOpacity
-                  onPress={handleChoosePhoto}
-                  style={{
-                    // paddingHorizontal: 10,
-                    // paddingVertical: 5,
-                    margin: 0,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 100,
-                    height: 100,
-                    backgroundColor: '#fff',
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.18,
-                    shadowRadius: 1.0,
-
-                    elevation: 1,
-                  }}>
-                  <Icon
-                    type="FontAwesome5"
-                    name="plus"
-                    style={{
-                      fontSize: 50,
-                      color: '#f44f4f',
-                    }}></Icon>
-                </TouchableOpacity>
-              )}
-            </ScrollView>
-          </View>
-
           <View style={styles.content}>
             <Text style={{fontSize: 16}}>Tên shop </Text>
             <TextInput
