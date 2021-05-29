@@ -110,7 +110,6 @@ const Profile = ({navigation}) => {
         });
       }
     };
-    console.log(info)
     return (
       <View style={styles.container}>
         <ScrollView style={styles.body}>

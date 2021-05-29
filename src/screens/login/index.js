@@ -45,7 +45,6 @@ const Login = ({navigation}) => {
     const [loading, setLoading] = useState(false);
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
       onCompleted: async (data) => {
-        console.log(data);
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
@@ -119,7 +118,6 @@ const Login = ({navigation}) => {
       if (typeLogin) variables.phone = deFormatPhone(userID.value.trim());
       else variables.email = userID.value.trim().toLowerCase();
       setLoading(true);
-      console.log(variables);
       login({
         variables: {
           ...variables,

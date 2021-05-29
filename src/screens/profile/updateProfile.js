@@ -34,7 +34,6 @@ const UpdateProfile = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [upload] = useMutation(UPLOAD_SINGLE_FILE, {
       onCompleted: (data) => {
-        console.log(data);
         setAvatarUpload(data.uploadSingleFile.url);
       },
       onError: (err) => {
@@ -269,20 +268,19 @@ const UpdateProfile = ({navigation}) => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                    updateUser({
-                      variables: {
-                        userUpdate: {
-                          name: userName,
-                          avatar: avatarUpload,
-                          address: userAddress,
-                          email: info.email ? info.email : userEmail,
-                          phone: info.phone ? info.phone : userPhone,
-                          interests: info.interests,
-                        },
+                  updateUser({
+                    variables: {
+                      userUpdate: {
+                        name: userName,
+                        avatar: avatarUpload,
+                        address: userAddress,
+                        email: info.email ? info.email : userEmail,
+                        phone: info.phone ? info.phone : userPhone,
+                        interests: info.interests,
                       },
-                    })                    
-                  }
-                }>
+                    },
+                  });
+                }}>
                 <Text style={styles.buttonText}>Xác nhận thay đổi</Text>
               </TouchableOpacity>
             ) : null}

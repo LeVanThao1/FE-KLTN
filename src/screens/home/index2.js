@@ -53,7 +53,6 @@ const Home = ({navigation}) => {
     const {categories, setCategory} = category;
     const [loading, setLoading] = useState(false);
     const [bookSell, setBookSell] = useState(undefined);
-    console.log('book detail', book);
     const [getBooks, {}] = useLazyQuery(GET_BOOKS, {
       onCompleted: async (data) => {
         setBooks(data.books);
@@ -99,7 +98,7 @@ const Home = ({navigation}) => {
     const [chooseCategory, setChooseCategory] = useState(0);
     const [images, setImages] = useState([
       Images.slider1,
-      "https://www.khaitam.com/Data/Sites/1/Product/116/hanh-trinh-ve-phuong-dong.jpg",
+      'https://www.khaitam.com/Data/Sites/1/Product/116/hanh-trinh-ve-phuong-dong.jpg',
       Images.slider3,
       Images.slider4,
     ]);

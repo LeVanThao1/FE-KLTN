@@ -308,7 +308,6 @@ const PostOfFeed = ({route, post, info, type}) => {
             }}>
             <PostFooter>
               <TextCount>{post.comment.length} Bình luận</TextCount>
-              {/* <Button onPress={() => console.log('onPresssssssssssssssss')}> */}
               <View style={{flexDirection: 'row'}}>
                 <Icon
                   type="MaterialCommunityIcons"

@@ -43,7 +43,7 @@ import sub, {
 import Toast from 'react-native-toast-message';
 import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
-import { UPLOAD_SINGLE_FILE } from '../../query/upload';
+import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
@@ -53,7 +53,6 @@ const UpdateStore = ({navigation}) => {
     const {info, setInfo} = shop;
     const navigation = useNavigation();
     const add = info.address.split(',');
-    // console.log('addresssss', add);
 
     const [name, setName] = useState({
       value: info ? info.name : '',
@@ -64,26 +63,53 @@ const UpdateStore = ({navigation}) => {
       error: '',
     });
 
-     const getAddress = (type, i) => type.filter((pr) => pr.name.toUpperCase() === add[add.length - i].trim().toUpperCase())[0].code + '-'+type.filter((pr) => pr.name.toUpperCase()===add[add.length - i].trim().toUpperCase())[0].name;
+    const getAddress = (type, i) =>
+      type.filter(
+        (pr) =>
+          pr.name.toUpperCase() === add[add.length - i].trim().toUpperCase(),
+      )[0].code +
+      '-' +
+      type.filter(
+        (pr) =>
+          pr.name.toUpperCase() === add[add.length - i].trim().toUpperCase(),
+      )[0].name;
     const [provinces, setProvinces] = useState({
-      value: getProvinces()?.filter((pr) => pr.name.toUpperCase() === add[add.length - 1].trim().toUpperCase())[0].code + '-'+getProvinces().filter((pr) => pr.name.toUpperCase()===add[add.length - 1].trim().toUpperCase())[0].name || undefined,
+      value:
+        getProvinces()?.filter(
+          (pr) =>
+            pr.name.toUpperCase() === add[add.length - 1].trim().toUpperCase(),
+        )[0].code +
+          '-' +
+          getProvinces().filter(
+            (pr) =>
+              pr.name.toUpperCase() ===
+              add[add.length - 1].trim().toUpperCase(),
+          )[0].name || undefined,
       error: '',
     });
     const [districts, setDistricts] = useState({
       value: getAddress(getDistricts(), 2) || undefined,
       error: '',
     });
-    const wardOfDistrict = getWards()?.filter((pr) => ((pr.name.toUpperCase() === add[add.length - 3].trim().toUpperCase()) && (pr.district_name === getDistricts().filter((pr) => pr.name.toUpperCase()===add[add.length - 2].trim().toUpperCase())[0].name)))[0];
+    const wardOfDistrict = getWards()?.filter(
+      (pr) =>
+        pr.name.toUpperCase() === add[add.length - 3].trim().toUpperCase() &&
+        pr.district_name ===
+          getDistricts().filter(
+            (pr) =>
+              pr.name.toUpperCase() ===
+              add[add.length - 2].trim().toUpperCase(),
+          )[0].name,
+    )[0];
     const [ward, setWard] = useState({
-      value: (wardOfDistrict?.code + '-' + wardOfDistrict?.name)|| undefined,
+      value: wardOfDistrict?.code + '-' + wardOfDistrict?.name || undefined,
       error: '',
     });
     const [address, setAddress] = useState({
       value: info && add.length == 4 ? add[add.length - 4].trim() : '',
       error: '',
     });
-    useEffect(() => {
-    }, [provinces])
+    useEffect(() => {}, [provinces]);
 
     const [updateStore, {called, loading, data, error}] = useMutation(
       UPDATE_STORE,
@@ -93,10 +119,10 @@ const UpdateStore = ({navigation}) => {
             ...info,
             name: name.value,
             description: description.value,
-            address:  `${address.value}, ${ward.value.split('-')[1]}, ${
+            address: `${address.value}, ${ward.value.split('-')[1]}, ${
               districts.value.split('-')[1]
             }, ${provinces.value.split('-')[1]}`,
-          })
+          });
           Toast.show({
             text: `Cập nhật cửa hàng thành công`,
             type: 'success',
@@ -168,8 +194,8 @@ const UpdateStore = ({navigation}) => {
     });
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
 
-    const onPress = () => {   
-      if(validateSubmit) {
+    const onPress = () => {
+      if (validateSubmit) {
         let dataStore = {
           avatar: avatarUpload,
           // // background: 'https://picsum.photos/id/237/200/300',
@@ -183,10 +209,10 @@ const UpdateStore = ({navigation}) => {
         updateStore({
           variables: {
             dataStore,
-            id: shop.info.id
+            id: shop.info.id,
           },
         });
-      }      
+      }
       // }
     };
 
@@ -254,7 +280,7 @@ const UpdateStore = ({navigation}) => {
         </View> */}
 
         <View style={styles.container_store}>
-        <View style={styles.cover}>
+          <View style={styles.cover}>
             <Image
               style={{...styles.imageAvt, opacity: !loading ? 1 : 0.5}}
               source={{
@@ -343,9 +369,8 @@ const UpdateStore = ({navigation}) => {
                 selectedValue={provinces?.value}
                 placeholder="Chọn tỉnh / thành phố"
                 onValueChange={(value) => {
-                  setProvinces({value: value, error: ''})
-                  }
-                }>
+                  setProvinces({value: value, error: ''});
+                }}>
                 {getProvinces().map((pr) => (
                   <Picker.Item
                     key={pr.code}
@@ -382,7 +407,7 @@ const UpdateStore = ({navigation}) => {
                       label={pr.name}
                       value={pr.code + '-' + pr.name}
                     />
-                  ))}      
+                  ))}
               </Picker>
             </View>
             <Text style={styles.err}>{districts.error}</Text>
@@ -401,10 +426,9 @@ const UpdateStore = ({navigation}) => {
                 selectedValue={ward.value}
                 placeholder="Chọn xã / thôn"
                 onValueChange={(value) => {
-                    console.log('ward change' , value)
-                    setWard({value: value, error: ''})
-                  }
-                }>
+                  console.log('ward change', value);
+                  setWard({value: value, error: ''});
+                }}>
                 {districts.value &&
                   getWardsByDistrictCode(
                     districts.value.split('-')[0],

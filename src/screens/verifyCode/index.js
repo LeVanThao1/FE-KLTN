@@ -18,7 +18,6 @@ import Toast from 'react-native-toast-message';
 export default function VerifyCode({route, navigation}) {
   const [verify, {called, loading, data, error}] = useLazyQuery(VERIFY, {
     onCompleted: async (data) => {
-      console.log(data);
       navigation.navigate('Login');
     },
     onError: (err) => {

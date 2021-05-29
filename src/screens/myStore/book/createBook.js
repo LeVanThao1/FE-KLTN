@@ -30,7 +30,7 @@ import Toast from 'react-native-toast-message';
 import {Notification} from '../../../utils/notifications';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
-import { useScrollToTop } from '@react-navigation/native';
+import {useScrollToTop} from '@react-navigation/native';
 
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
@@ -157,34 +157,33 @@ const CreateBook = ({navigation}) => {
           // setBookStore([data.createBook, ...bookStore]);
           setName({
             ...name,
-            value: ''
+            value: '',
           });
           setAuthor({
             ...author,
-            value: ''
+            value: '',
           });
           setNumPrint({
             ...numPrint,
-            value: 0
+            value: 0,
           });
           setDescription({
             ...description,
-            value: ''
+            value: '',
           });
           setPublisher({
             ...publisher,
-            value: ''
+            value: '',
           });
           setAmount({
             ...amount,
-            value: 0
+            value: 0,
           });
           setPrice({
             ...price,
-            value: 0
+            value: 0,
           });
           ref.current.scrollTop(0);
-
         },
         onError: (err) => {
           console.log(err);
@@ -267,12 +266,11 @@ const CreateBook = ({navigation}) => {
       return true;
     };
 
-    // console.log('valuidate', validateCreate())
     const onPress = () => {
-      if(validateCreate() === true) {      
+      if (validateCreate() === true) {
         let dataBook = {
           name: name.value,
-  
+
           amount: amount.value,
           price: price.value,
         };
@@ -291,9 +289,8 @@ const CreateBook = ({navigation}) => {
           variables: {
             dataBook,
           },
-        });      
-      }
-      else {
+        });
+      } else {
         Toast.show(Notification(NOTIFI.error, validateCreate()));
       }
     };
@@ -305,7 +302,6 @@ const CreateBook = ({navigation}) => {
 
     // const [field, setField] = useState(false);
     const filterNumber = (data) => {
-      console.log(typeof data);
       if (!isNaN(data.replace('.', ''))) return +data.replace('.', '');
       else {
         const tamp = data
@@ -597,7 +593,6 @@ const CreateBook = ({navigation}) => {
                       <TouchableOpacity
                         style={styles.recomment}
                         onPress={() => {
-                          console.log('click click');
                           setBook(bk);
                           setAuthor({...author, value: bk.author});
                           setName({...name, value: bk.name});

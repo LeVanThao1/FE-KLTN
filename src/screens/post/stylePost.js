@@ -205,7 +205,8 @@ export const stylesPost = StyleSheet.create({
 
   txtInput: {
     borderWidth: 0.3,
-    height: 30,
+    height: 38,
+    fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginVertical: 4,
@@ -217,7 +218,8 @@ export const stylesPost = StyleSheet.create({
   txtPrice: {
     width: '40%',
     borderWidth: 0.3,
-    height: 30,
+    height: 38,
+    // fonts
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginVertical: 4,
@@ -229,7 +231,7 @@ export const stylesPost = StyleSheet.create({
   txtVND: {
     width: '80%',
     borderWidth: 0.3,
-    height: 30,
+    height: 38,
     alignSelf: 'flex-end',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -285,6 +287,17 @@ export const stylesPost = StyleSheet.create({
     // borderBottomWidth: 0.5,
   },
 
+  horizontalName: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderRadius: 6,
+  },
+
   detail: {
     color: COLORS.primary,
   },
@@ -315,7 +328,7 @@ export const stylesPost = StyleSheet.create({
     padding: 10,
     textAlignVertical: 'top', // hack android
     height: 130,
-    fontSize: 14,
+    fontSize: 16,
     borderWidth: 0.1,
     borderRadius: 3,
     color: '#333',

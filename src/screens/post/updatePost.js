@@ -121,7 +121,6 @@ const UpdatePost = ({route, navigation}) => {
               setImagesUpload((cur) => [...cur, ...tamp]);
             })
             .catch((err) => {
-              // Toast.show(Notification(NOTIFI.error, err.message));
               console.log('update book', err);
             });
         })

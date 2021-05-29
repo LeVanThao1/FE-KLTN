@@ -70,7 +70,6 @@ const UpdateBook = ({navigation, route}) => {
       value: bookCurrent.amount ? bookCurrent.amount.toString() : '0',
       error: '',
     });
-    console.log('cateogori', bookCurrent);
 
     const [categori, setCategori] = useState({
       value: bookCurrent.categoryId,
@@ -87,38 +86,7 @@ const UpdateBook = ({navigation, route}) => {
         value: value,
       });
     };
-    // const [updateBook, {called, loading, data, error}] = useMutation(
-    //   UPDATE_BOOK,
-    //   {
-    //     onCompleted: async (data) => {
-    //       console.log(bookStore.length);
-    //       const newData = [...bookStore].filter(
-    //         (bt) => bt.id + '' !== bookId + '',
-    //       );
-    //       const bookUpdate = {
-    //         id: bookId,
-    //         name: name.value,
-    //         description: description.value,
-    //         year: year.value,
-    //         numberOfReprint: Number(numPrint.value),
-    //         publisher: publisher.value,
-    //         category: {
-    //           id: bookCategoryId,
-    //           name: bookCategoryName,
-    //         },
-    //         images: ['https://picsum.photos/200/300'],
-    //         amount: Number(amount.value),
-    //         price: Number(price.value),
-    //       };
-    //       shop.setBookStore([bookUpdate, ...newData]);
-    //       navigation.goBack();
-    //     },
-    //     onError: (err) => {
-    //       Toast.show(Notification(NOTIFI.error, err.message));
-    //       console.log(err);
-    //     },
-    //   },
-    // );
+
     const onAlert = () => {
       Alert.alert('Đồng ý cập nhật ?', 'Lựa chọn', [
         {text: 'Đồng ý', onPress: () => onPress()},

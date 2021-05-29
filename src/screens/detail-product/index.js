@@ -240,26 +240,48 @@ const DetailProduct = ({navigation, route}) => {
                   />
                 )}
               />
-              <ScrollView
-                horizontal={true}
-                contentContainerStyle={{
-                  marginTop: 8,
-                  paddingHorizontal: 4,
-                }}>
-                {images.map((img, i) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIndex(i);
-                      setIsVisible(true);
+               {images.length > 3 ? (
+                  <View style={styles.imgBookDetail}>
+                    <ScrollView horizontal={true}>
+                      {/* <Text>{postCurrent.images[0]}</Text> */}
+                      {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
+                      {images.map((img, i) => (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setIndex(i);
+                            setIsVisible(true);
+                          }}>
+                          <Image
+                            key={i}
+                            source={{uri: img}}
+                            style={styles.imgBook}
+                          />
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
                     }}>
-                    <Image
-                      // key={i}
-                      source={{uri: img}}
-                      style={stylesPost.imgBook}
-                    />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
+                    {images.map((img, i) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <Image
+                          key={i}
+                          source={{uri: img}}
+                          style={styles.imgBook}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
             </View>
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
@@ -472,6 +494,31 @@ const DetailProduct = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  
+  imgBookDetail: {
+    width: '100%',
+    margin: 'auto',
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+  },
+
+  imgBook: {
+    width: 150,
+    height: 200,
+    // marginRight: 15,
+    marginHorizontal: 4,
+    resizeMode: 'cover',
+    shadowColor: 'red',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+  },
   container: {
     flex: 1,
     paddingHorizontal: 8,
