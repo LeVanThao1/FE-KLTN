@@ -26,33 +26,6 @@ const ManageOrder = ({navigation}) => {
     const [selectedStatus, setSelectedStatus] = useState('WAITING');
     const [subOrders, setSubOrders] = useState([]);
 
-    // const [getSubOrders, {called, loading, data, error}] = useLazyQuery(
-    //   GET_SUB_ORDERS,
-    //   {
-    //     onCompleted: async (data) => {
-    //       const {subOrdersByUser} = data;
-    //       // console.log('subOrdersByUser', subOrdersByUser);
-    //       setSubOrders(
-    //         subOrdersByUser.map(
-    //           ({
-    //             id,
-    //             detail: {
-    //               book: {name, images},
-    //               amount,
-    //               price,
-    //             },
-    //             status,
-    //             createdAt,
-    //           }) => ({id, name, images, amount, price, status, createdAt}),
-    //         ),
-    //       );
-    //     },
-    //     onError: (err) => {
-    //       console.log(err);
-    //     },
-    //   },
-    // );
-
     useEffect(() => {
       // getSubOrders();
       queryData(GET_SUB_ORDERS).then(({data}) => {
@@ -75,13 +48,9 @@ const ManageOrder = ({navigation}) => {
       });
     }, []);
 
-    useEffect(() => {
-      // console.log('subOrders', subOrders);
-    }, [subOrders]);
+    useEffect(() => {}, [subOrders]);
 
-    useEffect(() => {
-      // console.log('selectedStatus', selectedStatus);
-    }, [selectedStatus]);
+    useEffect(() => {}, [selectedStatus]);
 
     const renderSubOrders = () => {
       return subOrders

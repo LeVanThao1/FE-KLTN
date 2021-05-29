@@ -62,7 +62,6 @@ const Payment = ({navigation}) => {
           destination: cart.map((ct) => ct.book.store.address),
         })
           .then(({data}) => {
-            console.log(data);
             setShip(data.distances);
           })
           .catch((err) => {

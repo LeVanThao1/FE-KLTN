@@ -16,14 +16,12 @@ const OrderDetail = ({navigation, route}) => {
     const {
       stores: {user},
     } = useContext(MobXProviderContext);
-    console.log('order-detail route', route);
     const [subOrder, setSubOrder] = useState({});
 
     const [getSubOrder, {called, loading, data, error}] = useLazyQuery(
       GET_SUB_ORDER,
       {
         onCompleted: async (data) => {
-          // console.log(data.subOrderByUser);
           setSubOrder(data.subOrderByUser);
         },
         onError: (err) => {
@@ -41,9 +39,7 @@ const OrderDetail = ({navigation, route}) => {
       });
     }, []);
 
-    useEffect(() => {
-      console.log(subOrder);
-    }, [subOrder]);
+    useEffect(() => {}, [subOrder]);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -102,7 +98,11 @@ const OrderDetail = ({navigation, route}) => {
                   color: COLORS.primary,
                   textAlign: 'right',
                 }}>
-                Thành tiền: {formatMoney(subOrder?.detail?.price * subOrder?.detail?.amount || 0)} VNĐ
+                Thành tiền:{' '}
+                {formatMoney(
+                  subOrder?.detail?.price * subOrder?.detail?.amount || 0,
+                )}{' '}
+                VNĐ
               </Text>
             </View>
           </View>

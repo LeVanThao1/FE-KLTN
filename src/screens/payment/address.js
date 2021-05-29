@@ -125,7 +125,6 @@ const Address = ({navigation}) => {
       return count === 0;
     };
     const onPress = () => {
-      console.log(ward);
       if (validateSubmit()) {
         setInfoOrder({
           name: name.value,
@@ -141,7 +140,6 @@ const Address = ({navigation}) => {
         navigation.goBack();
       }
     };
-    console.log(ward, districts, provinces);
     return (
       <ScrollView style={styles.container}>
         <View style={styles.field}>
@@ -282,16 +280,8 @@ const Address = ({navigation}) => {
               selectedValue={ward.value}
               placeholder="Chọn xã / thôn"
               onValueChange={(value) => {
-                console.log(value);
                 setWard({value: value, error: ''});
               }}>
-              {/* {!ward.value && (
-                <Picker.Item
-                  key={'xt'}
-                  label="Chọn xã / thôn"
-                  value={undefined}
-                />
-              )} */}
               {districts.value &&
                 getWardsByDistrictCode(
                   districts.value.split('-')[0],

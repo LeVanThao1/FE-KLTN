@@ -383,7 +383,7 @@ const NewPost = ({navigation}) => {
                 <Text>Số lần xuất bản </Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập số lần xuất bản"
+                  placeholder="Số lần xuất bản"
                   value={numberOfReprint.value}
                   onFocus={() => {
                     setNumberOfReprint({
@@ -400,10 +400,10 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Năm phát hành </Text>
+                <Text>Năm xuất bản </Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm phát hành"
+                  placeholder="Năm xuất bản"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -447,8 +447,8 @@ const NewPost = ({navigation}) => {
                     style={{
                       position: 'absolute',
                       right: 10,
-                      top: 8,
-                      fontSize: 14,
+                      top: 12,
+                      fontSize: 16,
                     }}>
                     VND
                   </Text>

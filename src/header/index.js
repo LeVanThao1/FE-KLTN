@@ -33,7 +33,6 @@ const HeaderStack = () => {
       SEARCH_BOOK,
       {
         onCompleted: async (data) => {
-          console.log(data.bookByName);
           book.setBooksSearch(data.bookByName);
         },
         onError: (err) => {
@@ -182,7 +181,6 @@ export const HeaderMessage = () => {
           <View style={styles.container}>
             <TouchableOpacity
               onPress={() => {
-                console.log('new');
                 // navigation.navigate('')
               }}>
               <Icon

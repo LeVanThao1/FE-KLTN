@@ -94,7 +94,6 @@ const StoreDetail = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
     );
-    console.log(listItem.background);
     return (
       <ScrollView>
         <View style={styles.images}>
@@ -107,7 +106,6 @@ const StoreDetail = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.storeChat}
               onPress={() => {
-                console.log('Chat with shop');
                 navigation.navigate('Room', {
                   name: listItem.name,
                   avatar: listItem.avatar,

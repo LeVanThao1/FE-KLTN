@@ -40,7 +40,6 @@ const BookDetail = ({navigation, book}) => {
 
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
-        // console.log('datapost', data.createCommentBook);
         setBookCurrent({
           ...bookCurrent,
           comment: [data.createCommentBook, ...bookCurrent.comment],
@@ -53,7 +52,6 @@ const BookDetail = ({navigation, book}) => {
       },
     });
 
-    // console.log('adadadsadsadasdsd ', postCurrent.comment[0]);
     const onPress = () => {
       let dataComment = {
         content: cmts,
@@ -67,7 +65,6 @@ const BookDetail = ({navigation, book}) => {
       });
       setCmts('');
     };
-    console.log('0000', bookCurrent);
     return (
       <ScrollView horizontal={false}>
         <View style={stylesPost.addpost}>

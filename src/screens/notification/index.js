@@ -85,7 +85,6 @@ const NotificationScreen = ({navigation}) => {
       <TouchableOpacity
         onPress={() => {
           if (!item.seen) {
-            console.log(item.id);
             mutateData(route[selected].mutate, {id: item.id})
               .then(({data}) => {
                 if (selected == 'post') {
