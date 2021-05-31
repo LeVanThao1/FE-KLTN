@@ -66,7 +66,9 @@ const Payment = ({navigation}) => {
           })
           .catch((err) => {
             console.log('getDistance', err);
-            Toast.show(Notification(NOTIFI.error, err));
+            const ships = new Array(cart.length).fill(10000);
+            setShip(ships);
+            // Toast.show(Notification(NOTIFI.error, err));
           });
       }
     }, [infoOrder]);
