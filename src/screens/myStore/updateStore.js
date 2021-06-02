@@ -123,12 +123,9 @@ const UpdateStore = ({navigation}) => {
               districts.value.split('-')[1]
             }, ${provinces.value.split('-')[1]}`,
           });
-          Toast.show({
-            text: `Cập nhật cửa hàng thành công`,
-            type: 'success',
-            position: 'top',
-            style: {backgroundColor: COLORS.primary, color: '#ffffff'},
-          });
+          Toast.show(
+            Notification(NOTIFI.error, 'Cập nhật cửa hàng thành công'),
+          );
         },
         onError: (err) => {
           Toast.show(Notification(NOTIFI.error, err.message));

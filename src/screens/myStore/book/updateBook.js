@@ -104,6 +104,7 @@ const UpdateBook = ({navigation, route}) => {
         images: imagesUpload,
         amount: Number(amount.value),
         price: Number(price.value),
+        author: author.value,
       };
       // updateBook({
       //   variables: {
@@ -128,6 +129,7 @@ const UpdateBook = ({navigation, route}) => {
             images: imagesUpload,
             amount: Number(amount.value),
             price: Number(price.value),
+            author: author.value,
           };
           const findIndex = [...bookStore].findIndex(
             (dt) => dt.id + '' == bookCurrent.id + '',
