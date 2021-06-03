@@ -7,17 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from 'react-native-chart-kit';
+import {LineChart} from 'react-native-chart-kit';
 import {queryData} from '../../../common';
-import {GET_SUB_ORDERS_STORE} from '../../../query/subOrder';
 import {COLORS} from '../../../constants/themes';
+import {GET_SUB_ORDERS_STORE} from '../../../query/subOrder';
 
 export default function Statistics() {
   const [subOrders, setSubOrders] = useState([]);

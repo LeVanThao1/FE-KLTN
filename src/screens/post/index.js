@@ -1,15 +1,14 @@
-import {useLazyQuery} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Spinner, Text, View, Icon} from 'native-base';
+import {Icon, Spinner, Text, View} from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {queryData} from '../../common';
-import {GET_POSTS_USER} from '../../query/post';
-import {button} from './style';
-import PostOne from './post';
 import {COLORS} from '../../constants';
+import {GET_POSTS_USER} from '../../query/post';
+import PostOne from './post';
+import {button} from './style';
 const Post = ({route}) => {
   const [refreshing, setRefreshing] = React.useState(false);
   return useObserver(() => {

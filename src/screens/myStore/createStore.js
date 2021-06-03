@@ -1,46 +1,32 @@
-import React, {useState, memo, useContext, useEffect, useRef} from 'react';
+import {useMutation} from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {ReactNativeFile} from 'extract-files';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Picker} from 'native-base';
+import React, {memo, useContext, useRef, useState} from 'react';
 import {
-  Image,
-  ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button} from 'native-base';
+import Toast from 'react-native-toast-message';
 import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {CREATE_STORE, GET_STORE} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
-import {Picker} from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS} from '../../constants/themes';
-
-import sub, {
-  getProvinces,
   getDistrictsByProvinceCode,
+  getProvinces,
   getWardsByDistrictCode,
 } from 'sub-vn';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
-
-import ImagePicker from 'react-native-image-crop-picker';
+import {COLORS} from '../../constants/themes';
+import {CREATE_STORE} from '../../query/store';
 import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {ReactNativeFile} from 'extract-files';
+import {Notification} from '../../utils/notifications';
 
 const CreateStore = ({navigation}) => {
   return useObserver(() => {

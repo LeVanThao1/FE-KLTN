@@ -39,7 +39,6 @@ const OrderDetail = ({navigation, route}) => {
       });
     }, []);
 
-    useEffect(() => {}, [subOrder]);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -48,7 +47,7 @@ const OrderDetail = ({navigation, route}) => {
               Địa chỉ nhận hàng
             </Text>
             <Text style={{fontSize: 16, marginBottom: 8}}>
-              {subOrder?.user?.name}
+              {subOrder?.name}
             </Text>
             <Text style={{fontSize: 16, marginBottom: 8}}>
               (+84) {subOrder.phone}

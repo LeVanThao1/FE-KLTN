@@ -1,12 +1,10 @@
-import {Spinner, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {View} from 'native-base';
+import React, {memo, useContext} from 'react';
 import {FlatList, Text, TouchableOpacity} from 'react-native';
-import {queryData} from '../../common';
-import {GET_BOOKS_CATEGORY} from '../../query/book';
 import ProductCart from '../../components/productCart';
 import {styles} from './styles';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
 const BookByCategory = ({navigation, category, type}) => {
   return useObserver(() => {
     const {
@@ -16,32 +14,20 @@ const BookByCategory = ({navigation, category, type}) => {
 
     return (
       <>
-        {/* <View style={styles.bookByCategory}> */}
-        {
-          booksCategory[category] && (
-            <FlatList
-              contentContainerStyle={styles.bookByCategory}
-              data={booksCategory[category]}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item, index}) => (
-                <ProductCart
-                  key={index.toString()}
-                  book={item}
-                  type={true}
-                  navigation={navigation}
-                />
-              )}></FlatList>
-          )
-          // booksCategory[category].map((bk) => (
-          //   <ProductCart
-          //     key={bk.id}
-          //     book={bk}
-          //     type={true}
-          //     navigation={navigation}
-          //   />
-          // ))
-        }
-        {/* </View> */}
+        {booksCategory[category] && (
+          <FlatList
+            contentContainerStyle={styles.bookByCategory}
+            data={booksCategory[category]}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => (
+              <ProductCart
+                key={index.toString()}
+                book={item}
+                type={true}
+                navigation={navigation}
+              />
+            )}></FlatList>
+        )}
         {booksCategory[category] ? (
           booksCategory[category].length > 0 ? (
             type ? null : (

@@ -3,11 +3,8 @@ import {COLORS} from '../../../../constants';
 
 const styles = StyleSheet.create({
   container: {
-    // position: 'absolute',
-    // zIndex: 999,
     flexDirection: 'row',
     margin: 10,
-    // bottom: 55,
     alignItems: 'flex-end',
   },
   mainContainer: {

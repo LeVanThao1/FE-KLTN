@@ -18,7 +18,6 @@ const WishList = ({navigation, route}) => {
       stores: {user},
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(false);
-    console.log(user.likes);
     return (
       <View style={styles.home__container}>
         {user.likes && user.likes.length > 0 ? (

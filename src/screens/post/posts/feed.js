@@ -103,7 +103,7 @@ const PostCard = () => {
       </View>
       <PostFooter>
         <TextCount>2k Bình luận</TextCount>
-        <Button onPress={() => console.log('onPresssssssssssssssss')}>
+        <Button onPress={() => {}}>
           <Icon
             type="MaterialCommunityIcons"
             name="comment-outline"

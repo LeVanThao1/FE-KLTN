@@ -1,22 +1,19 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import React, {useContext, useState, useEffect} from 'react';
 import {Icon} from 'native-base';
-
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
-  ScrollView,
-  Image,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {GET_SUB_ORDERS} from '../../query/subOrder';
-import {COLORS} from '../../constants';
-import formatMoney from '../../utils/format';
 import {queryData} from '../../common';
+import {COLORS} from '../../constants';
+import {GET_SUB_ORDERS} from '../../query/subOrder';
+import formatMoney from '../../utils/format';
 
 const ManageOrder = ({navigation}) => {
   return useObserver(() => {
@@ -27,13 +24,13 @@ const ManageOrder = ({navigation}) => {
     const [subOrders, setSubOrders] = useState([]);
 
     useEffect(() => {
-      // getSubOrders();
       queryData(GET_SUB_ORDERS).then(({data}) => {
         const {subOrdersByUser} = data;
         setSubOrders(
           subOrdersByUser.map(
             ({
               id,
+              name: nameUser,
               detail: {
                 book: {name, images},
                 amount,
@@ -42,15 +39,21 @@ const ManageOrder = ({navigation}) => {
               status,
               createdAt,
               ship,
-            }) => ({id, name, images, amount, price, status, createdAt, ship}),
+            }) => ({
+              id,
+              name,
+              images,
+              amount,
+              price,
+              status,
+              createdAt,
+              ship,
+              nameUser,
+            }),
           ),
         );
       });
     }, []);
-
-    useEffect(() => {}, [subOrders]);
-
-    useEffect(() => {}, [selectedStatus]);
 
     const renderSubOrders = () => {
       return subOrders

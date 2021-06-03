@@ -1,18 +1,16 @@
-import {Text, View, Button, Icon} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ScrollView} from 'react-native-gesture-handler';
-import {TouchableOpacity, Image, Alert} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {DELETE_BOOK} from '../../../query/book';
 import {useMutation} from '@apollo/client';
-import {useObserver} from 'mobx-react-lite';
+import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon, Text, View} from 'native-base';
+import React, {memo, useContext} from 'react';
+import {Alert, Image, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../../constants';
-import {Notification} from '../../../utils/notifications';
 import {COLORS} from '../../../constants/themes';
+import {DELETE_BOOK} from '../../../query/book';
 import formatMoney from '../../../utils/format';
+import {Notification} from '../../../utils/notifications';
 
 const Book = ({book}) => {
   return useObserver(() => {
@@ -30,7 +28,6 @@ const Book = ({book}) => {
         );
         shop.setBookStore([...newData]);
         Toast.show(Notification(NOTIFI.success, 'Xóa thành công'));
-        // navigation.goBack();
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -73,16 +70,6 @@ const Book = ({book}) => {
             marginVertical: 8,
           }}>
           <View>
-            {/* {book.images.map((img, i) => (
-              <Image
-              style={{width: 80, height: 100}}
-              source={{
-                uri: img
-                  ? img
-                  : 'https://picsum.photos/200/300',
-              }}
-            />
-            ))}             */}
             <Image
               style={{width: 80, height: 100}}
               source={{uri: book.images[0]}}

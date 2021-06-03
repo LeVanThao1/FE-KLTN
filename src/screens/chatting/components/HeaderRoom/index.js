@@ -1,18 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
-import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Icon} from 'native-base';
-import React, {useContext, useState} from 'react';
-import {
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
+import Menu, {MenuItem} from 'react-native-material-menu';
 import styles from './styles';
-import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 const {width, height} = Dimensions.get('screen');
 
 const HeaderRoom = ({name, avatar, userId, isNew, storeId}) => {

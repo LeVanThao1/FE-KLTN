@@ -1,27 +1,24 @@
-import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
+import {Icon, Text, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
-import {Image, Alert} from 'react-native';
 import {
-  TextInput,
-  StyleSheet,
-  FlatList,
+  Alert,
+  Image,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
 import Toast from 'react-native-toast-message';
-import ImagePicker from 'react-native-image-crop-picker';
-import Images from '../../assets/images/images';
+import {mutateData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {UPDATE_POST} from '../../query/post';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {stylesPost} from './stylePost';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {mutateData} from '../../common';
-import {ReactNativeFile} from 'extract-files';
 
 const UpdatePost = ({route, navigation}) => {
   return useObserver(() => {
@@ -153,42 +150,40 @@ const UpdatePost = ({route, navigation}) => {
     };
 
     const onUpdate = () => {
-      if(validateCreate() === true) {
-      let dataPost = {
-        title: title.value,
-        description: description.value,
-        bookWanna: [bookWanna.value],
-        images: imagesUpload,
-        publisher: publisher.value,
-        numberOfReprint: Number(numberOfReprint.value),
-        // category: categori.value,
-        year: year.value,
-        price: Number(price.value),
-      };
-      mutateData(UPDATE_POST, {
-        dataPost,
-        id: postId,
-      })
-        .then(({data}) => {
-          const findIndex = [...posts].findIndex(
-            (dt) => dt.id + '' == postId + '',
-          );
-          console.log(findIndex);
-          user.setPosts([
-            ...[...posts].slice(0, findIndex),
-            {...posts[findIndex], ...dataPost},
-            ...[...posts].slice(findIndex + 1),
-          ]);
-          setPostCurrent({...posts[findIndex], ...dataPost});
-          Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
-          navigation.goBack();
+      if (validateCreate() === true) {
+        let dataPost = {
+          title: title.value,
+          description: description.value,
+          bookWanna: [bookWanna.value],
+          images: imagesUpload,
+          publisher: publisher.value,
+          numberOfReprint: Number(numberOfReprint.value),
+          // category: categori.value,
+          year: year.value,
+          price: Number(price.value),
+        };
+        mutateData(UPDATE_POST, {
+          dataPost,
+          id: postId,
         })
-        .catch((err) => {
-          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
-          console.log(err);
-        });
-      }
-      else {
+          .then(({data}) => {
+            const findIndex = [...posts].findIndex(
+              (dt) => dt.id + '' == postId + '',
+            );
+            user.setPosts([
+              ...[...posts].slice(0, findIndex),
+              {...posts[findIndex], ...dataPost},
+              ...[...posts].slice(findIndex + 1),
+            ]);
+            setPostCurrent({...posts[findIndex], ...dataPost});
+            Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
+            navigation.goBack();
+          })
+          .catch((err) => {
+            Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
+            console.log(err);
+          });
+      } else {
         Toast.show(Notification(NOTIFI.error, validateCreate()));
       }
     };
@@ -437,19 +432,17 @@ const UpdatePost = ({route, navigation}) => {
                 underlineColorAndroid={'transparent'}
                 placeholder="Nhập mô tả"
               />
-              <View style={{ flexDirection: 'row',
-                  justifyContent:'center',}}>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: COLORS.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
-                  width: 130,
-                 
-                }}
-                onPress={onAlert}>
-                <Text style={stylesPost.btn}>Cập nhật</Text>
-              </TouchableOpacity>
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: COLORS.primary,
+                    paddingVertical: 10,
+                    borderRadius: 10,
+                    width: 130,
+                  }}
+                  onPress={onAlert}>
+                  <Text style={stylesPost.btn}>Cập nhật</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

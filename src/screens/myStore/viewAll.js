@@ -1,24 +1,15 @@
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
-import {valueFromAST} from 'graphql';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Button, Text, View} from 'native-base';
-import React, {useState, memo, useContext, useEffect} from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, {memo, useContext, useEffect, useState} from 'react';
+import {ScrollView, TextInput, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
-import {DELETE_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
+import {DELETE_BOOK, GET_BOOKS_STORE} from '../../query/book';
 import {Notification} from '../../utils/notifications';
 import {styles, stylesTable} from './styles';
-import {COLORS} from '../../constants/themes';
-
 
 const ViewAll = () => {
   return useObserver(() => {

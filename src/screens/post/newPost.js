@@ -1,26 +1,24 @@
 import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
+import {Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
-import {Image, Alert} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {ReactNativeFile} from 'extract-files';
 import {
-  TextInput,
-  StyleSheet,
-  FlatList,
+  Alert,
+  Image,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
-import {Notification} from '../../utils/notifications';
-import Images from '../../assets/images/images';
-import {CREATE_POST} from '../../query/post';
-import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
 import {COLORS, NOTIFI, SIZES} from '../../constants';
+import {CREATE_POST} from '../../query/post';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {Notification} from '../../utils/notifications';
+import {stylesPost} from './stylePost';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -120,7 +118,6 @@ const NewPost = ({navigation}) => {
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
     const onChange = (value) => {
-      console.log(value);
       setCategori({
         value: value,
       });
@@ -206,28 +203,27 @@ const NewPost = ({navigation}) => {
     };
     const onCreate = () => {
       if (validateCreate() === true) {
-      let dataPost = {
-        title: title.value,
-        name: name.value,
-        // author: author.value,
-        description: description.value,
-        bookWanna: bookWanna.value,
-        images: imagesUpload,
-        publisher: publisher.value,
-        numberOfReprint: numberOfReprint.value,
-        category: categori.value,
-        year: year.value,
-        price: price.value,
-      };
-      createPost({
-        variables: {
-          dataPost,
-        },
-      });
-    }
-    else {
-      Toast.show(Notification(NOTIFI.error, validateCreate()));
-    }
+        let dataPost = {
+          title: title.value,
+          name: name.value,
+          // author: author.value,
+          description: description.value,
+          bookWanna: bookWanna.value,
+          images: imagesUpload,
+          publisher: publisher.value,
+          numberOfReprint: numberOfReprint.value,
+          category: categori.value,
+          year: year.value,
+          price: price.value,
+        };
+        createPost({
+          variables: {
+            dataPost,
+          },
+        });
+      } else {
+        Toast.show(Notification(NOTIFI.error, validateCreate()));
+      }
     };
 
     return (

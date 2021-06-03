@@ -1,15 +1,17 @@
+import {ReactNativeFile} from 'apollo-upload-client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
 import {Icon} from 'native-base';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import SpeechToText from 'react-native-google-speech-to-text';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 import {mutateData} from '../../../../common';
 import {COLORS, NOTIFI} from '../../../../constants';
@@ -21,10 +23,6 @@ import {
 } from '../../../../query/message';
 import {Notification} from '../../../../utils/notifications';
 import styles from './styles';
-import ImagePicker from 'react-native-image-crop-picker';
-import {ReactNativeFile} from 'apollo-upload-client';
-import SpeechToText from 'react-native-google-speech-to-text';
-import {useNavigation} from '@react-navigation/native';
 const InputBox = ({userId}) => {
   return useObserver(() => {
     const {
@@ -152,7 +150,7 @@ const InputBox = ({userId}) => {
 
     const onPress = () => {
       if (!message.trim()) {
-        console.log(1);
+        return;
       } else {
         onSendPress();
       }
@@ -176,19 +174,6 @@ const InputBox = ({userId}) => {
         style={{width: '100%'}}>
         <View style={styles.container}>
           <View style={styles.mainContainer}>
-            {/* <View
-              style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 50,
-              }}>
-              <Icon
-                type="AntDesign"
-                name="smile-circle"
-                style={{color: COLORS.primary, fontSize: 20}}
-              />
-            </View> */}
             <TextInput
               placeholder={'Type a message'}
               style={styles.textInput}

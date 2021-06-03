@@ -1,37 +1,27 @@
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon, Picker} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
-  View,
+  Button,
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  ScrollView,
-  SafeAreaView,
   TextInput,
-  Image,
-  Button,
   TouchableOpacity,
-  Dimensions,
-  Modal,
-  Alert,
+  View,
 } from 'react-native';
-import {Icon, ListItem, Picker, Separator} from 'native-base';
 import Toast from 'react-native-toast-message';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import Address from './address';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useMutation} from '@apollo/client';
-import {CREATE_ORDER} from '../../query/order';
 import {mutateData, queryData} from '../../common';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
-import {GET_DISTANCE} from '../../query/distance';
 import {COLORS} from '../../constants/themes';
+import {GET_DISTANCE} from '../../query/distance';
+import {CREATE_ORDER} from '../../query/order';
 import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 
 const Payment = ({navigation}) => {
   return useObserver(() => {
@@ -68,7 +58,6 @@ const Payment = ({navigation}) => {
             console.log('getDistance', err);
             const ships = new Array(cart.length).fill(10000);
             setShip(ships);
-            // Toast.show(Notification(NOTIFI.error, err));
           });
       }
     }, [infoOrder]);
@@ -130,7 +119,6 @@ const Payment = ({navigation}) => {
                 )}
               </View>
             </TouchableOpacity>
-            {/* payment method */}
             <View style={styles.shipping}>
               <View style={styles.shipping_title}>
                 <Icon
@@ -215,7 +203,6 @@ const Payment = ({navigation}) => {
                   </View>
                 </View>
               ))}
-            {/* sumary */}
             <View style={styles.rowInput}>
               <Text style={{width: 80}}>Tin nhắn:</Text>
               <TextInput
@@ -237,12 +224,6 @@ const Payment = ({navigation}) => {
                   {formatMoney(total)} VNĐ
                 </Text>
               </View>
-              {/* <View style={styles.row}>
-                <Text>Tổng phí vận chuyển</Text>
-                <Text style={(styles.price, {fontSize: 14, color: '#111'})}>
-                  {ship} đ
-                </Text>
-              </View> */}
               <View style={styles.row}>
                 <Text style={styles.sumary}>Tổng thanh toán</Text>
                 <Text style={styles.sumary}>
@@ -253,7 +234,6 @@ const Payment = ({navigation}) => {
                 </Text>
               </View>
             </View>
-            {/* btn payment */}
             <View style={styles.button}>
               <Button
                 title="Đặt hàng"
@@ -303,11 +283,6 @@ const styles = StyleSheet.create({
   product: {
     padding: 15,
     flexDirection: 'row',
-    // borderBottomColor: 'grey',
-    // borderTopColor: 'grey',
-    // borderBottomWidth: 1,
-    // borderTopWidth: 1,
-    // marginVertical: 5,
   },
   product_name: {
     marginHorizontal: 20,
@@ -324,7 +299,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 15,
-    // paddingVertical: 5,
   },
   row: {
     flexDirection: 'row',
@@ -342,7 +316,6 @@ const styles = StyleSheet.create({
     color: '#111',
   },
   button: {
-    // width: '70%',
     borderRadius: 5,
     padding: 15,
     marginHorizontal: 15,

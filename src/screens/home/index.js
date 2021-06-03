@@ -14,11 +14,11 @@ import {SliderBox} from 'react-native-image-slider-box';
 import Images from '../../assets/images/images';
 import {queryData} from '../../common';
 import ProductCart from '../../components/productCart';
+import {COLORS} from '../../constants/themes';
 import {GET_BOOKS_CATEGORY} from '../../query/book';
 import {GET_HOME} from '../../query/home';
 import BookByCategory from './bookByCategory';
 import {styles} from './styles';
-import {COLORS} from '../../constants/themes';
 
 const Home = ({navigation}) => {
   return useObserver(() => {
@@ -156,20 +156,8 @@ const Home = ({navigation}) => {
                     ))}
                 </View>
               </ScrollView>
-              {/* <View style={styles.bookByCategory}> */}
               {selectCategory === 'all' && (
                 <>
-                  {/* <View style={styles.bookByCategory}>
-                    {books &&
-                      books.map((bk) => (
-                        <ProductCart
-                          key={bk.id}
-                          book={bk}
-                          type={true}
-                          navigation={navigation}
-                        />
-                      ))}
-                  </View> */}
                   {books && (
                     <FlatList
                       contentContainerStyle={styles.bookByCategory}
@@ -232,19 +220,6 @@ const Home = ({navigation}) => {
                   <Spinner size="small" color={COLORS.primary} />
                 </View>
               )}
-              {/* {books &&
-                  books.map((bk) => (
-                    <ProductItem
-                      key={bk.id}
-                      book={bk}
-                      type={true}
-                      navigation={navigation}
-                    />
-                  ))} */}
-              {/* </View> */}
-              {/* <View style={styles.seeMoreContainer}>
-                <Text style={styles.seeMoreText}>XEM TẤT CẢ SẢN PHẨM</Text>
-              </View> */}
             </View>
           </View>
         ) : (

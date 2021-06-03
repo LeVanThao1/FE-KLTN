@@ -22,8 +22,6 @@ import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
 import formatMoney from '../../../utils/format';
 
-// import {GET_SUB_ORDER} from '../../query/subOrder';
-
 const OrderDetailStore = ({navigation, route}) => {
   return useObserver(() => {
     const {
@@ -31,11 +29,8 @@ const OrderDetailStore = ({navigation, route}) => {
     } = useContext(MobXProviderContext);
     const {orderStore, setOrderStore} = shop;
     const {infoOrder, setInfoOrder} = order;
-    const [subOrder, setSubOrder] = useState({});
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(true);
-
-    console.log('order', infoOrder.map(o => o.detail));
 
     const nextStatus = (stt) => {
       let resultStt = '';
@@ -68,75 +63,61 @@ const OrderDetailStore = ({navigation, route}) => {
       ]);
     };
 
-    const [updateStatusSubOrder] = useMutation(UPDATE_STATUS_ORDER, {
-      onCompleted: async (data) => {
-        console.log('dataa' ,data);
-        console.log(infoOrder)
-        const newData = [...infoOrder].filter(
-          (od) => od.id + '' !== orderStore.id + '',
-        );
-        console.log('data update stt', newData);
-        setInfoOrder([infoOrder, ...newData]);
-        Toast.show(
-          Notification(
-            NOTIFI.success,
-            `Chuyển đơn trạng thái đơn hàng thành công`,
-          ),
-        );
-      },
-      onError: (err) => {
-        Toast.show(Notification(NOTIFI.error, err.message));
-        console.log(err);
-      },
-    });
-
     const CancelOrder = () => {
-      updateStatusSubOrder({
-        variables: {
-          dataStatus: 'CANCLE',
-          id: orderStore.id,
-        },
-      });
-      const newData = [...infoOrder].filter(
-        (od) => od.id + '' !== orderStore.id + '',
-      );
-      console.log('data update stt', newData);
-      setInfoOrder([infoOrder, ...newData]);
-      navigation.navigate('OrdersByStore');
+      mutateData(UPDATE_STATUS_ORDER, {
+        dataStatus: 'CANCLE',
+        id: orderStore.id,
+      })
+        .then((data) => {
+          const newData = [...infoOrder].filter(
+            (od) => od.id + '' !== orderStore.id + '',
+          );
+          setInfoOrder([{...orderStore, status: 'CANCLE'}, ...newData]);
+          Toast.show(Notification(NOTIFI.success, `Hủy đơn hàng thành công`));
+          navigation.navigate('OrdersByStore');
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, err.message));
+        });
     };
 
     const changeStatus = () => {
-      updateStatusSubOrder({
-        variables: {
-          dataStatus: nextStatus(orderStore.status),
-          id: orderStore.id,
-        },
-      });
-      const newData = [...infoOrder].filter(
-        (od) => od.id + '' !== orderStore.id + '',
-      );
-      console.log('data update stt', newData);
-      setInfoOrder([infoOrder, ...newData]);
-      navigation.navigate('OrdersByStore');
+      mutateData(UPDATE_STATUS_ORDER, {
+        dataStatus: nextStatus(orderStore.status),
+        id: orderStore.id,
+      })
+        .then((data) => {
+          const newData = [...infoOrder].filter(
+            (od) => od.id + '' !== orderStore.id + '',
+          );
+          setInfoOrder([
+            {...orderStore, status: nextStatus(orderStore.status)},
+            ...newData,
+          ]);
+          Toast.show(
+            Notification(
+              NOTIFI.success,
+              `Chuyển đơn trạng thái đơn hàng thành công`,
+            ),
+          );
+          navigation.navigate('OrdersByStore');
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.show(Notification(NOTIFI.error, err.message));
+        });
     };
 
     return (
       <View style={styles.container}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => {
-                setRefreshing(true);
-              }}
-            />
-          }>
+        <ScrollView>
           <View style={{marginBottom: 16}}>
             <Text style={{fontSize: 18, fontWeight: 'bold', marginBottom: 8}}>
               Địa chỉ nhận hàng
             </Text>
             <Text style={{fontSize: 16, marginBottom: 8}}>
-              {orderStore?.user?.name}
+              {orderStore?.name}
             </Text>
             <Text style={{fontSize: 16, marginBottom: 8}}>
               (+84) {orderStore?.phone}
@@ -219,7 +200,6 @@ const OrderDetailStore = ({navigation, route}) => {
           </View>
           <View
             style={{
-              // paddingVertical: 20,
               paddingHorizontal: 10,
               flexDirection: 'row',
               justifyContent: 'flex-start',
@@ -231,42 +211,44 @@ const OrderDetailStore = ({navigation, route}) => {
               {orderStore?.status}
             </Text>
           </View>
-         { orderStore?.status !== 'CANCLE' ? <><View
-            style={{
-              // paddingVertical: 20,
-              paddingHorizontal: 10,
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              backgroundColor: '#fff',
-            }}>
-            <Text style={{width: '50%'}}>Trạng thái kế tiếp</Text>
-            <Text style={{paddingVertical: 20, paddingLeft: 30}}>
-              {nextStatus(orderStore?.status)}
-            </Text>
-          </View> 
-          <TouchableOpacity onPress={onAlert}>
-              <Text
+          {orderStore?.status !== 'CANCLE' ? (
+            <>
+              <View
                 style={{
-                  color: '#fff',
-                  backgroundColor: COLORS.primary,
-                  textAlign: 'center',
-                  width: '50%',
-                  alignSelf: 'center',
                   paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  marginVertical: 15,
-                  borderRadius: 4,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  backgroundColor: '#fff',
                 }}>
-                Trạng thái tiếp theo
-              </Text>
-            </TouchableOpacity>
-          </>
-          : <></>}
-          
-          <View style={{paddingVertical: 20}}>
-            {/* {orderStore.status !== 'CANCLE' ?} */}
-            {orderStore?.status === 'WAITING' ?
+                <Text style={{width: '50%'}}>Trạng thái kế tiếp</Text>
+                <Text style={{paddingVertical: 20, paddingLeft: 30}}>
+                  {nextStatus(orderStore?.status)}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={onAlert}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    backgroundColor: COLORS.primary,
+                    textAlign: 'center',
+                    width: '50%',
+                    alignSelf: 'center',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    marginVertical: 15,
+                    borderRadius: 4,
+                  }}>
+                  Trạng thái tiếp theo
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <></>
+          )}
+
+          <View style={{paddingTop: 10}}>
+            {orderStore?.status === 'WAITING' ? (
               <TouchableOpacity onPress={onAlertCancel}>
                 <Text
                   style={{
@@ -277,14 +259,14 @@ const OrderDetailStore = ({navigation, route}) => {
                     alignSelf: 'center',
                     paddingHorizontal: 10,
                     paddingVertical: 10,
-                    // marginVertical: 15,
                     borderRadius: 4,
                   }}>
                   Hủy đơn hàng
                 </Text>
               </TouchableOpacity>
-              : <></>
-            }            
+            ) : (
+              <></>
+            )}
           </View>
         </ScrollView>
       </View>

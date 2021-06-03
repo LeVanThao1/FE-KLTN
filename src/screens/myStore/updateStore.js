@@ -1,49 +1,36 @@
-import React, {useState, memo, useContext, useEffect} from 'react';
+import {useMutation} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
+import {ReactNativeFile} from 'apollo-upload-client';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon, Picker, Spinner} from 'native-base';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
-  ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
-  Alert,
+  View,
 } from 'react-native';
-import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Spinner, Button} from 'native-base';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {UPDATE_STORE} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
-import {Picker} from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS} from '../../constants/themes';
-import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
-import {ReactNativeFile} from 'apollo-upload-client';
-
-import sub, {
-  getProvinces,
+import Textarea from 'react-native-textarea';
+import Toast from 'react-native-toast-message';
+import {
   getDistricts,
-  getWards,
   getDistrictsByProvinceCode,
+  getProvinces,
+  getWards,
   getWardsByDistrictCode,
 } from 'sub-vn';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+import {UPDATE_STORE} from '../../query/store';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
+import {UPDATE_AVATAR} from '../../query/user';
+import {Notification} from '../../utils/notifications';
 
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
@@ -109,7 +96,6 @@ const UpdateStore = ({navigation}) => {
       value: info && add.length == 4 ? add[add.length - 4].trim() : '',
       error: '',
     });
-    useEffect(() => {}, [provinces]);
 
     const [updateStore, {called, loading, data, error}] = useMutation(
       UPDATE_STORE,
@@ -209,8 +195,7 @@ const UpdateStore = ({navigation}) => {
             id: shop.info.id,
           },
         });
-      }
-      else {
+      } else {
         Toast.show({
           text: 'Vui lòng nhập đủ thông tin',
           type: 'error',
@@ -434,7 +419,6 @@ const UpdateStore = ({navigation}) => {
                 selectedValue={ward.value}
                 placeholder="Chọn xã / thôn"
                 onValueChange={(value) => {
-                  console.log('ward change', value);
                   setWard({value: value, error: ''});
                 }}>
                 {districts.value &&

@@ -1,24 +1,22 @@
 import {useMutation} from '@apollo/client';
+import {Icon} from 'native-base';
 import React, {useState} from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-
-import {passwordValidator} from '../../utils/validations';
+import Toast from 'react-native-toast-message';
+import {COLORS, NOTIFI} from '../../constants';
 import {RESET_PASSWORD} from '../../query/user';
 import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
-import Toast from 'react-native-toast-message';
+import {passwordValidator} from '../../utils/validations';
+
 // import {COLORS} from '../../constants/index';
 
-
 export default function ResetPassword({navigation, route}) {
-  console.log(token);
   const {token} = route.params;
   const onPress = () => {
     if (validateConfirmPassword(true) + validatePassword(true) !== 2) return;

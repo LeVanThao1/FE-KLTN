@@ -1,37 +1,22 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Icon, Text, View} from 'native-base';
+import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useRef, useState} from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ToastAndroid,
-  Dimensions,
-  Alert,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import ImageView from 'react-native-image-viewing';
+import {Alert, Image, TextInput, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import Textarea from 'react-native-textarea';
-import {Form, Item, Picker, Button} from 'native-base';
-import {CREATE_BOOK, GET_RECOMMENT_BY_NAME} from '../../../query/book';
+import SpeechToText from 'react-native-google-speech-to-text';
 // import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../../query/upload';
-import {ReactNativeFile} from 'extract-files';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import Modal from 'react-native-modal';
-import {queryData} from '../../../common';
-import Menu, {MenuItem} from 'react-native-material-menu';
-import {styles} from './styles';
+import Textarea from 'react-native-textarea';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
+import {queryData} from '../../../common';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
-import { useScrollToTop } from '@react-navigation/native';
-import SpeechToText from 'react-native-google-speech-to-text';
+import {CREATE_BOOK, GET_RECOMMENT_BY_NAME} from '../../../query/book';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
+import {Notification} from '../../../utils/notifications';
+import {styles} from './styles';
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -154,7 +139,6 @@ const CreateBook = ({navigation}) => {
       {
         onCompleted: async (data) => {
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
-          // setBookStore([data.createBook, ...bookStore]);
           setName({
             ...name,
             value: '',
@@ -227,12 +211,8 @@ const CreateBook = ({navigation}) => {
       ]);
     };
 
-    console.log('ádfasdfasdfsdf',description.value)
     const validateCreate = () => {
-      console.log('vvv', name.value.length)
-
-      if (name.value==='' || name.value.length < 3) {
-        console.log('vvv', name)
+      if (name.value === '' || name.value.length < 3) {
         setName({
           ...name,
           error: 'Tên sách phải dài hơn 3 ký tự',
@@ -253,14 +233,6 @@ const CreateBook = ({navigation}) => {
         });
         return 'Vui lòng nhập số lần xuất bản';
       }
-      console.log(description.value)
-      // if (description.value.length < 5) {
-      //   setDescription({
-      //     ...description,
-      //     error: 'Mô tả phải dài hơn 5 ký tự',
-      //   });
-      //   return 'Mô tả phải dài hơn 5 ký tự';
-      // }
       if (!amount.value || amount.value === 0) {
         setAmount({
           ...amount,
@@ -863,8 +835,6 @@ const CreateBook = ({navigation}) => {
                   editable={book ? false : true}
                   containerStyle={styles.textareacont}
                   style={styles.textarea}
-                  // onChangeText={this.onChange}
-                  // defaultValue={this.state.text}
                   maxLength={200}
                   placeholder={'Nhập mô tả sách'}
                   placeholderTextColor={'#c7c7c7'}
@@ -891,8 +861,6 @@ const CreateBook = ({navigation}) => {
                     height: '100%',
                     width: 30,
                     top: 10,
-                    // justifyContent: 'center',
-                    // alignItems: 'center',
                   }}
                   onPress={() => {
                     speechToTextHandler('description');
@@ -1033,9 +1001,5 @@ const CreateBook = ({navigation}) => {
     );
   });
 };
-
-// const styles = StyleSheet.create({
-
-// });
 
 export default memo(CreateBook);

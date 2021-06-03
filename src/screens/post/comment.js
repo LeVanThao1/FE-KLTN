@@ -1,17 +1,7 @@
-import React, {PureComponent, PropTypes} from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import moment from 'moment';
-import {stylesPost} from './stylePost';
-import {CREATE_COMMENT_POST} from '../../query/comment';
-import {Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {stylesPost} from './stylePost';
 
 const Comment = ({cmt}) => {
   const navigation = useNavigation();

@@ -1,32 +1,24 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useLazyQuery} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Button, Spinner} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 import React, {useContext, useState} from 'react';
-import {Icon} from 'native-base';
-import {COLORS} from '../../constants/themes';
 import {
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {LOGIN, REGISTER} from '../../query/user';
-import {
-  emailValidator,
-  passwordValidator,
-  phoneNumberValidator,
-} from '../../utils/validations';
-import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+import {LOGIN} from '../../query/user';
 import {Notification} from '../../utils/notifications';
-import {StackActions} from '@react-navigation/compat';
-import {useNavigation} from '@react-navigation/native';
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import {emailValidator, phoneNumberValidator} from '../../utils/validations';
 
 const Login = ({navigation}) => {
-  // const navigation = useNavigation();
   const [userID, setUserID] = React.useState({
     value: '',
     error: '',
@@ -51,10 +43,6 @@ const Login = ({navigation}) => {
         user.setLikes(data.login.user.likes);
         notification.setAllNotification(data.login.user.notifications);
         const tamp = {...data};
-        // delete tamp.login.user.notifications;
-        // delete tamp.login.user.store;
-        // delete tamp.login.user.cart;
-        // delete tamp.login.user.likes;
         user.setInfo(data?.login.user);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
@@ -99,14 +87,6 @@ const Login = ({navigation}) => {
         setPassword((cur) => ({...cur, error: 'Enter password'}));
         return false;
       }
-      // if (!passwordValidator(password.value) && password.value) {
-      //   setPassword((cur) => ({
-      //     ...cur,
-      //     error:
-      //       'The password must contain at least 1 digit, 1 uppercase character, 1 lowercase character and at least 8 characters',
-      //   }));
-      //   return false;
-      // }
       return true;
     };
     const onPress = () => {
@@ -214,7 +194,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    // alignItems: 'center',
   },
   title: {
     fontSize: 32,

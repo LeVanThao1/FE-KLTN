@@ -1,23 +1,23 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Alert,
-} from 'react-native';
-import {Icon} from 'native-base';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
 import {useMutation} from '@apollo/client';
-import {UPDATE_CART} from '../../query/user';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon} from 'native-base';
+import React, {useContext, useEffect, useRef} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
+import {UPDATE_CART} from '../../query/user';
 import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 const imageURL =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 export default function CartDetail({data}) {
@@ -29,23 +29,7 @@ export default function CartDetail({data}) {
     const typeRef = useRef(null);
     const [amount, setAmount] = React.useState(0);
     const [updateCart, {loading}] = useMutation(UPDATE_CART, {
-      onCompleted: async (dt) => {
-        // if(typeRef.current) {
-        //   const datat = [...cart].map((ct) => {
-        //     let tamp = {...ct}
-        //     if(ct.book.id === data.book.id) {
-        //       tamp.amount = typeRef.current === "i" ? ct.amount + 1 :  ct.amount - 1
-        //     }
-        //     return tamp;
-        //   })
-        //   setCart(datat)
-        // }
-        // else {
-        //   const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
-        //   setCart(datat)
-        //   setAmount(0)
-        // }
-      },
+      onCompleted: async (dt) => {},
       onError: (err) => {
         console.log(err);
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -164,7 +148,6 @@ export default function CartDetail({data}) {
               }}>
               <View
                 style={{
-                  // height: '50%',
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>

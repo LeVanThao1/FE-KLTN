@@ -1,29 +1,23 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, Icon, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  Image,
-  Button,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import ImageView from 'react-native-image-viewing';
-import {ScrollView} from 'react-native-gesture-handler';
-import Textarea from 'react-native-textarea';
-import {Form, Item, Picker} from 'native-base';
-import {CREATE_BOOK, UPDATE_BOOK} from '../../../query/book';
-// import {button} from '../style';
-import ImagePicker from 'react-native-image-crop-picker';
-
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
-import {COLORS, NOTIFI} from '../../../constants';
-import {UPLOAD_MULTI_FILE} from '../../../query/upload';
-import {mutateData} from '../../../common';
 import {ReactNativeFile} from 'extract-files';
+import {MobXProviderContext, useObserver} from 'mobx-react';
+import {Form, Icon, Item, Picker, Text, View} from 'native-base';
+import React, {memo, useContext, useState} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import ImagePicker from 'react-native-image-crop-picker';
+import Textarea from 'react-native-textarea';
+import Toast from 'react-native-toast-message';
+import {mutateData} from '../../../common';
+import {COLORS, NOTIFI} from '../../../constants';
+import {UPDATE_BOOK} from '../../../query/book';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
+import {Notification} from '../../../utils/notifications';
 
 const UpdateBook = ({navigation, route}) => {
   return useObserver(() => {
@@ -106,12 +100,6 @@ const UpdateBook = ({navigation, route}) => {
         price: Number(price.value),
         author: author.value,
       };
-      // updateBook({
-      //   variables: {
-      //     dataBook,
-      //     id: bookCurrent.id,
-      //   },
-      // });
       mutateData(UPDATE_BOOK, {
         dataBook,
         id: bookCurrent.id,

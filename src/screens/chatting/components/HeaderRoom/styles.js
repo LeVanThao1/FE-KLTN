@@ -13,17 +13,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   header__menu: {
-    // margin: -20,
     width: '100%',
-    // height: 00,
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {
-    // margin: 15,
     fontSize: 35,
     color: '#fff',
-    // paddingLeft: 20
   },
   search: {
     height: 35,

@@ -1,30 +1,18 @@
 import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import Textarea from 'react-native-textarea';
-import {COLORS} from '../../constants/themes';
-import Images from '../../assets/images/images';
-import {UPDATE_POST} from '../../query/post';
-import {CREATE_COMMENT_BOOK, CREATE_COMMENT_POST} from '../../query/comment';
-import Comment from '../post/comment';
-import {stylesPost} from './styles';
-import {Notification} from '../../utils/notifications';
+import {Icon, Text, View} from 'native-base';
+import React, {memo, useContext, useState} from 'react';
+import {Image, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import ImageView from 'react-native-image-viewing';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
-import formatMoney from '../../utils/format';
-
-import ImageView from 'react-native-image-viewing';
+import {CREATE_COMMENT_BOOK} from '../../query/comment';
 import ImageFooter from '../../screens/chatting/components/ImageFooter';
+import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
+import Comment from '../post/comment';
+import {stylesPost} from './styles';
 
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {

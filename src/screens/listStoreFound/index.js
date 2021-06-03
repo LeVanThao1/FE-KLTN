@@ -1,13 +1,10 @@
-import {Icon} from 'native-base';
 import React, {memo, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import GetLocation from 'react-native-get-location';
 import {queryData} from '../../common';
+import {COLORS} from '../../constants';
 import {GET_STORES_LOCATION} from '../../query/store';
 import StoreCart from './store';
-import GetLocation from 'react-native-get-location';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
 const ListStoreFound = ({navigation}) => {
   const [stores, setStores] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -36,7 +33,6 @@ const ListStoreFound = ({navigation}) => {
         const {code, message} = error;
         console.warn(code, message);
         setLoading(false);
-        // Toast.show(Notification(NOTIFI.error, message));
       });
   }, []);
   const renderStore = () => (
@@ -46,10 +42,7 @@ const ListStoreFound = ({navigation}) => {
           <Text style={{textAlign: 'center'}}>Đang quét</Text>
         </View>
       ) : stores?.length > 0 ? (
-        stores?.map((store, i) => (
-          <StoreCart key={i} data={store} />
-          // delete={onPress(book.id)}
-        ))
+        stores?.map((store, i) => <StoreCart key={i} data={store} />)
       ) : (
         <View style={{padding: 20}}>
           <Text style={{textAlign: 'center'}}>
@@ -72,7 +65,6 @@ const ListStoreFound = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
   },
   row: {
     width: '100%',

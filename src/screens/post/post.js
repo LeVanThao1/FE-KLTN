@@ -2,33 +2,19 @@ import {useMutation} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-// import {Text} from 'native-base';
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  Alert,
-  Image,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
-import {DELETE_POST} from '../../query/post';
-import {GET_COMMENT_POST} from '../../query/post';
-import {stylesPost} from './stylePost';
 import moment from 'moment';
-import {queryData} from '../../common';
-import {Comment} from './comment';
-import {View} from 'react-native';
-import styled from 'styled-components/native';
 // import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import {Icon} from 'native-base';
-
-import Avatar from './posts/avatar';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
-
+// import {Text} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
+import {Alert, TouchableOpacity, View} from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import Toast from 'react-native-toast-message';
+import styled from 'styled-components/native';
+import {NOTIFI} from '../../constants';
+import {DELETE_POST} from '../../query/post';
 import ImageFooter from '../../screens/chatting/components/ImageFooter';
+import {Notification} from '../../utils/notifications';
 
 const Container = styled.View`
   flex: 1;
@@ -173,7 +159,7 @@ const PostOne = ({route, post, type}) => {
         },
       });
     };
-    useEffect(() => {}, [post]);
+
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <Container>

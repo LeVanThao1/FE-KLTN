@@ -1,26 +1,20 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import React, {useContext, useState, useEffect, memo} from 'react';
 import {Icon, Spinner} from 'native-base';
-
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
-  ScrollView,
-  Image,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {DELETE_BOOK, GET_BOOKS_STORE} from '../../../query/book';
-
-import Book from './book';
-import {queryData} from '../../../common';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
+import {queryData} from '../../../common';
 import {COLORS, NOTIFI} from '../../../constants';
-import book from './book';
+import {GET_BOOKS_STORE} from '../../../query/book';
+import {Notification} from '../../../utils/notifications';
+import Book from './book';
 
 const BooksStore = ({navigation}) => {
   return useObserver(() => {
@@ -90,10 +84,7 @@ const BooksStore = ({navigation}) => {
       <>
         {!loading ? (
           categori?.length > 0 ? (
-            categori?.map((book, i) => (
-              <Book key={i} book={book} />
-              // delete={onPress(book.id)}
-            ))
+            categori?.map((book, i) => <Book key={i} book={book} />)
           ) : (
             <View style={{padding: 20}}>
               <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>

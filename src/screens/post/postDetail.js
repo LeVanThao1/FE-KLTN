@@ -1,39 +1,19 @@
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {
-  Button,
-  Form,
-  Icon,
-  Item,
-  Picker,
-  Spinner,
-  Text,
-  View,
-} from 'native-base';
+import {Icon, Spinner, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import Textarea from 'react-native-textarea';
-import Images from '../../assets/images/images';
-import {GET_POST, UPDATE_POST} from '../../query/post';
+import {Image, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import ImageView from 'react-native-image-viewing';
+import Toast from 'react-native-toast-message';
+import {COLORS, NOTIFI} from '../../constants';
 import {CREATE_COMMENT_POST} from '../../query/comment';
+import {GET_POST} from '../../query/post';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
+import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 import Comment from './comment';
 import {stylesPost} from './stylePost';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
-import formatMoney from '../../utils/format';
-import {queryData} from '../../common';
-
-import ImageView from 'react-native-image-viewing';
-import ImageFooter from '../../screens/chatting/components/ImageFooter';
 
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
@@ -68,8 +48,7 @@ const PostDetail = ({navigation, route}) => {
         },
       });
     }, [refreshing]);
-    useEffect(() => {}, [loading]);
-    useEffect(() => {}, [postCurrent]);
+
     const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
         setPostCurrent({
@@ -233,34 +212,6 @@ const PostDetail = ({navigation, route}) => {
                     <Text>{postCurrent?.description}</Text>
                   </View>
                 </View>
-                {/* {postCurrent.comment?.map((cmt, i) => (
-                  <Comment key={i} cmt={cmt} />
-                ))}
-                <View style={stylesPost.addCmt}>
-                  <View style={stylesPost.cmtInfo}>
-                    <Image
-                      source={{uri: info.avatar}}
-                      style={stylesPost.avtcmt}
-                    />
-                    <View style={stylesPost.addComment}>
-                      <TextInput
-                        style={stylesPost.comment}
-                        placeholder="Thêm bình luận"
-                        value={cmts}
-                        onFocus={() => {}}
-                        onChangeText={(value) => {
-                          setCmts(value);
-                        }}
-                      />
-                      <Icon
-                        name="ios-arrow-forward-circle-outline"
-                        type="Ionicons"
-                        style={stylesPost.iconEnter}
-                        onPress={onPress}
-                      />
-                    </View>
-                  </View>
-                </View> */}
                 <View
                   style={{
                     backgroundColor: '#fff',
@@ -310,22 +261,22 @@ const PostDetail = ({navigation, route}) => {
                 {info.id !== postCurrent?.author.id ? (
                   <></>
                 ) : (
-                  <View style={{flexDirection: 'row',
-                  justifyContent:'center'}}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: COLORS.primary,
-                      paddingVertical: 10,
-                      borderRadius: 10,
-                      width: 130
-                    }}
-                    onPress={() =>
-                      navigation.navigate('UpdatePost', {
-                        postId: postCurrent?.id,
-                      })
-                    }>
-                    <Text style={stylesPost.btn}>Cập nhật</Text>
-                  </TouchableOpacity>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: COLORS.primary,
+                        paddingVertical: 10,
+                        borderRadius: 10,
+                        width: 130,
+                      }}
+                      onPress={() =>
+                        navigation.navigate('UpdatePost', {
+                          postId: postCurrent?.id,
+                        })
+                      }>
+                      <Text style={stylesPost.btn}>Cập nhật</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>

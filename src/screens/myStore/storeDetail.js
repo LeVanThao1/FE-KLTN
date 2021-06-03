@@ -1,36 +1,25 @@
-import React, {useState, memo, useContext, useEffect} from 'react';
+import {useLazyQuery} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  Dimensions,
   Image,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
-  Dimensions,
+  View,
 } from 'react-native';
-import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button} from 'native-base';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery} from '@apollo/client';
-import {GET_STORE, GET_STORE_BY_USER} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
+import Images from '../../assets/images/images';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
+import {GET_STORE_BY_USER} from '../../query/store';
 import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 const {width} = Dimensions.get('screen');
 const StoreDetail = ({navigation, route}) => {
   return useObserver(() => {

@@ -1,24 +1,18 @@
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {useLazyQuery} from '@apollo/client';
 import React, {useState} from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-
-import {
-  emailValidator,
-  passwordValidator,
-  phoneNumberValidator,
-} from '../../utils/validations';
-import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
-import {FORGOT_PASSWORD} from '../../query/user';
 import Toast from 'react-native-toast-message';
 import {COLORS, NOTIFI} from '../../constants';
+import {FORGOT_PASSWORD} from '../../query/user';
 import {Notification} from '../../utils/notifications';
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import {emailValidator, phoneNumberValidator} from '../../utils/validations';
 
 export default function ResetPassword({navigation}) {
   const [forgotPassword] = useLazyQuery(FORGOT_PASSWORD, {

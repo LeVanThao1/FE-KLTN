@@ -4,10 +4,7 @@ export const GET_SUB_ORDERS = gql`
   query subOrdersByUser {
     subOrdersByUser {
       id
-      user {
-        id
-        name
-      }
+      name
       detail {
         book {
           id
@@ -43,10 +40,7 @@ export const GET_SUB_ORDER = gql`
   query subOrderByUser($id: ID!) {
     subOrderByUser(id: $id) {
       id
-      user {
-        id
-        name
-      }
+      name
       detail {
         book {
           id

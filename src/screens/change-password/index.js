@@ -1,14 +1,13 @@
-import {fromError, useMutation} from '@apollo/client';
+import {Icon} from 'native-base';
 import React, {useState} from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-import {COLOR, COLORS} from '../../constants/themes'
+import {COLORS} from '../../constants/themes';
 import {passwordValidator} from '../../utils/validations';
 export default function ForgotPassword({navigation}) {
   const onPress = () => {

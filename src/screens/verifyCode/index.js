@@ -1,20 +1,17 @@
+import {useLazyQuery} from '@apollo/client';
 import React from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  Button,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-import {useLazyQuery, useQuery} from '@apollo/client';
-import {VERIFY} from '../../query/user';
-import {codeValidator} from '../../utils/validations';
-import {deFormatPhone} from '../../utils/support/phoneFormat';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
 import Toast from 'react-native-toast-message';
+import {COLORS, NOTIFI} from '../../constants';
+import {VERIFY} from '../../query/user';
+import {Notification} from '../../utils/notifications';
+import {deFormatPhone} from '../../utils/support/phoneFormat';
 export default function VerifyCode({route, navigation}) {
   const [verify, {called, loading, data, error}] = useLazyQuery(VERIFY, {
     onCompleted: async (data) => {
@@ -30,7 +27,6 @@ export default function VerifyCode({route, navigation}) {
     error: '',
   });
   const {type, userId} = route.params;
-  console.log(type, userId);
   const validationCode = () => {
     if (!code.value.trim()) {
       setCode((cur) => ({...cur, error: 'Enter code'}));
