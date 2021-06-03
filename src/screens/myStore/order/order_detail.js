@@ -48,12 +48,22 @@ const OrderDetailStore = ({navigation, route}) => {
       if (stt === 'PROCESSING') {
         resultStt = 'DONE';
       }
+      if (stt === 'CANCEL') {
+        resultStt = 'CANCEL';
+      }
       return resultStt;
     };
 
     const onAlert = () => {
       Alert.alert('Đồng ý chuyển trạng thái ?', 'Lựa chọn', [
         {text: 'Đồng ý', onPress: () => changeStatus()},
+        {text: 'Hủy'},
+      ]);
+    };
+
+    const onAlertCancel = () => {
+      Alert.alert('Đồng ý hủy đơn hàng ?', 'Lựa chọn', [
+        {text: 'Đồng ý', onPress: () => CancelOrder()},
         {text: 'Hủy'},
       ]);
     };
@@ -70,9 +80,7 @@ const OrderDetailStore = ({navigation, route}) => {
         Toast.show(
           Notification(
             NOTIFI.success,
-            `Chuyển đơn hàng sang trạng thái ${nextStatus(
-              orderStore.status,
-            )} thành công`,
+            `Chuyển đơn trạng thái đơn hàng thành công`,
           ),
         );
       },
@@ -81,6 +89,21 @@ const OrderDetailStore = ({navigation, route}) => {
         console.log(err);
       },
     });
+
+    const CancelOrder = () => {
+      updateStatusSubOrder({
+        variables: {
+          dataStatus: 'CANCLE',
+          id: orderStore.id,
+        },
+      });
+      const newData = [...infoOrder].filter(
+        (od) => od.id + '' !== orderStore.id + '',
+      );
+      console.log('data update stt', newData);
+      setInfoOrder([infoOrder, ...newData]);
+      navigation.navigate('OrdersByStore');
+    };
 
     const changeStatus = () => {
       updateStatusSubOrder({
@@ -208,7 +231,7 @@ const OrderDetailStore = ({navigation, route}) => {
               {orderStore?.status}
             </Text>
           </View>
-          <View
+         { orderStore?.status !== 'CANCLE' ? <><View
             style={{
               // paddingVertical: 20,
               paddingHorizontal: 10,
@@ -221,9 +244,8 @@ const OrderDetailStore = ({navigation, route}) => {
             <Text style={{paddingVertical: 20, paddingLeft: 30}}>
               {nextStatus(orderStore?.status)}
             </Text>
-          </View>
-          <View style={{paddingVertical: 20}}>
-            <TouchableOpacity onPress={onAlert}>
+          </View> 
+          <TouchableOpacity onPress={onAlert}>
               <Text
                 style={{
                   color: '#fff',
@@ -239,6 +261,30 @@ const OrderDetailStore = ({navigation, route}) => {
                 Trạng thái tiếp theo
               </Text>
             </TouchableOpacity>
+          </>
+          : <></>}
+          
+          <View style={{paddingVertical: 20}}>
+            {/* {orderStore.status !== 'CANCLE' ?} */}
+            {orderStore?.status === 'WAITING' ?
+              <TouchableOpacity onPress={onAlertCancel}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    backgroundColor: COLORS.primary,
+                    textAlign: 'center',
+                    width: '50%',
+                    alignSelf: 'center',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    // marginVertical: 15,
+                    borderRadius: 4,
+                  }}>
+                  Hủy đơn hàng
+                </Text>
+              </TouchableOpacity>
+              : <></>
+            }            
           </View>
         </ScrollView>
       </View>
