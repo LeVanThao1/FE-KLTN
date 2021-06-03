@@ -174,26 +174,26 @@ const NewPost = ({navigation}) => {
       },
     );
     const validateCreate = () => {
-      if (title.value < 3) {
+      if (title.value.length < 3) {
         setTitle({
           ...title,
           error: 'Tiêu đề phải dài hơn 3 ký tự',
         });
-        return false;
+        return 'Tiêu đề phải dài hơn 3 ký tự';
       }
-      if (name.value < 3) {
+      if (name.value.length < 3) {
         setName({
           ...name,
           error: 'Tên sách phải dài hơn 3 ký tự',
         });
-        return false;
+        return 'Tên sách phải dài hơn 3 ký tự';
       }
-      if (!price.value) {
+      if (price.value === 0) {
         setPrice({
           ...price,
           error: 'Vui lòng nhập giá sách',
         });
-        return false;
+        return 'Vui lòng nhập giá sách';
       }
       return true;
     };
@@ -205,7 +205,7 @@ const NewPost = ({navigation}) => {
       ]);
     };
     const onCreate = () => {
-      if (validateCreate() === 1) return;
+      if (validateCreate() === true) {
       let dataPost = {
         title: title.value,
         name: name.value,
@@ -224,6 +224,10 @@ const NewPost = ({navigation}) => {
           dataPost,
         },
       });
+    }
+    else {
+      Toast.show(Notification(NOTIFI.error, validateCreate()));
+    }
     };
 
     return (

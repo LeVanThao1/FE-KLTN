@@ -339,6 +339,8 @@ export const stylesPost = StyleSheet.create({
     // padding: 10,
     // marginHorizontal: 85,
     // width: '50%',
+    margin: 'auto',
+
     textAlign: 'center',
     color: '#fff',
     fontSize: 14,
