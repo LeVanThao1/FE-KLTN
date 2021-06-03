@@ -74,15 +74,7 @@ const BookDetail = ({navigation, book}) => {
                   />
                 )}
               />
-              {/* <ScrollView>
-                {bookCurrent.images?.map((img, i) => (
-                  <Image
-                    key={i}
-                    source={{uri: img}}
-                    style={stylesPost.imgBook}
-                  />
-                ))}
-              </ScrollView> */}
+
               <View style={stylesPost.imgBookDetail}>
                 <ScrollView horizontal={true}>
                   {bookCurrent.images.map((img, i) => (
@@ -109,9 +101,6 @@ const BookDetail = ({navigation, book}) => {
                   <Text style={stylesPost.txtBold}>Tên sách</Text>
                   <Text style={stylesPost.titlePost}>{bookCurrent.name}</Text>
                 </View>
-                {/* <View style={stylesPost.titleCenter}>
-                <Text style={stylesPost.txtBold}>Thông tin sách</Text>
-              </View> */}
                 <View style={stylesPost.horizontal}>
                   <Text>Danh mục </Text>
                   <Text style={stylesPost.detail}>

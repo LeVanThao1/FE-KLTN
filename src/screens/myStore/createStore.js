@@ -381,11 +381,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
 
-  createStore: {
-    marginHorizontal: 'auto',
-    paddingVertical: '60%',
-  },
-
   titleCreate: {
     width: '100%',
     height: 38,
