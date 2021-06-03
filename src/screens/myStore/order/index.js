@@ -146,16 +146,7 @@ const OrdersByStore = ({navigation}) => {
     }
 
     return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.searchGroup}>
-            <Icon name="search" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Nhập mã đơn hàng"
-            />
-          </View>
-        </View>
+      <View style={styles.container}>       
         <View style={{height: 46, backgroundColor: '#ffffff'}}>
           <ScrollView horizontal>
             <Tab name="Đang chờ" status="WAITING" />
