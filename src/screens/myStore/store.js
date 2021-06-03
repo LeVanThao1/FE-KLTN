@@ -88,7 +88,7 @@ const Store = ({navigation}) => {
             </View>
             <View style={styles.des}>
               <Text>Mô tả shop: </Text>
-              <TextEvent style={styles.textarea}>{info?.description}</TextEvent>
+              <Text style={styles.textarea}>{info?.description}</Text>
             </View>
           </View>
           <View style={styles.product}>
