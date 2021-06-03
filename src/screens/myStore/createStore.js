@@ -99,6 +99,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng nhập họ tên',
         });
         count++;
+        return name.error;
       }
       if (!provinces.value) {
         setProvinces({
@@ -106,6 +107,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng chọn tỉnh / thành phố',
         });
         count++;
+        return provinces.error;
       }
       if (!districts.value) {
         setDistricts({
@@ -113,6 +115,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng chọn quận / huyện',
         });
         count++;
+        return districts.error;
       }
       if (!ward.value) {
         setWard({
@@ -127,6 +130,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng nhập địa chỉ cụ thể',
         });
         count++;
+        return address.error;
       }
       return count === 0;
     };
@@ -197,23 +201,33 @@ const CreateStore = ({navigation}) => {
     };
 
     const onPress = () => {
-      // if (validateSubmit) {
-      let dataStore = {
-        // avatar: 'https://picsum.photos/200',
-        name: name,
-        description: description,
-        address: `${address.value}, ${ward.value.split('-')[1]}, ${
-          districts.value.split('-')[1]
-        }, ${provinces.value.split('-')[1]}`,
-        owner: user.info.id,
-      };
-      createStore({
-        variables: {
-          dataStore,
-        },
-      });
-      setInfo(dataStore);
-      // }
+      if (validateSubmit === true) {
+        let dataStore = {
+          // avatar: 'https://picsum.photos/200',
+          name: name,
+          description: description,
+          address: `${address.value}, ${ward.value.split('-')[1]}, ${
+            districts.value.split('-')[1]
+          }, ${provinces.value.split('-')[1]}`,
+          owner: user.info.id,
+        };
+        createStore({
+          variables: {
+            dataStore,
+          },
+        });
+        setInfo(dataStore);
+      } else {
+        Toast.show({
+          text: 'Vui lòng nhập đủ thông tin',
+          type: 'error',
+          position: 'top',
+          visibilityTime: 4000,
+          autoHide: true,
+          topOffset: 30,
+          bottomOffset: 40,
+        });
+      }
     };
     return (
       <ScrollView>
@@ -238,6 +252,7 @@ const CreateStore = ({navigation}) => {
                 })
               }
             />
+            <Text style={styles.err}>{name.error}</Text>
           </View>
           <View style={styles.field}>
             <Text style={{fontSize: 16}}>Tỉnh / Thành phố *</Text>

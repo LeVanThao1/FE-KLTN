@@ -227,41 +227,53 @@ const CreateBook = ({navigation}) => {
       ]);
     };
 
+    console.log('ádfasdfasdfsdf',description.value)
     const validateCreate = () => {
-      if (name.value < 3) {
+      console.log('vvv', name.value.length)
+
+      if (name.value==='' || name.value.length < 3) {
+        console.log('vvv', name)
         setName({
           ...name,
           error: 'Tên sách phải dài hơn 3 ký tự',
         });
-        return name.error;
+        return 'Tên sách phải dài hơn 3 ký tự';
       }
-      if (author.value < 3) {
+      if (!name.value || author.value.length < 3) {
         setAuthor({
           ...author,
           error: 'Tên tác giả phải dài hơn 3 ký tự',
         });
-        return false;
+        return 'Tên tác giả phải dài hơn 3 ký tự';
       }
-      if (description.value < 30) {
-        setDescription({
-          ...description,
-          error: 'Mô tả phải dài hơn 30 ký tự',
+      if (numPrint.value.length === 0) {
+        setNumPrint({
+          ...numPrint,
+          error: 'Vui lòng nhập số lần xuất bản',
         });
-        return false;
+        return 'Vui lòng nhập số lần xuất bản';
       }
-      if (!amount.value) {
+      console.log(description.value)
+      // if (description.value.length < 5) {
+      //   setDescription({
+      //     ...description,
+      //     error: 'Mô tả phải dài hơn 5 ký tự',
+      //   });
+      //   return 'Mô tả phải dài hơn 5 ký tự';
+      // }
+      if (!amount.value || amount.value === 0) {
         setAmount({
           ...amount,
           error: 'Vui lòng nhập số lượng sách',
         });
-        return false;
+        return 'Vui lòng nhập số lượng sách';
       }
-      if (!price.value) {
+      if (!price.value || price.value === 0) {
         setPrice({
           ...price,
           error: 'Vui lòng nhập giá sách',
         });
-        return false;
+        return 'Vui lòng nhập giá sách';
       }
       return true;
     };

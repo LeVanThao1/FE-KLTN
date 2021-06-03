@@ -310,11 +310,14 @@ const PostDetail = ({navigation, route}) => {
                 {info.id !== postCurrent?.author.id ? (
                   <></>
                 ) : (
+                  <View style={{flexDirection: 'row',
+                  justifyContent:'center'}}>
                   <TouchableOpacity
                     style={{
                       backgroundColor: COLORS.primary,
                       paddingVertical: 10,
                       borderRadius: 10,
+                      width: 130
                     }}
                     onPress={() =>
                       navigation.navigate('UpdatePost', {
@@ -323,6 +326,7 @@ const PostDetail = ({navigation, route}) => {
                     }>
                     <Text style={stylesPost.btn}>Cập nhật</Text>
                   </TouchableOpacity>
+                  </View>
                 )}
               </View>
             </View>

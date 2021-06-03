@@ -35,6 +35,8 @@ const OrderDetailStore = ({navigation, route}) => {
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(true);
 
+    console.log('order', infoOrder.map(o => o.detail));
+
     const nextStatus = (stt) => {
       let resultStt = '';
       if (stt === 'WAITING') {
@@ -58,9 +60,12 @@ const OrderDetailStore = ({navigation, route}) => {
 
     const [updateStatusSubOrder] = useMutation(UPDATE_STATUS_ORDER, {
       onCompleted: async (data) => {
+        console.log('dataa' ,data);
+        console.log(infoOrder)
         const newData = [...infoOrder].filter(
           (od) => od.id + '' !== orderStore.id + '',
         );
+        console.log('data update stt', newData);
         setInfoOrder([infoOrder, ...newData]);
         Toast.show(
           Notification(
@@ -70,7 +75,6 @@ const OrderDetailStore = ({navigation, route}) => {
             )} thành công`,
           ),
         );
-        navigation.goBack();
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -85,6 +89,12 @@ const OrderDetailStore = ({navigation, route}) => {
           id: orderStore.id,
         },
       });
+      const newData = [...infoOrder].filter(
+        (od) => od.id + '' !== orderStore.id + '',
+      );
+      console.log('data update stt', newData);
+      setInfoOrder([infoOrder, ...newData]);
+      navigation.navigate('OrdersByStore');
     };
 
     return (

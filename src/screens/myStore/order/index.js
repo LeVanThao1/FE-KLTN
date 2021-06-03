@@ -41,13 +41,14 @@ const OrdersByStore = ({navigation}) => {
 
     useEffect(() => {}, [infoOrder]);
 
+
     useEffect(() => {}, [selectedStatus]);
 
     const renderSubOrders = () => {
       return (
         <View>
           {!loading ? (
-            subOrders
+            infoOrder
               ?.filter((so) => so.status === selectedStatus)
               .map((so) => <SubOrder {...so} order={so} key={so.id} />)
           ) : (

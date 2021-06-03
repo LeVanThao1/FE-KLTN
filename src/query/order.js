@@ -132,3 +132,11 @@ export const UPDATE_STATUS_ORDER = gql`
     }
   }
 `;
+
+export const CANCEL_ORDER_BY_USER = gql `
+  mutation cancleOrderByUser($id: ID!) {
+    cancleOrderByUser(id: $id) {
+      message
+    }
+  }
+`

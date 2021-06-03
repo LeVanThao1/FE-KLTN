@@ -192,7 +192,7 @@ const UpdateStore = ({navigation}) => {
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
 
     const onPress = () => {
-      if (validateSubmit) {
+      if (validateSubmit === true) {
         let dataStore = {
           avatar: avatarUpload,
           // // background: 'https://picsum.photos/id/237/200/300',
@@ -208,6 +208,17 @@ const UpdateStore = ({navigation}) => {
             dataStore,
             id: shop.info.id,
           },
+        });
+      }
+      else {
+        Toast.show({
+          text: 'Vui lòng nhập đủ thông tin',
+          type: 'error',
+          position: 'top',
+          visibilityTime: 4000,
+          autoHide: true,
+          topOffset: 30,
+          bottomOffset: 40,
         });
       }
       // }

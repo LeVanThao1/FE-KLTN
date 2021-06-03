@@ -127,7 +127,33 @@ const UpdatePost = ({route, navigation}) => {
         .catch((err) => console.log(err));
     };
 
+    const validateCreate = () => {
+      if (title.value.length < 3) {
+        setTitle({
+          ...title,
+          error: 'Tiêu đề phải dài hơn 3 ký tự',
+        });
+        return 'Tiêu đề phải dài hơn 3 ký tự';
+      }
+      if (description.value.length < 10) {
+        setName({
+          ...name,
+          error: 'Tên sách phải dài hơn 3 ký tự',
+        });
+        return 'Tên sách phải dài hơn 3 ký tự';
+      }
+      if (price.value === 0) {
+        setPrice({
+          ...price,
+          error: 'Vui lòng nhập giá sách',
+        });
+        return 'Vui lòng nhập giá sách';
+      }
+      return true;
+    };
+
     const onUpdate = () => {
+      if(validateCreate() === true) {
       let dataPost = {
         title: title.value,
         description: description.value,
@@ -161,6 +187,10 @@ const UpdatePost = ({route, navigation}) => {
           Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
           console.log(err);
         });
+      }
+      else {
+        Toast.show(Notification(NOTIFI.error, validateCreate()));
+      }
     };
 
     return (
@@ -359,7 +389,7 @@ const UpdatePost = ({route, navigation}) => {
                     style={{
                       position: 'absolute',
                       right: 10,
-                      top: 8,
+                      top: 13,
                       fontSize: 14,
                     }}>
                     VND
@@ -407,15 +437,20 @@ const UpdatePost = ({route, navigation}) => {
                 underlineColorAndroid={'transparent'}
                 placeholder="Nhập mô tả"
               />
+              <View style={{ flexDirection: 'row',
+                  justifyContent:'center',}}>
               <TouchableOpacity
                 style={{
                   backgroundColor: COLORS.primary,
                   paddingVertical: 10,
                   borderRadius: 10,
+                  width: 130,
+                 
                 }}
                 onPress={onAlert}>
                 <Text style={stylesPost.btn}>Cập nhật</Text>
               </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
