@@ -85,7 +85,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng nhập họ tên',
         });
         count++;
-        return name.error;
+        // return name.error;
       }
       if (!provinces.value) {
         setProvinces({
@@ -93,7 +93,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng chọn tỉnh / thành phố',
         });
         count++;
-        return provinces.error;
+        // return provinces.error;
       }
       if (!districts.value) {
         setDistricts({
@@ -101,7 +101,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng chọn quận / huyện',
         });
         count++;
-        return districts.error;
+        // return districts.error;
       }
       if (!ward.value) {
         setWard({
@@ -116,7 +116,7 @@ const CreateStore = ({navigation}) => {
           error: 'Vui lòng nhập địa chỉ cụ thể',
         });
         count++;
-        return address.error;
+        // return address.error;
       }
       return count === 0;
     };
@@ -205,7 +205,7 @@ const CreateStore = ({navigation}) => {
         setInfo(dataStore);
       } else {
         Toast.show({
-          text: 'Vui lòng nhập đủ thông tin',
+          text1: 'Vui lòng nhập đủ thông tin',
           type: 'error',
           position: 'top',
           visibilityTime: 4000,
