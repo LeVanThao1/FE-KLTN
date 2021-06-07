@@ -121,6 +121,11 @@ export const CREATE_COMMENT_BOOK = gql`
         id
         avatar
         name
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       createdAt

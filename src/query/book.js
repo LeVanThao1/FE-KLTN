@@ -101,6 +101,11 @@ export const GET_BOOK = gql`
           id
           name
           avatar
+          store {
+            id
+            name
+            avatar
+          }
         }
         createdAt
       }
@@ -123,12 +128,11 @@ export const GET_BOOK = gql`
         avatar
         background
         address
-      }      
+      }
       category {
         id
         name
       }
-      
     }
   }
 `;

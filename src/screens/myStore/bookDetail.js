@@ -25,7 +25,7 @@ const BookDetail = ({navigation, book}) => {
     const [addCmt, setAddCmt] = useState('');
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
-
+    console.log(bookCurrent);
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
         setBookCurrent({
@@ -142,10 +142,10 @@ const BookDetail = ({navigation, book}) => {
                   </Text> */}
                   </View>
                 </View>
-                <View style={stylesPost.elment}>
+                {/* <View style={stylesPost.elment}>
                   <Text>Sách muốn đổi </Text>
                   <Text style={stylesPost.detail}>asdas</Text>
-                </View>
+                </View> */}
 
                 <Text style={stylesPost.textContent}>Mô tả</Text>
                 <View style={stylesPost.textDes}>

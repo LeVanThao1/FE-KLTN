@@ -31,7 +31,7 @@ import {UPDATE_STORE} from '../../query/store';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
 import {UPDATE_AVATAR} from '../../query/user';
 import {Notification} from '../../utils/notifications';
-
+import {mutateData} from '../../common';
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -40,7 +40,7 @@ const UpdateStore = ({navigation}) => {
     const {info, setInfo} = shop;
     const navigation = useNavigation();
     const add = info.address.split(',');
-
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState({
       value: info ? info.name : '',
       error: '',
@@ -97,28 +97,26 @@ const UpdateStore = ({navigation}) => {
       error: '',
     });
 
-    const [updateStore, {called, loading, data, error}] = useMutation(
-      UPDATE_STORE,
-      {
-        onCompleted: async (data) => {
-          setInfo({
-            ...info,
-            name: name.value,
-            description: description.value,
-            address: `${address.value}, ${ward.value.split('-')[1]}, ${
-              districts.value.split('-')[1]
-            }, ${provinces.value.split('-')[1]}`,
-          });
-          Toast.show(
-            Notification(NOTIFI.error, 'Cập nhật cửa hàng thành công'),
-          );
-        },
-        onError: (err) => {
-          Toast.show(Notification(NOTIFI.error, err.message));
-          console.log('error update store', err);
-        },
+    const [updateStore, {called, data, error}] = useMutation(UPDATE_STORE, {
+      onCompleted: async (data) => {
+        setInfo({
+          ...info,
+          name: name.value,
+          description: description.value,
+          address: `${address.value}, ${ward.value.split('-')[1]}, ${
+            districts.value.split('-')[1]
+          }, ${provinces.value.split('-')[1]}`,
+        });
+        Toast.show(
+          Notification(NOTIFI.success, 'Cập nhật cửa hàng thành công'),
+        );
+        navigation.goBack();
       },
-    );
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log('error update store', err);
+      },
+    });
     const validateSubmit = () => {
       let count = 0;
       if (!name.value) {
@@ -178,7 +176,7 @@ const UpdateStore = ({navigation}) => {
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
 
     const onPress = () => {
-      if (validateSubmit === true) {
+      if (validateSubmit() === true) {
         let dataStore = {
           avatar: avatarUpload,
           // // background: 'https://picsum.photos/id/237/200/300',
@@ -196,15 +194,9 @@ const UpdateStore = ({navigation}) => {
           },
         });
       } else {
-        Toast.show({
-          text: 'Vui lòng nhập đủ thông tin',
-          type: 'error',
-          position: 'top',
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 30,
-          bottomOffset: 40,
-        });
+        Toast.show(
+          Notification(NOTIFI.error, 'Vui lòng nhập đầy đủ thông tin.'),
+        );
       }
       // }
     };

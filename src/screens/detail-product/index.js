@@ -49,7 +49,7 @@ const User = styled.Image`
 const DetailProduct = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user},
+      stores: {user, shop},
     } = useContext(MobXProviderContext);
     const {cart, setCart, likes, addToLike, removeToLike, info} = user;
     const {productId} = route.params;
@@ -164,6 +164,7 @@ const DetailProduct = ({navigation, route}) => {
             ...cur,
             comment: [data.createCommentBook, ...cur.comment],
           }));
+          onChangeComment('');
         })
         .catch((err) => {
           console.log(err);
@@ -176,7 +177,7 @@ const DetailProduct = ({navigation, route}) => {
       if (found) {
         const dataCart = [...cart].map((ct) => {
           let tamp = {
-            book: productId,
+            book: ct.book.id,
             price: book.price,
             amount: ct.amount,
           };
@@ -273,10 +274,10 @@ const DetailProduct = ({navigation, route}) => {
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
                 <Text style={styles.detail__content_name}>
-                  {book.name ? book.name : 'Tên sách'}
+                  {book.book ? book?.book?.name : book.name}
                 </Text>
                 <Text style={{...styles.detail__content_name, fontSize: 16}}>
-                  {book.publisher}đ
+                  {book.book ? book?.book?.publisher : book.publisher}
                 </Text>
                 <Text style={styles.current__price}>
                   Giá bán: {formatMoney(book.price)}đ
@@ -453,7 +454,7 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={stylesPost.addCmt}>
                   <View style={stylesPost.person}>
                     <Image
-                      source={{uri: info.avatar}}
+                      source={{uri: shop.info ? shop.info.avatar : info.avatar}}
                       style={stylesPost.avtcmt}
                     />
                     <TextInput

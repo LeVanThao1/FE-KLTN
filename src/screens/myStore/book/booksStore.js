@@ -14,6 +14,7 @@ import {queryData} from '../../../common';
 import {COLORS, NOTIFI} from '../../../constants';
 import {GET_BOOKS_STORE} from '../../../query/book';
 import {Notification} from '../../../utils/notifications';
+import book from './book';
 import Book from './book';
 
 const BooksStore = ({navigation}) => {
@@ -43,19 +44,22 @@ const BooksStore = ({navigation}) => {
         setListBook(
           bookStore.map((ct, i) => ({
             id: ct.id ? ct.id : '',
-            name: ct.name ? ct.name : '',
-            categoryId: ct.category ? ct.category.id : '',
-            categoryName: ct.category ? ct.category.name : '',
-            author: ct.author ? ct.author : '',
+            name: ct.book ? ct.book.name : ct.name,
+            categoryId: ct.book ? ct.book.category?.id : ct.category?.id,
+            categoryName: ct.book ? ct.book.category?.name : ct.category?.name,
+            author: ct.book ? ct.book.author : ct.author,
             price: ct.price ? ct.price : '',
-            publisher: ct.publisher ? ct.publisher : '',
-            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
-            year: ct.year ? ct.year : '',
+            publisher: ct.book ? ct.book.publisher : ct.publisher,
+            numberOfReprint: ct.book
+              ? ct.book.numberOfReprint
+              : ct.numberOfReprint,
+            year: ct.book ? ct.book.year : ct.year,
             amount: ct.amount ? ct.amount : '',
             sold: ct.sold ? ct.sold : '',
-            description: ct.description ? ct.description : '',
-            images: ct.images ? ct.images : [],
+            description: ct.book ? ct.book.description : ct.description,
+            images: ct.book ? ct.book.images : ct.images,
             comment: ct.comment ? ct.comment : '',
+            book: ct.book ? ct.book.id : null,
           })),
         );
       }
