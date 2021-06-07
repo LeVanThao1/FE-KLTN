@@ -39,7 +39,10 @@ const CreateStore = ({navigation}) => {
       value: '',
       error: '',
     });
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState({
+      value: '',
+      error: '',
+    });
     const [provinces, setProvinces] = useState({
       value: undefined,
       error: '',
@@ -61,15 +64,16 @@ const CreateStore = ({navigation}) => {
       CREATE_STORE,
       {
         onCompleted: async (data) => {
-          Toast.show({
-            text: `Tạo cửa hàng thành công`,
-            type: 'success',
-            position: 'top',
-            style: {backgroundColor: COLORS.primary, color: '#ffffff'},
-          });
+          Toast.show(Notification(NOTIFI.success, 'Tạo cửa hàng thành công'));
           AsyncStorage.clear().then(() => {
             auth.setLogout();
           });
+          // {
+          //   text: `Tạo cửa hàng thành công`,
+          //   type: 'success',
+          //   position: 'top',
+          //   style: {backgroundColor: COLORS.primary, color: '#ffffff'},
+          // }
         },
         onError: (err) => {
           Toast.show(Notification(NOTIFI.error, err.message));
@@ -202,17 +206,18 @@ const CreateStore = ({navigation}) => {
             dataStore,
           },
         });
-        setInfo(dataStore);
+        // setInfo(dataStore);
       } else {
-        Toast.show({
-          text: 'Vui lòng nhập đủ thông tin',
-          type: 'error',
-          position: 'top',
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 30,
-          bottomOffset: 40,
-        });
+        Toast.show(Notification(NOTIFI.error, 'Vui lòng nhập đủ thông tin'));
+        // Toast.show({
+        //   text: 'Vui lòng nhập đủ thông tin',
+        //   type: 'error',
+        //   position: 'top',
+        //   visibilityTime: 4000,
+        //   autoHide: true,
+        //   topOffset: 30,
+        //   bottomOffset: 40,
+        // });
       }
     };
     return (

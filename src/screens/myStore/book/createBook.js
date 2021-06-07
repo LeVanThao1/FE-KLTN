@@ -140,34 +140,39 @@ const CreateBook = ({navigation}) => {
         onCompleted: async (data) => {
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
           setName({
-            ...name,
             value: '',
+            error: '',
           });
           setAuthor({
-            ...author,
             value: '',
+            error: '',
           });
           setNumPrint({
-            ...numPrint,
-            value: 0,
+            value: '',
+            error: '',
           });
           setDescription({
-            ...description,
             value: '',
+            error: '',
           });
           setPublisher({
-            ...publisher,
             value: '',
+            error: '',
           });
           setAmount({
-            ...amount,
             value: 0,
+            error: '',
           });
           setPrice({
-            ...price,
             value: 0,
+            error: '',
           });
-          ref.current.scrollTop(0);
+          setCategori({value: category.categories[0].id, error: ''});
+          setImages([]);
+          setImageUpload([]);
+          setYear({value: '', error: ''});
+          setBook(null);
+          ref.current.scrollTo({x: 0, y: 0, animated: true});
         },
         onError: (err) => {
           console.log(err);
@@ -212,41 +217,95 @@ const CreateBook = ({navigation}) => {
     };
 
     const validateCreate = () => {
-      if (name.value === '' || name.value.length < 3) {
-        setName({
-          ...name,
-          error: 'Tên sách phải dài hơn 3 ký tự',
-        });
-        return 'Tên sách phải dài hơn 3 ký tự';
+      if (book) {
+        if (!amount.value || amount.value === 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập số lượng sách',
+          });
+          return 'Vui lòng nhập số lượng sách';
+        }
+        if (!price.value || price.value === 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập giá sách',
+          });
+          return 'Vui lòng nhập giá sách';
+        }
+      } else {
+        if (name.value === '' || name.value.length < 3) {
+          setName({
+            ...name,
+            error: 'Tên sách phải dài hơn 3 ký tự',
+          });
+          return 'Tên sách phải dài hơn 3 ký tự';
+        }
+        if (!author.value || author.value.length < 3) {
+          setAuthor({
+            ...author,
+            error: 'Tên tác giả phải dài hơn 3 ký tự',
+          });
+          return 'Tên tác giả phải dài hơn 3 ký tự';
+        }
+        if (numPrint.value.length === 0) {
+          setNumPrint({
+            ...numPrint,
+            error: 'Vui lòng nhập số lần xuất bản',
+          });
+          return 'Vui lòng nhập số lần xuất bản';
+        }
+        if (year.value.length === 0) {
+          setYear({
+            ...year,
+            error: 'Vui lòng nhập năm xuất bản',
+          });
+          return 'Vui lòng nhập năm xuất bản';
+        }
+        if (publisher.value.length === 0) {
+          setPublisher({
+            ...publisher,
+            error: 'Vui lòng nhập nhà xuất bản',
+          });
+          return 'Vui lòng nhập nhà xuất bản';
+        }
+        if (numPrint.value === 0) {
+          setNumPrint({
+            ...numPrint,
+            error: 'Vui lòng nhập lần xuất bản',
+          });
+          return 'Vui lòng nhập lần xuất bản';
+        }
+        if (imagesUpload.length === 0) {
+          // setPublisher({
+          //   ...publisher,
+          //   error: 'Vui lòng nhập năm xuất bản',
+          // });
+          return 'Vui lòng thêm ảnh cho sách';
+        }
+
+        if (description.value.length === 0) {
+          setDescription({
+            ...description,
+            error: 'Vui lòng nhập mô tả',
+          });
+          return 'Vui lòng nhập mô tả';
+        }
+        if (!amount.value || amount.value === 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập số lượng sách',
+          });
+          return 'Vui lòng nhập số lượng sách';
+        }
+        if (!price.value || price.value === 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập giá sách',
+          });
+          return 'Vui lòng nhập giá sách';
+        }
       }
-      if (!name.value || author.value.length < 3) {
-        setAuthor({
-          ...author,
-          error: 'Tên tác giả phải dài hơn 3 ký tự',
-        });
-        return 'Tên tác giả phải dài hơn 3 ký tự';
-      }
-      if (numPrint.value.length === 0) {
-        setNumPrint({
-          ...numPrint,
-          error: 'Vui lòng nhập số lần xuất bản',
-        });
-        return 'Vui lòng nhập số lần xuất bản';
-      }
-      if (!amount.value || amount.value === 0) {
-        setAmount({
-          ...amount,
-          error: 'Vui lòng nhập số lượng sách',
-        });
-        return 'Vui lòng nhập số lượng sách';
-      }
-      if (!price.value || price.value === 0) {
-        setPrice({
-          ...price,
-          error: 'Vui lòng nhập giá sách',
-        });
-        return 'Vui lòng nhập giá sách';
-      }
+
       return true;
     };
 
@@ -611,7 +670,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* year */}
             <View style={styles.name}>
-              <Text>Năm xuất bản</Text>
+              <Text>Năm xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
@@ -656,7 +715,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* pulisher */}
             <View style={styles.name}>
-              <Text>Nhà xuất bản</Text>
+              <Text>Nhà xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
@@ -701,7 +760,7 @@ const CreateBook = ({navigation}) => {
             </View>
             {/* number of printed lines */}
             <View style={styles.name}>
-              <Text>Số lần xuất bản</Text>
+              <Text>Số lần xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
