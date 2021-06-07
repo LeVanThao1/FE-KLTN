@@ -185,6 +185,28 @@ const NewPost = ({navigation}) => {
         });
         return 'Tên sách phải dài hơn 3 ký tự';
       }
+      if (publisher.value.length < 3) {
+        setPublisher({
+          ...publisher,
+          error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+        });
+        return 'Nhà xuất bản phải dài hơn 3 ký tự';
+      }
+      if (year.value.length !== 4) {
+        setYear({
+          ...year,
+          error: 'Nhập năm xuất bản',
+        });
+        return 'Vui lòng nhập đúng năm xuất bản';
+      }
+      
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
+        });
+        return 'Mô tả phải dài hơn 10 ký tự';
+      }
       if (price.value === 0) {
         setPrice({
           ...price,
@@ -212,7 +234,7 @@ const NewPost = ({navigation}) => {
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
-          category: categori.value,
+          // category: categori.value,
           year: year.value,
           price: price.value,
         };
@@ -271,7 +293,7 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
-              <View style={stylesPost.vertical}>
+              {/* <View style={stylesPost.vertical}>
                 <Text>Danh mục sách</Text>
                 <Form>
                   <Item picker>
@@ -291,7 +313,7 @@ const NewPost = ({navigation}) => {
                     </Picker>
                   </Item>
                 </Form>
-              </View>
+              </View> */}
               <View style={stylesPost.vertical}>
                 <Text>Hình ảnh *</Text>
                 <ScrollView

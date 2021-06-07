@@ -41,9 +41,10 @@ const OrdersByStore = ({navigation}) => {
       return (
         <View>
           {!loading ? (
-            infoOrder
-              ?.filter((so) => so.status === selectedStatus)
-              .map((so) => <SubOrder {...so} order={so} key={so.id} />)
+            infoOrder.length > 0
+              ? infoOrder.filter((so) => so.status === selectedStatus)
+              .map((so) => <SubOrder {...so} order={so} key={so.id} /> ) : 
+              ((<Text style={{textAlign: 'center', color: COLORS.primary,fontWeight: 'bold', paddingTop: 20}}>Không có dữ liệu</Text>))
           ) : (
             <Spinner color={COLORS.primary} />
           )}

@@ -31,6 +31,10 @@ const UpdatePost = ({route, navigation}) => {
       value: postCurrent.title ? postCurrent.title : '',
       error: '',
     });
+    const [name, setName] = useState({
+      value: postCurrent.name ? postCurrent.name : '',
+      error: '',
+    });
     const [description, setDescription] = useState({
       value: postCurrent.description ? postCurrent.description : '',
       error: '',
@@ -132,12 +136,34 @@ const UpdatePost = ({route, navigation}) => {
         });
         return 'Tiêu đề phải dài hơn 3 ký tự';
       }
-      if (description.value.length < 10) {
+      if (name.value.length < 3) {
         setName({
           ...name,
           error: 'Tên sách phải dài hơn 3 ký tự',
         });
         return 'Tên sách phải dài hơn 3 ký tự';
+      }
+      if (publisher.value.length < 3) {
+        setPublisher({
+          ...publisher,
+          error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+        });
+        return 'Nhà xuất bản phải dài hơn 3 ký tự';
+      }
+      if (year.value.length !== 4) {
+        setYear({
+          ...year,
+          error: 'Nhập năm xuất bản',
+        });
+        return 'Vui lòng nhập đúng năm xuất bản';
+      }
+      
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
+        });
+        return 'Mô tả phải dài hơn 10 ký tự';
       }
       if (price.value === 0) {
         setPrice({
@@ -155,6 +181,7 @@ const UpdatePost = ({route, navigation}) => {
           title: title.value,
           description: description.value,
           bookWanna: [bookWanna.value],
+          name: name.value,
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: Number(numberOfReprint.value),
@@ -295,6 +322,27 @@ const UpdatePost = ({route, navigation}) => {
                   });
                 }}
               />
+            <View style={stylesPost.ct}>
+              <Text>Tên sách </Text>
+              <TextInput
+                style={stylesPost.txtInput}
+                placeholder="Nhập tên sách"
+                autoFocus={true}
+                value={name.value}
+                onFocus={() => {
+                  setName({
+                    ...name,
+                    error: '',
+                  });
+                }}
+                onChangeText={(value) => {
+                  setName({
+                    ...name,
+                    value: value,
+                  });
+                }}
+              />
+              </View>
               <View style={stylesPost.ct}>
                 <Text>Nhà xuất bản </Text>
                 <TextInput

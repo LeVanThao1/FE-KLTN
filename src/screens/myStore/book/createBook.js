@@ -469,6 +469,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{name.error}</Text>
               {type === 'unsignedName' &&
                 isModalVisible &&
                 booksRecomment &&
@@ -534,6 +535,7 @@ const CreateBook = ({navigation}) => {
                   </ScrollView>
                 )}
             </View>
+
             <View>
               <Text>Danh mục sách *</Text>
               <Form>
@@ -667,7 +669,9 @@ const CreateBook = ({navigation}) => {
                     ))}
                   </ScrollView>
                 )}
+            <Text style={styles.err}>{author.error}</Text>
             </View>
+
             {/* year */}
             <View style={styles.name}>
               <Text>Năm xuất bản *</Text>
@@ -675,7 +679,7 @@ const CreateBook = ({navigation}) => {
                 <TextInput
                   editable={book ? false : true}
                   style={styles.txtMaxWidth}
-                  placeholder="Nhập năm phát hành"
+                  placeholder="Nhập năm xuất bản"
                   value={book ? book.year : year.value}
                   onFocus={() => {
                     setYear({
@@ -712,8 +716,10 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+            <Text style={styles.err}>{year.error}</Text>
             </View>
             {/* pulisher */}
+
             <View style={styles.name}>
               <Text>Nhà xuất bản *</Text>
               <View>
@@ -757,7 +763,9 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+            <Text style={styles.err}>{publisher.error}</Text>
             </View>
+
             {/* number of printed lines */}
             <View style={styles.name}>
               <Text>Số lần xuất bản *</Text>
@@ -802,7 +810,9 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+            <Text style={styles.err}>{numPrint.error}</Text>
             </View>
+
             {/* Image */}
             <View style={styles.name}>
               <Text>Hình ảnh *</Text>
@@ -933,8 +943,9 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+            <Text style={styles.err}>{description.error}</Text>
             </View>
-
+            
             <View style={styles.name}>
               <Text>Số lượng *</Text>
               <View
@@ -988,8 +999,10 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
+            <Text style={styles.err}>{amount.error}</Text>
             </View>
             {/*  */}
+
             <View style={styles.name}>
               <Text>Giá sách *</Text>
               <View>
@@ -1040,6 +1053,8 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
+            <Text style={styles.err}>{price.error}</Text>
+
             </View>
             <View
               style={{

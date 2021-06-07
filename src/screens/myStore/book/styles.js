@@ -4,6 +4,11 @@ export const styles = StyleSheet.create({
   container_product: {
     margin: 5,
   },
+  err: {
+    fontSize: 10,
+    color: 'red',
+    textAlign: 'left',
+  },
   header: {
     fontSize: 18,
     fontWeight: 'bold',

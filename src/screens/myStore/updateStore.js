@@ -122,7 +122,7 @@ const UpdateStore = ({navigation}) => {
       if (!name.value) {
         setName({
           ...name,
-          error: 'Vui lòng nhập họ tên',
+          error: 'Vui lòng nhập tên shop',
         });
         count++;
       }
@@ -150,7 +150,14 @@ const UpdateStore = ({navigation}) => {
       if (!address.value) {
         setAddress({
           ...address,
-          error: 'Vui lòng nhập địa chỉ cụ thể',
+          error: 'Vui lòng nhập địa chỉ',
+        });
+        count++;
+      }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
         });
         count++;
       }
@@ -174,6 +181,8 @@ const UpdateStore = ({navigation}) => {
       },
     });
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
+
+    console.log(shop.info.id)
 
     const onPress = () => {
       if (validateSubmit() === true) {
@@ -457,6 +466,8 @@ const UpdateStore = ({navigation}) => {
                 });
               }}
             />
+            <Text style={styles.err}>{description.error}</Text>
+
           </View>
           <TouchableOpacity style={styles.btnCreate} onPress={onAlert}>
             <Text style={styles.txtCreate}>Cập nhật cửa hàng</Text>

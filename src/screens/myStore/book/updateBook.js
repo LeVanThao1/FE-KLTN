@@ -140,12 +140,12 @@ const UpdateBook = ({navigation, route}) => {
           });
           return 'Vui lòng nhập nhà xuất bản';
         }
-        if (numPrint.value === 0) {
+        if (numPrint.value <= 0) {
           setNumPrint({
             ...numPrint,
-            error: 'Vui lòng nhập lần xuất bản',
+            error: 'Vui lòng nhập đúng số lần xuất bản',
           });
-          return 'Vui lòng nhập lần xuất bản';
+          return 'Vui lòng nhập đúng số lần xuất bản';
         }
         if (imagesUpload.length === 0) {
           // setPublisher({
@@ -162,19 +162,19 @@ const UpdateBook = ({navigation, route}) => {
           });
           return 'Vui lòng nhập mô tả';
         }
-        if (!amount.value || amount.value === 0) {
+        if (!amount.value || amount.value <= 0) {
           setAmount({
             ...amount,
-            error: 'Vui lòng nhập số lượng sách',
+            error: 'Vui lòng nhập đúng số lượng sách',
           });
-          return 'Vui lòng nhập số lượng sách';
+          return 'Vui lòng nhập đúng số lượng sách';
         }
-        if (!price.value || price.value === 0) {
+        if (!price.value || price.value <= 0) {
           setPrice({
             ...price,
-            error: 'Vui lòng nhập giá sách',
+            error: 'Vui lòng nhập đúng giá sách',
           });
-          return 'Vui lòng nhập giá sách';
+          return 'Vui lòng nhập đúng giá sách';
         }
       }
 
@@ -393,6 +393,8 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{name.error}</Text>
+
               <View>
                 <Text>Danh mục sách *</Text>
                 <Form>
@@ -438,6 +440,7 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{author.error}</Text>
 
               {/* pulisher */}
               <View style={styles.ct}>
@@ -460,14 +463,16 @@ const UpdateBook = ({navigation, route}) => {
                     });
                   }}
                 />
+
               </View>
+              <Text style={styles.err}>{publisher.error}</Text>
               {/* number of printed lines */}
               <View style={styles.horizontal}>
                 <Text>Số lần xuất bản *</Text>
                 <TextInput
                   editable={!bookCurrent.book}
                   style={styles.txtPrice}
-                  placeholder="Nhập số lần xuất bản"
+                  placeholder="Số lần xuất bản"
                   value={numPrint.value}
                   onFocus={() => {
                     setNumPrint({
@@ -483,8 +488,9 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{numPrint.error}</Text>
               <View style={styles.horizontal}>
-                <Text>Năm phát hành *</Text>
+                <Text>Năm xuất bản *</Text>
                 <View
                   style={{
                     position: 'relative',
@@ -493,7 +499,7 @@ const UpdateBook = ({navigation, route}) => {
                   <TextInput
                     editable={!bookCurrent.book}
                     style={styles.txtVND}
-                    placeholder="Nhập năm phát hành"
+                    placeholder="Năm xuất bản"
                     value={year.value}
                     onFocus={() => {
                       setYear({
@@ -510,6 +516,8 @@ const UpdateBook = ({navigation, route}) => {
                   />
                 </View>
               </View>
+              <Text style={styles.err}>{year.error}</Text>
+              
               {/* Image */}
               <View style={styles.horizontal}>
                 <Text>Số lượng *</Text>
@@ -520,7 +528,7 @@ const UpdateBook = ({navigation, route}) => {
                   }}>
                   <TextInput
                     style={styles.txtVND}
-                    placeholder="Nhập số lượng sách"
+                    placeholder="Số lượng"
                     value={amount.value}
                     onFocus={() => {
                       setAmount({
@@ -546,6 +554,8 @@ const UpdateBook = ({navigation, route}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={styles.err}>{amount.error}</Text>
+
               <View style={styles.horizontal}>
                 <Text>Giá sách *</Text>
                 <View
@@ -555,7 +565,7 @@ const UpdateBook = ({navigation, route}) => {
                   }}>
                   <TextInput
                     style={styles.txtVND}
-                    placeholder="Nhập giá sách"
+                    placeholder="Giá sách"
                     value={price.value}
                     onFocus={() => {
                       setPrice({
@@ -581,6 +591,8 @@ const UpdateBook = ({navigation, route}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={styles.err}>{price.error}</Text>
+
               <View style={styles.container}></View>
               <View style={styles.des}>
                 <Text style={styles.textContent}>Mô tả *</Text>
@@ -608,6 +620,7 @@ const UpdateBook = ({navigation, route}) => {
                 />
               </View>
               {/* price */}
+              <Text style={styles.err}>{description.error}</Text>
 
               <TouchableOpacity
                 style={{
@@ -628,6 +641,11 @@ const UpdateBook = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container_product: {
     margin: 5,
+  },
+  err: {
+    fontSize: 10,
+    color: 'red',
+    textAlign: 'left',
   },
   header: {
     fontSize: 18,

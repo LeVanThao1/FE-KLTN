@@ -122,6 +122,14 @@ const CreateStore = ({navigation}) => {
         count++;
         return address.error;
       }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Vui lòng nhập mô tả hơn 10 ký tự',
+        });
+        count++;
+        return description.error;
+      }
       return count === 0;
     };
 
@@ -366,6 +374,7 @@ const CreateStore = ({navigation}) => {
                 })
               }
             />
+            <Text style={styles.err}>{description.error}</Text>
           </View>
           <TouchableOpacity style={styles.btnCreate} onPress={onPress}>
             <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
@@ -402,6 +411,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   btnCreate: {
+    marginTop: 10,
     alignSelf: 'center',
     padding: 15,
     borderRadius: 4,

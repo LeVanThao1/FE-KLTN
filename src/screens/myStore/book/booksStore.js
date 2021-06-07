@@ -78,6 +78,7 @@ const BooksStore = ({navigation}) => {
 
     const onPressTab = (name, status) => {
       setSelectedStatus(status);
+      setCategoryName(name);
       setCategori(
         status === 'ALL'
           ? listBook
@@ -91,7 +92,7 @@ const BooksStore = ({navigation}) => {
             categori?.map((book, i) => <Book key={i} book={book} />)
           ) : (
             <View style={{padding: 20}}>
-              <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>
+              <Text style={{textAlign: 'center', color: COLORS.primary, fontWeight: 'bold'}}>Không có dữ liệu</Text>
             </View>
           )
         ) : (
@@ -111,10 +112,35 @@ const BooksStore = ({navigation}) => {
       );
     }
 
-    const [search, setSearch] = useState('');
+    const [categoryName, setCategoryName] = useState([]);
+    const [booksSearch, setBooksSearch] = useState([]);
 
-    const onChangeSearch = (value) => {
-      console.log('target');
+    const convertText = (text) => {
+      return text.replace(/[àáâãăạảấầẩẫậắằẳẵặ]/g, 'a')
+        .replace(/[ÀÁÂÃĂẠẢẤẦẨẪẬẮẰẲẴẶ]/g, 'A')
+        .replace(/[òóôõơọỏốồổỗộớờởỡợ]/g, 'o')
+        .replace(/[ÒÓÔÕƠỌỎỐỒỔỖỘỚỜỞỠỢ]/g, 'O')
+        .replace(/[èéêẹẻẽếềểễệ]/g, 'e')
+        .replace(/[ÈÉÊẸẺẼẾỀỂỄỆ]/g, 'E')
+        .replace(/[ùúũưụủứừửữự]/g, 'u')
+        .replace(/[ÙÚŨƯỤỦỨỪỬỮỰ]/g, 'U')
+        .replace(/[ìíĩỉị]/g, 'i')
+        .replace(/[ÌÍĨỈỊ]/g, 'I')
+        .replace(/[ýỳỵỷỹ]/g, 'y')
+        .replace(/[ÝỲỴỶỸ]/g, 'Y')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, '')
+        .replace(/\u02C6|\u0306|\u031B/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    const onChangeSearch = (e) => {
+      const books = listBook?.filter(b => convertText(b.name).toLowerCase().includes(convertText(e).toLowerCase()));
+      categoryName === 'Tất cả' ? setCategori(books) : 
+      setCategori(books.filter(b => b.categoryName === categoryName));
     };
 
     return (
@@ -124,9 +150,9 @@ const BooksStore = ({navigation}) => {
             <Icon name="search" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              value={search}
+              value={booksSearch}
               placeholder="Nhập tên sách"
-              onChange={(value) => onChangeSearch(value)}
+              onChangeText={(e) => onChangeSearch(e)}
             />
           </View>
         </View>

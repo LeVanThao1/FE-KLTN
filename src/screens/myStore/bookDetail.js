@@ -75,7 +75,7 @@ const BookDetail = ({navigation, book}) => {
                 )}
               />
 
-              <View style={stylesPost.imgBookDetail}>
+              {/* <View style={stylesPost.imgBookDetail}>
                 <ScrollView horizontal={true}>
                   {bookCurrent.images.map((img, i) => (
                     <TouchableOpacity
@@ -91,7 +91,49 @@ const BookDetail = ({navigation, book}) => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-              </View>
+              </View> */}
+              {/*  */}
+              {bookCurrent?.images.length > 3 ? (
+                  <View style={stylesPost.imgBookDetail}>
+                    <ScrollView horizontal={true}>
+                      {bookCurrent?.images.map((img, i) => (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setIndex(i);
+                            setIsVisible(true);
+                          }}>
+                          <Image
+                            key={i}
+                            source={{uri: img}}
+                            style={stylesPost.imgBook}
+                          />
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}>
+                    {bookCurrent?.images.map((img, i) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <Image
+                          key={i}
+                          source={{uri: img}}
+                          style={stylesPost.imgBook}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              {/*  */}
             </View>
           </ScrollView>
           <View style={stylesPost.content}>

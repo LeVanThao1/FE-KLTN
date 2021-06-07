@@ -188,7 +188,7 @@ export const stylesPost = StyleSheet.create({
     width: 150,
     height: 200,
     resizeMode: 'cover',
-    marginHorizontal: 4,
+    marginHorizontal: 10,
   },
 
   img: {

@@ -167,6 +167,12 @@ const PostDetail = ({navigation, route}) => {
                     <Text style={stylesPost.txtBold}>Thông tin sách</Text>
                   </View>
                   <View style={stylesPost.horizontal}>
+                    <Text>Tên sách </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.name}
+                    </Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
                     <Text>Nhà xuất bản </Text>
                     <Text style={stylesPost.detail}>
                       {postCurrent?.publisher}
