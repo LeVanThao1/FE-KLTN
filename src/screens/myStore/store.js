@@ -30,6 +30,7 @@ const Store = ({navigation}) => {
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
 
+    console.log(shop.info);
     if (shop.info === null)
       return (
         <View style={styles.createStore}>

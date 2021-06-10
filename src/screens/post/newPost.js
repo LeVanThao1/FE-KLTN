@@ -199,7 +199,7 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
-      
+
       if (description.value.length < 10) {
         setDescription({
           ...description,
@@ -272,6 +272,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{title.error}</Text>
               </View>
               <View>
                 <Text>Tên sách * </Text>
@@ -292,6 +293,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{name.error}</Text>
               </View>
               {/* <View style={stylesPost.vertical}>
                 <Text>Danh mục sách</Text>
@@ -400,6 +402,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
                 <Text>Số lần xuất bản </Text>
@@ -421,6 +424,7 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
+              <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
               <View style={stylesPost.horizontal}>
                 <Text>Năm xuất bản </Text>
                 <TextInput
@@ -441,6 +445,7 @@ const NewPost = ({navigation}) => {
                   value={year.value}
                 />
               </View>
+              <Text style={stylesPost.err}>{year.error}</Text>
               <View style={stylesPost.horizontal}>
                 <Text>Giá sách *</Text>
                 <View
@@ -476,6 +481,8 @@ const NewPost = ({navigation}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={stylesPost.err}>{price.error}</Text>
+
               <View style={stylesPost.vertical}>
                 <Text>Sách muốn đổi: </Text>
                 <TextInput
@@ -521,6 +528,7 @@ const NewPost = ({navigation}) => {
                   value={description.value}
                   placeholder="Nhập mô tả"
                 />
+                <Text style={stylesPost.err}>{description.error}</Text>
               </View>
               <TouchableOpacity
                 style={{
