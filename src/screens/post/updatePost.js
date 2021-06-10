@@ -1,7 +1,7 @@
 import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Icon, Text, View} from 'native-base';
+import {Icon, Text, View, Form, Item, Picker} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
 import {
   Alert,
@@ -58,7 +58,7 @@ const UpdatePost = ({route, navigation}) => {
       error: '',
     });
     const [categori, setCategori] = useState({
-      value: '',
+      value: postCurrent?.category ? postCurrent.category?.id : '',
       error: '',
     });
     const [numberOfReprint, setNumberOfReprint] = useState({
@@ -157,7 +157,7 @@ const UpdatePost = ({route, navigation}) => {
         });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
-      
+
       if (description.value.length < 10) {
         setDescription({
           ...description,
@@ -185,7 +185,7 @@ const UpdatePost = ({route, navigation}) => {
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: Number(numberOfReprint.value),
-          // category: categori.value,
+          category: categori.value,
           year: year.value,
           price: Number(price.value),
         };
@@ -202,7 +202,13 @@ const UpdatePost = ({route, navigation}) => {
               {...posts[findIndex], ...dataPost},
               ...[...posts].slice(findIndex + 1),
             ]);
-            setPostCurrent({...posts[findIndex], ...dataPost});
+            setPostCurrent({
+              ...posts[findIndex],
+              ...dataPost,
+              category: category.categories.find(
+                (p) => p.id + '' === categori.value + '',
+              ),
+            });
             Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
             navigation.goBack();
           })
@@ -249,7 +255,7 @@ const UpdatePost = ({route, navigation}) => {
                           name="closecircleo"
                           style={{
                             fontSize: 22,
-                            color: 'red',
+                            color: COLORS.primary,
                           }}></Icon>
                       </TouchableOpacity>
                     </View>
@@ -322,26 +328,47 @@ const UpdatePost = ({route, navigation}) => {
                   });
                 }}
               />
-            <View style={stylesPost.ct}>
-              <Text>Tên sách </Text>
-              <TextInput
-                style={stylesPost.txtInput}
-                placeholder="Nhập tên sách"
-                autoFocus={true}
-                value={name.value}
-                onFocus={() => {
-                  setName({
-                    ...name,
-                    error: '',
-                  });
-                }}
-                onChangeText={(value) => {
-                  setName({
-                    ...name,
-                    value: value,
-                  });
-                }}
-              />
+              <View style={stylesPost.ct}>
+                <Text>Tên sách </Text>
+                <TextInput
+                  style={stylesPost.txtInput}
+                  placeholder="Nhập tên sách"
+                  autoFocus={true}
+                  value={name.value}
+                  onFocus={() => {
+                    setName({
+                      ...name,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setName({
+                      ...name,
+                      value: value,
+                    });
+                  }}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text>Danh mục sách</Text>
+                <Form>
+                  <Item picker>
+                    <Picker
+                      style={stylesPost.picker}
+                      mode="dropdown"
+                      // iosIcon={<Icon name="arrow-down" />}
+                      style={{width: undefined}}
+                      placeholder="Chọn danh mục"
+                      placeholderStyle={{color: '#bfc6ea'}}
+                      placeholderIconColor="#007aff"
+                      selectedValue={categori.value}
+                      onValueChange={onChange}>
+                      {category.categories.map((ct, i) => (
+                        <Picker.Item label={ct.name} value={ct.id} />
+                      ))}
+                    </Picker>
+                  </Item>
+                </Form>
               </View>
               <View style={stylesPost.ct}>
                 <Text>Nhà xuất bản </Text>

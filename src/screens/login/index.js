@@ -17,7 +17,6 @@ import {LOGIN} from '../../query/user';
 import {Notification} from '../../utils/notifications';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {emailValidator, phoneNumberValidator} from '../../utils/validations';
-
 const Login = ({navigation}) => {
   const [userID, setUserID] = React.useState({
     value: '',
@@ -36,6 +35,7 @@ const Login = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(false);
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
+      fetchPolicy: 'no-cache',
       onCompleted: async (data) => {
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);

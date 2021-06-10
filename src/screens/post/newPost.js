@@ -61,7 +61,7 @@ const NewPost = ({navigation}) => {
       error: '',
     });
     const [categori, setCategori] = useState({
-      value: '',
+      value: category.categories[0].id,
       error: '',
     });
     const [numberOfReprint, setNumberOfReprint] = useState({
@@ -120,6 +120,7 @@ const NewPost = ({navigation}) => {
     const onChange = (value) => {
       setCategori({
         value: value,
+        error: '',
       });
     };
 
@@ -199,7 +200,7 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
-      
+
       if (description.value.length < 10) {
         setDescription({
           ...description,
@@ -234,7 +235,7 @@ const NewPost = ({navigation}) => {
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
-          // category: categori.value,
+          category: categori.value,
           year: year.value,
           price: price.value,
         };
@@ -293,8 +294,8 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
-              {/* <View style={stylesPost.vertical}>
-                <Text>Danh mục sách</Text>
+              <View style={stylesPost.vertical}>
+                <Text>Danh mục sách *</Text>
                 <Form>
                   <Item picker>
                     <Picker
@@ -305,7 +306,7 @@ const NewPost = ({navigation}) => {
                       placeholder="Chọn danh mục"
                       placeholderStyle={{color: '#bfc6ea'}}
                       placeholderIconColor="#007aff"
-                      selectedValue={categori}
+                      selectedValue={categori.value}
                       onValueChange={onChange}>
                       {category.categories.map((ct, i) => (
                         <Picker.Item label={ct.name} value={ct.id} />
@@ -313,7 +314,7 @@ const NewPost = ({navigation}) => {
                     </Picker>
                   </Item>
                 </Form>
-              </View> */}
+              </View>
               <View style={stylesPost.vertical}>
                 <Text>Hình ảnh *</Text>
                 <ScrollView
@@ -375,14 +376,34 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: '#f44f4f',
+                          color: COLORS.primary,
                         }}></Icon>
                     </TouchableOpacity>
                   )}
                 </ScrollView>
               </View>
+              {/* <View>
+                <Text>Tác giả *</Text>
+                <TextInput
+                  style={stylesPost.txtInput}
+                  placeholder="Nhập tên nhà xuất bản"
+                  value={publisher.value}
+                  onFocus={() => {
+                    setAuthor({
+                      ...author,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setAuthor({
+                      ...author,
+                      value: value,
+                    });
+                  }}
+                />
+              </View> */}
               <View>
-                <Text>Nhà xuất bản </Text>
+                <Text>Nhà xuất bản * </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
@@ -402,7 +423,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"
@@ -422,7 +443,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
+                <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Năm xuất bản"
@@ -477,7 +498,7 @@ const NewPost = ({navigation}) => {
                 </View>
               </View>
               <View style={stylesPost.vertical}>
-                <Text>Sách muốn đổi: </Text>
+                <Text>Sách muốn đổi : </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập sách muốn đổi"
@@ -497,7 +518,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.vertical}>
-                <Text style={stylesPost.textContent}>Mô tả</Text>
+                <Text style={stylesPost.textContent}>Mô tả *</Text>
                 <Textarea
                   containerStyle={stylesPost.textareacont}
                   style={stylesPost.textarea}
