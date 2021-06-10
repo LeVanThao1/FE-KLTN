@@ -410,6 +410,8 @@ const UpdatePost = ({route, navigation}) => {
                   }}
                 />
               </View>
+              <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
+
               <View style={stylesPost.horizontal}>
                 <Text>Năm phát hành</Text>
                 <TextInput
@@ -430,6 +432,8 @@ const UpdatePost = ({route, navigation}) => {
                   value={year.value}
                 />
               </View>
+              <Text style={stylesPost.err}>{year.error}</Text>
+
               <View style={stylesPost.horizontal}>
                 <Text>Giá sách</Text>
                 <View
@@ -466,6 +470,8 @@ const UpdatePost = ({route, navigation}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={stylesPost.err}>{price.error}</Text>
+
               <View style={stylesPost.ct}>
                 <Text>Sách muốn đổi: </Text>
                 <TextInput
@@ -507,6 +513,8 @@ const UpdatePost = ({route, navigation}) => {
                 underlineColorAndroid={'transparent'}
                 placeholder="Nhập mô tả"
               />
+              <Text style={stylesPost.err}>{description.error}</Text>
+
               <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                 <TouchableOpacity
                   style={{

@@ -39,6 +39,7 @@ const Login = ({}) => {
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
       fetchPolicy: 'no-cache',
       onCompleted: async (data) => {
+        console.log(data.login.user.store)
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
@@ -262,3 +263,108 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     paddingHorizontal: 12,
+//     paddingVertical: 4,
+//     marginVertical: 6,
+//     borderRadius: 5,
+//   },
+//   postHeader: {
+//     height: 50,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//     marginTop: 6,
+//     paddingVertical: 0,
+//     paddingHorizontal: 11,
+//   },
+//   row: {
+//     alignItems: 'center',
+//     flexDirection: 'row',
+//   },
+//   UserName: {
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     color: '#222121',
+//   },
+//   PostTime: {
+//     fontSize: 12,
+//     color: '#747476',
+//   },
+//   PostTitle: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#000000',
+//     paddingHorizontal: 11,
+//     paddingVertical: 0,
+//   },
+//   PostDescription: {
+//     fontSize: 14,
+//     color: '#222121',
+//     paddingHorizontal: 11,
+//     paddingVertical: 0,
+//   },
+//   PhotoGroup: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     flexWrap: 'wrap',
+//   },
+//   PhotoContainer: {
+//     width: '50%',
+//     padding: 10,
+//   },
+//   PostPhoto: {
+//     width: '100%',
+//     height: 210
+//   },
+//   PostFooter: {
+//     padding: 10,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//   },
+//   TextCount: {
+//     fontSize: 11,
+//     color: '#424040'
+//   },
+//   Button: {
+//     alignItems: 'center',
+//     flexDirection: 'row',
+//   },
+//   txt: {
+//     fontSize: 12,
+//     color: '#424040'
+//   },
+//   BreakLine: {
+//     width: '100%',
+//     height: 0.5,
+//     backgroundColor: '#000',
+//   },
+//   OverlayGroup: {
+//     width: '100%',
+//     position: 'relative',
+//   },
+//   Overlay: {
+//     position: 'absolute',
+//     width: '100%',
+//     height: '100%',
+//     top: 0,
+//     left: 0,
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//     // backgroundColor: 
+//   },
+//   User: {
+//     width: 40,
+//     height: 40,
+//     borderRadius: 20,
+//     borderColor: '#1777f2',
+//     borderWidth: 3
+//     // borderWidth: ${(props) => (props.story ? '3px' : 0)};
+//   }
+// });

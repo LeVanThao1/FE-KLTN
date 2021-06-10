@@ -2,6 +2,11 @@ import {Dimensions, StyleSheet} from 'react-native';
 import {COLORS} from '../../constants/themes';
 const {width} = Dimensions.get('screen');
 export const stylesPost = StyleSheet.create({
+  err: {
+    fontSize: 10,
+    color: 'red',
+    textAlign: 'left',
+  },
   textDes: {
     height: 'auto',
     borderWidth: 0.5,
@@ -326,6 +331,7 @@ export const stylesPost = StyleSheet.create({
     // padding: -3?0,
     // marginTop: -10,
     padding: 10,
+    paddingBottom: 0,
     textAlignVertical: 'top', // hack android
     height: 130,
     fontSize: 16,

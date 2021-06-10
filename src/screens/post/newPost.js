@@ -22,9 +22,10 @@ import {stylesPost} from './stylePost';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, post},
     } = useContext(MobXProviderContext);
-    const {setPosts, posts} = user;
+    const {posts, setPosts} = user;
+    const {general, setGeneral} = post;
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -128,7 +129,11 @@ const NewPost = ({navigation}) => {
       CREATE_POST,
       {
         onCompleted: async (data) => {
-          setPosts([data.createPost, ...posts]);
+          console.log(data, posts);
+          if (posts) {
+            setPosts([data.createPost, ...posts]);
+          }
+          post.setGeneral([data.createPost, ...general]);
           Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
           setName({
             ...name,
@@ -142,6 +147,8 @@ const NewPost = ({navigation}) => {
             ...numberOfReprint,
             value: '0',
           });
+          setImageUpload([]);
+          setImages([]);
           setDescription({
             ...description,
             value: '',
@@ -162,6 +169,7 @@ const NewPost = ({navigation}) => {
             ...price,
             value: '0',
           });
+          navigation.goBack();
         },
         onError: (err) => {
           console.log(err);
@@ -231,7 +239,7 @@ const NewPost = ({navigation}) => {
           name: name.value,
           // author: author.value,
           description: description.value,
-          bookWanna: bookWanna.value,
+          bookWanna: [bookWanna.value],
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
@@ -273,6 +281,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{title.error}</Text>
               </View>
               <View>
                 <Text>Tên sách * </Text>
@@ -293,6 +302,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{name.error}</Text>
               </View>
               <View style={stylesPost.vertical}>
                 <Text>Danh mục sách *</Text>
@@ -421,6 +431,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
                 <Text>Số lần xuất bản *</Text>
@@ -442,6 +453,7 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
+              <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
               <View style={stylesPost.horizontal}>
                 <Text>Năm xuất bản *</Text>
                 <TextInput
@@ -462,6 +474,7 @@ const NewPost = ({navigation}) => {
                   value={year.value}
                 />
               </View>
+              <Text style={stylesPost.err}>{year.error}</Text>
               <View style={stylesPost.horizontal}>
                 <Text>Giá sách *</Text>
                 <View
@@ -497,6 +510,8 @@ const NewPost = ({navigation}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={stylesPost.err}>{price.error}</Text>
+
               <View style={stylesPost.vertical}>
                 <Text>Sách muốn đổi : </Text>
                 <TextInput
@@ -542,11 +557,12 @@ const NewPost = ({navigation}) => {
                   value={description.value}
                   placeholder="Nhập mô tả"
                 />
+                <Text style={stylesPost.err}>{description.error}</Text>
               </View>
               <TouchableOpacity
                 style={{
-                  marginTop: 10,
-                  paddingTop: 10,
+                  // marginTop: 10,
+                  // paddingTop: 10,
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -554,7 +570,7 @@ const NewPost = ({navigation}) => {
                 onPress={onAlert}>
                 <Text
                   style={{
-                    marginTop: 10,
+                    // marginTop: 10,
                     alignItems: 'center',
                     borderRadius: 6,
                     width: SIZES.acceptBtn,
