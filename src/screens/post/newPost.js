@@ -200,19 +200,19 @@ const NewPost = ({navigation}) => {
         return 'Vui lòng nhập đúng năm xuất bản';
       }
 
-      if (description.value.length < 10) {
-        setDescription({
-          ...description,
-          error: 'Mô tả phải dài hơn 10 ký tự',
-        });
-        return 'Mô tả phải dài hơn 10 ký tự';
-      }
       if (price.value === 0) {
         setPrice({
           ...price,
           error: 'Vui lòng nhập giá sách',
         });
         return 'Vui lòng nhập giá sách';
+      }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
+        });
+        return 'Mô tả phải dài hơn 10 ký tự';
       }
       return true;
     };
@@ -253,6 +253,8 @@ const NewPost = ({navigation}) => {
         <View style={stylesPost.addpost}>
           <View style={stylesPost.content}>
             <View style={stylesPost.text}>
+            <Text style={{fontSize: 12, marginBottom: 20, fontWeight: 'bold'}}>(Nội dung có dấu '*' : bắt buộc)</Text>
+
               <View style={stylesPost.vertical}>
                 <Text>Tiêu đề *</Text>
                 <TextInput
