@@ -331,6 +331,7 @@ export const stylesPost = StyleSheet.create({
     // padding: -3?0,
     // marginTop: -10,
     padding: 10,
+    paddingBottom: 0,
     textAlignVertical: 'top', // hack android
     height: 130,
     fontSize: 16,

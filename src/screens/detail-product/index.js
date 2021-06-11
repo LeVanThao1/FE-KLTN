@@ -230,7 +230,7 @@ const DetailProduct = ({navigation, route}) => {
                   />
                 )}
               />
-              {images.length > 3 ? (
+              {images.length > 2 ? (
                 <View style={styles.imgBookDetail}>
                   <ScrollView horizontal={true}>
                     {images.map((img, i) => (

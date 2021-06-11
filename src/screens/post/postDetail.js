@@ -168,8 +168,12 @@ const PostDetail = ({navigation, route}) => {
                   </View>
                   <View style={stylesPost.horizontal}>
                     <Text>Tên sách </Text>
+                    <Text style={stylesPost.detail}>{postCurrent?.name}</Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Thể loại sách </Text>
                     <Text style={stylesPost.detail}>
-                      {postCurrent?.name}
+                      {postCurrent?.category?.name || ''}
                     </Text>
                   </View>
                   <View style={stylesPost.horizontal}>

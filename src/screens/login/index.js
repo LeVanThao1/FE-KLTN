@@ -1,5 +1,6 @@
 import {useLazyQuery} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext, useObserver} from 'mobx-react';
 import {Icon, Spinner} from 'native-base';
 import React, {useContext, useState} from 'react';
@@ -17,8 +18,8 @@ import {LOGIN} from '../../query/user';
 import {Notification} from '../../utils/notifications';
 import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {emailValidator, phoneNumberValidator} from '../../utils/validations';
-
-const Login = ({navigation}) => {
+const Login = ({}) => {
+  const navigation = useNavigation();
   const [userID, setUserID] = React.useState({
     value: '',
     error: '',
@@ -36,6 +37,7 @@ const Login = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(false);
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
+      fetchPolicy: 'no-cache',
       onCompleted: async (data) => {
         console.log(data.login.user.store)
         const {token, refreshToken} = data?.login;
@@ -49,11 +51,19 @@ const Login = ({navigation}) => {
         await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);
         setLoading(false);
-        navigation.navigate({routeName: 'App'});
+        // navigation.navigate({routeName: 'App'});
+        navigation.reset({routeName: 'App'});
       },
       onError: (err) => {
         setLoading(false);
-        Toast.show(Notification(NOTIFI.error, err.message));
+        let message = 'Đăng nhập không thành công';
+        if (err.message === 'User not found') {
+          message = 'Tài khoản không tồn tại';
+        }
+        if (err.message === 'Password is incorrect.') {
+          message = 'Mật khẩu không đúng';
+        }
+        Toast.show(Notification(NOTIFI.error, message));
       },
     });
     const validateUserId = () => {

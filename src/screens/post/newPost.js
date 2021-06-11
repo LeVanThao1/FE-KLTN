@@ -22,9 +22,10 @@ import {stylesPost} from './stylePost';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, post},
     } = useContext(MobXProviderContext);
-    const {setPosts, posts} = user;
+    const {posts, setPosts} = user;
+    const {general, setGeneral} = post;
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -61,7 +62,7 @@ const NewPost = ({navigation}) => {
       error: '',
     });
     const [categori, setCategori] = useState({
-      value: '',
+      value: category.categories[0].id,
       error: '',
     });
     const [numberOfReprint, setNumberOfReprint] = useState({
@@ -120,6 +121,7 @@ const NewPost = ({navigation}) => {
     const onChange = (value) => {
       setCategori({
         value: value,
+        error: '',
       });
     };
 
@@ -127,7 +129,11 @@ const NewPost = ({navigation}) => {
       CREATE_POST,
       {
         onCompleted: async (data) => {
-          setPosts([data.createPost, ...posts]);
+          console.log(data, posts);
+          if (posts) {
+            setPosts([data.createPost, ...posts]);
+          }
+          post.setGeneral([data.createPost, ...general]);
           Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
           setName({
             ...name,
@@ -141,6 +147,8 @@ const NewPost = ({navigation}) => {
             ...numberOfReprint,
             value: '0',
           });
+          setImageUpload([]);
+          setImages([]);
           setDescription({
             ...description,
             value: '',
@@ -161,6 +169,7 @@ const NewPost = ({navigation}) => {
             ...price,
             value: '0',
           });
+          navigation.goBack();
         },
         onError: (err) => {
           console.log(err);
@@ -230,11 +239,11 @@ const NewPost = ({navigation}) => {
           name: name.value,
           // author: author.value,
           description: description.value,
-          bookWanna: bookWanna.value,
+          bookWanna: [bookWanna.value],
           images: imagesUpload,
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
-          // category: categori.value,
+          category: categori.value,
           year: year.value,
           price: price.value,
         };
@@ -297,8 +306,8 @@ const NewPost = ({navigation}) => {
                 />
                 <Text style={stylesPost.err}>{name.error}</Text>
               </View>
-              {/* <View style={stylesPost.vertical}>
-                <Text>Danh mục sách</Text>
+              <View style={stylesPost.vertical}>
+                <Text>Danh mục sách *</Text>
                 <Form>
                   <Item picker>
                     <Picker
@@ -309,7 +318,7 @@ const NewPost = ({navigation}) => {
                       placeholder="Chọn danh mục"
                       placeholderStyle={{color: '#bfc6ea'}}
                       placeholderIconColor="#007aff"
-                      selectedValue={categori}
+                      selectedValue={categori.value}
                       onValueChange={onChange}>
                       {category.categories.map((ct, i) => (
                         <Picker.Item label={ct.name} value={ct.id} />
@@ -317,7 +326,7 @@ const NewPost = ({navigation}) => {
                     </Picker>
                   </Item>
                 </Form>
-              </View> */}
+              </View>
               <View style={stylesPost.vertical}>
                 <Text>Hình ảnh *</Text>
                 <ScrollView
@@ -379,14 +388,34 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: '#f44f4f',
+                          color: COLORS.primary,
                         }}></Icon>
                     </TouchableOpacity>
                   )}
                 </ScrollView>
               </View>
+              {/* <View>
+                <Text>Tác giả *</Text>
+                <TextInput
+                  style={stylesPost.txtInput}
+                  placeholder="Nhập tên nhà xuất bản"
+                  value={publisher.value}
+                  onFocus={() => {
+                    setAuthor({
+                      ...author,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setAuthor({
+                      ...author,
+                      value: value,
+                    });
+                  }}
+                />
+              </View> */}
               <View>
-                <Text>Nhà xuất bản </Text>
+                <Text>Nhà xuất bản * </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
@@ -407,7 +436,7 @@ const NewPost = ({navigation}) => {
                 <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"
@@ -428,7 +457,7 @@ const NewPost = ({navigation}) => {
               </View>
               <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
               <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
+                <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Năm xuất bản"
@@ -486,7 +515,7 @@ const NewPost = ({navigation}) => {
               <Text style={stylesPost.err}>{price.error}</Text>
 
               <View style={stylesPost.vertical}>
-                <Text>Sách muốn đổi: </Text>
+                <Text>Sách muốn đổi : </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập sách muốn đổi"
@@ -506,7 +535,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.vertical}>
-                <Text style={stylesPost.textContent}>Mô tả</Text>
+                <Text style={stylesPost.textContent}>Mô tả *</Text>
                 <Textarea
                   containerStyle={stylesPost.textareacont}
                   style={stylesPost.textarea}
@@ -534,8 +563,8 @@ const NewPost = ({navigation}) => {
               </View>
               <TouchableOpacity
                 style={{
-                  marginTop: 10,
-                  paddingTop: 10,
+                  // marginTop: 10,
+                  // paddingTop: 10,
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -543,7 +572,7 @@ const NewPost = ({navigation}) => {
                 onPress={onAlert}>
                 <Text
                   style={{
-                    marginTop: 10,
+                    // marginTop: 10,
                     alignItems: 'center',
                     borderRadius: 6,
                     width: SIZES.acceptBtn,
