@@ -100,12 +100,8 @@ const Feed = () => {
             onPress={() => navigation.navigate('NewPost')}
           />
         )}
-        {/* </TouchableOpacity> */}
-        {/* </View> */}
-        <ScrollView
-          // contentContainerStyle={{
-          //   position: 'relative',
-          // }}
+
+        <ScrollView         
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -114,18 +110,7 @@ const Feed = () => {
               }}
             />
           }>
-          {/* bỏ cái này trong loading chứ  dang check thu dc h*/}
-          {/* <Icon
-          name="pluscircleo"
-          type="AntDesign"
-          style={{
-            position: 'absolute',
-            color: COLORS.primary,
-            zIndex: 10,
-            fontSize: 30,
-            marginRight: 8,
-          }}
-        /> */}
+          
           {!loading ? (
             general && general.length > 0 ? (
               <FlatList
@@ -153,7 +138,7 @@ const Feed = () => {
                     </View>
                     <PostOfFeed
                       key={item.id + ''}
-                      post={item}
+                      postFeed={item}
                       info={user.info}
                       type={false}
                     />
@@ -167,37 +152,7 @@ const Feed = () => {
                 ListFooterComponent={() =>
                   loadMore && <Spinner color={COLORS.primary} size="small" />
                 }></FlatList>
-            ) : (
-              // general && general.length > 0 ? (
-              //   general.map((pt) => (
-              //     <>
-              //       <View style={{borderRadius: 5, backgroundColor: '#111'}}>
-              //         <Icon
-              //           name="pluscircleo"
-              //           type="AntDesign"
-              //           style={{
-              //             position: 'absolute',
-              //             color: COLORS.primary,
-              //             // backgroundColor: '#fff',
-              //             // width: '100%',
-              //             zIndex: 10,
-              //             fontSize: 36,
-              //             marginRight: 8,
-              //             // right: 0,
-              //             top: 70,
-              //             right: 15,
-              //             // bottom: 0,
-              //           }}
-              //         />
-              //       </View>
-              //       <PostOfFeed
-              //         key={pt.id + ''}
-              //         post={pt}
-              //         info={user.info}
-              //         type={false}
-              //       />
-              //     </>
-              //   ))
+            ) : (            
               <Text style={{textAlign: 'center', marginTop: 20}}>
                 Không có bài viết
               </Text>

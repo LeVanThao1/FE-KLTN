@@ -17,24 +17,26 @@ import ImageFooter from '../../screens/chatting/components/ImageFooter';
 import {Notification} from '../../utils/notifications';
 import {stylesPost} from './stylePost';
 
-const PostOfFeed = ({route, post, info, type}) => {
+const PostOfFeed = ({route, postFeed, info, type}) => {
   return useObserver(() => {
     const {
-      stores: {user, comment},
+      stores: {user, comment, post},
     } = useContext(MobXProviderContext);
     const navigation = useNavigation();
     const {posts} = user;
+    const {general, setGeneral} = post;
     const {postComment, setPostComment} = comment;
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
 
-    const postId = post?.id;
+    const postId = postFeed?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
       {
         onCompleted: async (data) => {
-          const newData = [...posts].filter((p) => p.id + '' !== post.id + '');
+          const newData = [...posts].filter((p) => p.id + '' !== postFeed.id + '');
           user.setPosts([...newData]);
+          setGeneral([...newData]);
           Toast.show(Notification(NOTIFI.success, 'Xóa thành công'));
         },
         onError: (err) => {
@@ -52,7 +54,7 @@ const PostOfFeed = ({route, post, info, type}) => {
     const onPress = () => {
       deletePost({
         variables: {
-          id: post.id,
+          id: postFeed.id,
         },
       });
     };
@@ -60,7 +62,7 @@ const PostOfFeed = ({route, post, info, type}) => {
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <ImageView
-          images={post.images.map((t) => ({uri: t}))}
+          images={postFeed.images.map((t) => ({uri: t}))}
           imageIndex={index}
           visible={visible}
           onRequestClose={() => setIsVisible(false)}
@@ -70,25 +72,25 @@ const PostOfFeed = ({route, post, info, type}) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('UserInfo', {
-                  id: post.author.id ? post.author.id : '',
+                  id: postFeed.author.id ? postFeed.author.id : '',
                 })
               }>
               <View style={stylesPOST.row}>
                 <Image
                   style={stylesPOST.User}
-                  source={{uri: post.author.avatar}}
+                  source={{uri: postFeed.author.avatar}}
                 />
                 <View style={{paddingLeft: 10}}>
-                  <Text style={stylesPOST.UserName}>{post.author.name}</Text>
+                  <Text style={stylesPOST.UserName}>{postFeed.author.name}</Text>
                   <View style={stylesPOST.row}>
                     <Text style={stylesPOST.PostTime}>
-                      {moment(moment(post.createdAt)._d).fromNow()}
+                      {moment(moment(postFeed.createdAt)._d).fromNow()}
                     </Text>
                   </View>
                 </View>
               </View>
             </TouchableOpacity>
-            {user.info.id === post.author.id ? (
+            {user.info.id === postFeed.author.id ? (
               <TouchableOpacity onPress={() => onDelete()}>
                 <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
               </TouchableOpacity>
@@ -101,16 +103,16 @@ const PostOfFeed = ({route, post, info, type}) => {
           <TouchableOpacity
             onPress={() => {
               user.setPostCurrent(post);
-              setPostComment(post.comment);
-              navigation.navigate('PostDetail', {postID: post.id});
+              setPostComment(postFeed.comment);
+              navigation.navigate('PostDetail', {postID: postFeed.id});
             }}>
             <View
               style={{
                 paddingVertical: 8,
               }}>
-              <Text style={stylesPOST.PostTitle}>{post.title}</Text>
+              <Text style={stylesPOST.PostTitle}>{postFeed.title}</Text>
               <Text style={stylesPOST.PostDescription} numberOfLines={4}>
-                {post.description}
+                {postFeed.description}
               </Text>
             </View>
           </TouchableOpacity>
@@ -118,21 +120,22 @@ const PostOfFeed = ({route, post, info, type}) => {
           <View>
             <View>
               <ImageView
-                images={post.images.map((t) => ({uri: t}))}
+                images={postFeed.images.map((t) => ({uri: t}))}
                 imageIndex={index}
                 visible={visible}
                 onRequestClose={() => setIsVisible(false)}
                 FooterComponent={({imageIndex}) => (
                   <ImageFooter
                     imageIndex={imageIndex}
-                    imagesCount={post.images.length}
+                    imagesCount={postFeed.images.length}
                   />
                 )}
               />
             </View>
-            {post.images.length < 3 ? (
-              <View style={stylesPOST.PhotoGroup}>
-                {post.images.map((img, i) => (
+            {postFeed.images.length < 3 ? (
+              // <View style={stylesPOST.PhotoGroup}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                {postFeed.images.map((img, i) => (
                   <View style={stylesPOST.PhotoContainer} key={i.toString()}>
                     <TouchableOpacity
                       onPress={() => {
@@ -152,7 +155,7 @@ const PostOfFeed = ({route, post, info, type}) => {
             ) : (
               //
               <View style={stylesPOST.PhotoGroup}>
-                {post.images.slice(0, 1).map((img, i) => (
+                {postFeed.images.slice(0, 1).map((img, i) => (
                   <>
                     <View style={stylesPOST.PhotoContainer}>
                       {/* <PostPhoto source={{uri: img}} /> */}
@@ -177,11 +180,11 @@ const PostOfFeed = ({route, post, info, type}) => {
                           }}>
                           <Image
                             style={stylesPOST.PostPhoto}
-                            source={{uri: post.images[1]}}
+                            source={{uri: postFeed.images[1]}}
                           />
                           <View style={stylesPOST.Overlay}>
-                            <Text style={{color: '#ffffff', fontSize: 22}}>
-                              + {post.images.length - 1}
+                            <Text style={{color: '#ffffff', fontSize: 30}}>
+                              + {postFeed.images.length - 1}
                             </Text>
                           </View>
                         </TouchableOpacity>
@@ -197,12 +200,12 @@ const PostOfFeed = ({route, post, info, type}) => {
           <TouchableOpacity
             onPress={() => {
               user.setPostCurrent(post);
-              setPostComment(post.comment);
-              navigation.navigate('PostDetail', {postID: post.id});
+              setPostComment(postFeed.comment);
+              navigation.navigate('PostDetail', {postID: postFeed.id});
             }}>
             <View style={stylesPOST.PostFooter}>
               <Text style={stylesPOST.TextCount}>
-                {post.comment.length} Bình luận
+                {postFeed.comment.length} Bình luận
               </Text>
               <View
                 style={{
@@ -311,16 +314,18 @@ const stylesPOST = StyleSheet.create({
   OverlayGroup: {
     width: '100%',
     position: 'relative',
+    backgroundColor: '#111',
   },
   Overlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    top: 0,
-    left: 0,
+    // top: 0,
+    // left: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    // backgroundColor:
+    backgroundColor: '#111',
+    opacity: 0.6
   },
   User: {
     width: 40,

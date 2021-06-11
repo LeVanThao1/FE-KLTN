@@ -196,13 +196,13 @@ const styles = StyleSheet.create({
     width: 4,
   },
   icon: {
-    color: '#949494',
+    color: COLORS.primary,
     fontSize: 22,
   },
   activeIcon: {
     padding: 12,
     marginLeft: -4,
-    color: '#949494',
+    color: COLORS.primary,
     fontSize: 22,
   },
   listContainer: {

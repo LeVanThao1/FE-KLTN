@@ -129,7 +129,6 @@ const NewPost = ({navigation}) => {
       CREATE_POST,
       {
         onCompleted: async (data) => {
-          console.log(data, posts);
           if (posts) {
             setPosts([data.createPost, ...posts]);
           }
@@ -179,6 +178,7 @@ const NewPost = ({navigation}) => {
         },
       },
     );
+    const [errImg, setErrImg] = useState('');
     const validateCreate = () => {
       if (title.value.length < 3) {
         setTitle({
@@ -194,6 +194,10 @@ const NewPost = ({navigation}) => {
         });
         return 'Tên sách phải dài hơn 3 ký tự';
       }
+      // if (imagesUpload.length === 0) {
+      //   setErrImg('Vui lòng upload ít nhất 1 ảnh');
+      //   return 'Vui lòng upload ít nhất 1 ảnh';
+      // }
       if (publisher.value.length < 3) {
         setPublisher({
           ...publisher,
@@ -216,6 +220,7 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập giá sách';
       }
+
       if (description.value.length < 10) {
         setDescription({
           ...description,
@@ -240,7 +245,8 @@ const NewPost = ({navigation}) => {
           // author: author.value,
           description: description.value,
           bookWanna: [bookWanna.value],
-          images: imagesUpload,
+          // images: imagesUpload,
+          images: ['https://picsum.photos/300/200','https://picsum.photos/300/200','https://picsum.photos/300/200','https://picsum.photos/300/200'],
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
           category: categori.value,
@@ -394,6 +400,8 @@ const NewPost = ({navigation}) => {
                   )}
                 </ScrollView>
               </View>
+              <Text style={stylesPost.err}>{errImg}</Text>
+
               {/* <View>
                 <Text>Tác giả *</Text>
                 <TextInput
@@ -436,7 +444,7 @@ const NewPost = ({navigation}) => {
                 <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản *</Text>
+                <Text>Số lần xuất bản</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"

@@ -16,128 +16,26 @@ import {DELETE_POST} from '../../query/post';
 import ImageFooter from '../../screens/chatting/components/ImageFooter';
 import {Notification} from '../../utils/notifications';
 
-// const Container = styled.View`
-//   flex: 1;
-//   background: #ffffff;
-//   padding: 4px 12px;
-//   margin: 6px 0;
-//   border-radius: 5px;
-// `;
-// const PostHeader = styled.View`
-//   height: 50px;
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: space-between;
-//   margin-top: 6px;
-//   padding: 0 11px;
-// `;
-// const Row = styled.View`
-//   align-items: center;
-//   flex-direction: row;
-// `;
-// const UserName = styled.Text`
-//   font-size: 14px;
-//   font-weight: bold;
-//   color: #222121;
-// `;
-// const PostTime = styled.Text`
-//   font-size: 12px;
-//   color: #747476;
-// `;
-// const PostTitle = styled.Text`
-//   font-size: 16px;
-//   font-weightL bold;
-//   color: #000000;
-//   line-height: 24px;
-//   padding: 0 11px;
-// `;
-// const PostDescription = styled.Text`
-//   font-size: 14px;
-//   color: #222121;
-//   line-height: 21px;
-//   padding: 0 11px;
-// `;
-// const PhotoGroup = styled.View`
-//   flex-direction: row;
-//   justify-content: center;
-//   flex-wrap: wrap;
-// `;
-// const PhotoContainer = styled.View`
-//   width: 50%;
-//   padding: 10px;
-// `;
-// const PostPhoto = styled.Image`
-//   width: 100%;
-//   height: 210px;
-// `;
-// const PostFooter = styled.View`
-//   padding: 10px 10px;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   align-items: center;
-// `;
-// const TextCount = styled.Text`
-//   font-size: 11px;
-//   color: #424040;
-// `;
-// const Button = styled.TouchableOpacity`
-//   flex-direction: row;
-//   align-items: center;
-// `;
-// // const Text = styled.Text`
-// //   font-size: 12px;
-// //   color: #424040;
-// // `;
-// const BreakLine = styled.View`
-//   width: 100%;
-//   height: 0.5px;
-//   background: #000000;
-// `;
-// const OverlayGroup = styled.View`
-//   width: 100%;
-//   position: relative;
-// `;
-// const Overlay = styled.View`
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   top: 0;
-//   left: 0;
-//   justify-content: center;
-//   align-items: center;
-//   background: rgba(0, 0, 0, 0.5);
-// `;
 
-// const ViewImg = styled.View`
-//   width: 100%;
-//   height: 100%;
-// `;
-// //
-// const User = styled.Image`
-//   width: 40px;
-//   height: 40px;
-//   border-radius: 20px;
-//   border-color: #1777f2;
-//   border-width: ${(props) => (props.story ? '3px' : 0)};
-// `;
 //
-const PostOne = ({route, post, type}) => {
+const PostOne = ({route, postUser, type}) => {
   return useObserver(() => {
     const {
-      stores: {user, comment},
+      stores: {user, comment, post},
     } = useContext(MobXProviderContext);
     const navigation = useNavigation();
     const {info, posts} = user;
     const {postComment, setPostComment} = comment;
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
-    const postId = post?.id;
+    const postId = postUser?.id;
     const [deletePost, {called, loading, data, error}] = useMutation(
       DELETE_POST,
       {
         onCompleted: async (data) => {
-          const newData = [...posts].filter((p) => p.id + '' !== post.id + '');
+          const newData = [...posts].filter((p) => p.id + '' !== postUser.id + '');
           user.setPosts([...newData]);
+          post.setGeneral([...newData]);
           Toast.show(Notification(NOTIFI.success, 'Xóa thành công'));
         },
         onError: (err) => {
@@ -155,7 +53,7 @@ const PostOne = ({route, post, type}) => {
     const onPress = () => {
       deletePost({
         variables: {
-          id: post.id,
+          id: postUser.id,
         },
       });
     };
@@ -168,11 +66,11 @@ const PostOne = ({route, post, type}) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('UserInfo', {
-                  userAvatar: post.author.avatar ? post.author.avatar : [],
-                  userName: post.author.name ? post.author.name : '',
-                  userPhone: post.author.phone ? post.author.phone : '',
-                  userMail: post.author.email ? post.author.email : '',
-                  userAddress: post.author.address ? post.author.address : '',
+                  userAvatar: postUser.author.avatar ? postUser.author.avatar : [],
+                  userName: postUser.author.name ? postUser.author.name : '',
+                  userPhone: postUser.author.phone ? postUser.author.phone : '',
+                  userMail: postUser.author.email ? postUser.author.email : '',
+                  userAddress: postUser.author.address ? postUser.author.address : '',
                 })
               }>
               <View style={stylesPOST.row}>
@@ -180,22 +78,22 @@ const PostOne = ({route, post, type}) => {
                   style={stylesPOST.User}
                   source={{
                     uri:
-                      post.author.id === user.info.id
+                    postUser.author.id === user.info.id
                         ? user.info.avatar
-                        : post.author.avatar,
+                        : postUser.author.avatar,
                   }}
                 />
                 <View style={{paddingLeft: 10}}>
-                  <Text style={stylesPOST.UserName}>{post.author.name}</Text>
+                  <Text style={stylesPOST.UserName}>{postUser.author.name}</Text>
                   <View style={stylesPOST.row}>
                     <Text style={stylesPOST.PostTime}>
-                      {moment(moment(post.createdAt)._d).fromNow()}
+                      {moment(moment(postUser.createdAt)._d).fromNow()}
                     </Text>
                   </View>
                 </View>
               </View>
             </TouchableOpacity>
-            {post.author.id === user.info.id ? (
+            {postUser.author.id === user.info.id ? (
               <TouchableOpacity onPress={onAlert}>
                 <Icon name="dots-horizontal" type="MaterialCommunityIcons" />
               </TouchableOpacity>
@@ -206,9 +104,9 @@ const PostOne = ({route, post, type}) => {
           <View style={stylesPOST.BreakLine} />
           <TouchableOpacity
             onPress={() => {
-              user.setPostCurrent(post);
-              setPostComment(post.comment);
-              navigation.navigate('PostDetail', {postID: post.id});
+              user.setPostCurrent(postUser);
+              setPostComment(postUser.comment);
+              navigation.navigate('PostDetail', {postID: postUser.id});
             }}>
             <View
               style={{
@@ -216,23 +114,24 @@ const PostOne = ({route, post, type}) => {
                 borderBottomColor: '#000000',
                 borderBottomWidth: 0.5,
               }}>
-              <Text style={stylesPOST.PostTitle}>{post.title}</Text>
-              <Text style={stylesPOST.PostDescription}>{post.description}</Text>
+              <Text style={stylesPOST.PostTitle}>{postUser.title}</Text>
+              <Text style={stylesPOST.PostDescription}>{postUser.description}</Text>
               <ImageView
-                images={post.images.map((t) => ({uri: t}))}
+                images={postUser.images.map((t) => ({uri: t}))}
                 imageIndex={index}
                 visible={visible}
                 onRequestClose={() => setIsVisible(false)}
                 FooterComponent={({imageIndex}) => (
                   <ImageFooter
                     imageIndex={imageIndex}
-                    imagesCount={post.images.length}
+                    imagesCount={postUser.images.length}
                   />
                 )}
               />
-              {post.images.length < 3 ? (
-                <View style={stylesPOST.PhotoGroup}>
-                  {post.images.map((img, i) => (
+              {postUser.images.length < 3 ? (
+                // <View style={stylesPOST.PhotoGroup}>
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  {postUser.images.map((img, i) => (
                     <View style={stylesPOST.PhotoContainer}>
                       <TouchableOpacity
                         onPress={() => {
@@ -256,7 +155,7 @@ const PostOne = ({route, post, type}) => {
               ) : (
                 //
                 <View style={stylesPOST.PhotoGroup}>
-                  {post.images.slice(0, 1).map((img, i) => (
+                  {postUser.images.slice(0, 1).map((img, i) => (
                     <>
                       <View style={stylesPOST.PhotoContainer}>
                         {/* <PostPhoto source={{uri: img}} /> */}
@@ -272,7 +171,7 @@ const PostOne = ({route, post, type}) => {
                           />
                         </TouchableOpacity>
                       </View>
-                      <View>
+                      <View style={stylesPOST.PhotoContainer}>
                         <View style={stylesPOST.OverlayGroup}>
                           <TouchableOpacity
                             onPress={() => {
@@ -281,11 +180,11 @@ const PostOne = ({route, post, type}) => {
                             }}>
                             <Image
                               style={stylesPOST.PostPhoto}
-                              source={{uri: post.images[1]}}
+                              source={{uri: postUser.images[1]}}
                             />
                             <View style={stylesPOST.Overlay}>
                               <Text style={{color: '#ffffff', fontSize: 22}}>
-                                + {post.images.length - 1}
+                                + {postUser.images.length - 1}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -299,12 +198,12 @@ const PostOne = ({route, post, type}) => {
             <TouchableOpacity
               onPress={() => {
                 user.setPostCurrent(post);
-                setPostComment(post.comment);
-                navigation.navigate('PostDetail', {postID: post.id});
+                setPostComment(postUser.comment);
+                navigation.navigate('PostDetail', {postID: postUser.id});
               }}>
               <View style={stylesPOST.PostFooter}>
                 <Text style={stylesPOST.TextCount}>
-                  {post.comment.length} Bình luận
+                  {postUser.comment.length} Bình luận
                 </Text>
                 {/* <TouchableOpacity
                 style={stylesPOST.Button}
@@ -423,11 +322,12 @@ const stylesPOST = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    top: 0,
-    left: 0,
+    // top: 0,
+    // left: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    // backgroundColor:
+    backgroundColor: '#111',
+    opacity: 0.6
   },
   User: {
     width: 40,

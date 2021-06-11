@@ -53,7 +53,7 @@ const Post = ({route}) => {
           {!loading ? (
             posts && posts.length > 0 ? (
               posts.map((pt) => (
-                <PostOne key={pt.id} post={pt} info={info} type={true} />
+                <PostOne key={pt.id} postUser={pt} info={info} type={true} />
               ))
             ) : (
               <Text style={{textAlign: 'center', marginTop: 20}}>

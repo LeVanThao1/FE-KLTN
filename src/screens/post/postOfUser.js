@@ -16,7 +16,7 @@ const PostOfUser = ({navigation, posts}) => {
     <View>
       <ScrollView horizontal={false}>
         {posts && posts.length > 0 ? (
-          posts.map((pt) => <PostOne key={pt.id} post={pt} type={true} />)
+          posts.map((pt) => <PostOne key={pt.id} postUser={pt} type={true} />)
         ) : (
           <Text style={{textAlign: 'center', marginTop: 20}}>
             Không có bài viết
