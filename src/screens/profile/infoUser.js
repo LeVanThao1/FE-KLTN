@@ -90,7 +90,8 @@ const Profile = ({navigation, route}) => {
                 <View style={{marginTop: 60}}>
                   <Text style={styles.name}>{userProfile.profile.name}</Text>
                 </View>
-                <TouchableOpacity
+                {info.id !== userProfile.profile.id ? (
+                  <TouchableOpacity
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -115,7 +116,8 @@ const Profile = ({navigation, route}) => {
                   />
                   <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
                   {/* </View> */}
-                </TouchableOpacity>
+                </TouchableOpacity>) : <></>
+                }
               </View>
             </View>
 

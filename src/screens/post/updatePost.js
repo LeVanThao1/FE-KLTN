@@ -23,10 +23,12 @@ import {stylesPost} from './stylePost';
 const UpdatePost = ({route, navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, post},
     } = useContext(MobXProviderContext);
     const {posts, postCurrent, setPostCurrent} = user;
     const {postId} = route.params;
+    const {general, setGeneral} = post;
+
     const [title, setTitle] = useState({
       value: postCurrent.title ? postCurrent.title : '',
       error: '',
@@ -150,6 +152,13 @@ const UpdatePost = ({route, navigation}) => {
         });
         return 'Nhà xuất bản phải dài hơn 3 ký tự';
       }
+      // if (year.value.length !== 4) {
+      //   setYear({
+      //     ...year,
+      //     error: 'Nhập năm xuất bản',
+      //   });
+      //   return 'Vui lòng nhập đúng năm xuất bản';
+      // }
       if (year.value.length !== 4) {
         setYear({
           ...year,
@@ -194,21 +203,47 @@ const UpdatePost = ({route, navigation}) => {
           id: postId,
         })
           .then(({data}) => {
-            const findIndex = [...posts].findIndex(
+            console.log(user.posts, postCurrent);
+            const findIndex = [...general].findIndex(
               (dt) => dt.id + '' == postId + '',
             );
-            user.setPosts([
-              ...[...posts].slice(0, findIndex),
-              {...posts[findIndex], ...dataPost},
-              ...[...posts].slice(findIndex + 1),
+            setGeneral([
+              ...general.slice(0, findIndex),
+              {
+                ...general[findIndex],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              },
+              ...general.slice(findIndex + 1),
             ]);
-            setPostCurrent({
-              ...posts[findIndex],
-              ...dataPost,
-              category: category.categories.find(
-                (p) => p.id + '' === categori.value + '',
-              ),
-            });
+            if (posts) {
+              const findIndexx = [...posts].findIndex(
+                (dt) => dt.id + '' == postId + '',
+              );
+              user.setPosts([
+                ...[...posts].slice(0, findIndexx),
+                {...posts[findIndexx], ...dataPost},
+                ...[...posts].slice(findIndexx + 1),
+              ]);
+              setPostCurrent({
+                ...posts[findIndexx],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              });
+            } else {
+              setPostCurrent({
+                ...general[findIndex],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              });
+            }
+
             Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
             navigation.goBack();
           })
@@ -226,7 +261,7 @@ const UpdatePost = ({route, navigation}) => {
         <View style={stylesPost.addpost}>
           <ScrollView showsVerticalScrollIndicator>
             <View style={stylesPost.textImg}>
-              <Text>Hình ảnh</Text>
+              <Text>Hình ảnh *</Text>
 
               <ScrollView
                 style={{flexDirection: 'row', marginVertical: 10}}
@@ -292,16 +327,6 @@ const UpdatePost = ({route, navigation}) => {
                   </TouchableOpacity>
                 )}
               </ScrollView>
-
-              {/* <View style={stylesPost.imgBookDetail}>
-                {postCurrent.images?.map((img, i) => (
-                  <Image
-                    key={i}
-                    source={{uri: img}}
-                    style={stylesPost.imgBook}
-                  />
-                ))}
-              </View> */}
             </View>
             {/*  */}
 
@@ -309,7 +334,7 @@ const UpdatePost = ({route, navigation}) => {
           </ScrollView>
           <View style={stylesPost.content}>
             <View style={stylesPost.ct}>
-              <Text>Tiêu đề </Text>
+              <Text>Tiêu đề *</Text>
               <TextInput
                 style={stylesPost.txtInput}
                 placeholder="Nhập tiêu đề"
@@ -329,7 +354,7 @@ const UpdatePost = ({route, navigation}) => {
                 }}
               />
               <View style={stylesPost.ct}>
-                <Text>Tên sách </Text>
+                <Text>Tên sách *</Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên sách"
@@ -371,7 +396,7 @@ const UpdatePost = ({route, navigation}) => {
                 </Form>
               </View>
               <View style={stylesPost.ct}>
-                <Text>Nhà xuất bản </Text>
+                <Text>Nhà xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
@@ -391,7 +416,7 @@ const UpdatePost = ({route, navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Nhập số lần xuất bản"
@@ -413,7 +438,7 @@ const UpdatePost = ({route, navigation}) => {
               <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
 
               <View style={stylesPost.horizontal}>
-                <Text>Năm phát hành</Text>
+                <Text>Năm phát hành *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Nhập năm phát hành"
@@ -435,7 +460,7 @@ const UpdatePost = ({route, navigation}) => {
               <Text style={stylesPost.err}>{year.error}</Text>
 
               <View style={stylesPost.horizontal}>
-                <Text>Giá sách</Text>
+                <Text>Giá sách *</Text>
                 <View
                   style={{
                     position: 'relative',
@@ -473,7 +498,7 @@ const UpdatePost = ({route, navigation}) => {
               <Text style={stylesPost.err}>{price.error}</Text>
 
               <View style={stylesPost.ct}>
-                <Text>Sách muốn đổi: </Text>
+                <Text>Sách muốn đổi </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   // style={{fontWeight: 'bold'}}
@@ -493,7 +518,7 @@ const UpdatePost = ({route, navigation}) => {
                   value={bookWanna.value}
                 />
               </View>
-              <Text style={stylesPost.textContent}>Mô tả</Text>
+              <Text style={stylesPost.textContent}>Mô tả *</Text>
               <Textarea
                 containerStyle={stylesPost.textareacont}
                 style={stylesPost.textarea}

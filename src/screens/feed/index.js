@@ -32,6 +32,9 @@ const Feed = () => {
       queryData(GET_POSTS, option)
         .then(({data}) => {
           setGeneral(data.posts);
+          if (data.posts.length < 10) {
+            setStop(true);
+          }
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -39,10 +42,14 @@ const Feed = () => {
     useEffect(() => {
       if (refreshing) {
         setOption({limit: 10, page: 1});
-        queryData(GET_POSTS, option)
+        setStop(false);
+        queryData(GET_POSTS, {limit: 10, page: 1})
           .then(({data}) => {
             setGeneral(data.posts);
             // setLoading(false);
+            if (data.posts.length < 10) {
+              setStop(true);
+            }
             setRefreshing(false);
           })
           .catch((err) => {
@@ -101,7 +108,7 @@ const Feed = () => {
           />
         )}
 
-        <ScrollView         
+        <ScrollView
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -110,7 +117,6 @@ const Feed = () => {
               }}
             />
           }>
-          
           {!loading ? (
             general && general.length > 0 ? (
               <FlatList
@@ -152,7 +158,7 @@ const Feed = () => {
                 ListFooterComponent={() =>
                   loadMore && <Spinner color={COLORS.primary} size="small" />
                 }></FlatList>
-            ) : (            
+            ) : (
               <Text style={{textAlign: 'center', marginTop: 20}}>
                 Không có bài viết
               </Text>

@@ -160,6 +160,7 @@ const PostOfFeed = ({route, postFeed, info, type}) => {
                     <View style={stylesPOST.PhotoContainer}>
                       {/* <PostPhoto source={{uri: img}} /> */}
                       <TouchableOpacity
+                      
                         onPress={() => {
                           setIndex(i);
                           setIsVisible(true);

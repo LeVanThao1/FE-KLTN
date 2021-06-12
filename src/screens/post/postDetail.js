@@ -98,7 +98,7 @@ const PostDetail = ({navigation, route}) => {
                     />
                   )}
                 />
-                {postCurrent?.images.length > 3 ? (
+                {postCurrent?.images.length > 2 ? (
                   <View style={stylesPost.imgBookDetail}>
                     <ScrollView horizontal={true}>
                       {postCurrent?.images.map((img, i) => (

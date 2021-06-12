@@ -91,9 +91,11 @@ const Chats = ({navigation}) => {
     useEffect(() => {
       if (refresh) {
         setOption({limit: 20, page: 1});
+        setStop(false);
         queryData(GET_GROUP)
           .then(({data}) => {
             setGroups(data.groups);
+            if (data.groups.length < 20) setStop(true);
             setRefresh(false);
           })
           .catch((err) => {
