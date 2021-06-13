@@ -152,6 +152,13 @@ const UpdatePost = ({route, navigation}) => {
         });
         return 'Nhà xuất bản phải dài hơn 3 ký tự';
       }
+      if (Number(numberOfReprint.value) < 1) {
+        setNumberOfReprint({
+          ...numberOfReprint,
+          error: 'Vui lòng nhập số lần xuất bản',
+        });
+        return 'Vui lòng nhập số lần xuất bản';
+      }
       // if (year.value.length !== 4) {
       //   setYear({
       //     ...year,
