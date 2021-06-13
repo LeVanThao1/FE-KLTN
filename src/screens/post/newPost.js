@@ -194,10 +194,10 @@ const NewPost = ({navigation}) => {
         });
         return 'Tên sách phải dài hơn 3 ký tự';
       }
-      // if (imagesUpload.length === 0) {
-      //   setErrImg('Vui lòng upload ít nhất 1 ảnh');
-      //   return 'Vui lòng upload ít nhất 1 ảnh';
-      // }
+      if (imagesUpload.length === 0) {
+        setErrImg('Vui lòng upload ít nhất 1 ảnh');
+        return 'Vui lòng upload ít nhất 1 ảnh';
+      }
       if (publisher.value.length < 3) {
         setPublisher({
           ...publisher,
@@ -253,12 +253,12 @@ const NewPost = ({navigation}) => {
           description: description.value,
           bookWanna: [bookWanna.value],
           images: imagesUpload,
-          images: [
-            'https://picsum.photos/300/200',
-            'https://picsum.photos/300/200',
-            'https://picsum.photos/300/200',
-            'https://picsum.photos/300/200',
-          ],
+          // images: [
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          // ],
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
           category: categori.value,
