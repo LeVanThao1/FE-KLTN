@@ -45,7 +45,7 @@ const NewPost = ({navigation}) => {
     });
 
     const [bookWanna, setBookWanna] = useState({
-      value: [],
+      value: '',
       error: '',
     });
 
@@ -459,7 +459,7 @@ const NewPost = ({navigation}) => {
                 <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản</Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"
