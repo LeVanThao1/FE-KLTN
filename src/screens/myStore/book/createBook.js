@@ -669,7 +669,7 @@ const CreateBook = ({navigation}) => {
                     ))}
                   </ScrollView>
                 )}
-            <Text style={styles.err}>{author.error}</Text>
+              <Text style={styles.err}>{author.error}</Text>
             </View>
 
             {/* year */}
@@ -681,6 +681,7 @@ const CreateBook = ({navigation}) => {
                   style={styles.txtMaxWidth}
                   placeholder="Nhập năm xuất bản"
                   value={book ? book.year : year.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -716,7 +717,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
-            <Text style={styles.err}>{year.error}</Text>
+              <Text style={styles.err}>{year.error}</Text>
             </View>
             {/* pulisher */}
 
@@ -763,7 +764,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
-            <Text style={styles.err}>{publisher.error}</Text>
+              <Text style={styles.err}>{publisher.error}</Text>
             </View>
 
             {/* number of printed lines */}
@@ -773,6 +774,7 @@ const CreateBook = ({navigation}) => {
                 <TextInput
                   editable={book ? false : true}
                   style={styles.txtMaxWidth}
+                  keyboardType="numeric"
                   placeholder="Nhập số lần xuất bản"
                   value={book ? book.numberOfReprint + '' : numPrint.value + ''}
                   onFocus={() => {
@@ -810,7 +812,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
-            <Text style={styles.err}>{numPrint.error}</Text>
+              <Text style={styles.err}>{numPrint.error}</Text>
             </View>
 
             {/* Image */}
@@ -943,9 +945,9 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
-            <Text style={styles.err}>{description.error}</Text>
+              <Text style={styles.err}>{description.error}</Text>
             </View>
-            
+
             <View style={styles.name}>
               <Text>Số lượng *</Text>
               <View
@@ -956,6 +958,7 @@ const CreateBook = ({navigation}) => {
                   style={styles.txtMaxWidth}
                   placeholder="Nhập số lượng"
                   value={amount.value + ''}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setAmount({
                       ...amount,
@@ -999,7 +1002,7 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
-            <Text style={styles.err}>{amount.error}</Text>
+              <Text style={styles.err}>{amount.error}</Text>
             </View>
             {/*  */}
 
@@ -1010,6 +1013,7 @@ const CreateBook = ({navigation}) => {
                   style={styles.txtMaxWidth}
                   placeholder="Nhập giá sách"
                   value={price.value + ''}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setPrice({
                       ...price,
@@ -1053,8 +1057,7 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
-            <Text style={styles.err}>{price.error}</Text>
-
+              <Text style={styles.err}>{price.error}</Text>
             </View>
             <View
               style={{

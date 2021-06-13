@@ -205,13 +205,6 @@ const NewPost = ({navigation}) => {
         });
         return 'Nhà xuất bản phải dài hơn 3 ký tự';
       }
-      if (Number(numberOfReprint.value) < 1) {
-        setNumberOfReprint({
-          ...numberOfReprint,
-          error: 'Vui lòng nhập số lần xuất bản',
-        });
-        return 'Vui lòng nhập số lần xuất bản';
-      }
       if (year.value.length !== 4) {
         setYear({
           ...year,
@@ -253,12 +246,7 @@ const NewPost = ({navigation}) => {
           description: description.value,
           bookWanna: [bookWanna.value],
           images: imagesUpload,
-          // images: [
-          //   'https://picsum.photos/300/200',
-          //   'https://picsum.photos/300/200',
-          //   'https://picsum.photos/300/200',
-          //   'https://picsum.photos/300/200',
-          // ],
+          // images: ['https://picsum.photos/300/200','https://picsum.photos/300/200','https://picsum.photos/300/200','https://picsum.photos/300/200'],
           publisher: publisher.value,
           numberOfReprint: numberOfReprint.value,
           category: categori.value,
@@ -459,11 +447,12 @@ const NewPost = ({navigation}) => {
                 <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản *</Text>
+                <Text>Số lần xuất bản</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"
                   value={numberOfReprint.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setNumberOfReprint({
                       ...numberOfReprint,
@@ -484,6 +473,7 @@ const NewPost = ({navigation}) => {
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Năm xuất bản"
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -511,6 +501,7 @@ const NewPost = ({navigation}) => {
                     style={stylesPost.txtVND}
                     placeholder="Giá sách"
                     value={price.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setPrice({
                         ...price,

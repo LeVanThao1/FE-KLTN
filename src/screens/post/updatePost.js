@@ -428,6 +428,7 @@ const UpdatePost = ({route, navigation}) => {
                   style={stylesPost.txtPrice}
                   placeholder="Nhập số lần xuất bản"
                   value={numberOfReprint.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setNumberOfReprint({
                       ...numberOfReprint,
@@ -445,10 +446,11 @@ const UpdatePost = ({route, navigation}) => {
               <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
 
               <View style={stylesPost.horizontal}>
-                <Text>Năm phát hành *</Text>
+                <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm phát hành"
+                  placeholder="Nhập năm xuất bản"
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -477,6 +479,7 @@ const UpdatePost = ({route, navigation}) => {
                     style={stylesPost.txtVND}
                     // style={stylesPost.input}
                     placeholder="Nhập giá sách"
+                    keyboardType="numeric"
                     value={price.value}
                     onFocus={() => {
                       setPrice({

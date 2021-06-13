@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e5e5e5',
   },
   activeMark: {
-    backgroundColor: '#1e88e5',
+    backgroundColor: COLORS.primary,
     width: 4,
   },
   icon: {

@@ -30,7 +30,6 @@ const Store = ({navigation}) => {
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
 
-    console.log(shop.info);
     if (shop.info === null)
       return (
         <View style={styles.createStore}>
@@ -97,15 +96,15 @@ const Store = ({navigation}) => {
               <Collapse>
                 <CollapseHeader>
                   <Separator bordered style={{backgroundColor: COLORS.primary}}>
-                    <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
+                    <Text style={{color: '#fff'}}>+ Quản lý sách</Text>
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody style={{backgroundColor: COLORS.grayLight}}>
                   <ListItem onPress={() => navigation.navigate('CreateBook')}>
-                    <Text>Thêm sản phẩm</Text>
+                    <Text>Thêm sách</Text>
                   </ListItem>
                   <ListItem onPress={() => navigation.navigate('BooksStore')}>
-                    <Text>Quản lý sản phẩm</Text>
+                    <Text>Quản lý sách</Text>
                   </ListItem>
                 </CollapseBody>
               </Collapse>

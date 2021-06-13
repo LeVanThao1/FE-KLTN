@@ -463,7 +463,6 @@ const UpdateBook = ({navigation, route}) => {
                     });
                   }}
                 />
-
               </View>
               <Text style={styles.err}>{publisher.error}</Text>
               {/* number of printed lines */}
@@ -473,6 +472,7 @@ const UpdateBook = ({navigation, route}) => {
                   editable={!bookCurrent.book}
                   style={styles.txtPrice}
                   placeholder="Số lần xuất bản"
+                  keyboardType="numeric"
                   value={numPrint.value}
                   onFocus={() => {
                     setNumPrint({
@@ -501,6 +501,7 @@ const UpdateBook = ({navigation, route}) => {
                     style={styles.txtVND}
                     placeholder="Năm xuất bản"
                     value={year.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setYear({
                         ...year,
@@ -517,7 +518,7 @@ const UpdateBook = ({navigation, route}) => {
                 </View>
               </View>
               <Text style={styles.err}>{year.error}</Text>
-              
+
               {/* Image */}
               <View style={styles.horizontal}>
                 <Text>Số lượng *</Text>
@@ -530,6 +531,7 @@ const UpdateBook = ({navigation, route}) => {
                     style={styles.txtVND}
                     placeholder="Số lượng"
                     value={amount.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setAmount({
                         ...amount,
@@ -567,6 +569,7 @@ const UpdateBook = ({navigation, route}) => {
                     style={styles.txtVND}
                     placeholder="Giá sách"
                     value={price.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setPrice({
                         ...price,
