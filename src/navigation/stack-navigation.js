@@ -251,7 +251,7 @@ const routes = [
 
   {
     name: 'UpdateProfile',
-    title: 'Cập nhật thông tin cá nhân',
+    title: 'Cập nhật thông tin',
     header: false,
     show: true,
     component: UpdateProfile,

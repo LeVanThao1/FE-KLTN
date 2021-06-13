@@ -460,3 +460,11 @@ export const UPDATE_AVATAR = gql`
     updateAvatar(file: $file)
   }
 `;
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+      message
+    }
+  }
+`;
