@@ -247,57 +247,53 @@ const CreateBook = ({navigation}) => {
           });
           return 'Tên tác giả phải dài hơn 3 ký tự';
         }
-        if (numPrint.value.length === 0) {
-          setNumPrint({
-            ...numPrint,
-            error: 'Vui lòng nhập số lần xuất bản',
-          });
-          return 'Vui lòng nhập số lần xuất bản';
-        }
-        if (year.value.length === 0) {
+        // if (numPrint.value.length <= 0) {
+        //   setNumPrint({
+        //     ...numPrint,
+        //     error: 'Vui lòng nhập đúng số lần xuất bản',
+        //   });
+        //   return 'Vui lòng nhập đúng số lần xuất bản';
+        // }
+        if (year.value.length !== 4) {
           setYear({
             ...year,
-            error: 'Vui lòng nhập năm xuất bản',
+            error: 'Vui lòng nhập đúng năm xuất bản',
           });
-          return 'Vui lòng nhập năm xuất bản';
+          return 'Vui lòng nhập đúng năm xuất bản';
         }
-        if (publisher.value.length === 0) {
+        if (publisher.value.length < 3) {
           setPublisher({
             ...publisher,
-            error: 'Vui lòng nhập nhà xuất bản',
+            error: 'Nhà xuất bản phải dài hơn 3 ký tự',
           });
-          return 'Vui lòng nhập nhà xuất bản';
+          return 'Nhà xuất bản phải dài hơn 3 ký tự';
         }
-        if (numPrint.value === 0) {
+        if (numPrint.value <= 0) {
           setNumPrint({
             ...numPrint,
-            error: 'Vui lòng nhập lần xuất bản',
+            error: 'Vui lòng nhập đúng số lần xuất bản',
           });
-          return 'Vui lòng nhập lần xuất bản';
+          return 'Vui lòng nhập đúng số lần xuất bản';
         }
         if (imagesUpload.length === 0) {
-          // setPublisher({
-          //   ...publisher,
-          //   error: 'Vui lòng nhập năm xuất bản',
-          // });
           return 'Vui lòng thêm ảnh cho sách';
         }
 
-        if (description.value.length === 0) {
+        if (description.value.length < 10) {
           setDescription({
             ...description,
-            error: 'Vui lòng nhập mô tả',
+            error: 'Mô tả phải dài hơn 10 ký tự',
           });
-          return 'Vui lòng nhập mô tả';
+          return 'Mô tả phải dài hơn 10 ký tự';
         }
-        if (!amount.value || amount.value === 0) {
+        if (!amount.value || amount.value <= 0) {
           setAmount({
             ...amount,
             error: 'Vui lòng nhập số lượng sách',
           });
           return 'Vui lòng nhập số lượng sách';
         }
-        if (!price.value || price.value === 0) {
+        if (!price.value || price.value <= 0) {
           setPrice({
             ...price,
             error: 'Vui lòng nhập giá sách',

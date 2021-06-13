@@ -155,9 +155,9 @@ const UpdatePost = ({route, navigation}) => {
       if (Number(numberOfReprint.value) < 1) {
         setNumberOfReprint({
           ...numberOfReprint,
-          error: 'Vui lòng nhập số lần xuất bản',
+          error: 'Vui lòng nhập đúng số lần xuất bản',
         });
-        return 'Vui lòng nhập số lần xuất bản';
+        return 'Vui lòng nhập đúng số lần xuất bản';
       }
       // if (year.value.length !== 4) {
       //   setYear({
@@ -169,24 +169,24 @@ const UpdatePost = ({route, navigation}) => {
       if (year.value.length !== 4) {
         setYear({
           ...year,
-          error: 'Nhập năm xuất bản',
+          error: 'Vui lòng nhập đúng năm xuất bản',
         });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
 
+      if (price.value <= 0) {
+        setPrice({
+          ...price,
+          error: 'Vui lòng nhập đúng giá sách',
+        });
+        return 'Vui lòng nhập đúng giá sách';
+      }
       if (description.value.length < 10) {
         setDescription({
           ...description,
           error: 'Mô tả phải dài hơn 10 ký tự',
         });
         return 'Mô tả phải dài hơn 10 ký tự';
-      }
-      if (price.value === 0) {
-        setPrice({
-          ...price,
-          error: 'Vui lòng nhập giá sách',
-        });
-        return 'Vui lòng nhập giá sách';
       }
       return true;
     };

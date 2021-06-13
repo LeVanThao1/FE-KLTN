@@ -126,19 +126,19 @@ const UpdateBook = ({navigation, route}) => {
           });
           return 'Vui lòng nhập số lần xuất bản';
         }
-        if (year.value.length === 0) {
+        if (year.value.length !== 4) {
           setYear({
             ...year,
-            error: 'Vui lòng nhập năm xuất bản',
+            error: 'Vui lòng nhập đúng năm xuất bản',
           });
-          return 'Vui lòng nhập năm xuất bản';
+          return 'Vui lòng nhập đúng năm xuất bản';
         }
         if (publisher.value.length === 0) {
           setPublisher({
             ...publisher,
-            error: 'Vui lòng nhập nhà xuất bản',
+            error: 'Nhà xuất bản phải dài hơn 3 ký tự',
           });
-          return 'Vui lòng nhập nhà xuất bản';
+          return 'Nhà xuất bản phải dài hơn 3 ký tự';
         }
         if (numPrint.value <= 0) {
           setNumPrint({
@@ -155,7 +155,7 @@ const UpdateBook = ({navigation, route}) => {
           return 'Vui lòng thêm ảnh cho sách';
         }
 
-        if (description.value.length === 0) {
+        if (description.value.length < 10) {
           setDescription({
             ...description,
             error: 'Vui lòng nhập mô tả',
