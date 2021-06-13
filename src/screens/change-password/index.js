@@ -7,12 +7,51 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
+import {mutateData} from '../../common';
 import {COLORS} from '../../constants/themes';
 import {passwordValidator} from '../../utils/validations';
+import {Notification} from '../../utils/notifications';
+import {NOTIFI} from '../../constants';
+import {CHANGE_PASSWORD} from '../../query/user';
 export default function ForgotPassword({navigation}) {
   const onPress = () => {
-    if (validateConfirmPassword(true) + validatePassword(true) !== 3) return;
+    if (
+      validateCurrentPassword(true) +
+        validateNewPassword(true) +
+        validateConfirmNewPassword(true) !==
+      3
+    )
+      return;
     //handle here
+    mutateData(CHANGE_PASSWORD, {
+      oldPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    })
+      .then(() => {
+        setNewPassword({
+          value: '',
+          error: '',
+          display: false,
+        });
+        setConfirmNewPassword({value: '', error: '', display: false});
+        setCurrentPassword({
+          value: '',
+          error: '',
+          display: false,
+        });
+        Toast.show(
+          Notification(NOTIFI.success, 'Thay đổi mật khẩu thành công'),
+        );
+        navigation.goBack();
+      })
+      .catch((err) => {
+        let message = 'Thay đổi mật khẩu không thành công';
+        if (err.message === 'Old password incorrect') {
+          message = 'Mật khẩu hiện tại không đúng';
+        }
+        Toast.show(Notification(NOTIFI.error, message));
+      });
   };
 
   const [currentPassword, setCurrentPassword] = useState({
@@ -49,7 +88,7 @@ export default function ForgotPassword({navigation}) {
 
   const validateNewPassword = (type) => {
     if (!newPassword.value.trim() && type) {
-      setNewPassword((cur) => ({...cur, error: 'Enter password'}));
+      setNewPassword((cur) => ({...cur, error: 'Enter new password'}));
       return false;
     }
     if (!passwordValidator(newPassword.value) && newPassword.value) {
@@ -70,7 +109,7 @@ export default function ForgotPassword({navigation}) {
       }));
       return false;
     }
-    if (password.value.trim() !== confirmNewPassword.value.trim()) {
+    if (newPassword.value.trim() !== confirmNewPassword.value.trim()) {
       setConfirmNewPassword((cur) => ({
         ...cur,
         error: 'Password must match',
@@ -112,6 +151,7 @@ export default function ForgotPassword({navigation}) {
             setCurrentPassword({
               ...currentPassword,
               value: value,
+              error: '',
             });
           }}
           onEndEditing={() => {
@@ -148,6 +188,7 @@ export default function ForgotPassword({navigation}) {
             setNewPassword({
               ...newPassword,
               value: value,
+              error: '',
             });
           }}
           onEndEditing={() => {
@@ -183,6 +224,7 @@ export default function ForgotPassword({navigation}) {
             setConfirmNewPassword({
               ...confirmNewPassword,
               value: value,
+              error: '',
             });
           }}
           onEndEditing={() => {

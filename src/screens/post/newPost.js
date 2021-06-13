@@ -212,7 +212,7 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập đúng số lần xuất bản';
       }
-      if (year.value.length !== 4) {
+      if (year.value.length !== 4 || Number(year.value) > 0) {
         setYear({
           ...year,
           error: 'Vui lòng nhập đúng năm xuất bản',
@@ -459,7 +459,7 @@ const NewPost = ({navigation}) => {
                 <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản</Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"

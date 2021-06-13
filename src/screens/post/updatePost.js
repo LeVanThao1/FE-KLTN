@@ -166,7 +166,7 @@ const UpdatePost = ({route, navigation}) => {
       //   });
       //   return 'Vui lòng nhập đúng năm xuất bản';
       // }
-      if (year.value.length !== 4) {
+      if (year.value.length !== 4 || Number(year.value) > 0) {
         setYear({
           ...year,
           error: 'Vui lòng nhập đúng năm xuất bản',
@@ -384,7 +384,7 @@ const UpdatePost = ({route, navigation}) => {
                 />
               </View>
               <View style={stylesPost.vertical}>
-                <Text>Danh mục sách</Text>
+                <Text>Danh mục sách *</Text>
                 <Form>
                   <Item picker>
                     <Picker
@@ -428,7 +428,7 @@ const UpdatePost = ({route, navigation}) => {
                 <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập số lần xuất bản"
+                  placeholder="Số lần xuất bản"
                   value={numberOfReprint.value}
                   keyboardType="numeric"
                   onFocus={() => {
@@ -451,7 +451,7 @@ const UpdatePost = ({route, navigation}) => {
                 <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm xuất bản"
+                  placeholder="Năm xuất bản"
                   keyboardType="numeric"
                   onFocus={() => {
                     setYear({
@@ -480,7 +480,7 @@ const UpdatePost = ({route, navigation}) => {
                   <TextInput
                     style={stylesPost.txtVND}
                     // style={stylesPost.input}
-                    placeholder="Nhập giá sách"
+                    placeholder="Giá sách"
                     keyboardType="numeric"
                     value={price.value}
                     onFocus={() => {
