@@ -27,11 +27,12 @@ const PostDetail = ({navigation, route}) => {
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
+    // const {general, setGeneral} = post;
 
     const postID = route?.params?.postID;
     const [loading, setLoading] = useState(true);
 
-    const [post, {aa, s, c, d}] = useLazyQuery(GET_POST, {
+    const [postDetail, {aa, s, c, d}] = useLazyQuery(GET_POST, {
       onCompleted: async (data) => {
         setLoading(false);
         setPostCurrent(data.post);
@@ -42,7 +43,7 @@ const PostDetail = ({navigation, route}) => {
       },
     });
     useEffect(() => {
-      post({
+      postDetail({
         variables: {
           id: postID,
         },
@@ -75,6 +76,9 @@ const PostDetail = ({navigation, route}) => {
         },
       });
     };
+
+    // console.log(general[0]);
+    console.log(postComment);
 
     return (
       <ScrollView horizontal={false}>

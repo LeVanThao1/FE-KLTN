@@ -191,6 +191,8 @@ const UpdatePost = ({route, navigation}) => {
       return true;
     };
 
+    console.log(general[0]);
+
     const onUpdate = () => {
       if (validateCreate() === true) {
         let dataPost = {
