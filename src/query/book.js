@@ -1,5 +1,6 @@
 import {gql} from '@apollo/client';
-
+//  doi xi t push cod eben cty da. lz kia hoi qua
+// lai di, ma no van chua co comment 
 export const GET_BOOKS = gql`
   query books($limit: Int, $page: Int) {
     books(limit: $limit, page: $page) {
@@ -49,6 +50,11 @@ export const GET_BOOKS_STORE = gql`
           id
           name
           avatar
+          store {
+            id
+            avatar
+            name
+          }
         }
         createdAt
       }

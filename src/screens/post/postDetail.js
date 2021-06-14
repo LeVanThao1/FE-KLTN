@@ -14,11 +14,13 @@ import formatMoney from '../../utils/format';
 import {Notification} from '../../utils/notifications';
 import Comment from './comment';
 import {stylesPost} from './stylePost';
-
+// query chỗ nào đâu
+// cho comment dau
+// tét lai di ok rồi đó
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user, category, comment},
+      stores: {user, category, comment, post},
     } = useContext(MobXProviderContext);
     const {info, postCurrent, setPostCurrent} = user;
     const {postComment, setPostComment} = comment;
@@ -27,13 +29,15 @@ const PostDetail = ({navigation, route}) => {
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
-    // const {general, setGeneral} = post;
+    const {general, setGeneral} = post;
 
     const postID = route?.params?.postID;
     const [loading, setLoading] = useState(true);
 
     const [postDetail, {aa, s, c, d}] = useLazyQuery(GET_POST, {
+      fetchPolicy: "no-cache",
       onCompleted: async (data) => {
+        console.log('post comment',data.post.comment);
         setLoading(false);
         setPostCurrent(data.post);
         setRefreshing(true);
@@ -57,6 +61,21 @@ const PostDetail = ({navigation, route}) => {
           comment: [data.createCommentPost, ...postCurrent.comment],
         });
         setPostComment([data.createCommentPost, ...postComment]);
+        setCmts('');
+        if (general) {
+          const findIndex = [...general].findIndex(
+            (dt) => dt.id + '' == postID + '',
+          );
+          const newComment = [data.createCommentPost, ...general[findIndex].comment];
+          setGeneral([
+            ...general.slice(0, findIndex),
+            {
+              ...general[findIndex],
+              comment: newComment,
+            },
+            ...general.slice(findIndex + 1),
+          ]);
+        }
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -69,6 +88,8 @@ const PostDetail = ({navigation, route}) => {
         content: cmts,
         type: 'TEXT',
       };
+
+      // à hiểu rồi. nó lưu cache roi
       createComment({
         variables: {
           dataComment,
@@ -77,9 +98,8 @@ const PostDetail = ({navigation, route}) => {
       });
     };
 
-    // console.log(general[0]);
-    console.log(postComment);
 
+    // ben book comment sao để qua coi luôn
     return (
       <ScrollView horizontal={false}>
         {!loading ? (

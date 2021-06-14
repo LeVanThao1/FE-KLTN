@@ -56,6 +56,7 @@ export const GET_COMMENT_POST = gql`
       author {
         id
         avatar
+        name
       }
       post {
         id
@@ -155,6 +156,7 @@ export const CREATE_COMMENT_POST = gql`
       author {
         id
         name
+        avatar
       }
       type
       reply {

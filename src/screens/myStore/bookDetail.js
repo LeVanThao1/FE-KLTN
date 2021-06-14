@@ -17,21 +17,35 @@ import {stylesPost} from './styles';
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
     const {
-      stores: {user, category, comment},
+      stores: {user, category, comment, shop},
     } = useContext(MobXProviderContext);
     const {info, bookCurrent, setBookCurrent} = user;
     const {bookComment, setBookComment} = comment;
+    const {bookStore, setBookStore} = shop;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
-    console.log(bookCurrent);
+    // console.log(bookCurrent);
+    console.log('this',bookStore[1]);
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
         setBookCurrent({
           ...bookCurrent,
           comment: [data.createCommentBook, ...bookCurrent.comment],
         });
+        const findIndex = bookStore.findIndex((p) => p.id+ '' === bookCurrent.id + '');
+        console.log('this',bookStore[findIndex]);
+        const newComment = [...bookStore[findIndex].comment, data.createCommentBook];
+        setBookStore([
+          ...bookStore.slice(0, findIndex),
+          {...bookCurrent.current, comment: [data.createCommentBook,...bookCurrent.comment]},
+          // {...bookStore.comment, [data.createCommentBook,...bookCurrent.comment]},
+          ...bookStore.slice(findIndex + 1)
+        ])
+        // rang m add cais current lam gi rua, rag ko trai cai comment ben do thoi
+        //  dc chua, ddag test
+        // roi hieu
         setBookComment([data.createCommentBook, ...bookComment]);
       },
       onError: (err) => {
@@ -39,7 +53,9 @@ const BookDetail = ({navigation, book}) => {
         console.log('gaga', err);
       },
     });
-
+    // m thaays co chuyen gi k
+    // chuyen  j tn ms been, kia qua ddau thay j dau,
+    // luc nay t comment no hien la cacbonStore, la ten cua hang cua t, ma h no thanh ten t roi
     const onPress = () => {
       let dataComment = {
         content: cmts,
@@ -188,6 +204,7 @@ const BookDetail = ({navigation, book}) => {
                   <Text>Sách muốn đổi </Text>
                   <Text style={stylesPost.detail}>asdas</Text>
                 </View> */}
+                {/* doi t xi t hop cia da o k */}
 
                 <Text style={stylesPost.textContent}>Mô tả</Text>
                 <View style={stylesPost.textDes}>
@@ -219,7 +236,7 @@ const BookDetail = ({navigation, book}) => {
                 <View style={stylesPost.addCmt}>
                   <View style={stylesPost.person}>
                     <Image
-                      source={{uri: info.avatar}}
+                      source={{uri: shop.info ? shop.info.avatar : info.avatar}}
                       style={stylesPost.avtcmt}
                     />
                     <TextInput
@@ -247,7 +264,7 @@ const BookDetail = ({navigation, book}) => {
                   // setBookCurrent(book);
                   navigation.navigate('UpdateBook');
                 }}>
-                <Text style={stylesPost.btn}>Cập nhật sách</Text>
+                <Text style={stylesPost.btn}>Cập nhật</Text>
               </TouchableOpacity>
             </View>
           </View>

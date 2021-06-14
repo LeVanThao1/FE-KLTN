@@ -52,6 +52,7 @@ const Book = ({book}) => {
     return (
       <TouchableOpacity
         // key={id}
+        // nhu ri met roif.
         onPress={() => {
           user.setBookCurrent(book);
           setBookComment(book.comment);

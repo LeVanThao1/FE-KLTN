@@ -58,14 +58,15 @@ const BooksStore = ({navigation}) => {
             sold: ct.sold ? ct.sold : '',
             description: ct.book ? ct.book.description : ct.description,
             images: ct.book ? ct.book.images : ct.images,
-            comment: ct.comment ? ct.comment : '',
+            comment: ct.comment ? ct.comment :[],
             book: ct.book ? ct.book.id : null,
+            current: ct
           })),
         );
       }
       // setLoading(false);
     }, [bookStore]);
-
+// loi j nua, cai bi mat comment day', vl ben duoi no cua t
     const [categori, setCategori] = useState(undefined);
 
     useEffect(() => {
