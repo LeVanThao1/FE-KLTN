@@ -14,9 +14,6 @@ import formatMoney from '../../utils/format';
 import {Notification} from '../../utils/notifications';
 import Comment from './comment';
 import {stylesPost} from './stylePost';
-// query chỗ nào đâu
-// cho comment dau
-// tét lai di ok rồi đó
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
@@ -99,7 +96,6 @@ const PostDetail = ({navigation, route}) => {
     };
 
 
-    // ben book comment sao để qua coi luôn
     return (
       <ScrollView horizontal={false}>
         {!loading ? (

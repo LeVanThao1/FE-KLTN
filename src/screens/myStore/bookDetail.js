@@ -26,7 +26,7 @@ const BookDetail = ({navigation, book}) => {
     const [addCmt, setAddCmt] = useState('');
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
-    // console.log(bookCurrent);
+    // console.log(bookCurrent); doi ti test noto, a ben user nua
     console.log('this',bookStore[1]);
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
@@ -35,17 +35,11 @@ const BookDetail = ({navigation, book}) => {
           comment: [data.createCommentBook, ...bookCurrent.comment],
         });
         const findIndex = bookStore.findIndex((p) => p.id+ '' === bookCurrent.id + '');
-        console.log('this',bookStore[findIndex]);
-        const newComment = [...bookStore[findIndex].comment, data.createCommentBook];
         setBookStore([
           ...bookStore.slice(0, findIndex),
           {...bookCurrent.current, comment: [data.createCommentBook,...bookCurrent.comment]},
-          // {...bookStore.comment, [data.createCommentBook,...bookCurrent.comment]},
           ...bookStore.slice(findIndex + 1)
         ])
-        // rang m add cais current lam gi rua, rag ko trai cai comment ben do thoi
-        //  dc chua, ddag test
-        // roi hieu
         setBookComment([data.createCommentBook, ...bookComment]);
       },
       onError: (err) => {

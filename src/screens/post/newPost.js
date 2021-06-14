@@ -212,11 +212,8 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập đúng số lần xuất bản';
       }
-      if (year.value.length !== 4 || Number(year.value) < 0) {
         setYear({
-          ...year,
           error: 'Vui lòng nhập đúng năm xuất bản',
-        });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
 

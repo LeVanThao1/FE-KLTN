@@ -62,7 +62,7 @@ const PostOfFeed = ({route, postFeed, info, type}) => {
     return (
       <View style={{paddingHorizontal: 14, paddingVertical: 0}}>
         <ImageView
-          images={postFeed.images.map((t) => ({uri: t}))}
+          images={postFeed?.images.map((t) => ({uri: t}))}
           imageIndex={index}
           visible={visible}
           onRequestClose={() => setIsVisible(false)}
@@ -102,7 +102,7 @@ const PostOfFeed = ({route, postFeed, info, type}) => {
 
           <TouchableOpacity
             onPress={() => {
-              user.setPostCurrent(post);
+              user.setPostCurrent(postFeed);
               setPostComment(postFeed.comment);
               navigation.navigate('PostDetail', {postID: postFeed.id});
             }}>
