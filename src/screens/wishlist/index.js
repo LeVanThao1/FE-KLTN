@@ -9,7 +9,9 @@ import {
   View,
   Image,
   Dimensions,
+  FlatList,
 } from 'react-native';
+import ProductCard from '../../components/productCart';
 import {COLORS} from '../../constants/index';
 
 const WishList = ({navigation, route}) => {
@@ -27,40 +29,58 @@ const WishList = ({navigation, route}) => {
                 flexWrap: 'wrap',
                 marginHorizontal: 10,
                 flexDirection: 'row',
-                // justifyContent: 'space-between',
+                justifyContent: 'space-around',
               }}>
-              {user.likes.map((item) => (
-                <View style={styles.product}>
-                  <TouchableOpacity
-                    style={styles.list_product}
-                    // onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
-                    onPress={() =>
-                      navigation.navigate('Detail-Product', {
-                        productId: item.id,
-                      })
-                    }>
-                    <Image
-                      source={{
-                        uri: item.book ? item.book.images[0] : item.images[0],
-                      }}
-                      style={{width: '90%', height: 130, resizeMode: 'cover'}}
-                      // onPress={() => productHandler()}
-                    />
-                    <View>
-                      <Text style={styles.name} numberOfLines={1}>
-                        {item.book ? item.book.name : item.name}
-                      </Text>
-                      <View style={styles.content}>
-                        <Text style={styles.price}>Giá: {item.price}</Text>
-                      </View>
-                      <View style={styles.selled}>
-                        <Text>Còn lại: </Text>
-                        <Text>{item.amount}</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              ))}
+              <FlatList
+                contentContainerStyle={styles.bookByCategory}
+                data={user.likes}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item, index}) => (
+                  <ProductCard
+                    key={index.toString()}
+                    book={item}
+                    type={true}
+                    navigation={navigation}
+                  />
+                )}></FlatList>
+
+              {
+                // user.likes.map((item) => (
+                //   <View style={styles.product}>
+                //     <ProductCard navigation={navigation} book={item} />
+                //   </View>
+                // <View style={styles.product}>
+                //   <TouchableOpacity
+                //     style={styles.list_product}
+                //     // onStartShouldSetResponder={() => navigation.navigate('Detail-Product')}
+                //     onPress={() =>
+                //       navigation.navigate('Detail-Product', {
+                //         productId: item.id,
+                //       })
+                //     }>
+                //     <Image
+                //       source={{
+                //         uri: item.book ? item.book.images[0] : item.images[0],
+                //       }}
+                //       style={{width: '90%', height: 130, resizeMode: 'cover'}}
+                //       // onPress={() => productHandler()}
+                //     />
+                //     <View>
+                //       <Text style={styles.name} numberOfLines={1}>
+                //         {item.book ? item.book.name : item.name}
+                //       </Text>
+                //       <View style={styles.content}>
+                //         <Text style={styles.price}>Giá: {item.price}</Text>
+                //       </View>
+                //       <View style={styles.selled}>
+                //         <Text>Còn lại: </Text>
+                //         <Text>{item.amount}</Text>
+                //       </View>
+                //     </View>
+                //   </TouchableOpacity>
+                // </View>
+                // ))
+              }
             </View>
           </ScrollView>
         ) : (
@@ -128,7 +148,14 @@ const styles = StyleSheet.create({
   },
 
   product: {
-    width: (Dimensions.get('window').width - 20) / 2,
+    width: '40%',
+  },
+  bookByCategory: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
+    marginTop: 8,
   },
 });
 

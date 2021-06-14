@@ -6,6 +6,7 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
+import {COLORS} from '../constants';
 import formatMoney from '../utils/format';
 const {width, height} = Dimensions.get('window');
 
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 14,
     fontWeight: '600',
-    color: '#f44f4f',
+    color: COLORS.primary,
     textAlign: 'center',
   },
 });

@@ -151,15 +151,21 @@ const Store = ({navigation}) => {
             </View>
           </View>
         </View>
-        <TouchableOpacity
-          style={{width: '100%'}}
-          onPress={() =>
-            navigation.navigate('UpdateStore', {
-              idStore: info.id,
-            })
-          }>
-          <Text style={styles.btn}>Cập nhật cửa hàng</Text>
-        </TouchableOpacity>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('UpdateStore', {
+                idStore: info.id,
+              })
+            }>
+            <Text style={styles.btn}>Cập nhật cửa hàng</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     );
   });
@@ -271,10 +277,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   btn: {
-    paddingHorizontal: 10,
     padding: 10,
-    marginHorizontal: 85,
-    width: '50%',
+    // width: '50%',
     textAlign: 'center',
     color: '#fff',
     borderRadius: 4,
