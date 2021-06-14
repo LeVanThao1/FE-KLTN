@@ -35,6 +35,7 @@ const Profile = ({navigation, route}) => {
     useEffect(() => {
       queryData(GET_PROFILE_USER, {id: id})
         .then(({data}) => {
+          console.log(data.profileUserOther)
           setUserProfile(data.profileUserOther);
           setLoading(false);
         })
@@ -160,7 +161,7 @@ const Profile = ({navigation, route}) => {
               ) : null}
             </View>
             <View style={{marginTop: 5}}>
-              <PostOfUser posts={userProfile.post} />
+              <PostOfUser posts={userProfile.post.reverse()} />
             </View>
           </ScrollView>
         ) : (

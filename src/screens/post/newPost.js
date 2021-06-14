@@ -198,6 +198,8 @@ const NewPost = ({navigation}) => {
         setErrImg('Vui lòng upload ít nhất 1 ảnh');
         return 'Vui lòng upload ít nhất 1 ảnh';
       }
+      if(imagesUpload.length > 0)
+        setErrImg('');
       if (publisher.value.length < 3) {
         setPublisher({
           ...publisher,
@@ -212,12 +214,15 @@ const NewPost = ({navigation}) => {
         });
         return 'Vui lòng nhập đúng số lần xuất bản';
       }
+      if (year.value.length !== 4 || Number(year.value) <= 0) {
         setYear({
+          ...year,
           error: 'Vui lòng nhập đúng năm xuất bản',
+        });
         return 'Vui lòng nhập đúng năm xuất bản';
       }
 
-      if (price.value <= 0) {
+      if (Number(price.value) <= 0) {
         setPrice({
           ...price,
           error: 'Vui lòng nhập đúng giá sách',
@@ -414,26 +419,7 @@ const NewPost = ({navigation}) => {
               </View>
               <Text style={stylesPost.err}>{errImg}</Text>
 
-              {/* <View>
-                <Text>Tác giả *</Text>
-                <TextInput
-                  style={stylesPost.txtInput}
-                  placeholder="Nhập tên nhà xuất bản"
-                  value={publisher.value}
-                  onFocus={() => {
-                    setAuthor({
-                      ...author,
-                      error: '',
-                    });
-                  }}
-                  onChangeText={(value) => {
-                    setAuthor({
-                      ...author,
-                      value: value,
-                    });
-                  }}
-                />
-              </View> */}
+             
               <View>
                 <Text>Nhà xuất bản * </Text>
                 <TextInput
