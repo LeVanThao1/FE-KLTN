@@ -1,32 +1,31 @@
 import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
+import {Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
-import {Image, Alert} from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {ReactNativeFile} from 'extract-files';
 import {
-  TextInput,
-  StyleSheet,
-  FlatList,
+  Alert,
+  Image,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
-import {Notification} from '../../utils/notifications';
-import Images from '../../assets/images/images';
-import {CREATE_POST} from '../../query/post';
-import {stylesPost} from './stylePost';
 import Toast from 'react-native-toast-message';
 import {COLORS, NOTIFI, SIZES} from '../../constants';
+import {CREATE_POST} from '../../query/post';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
+import {Notification} from '../../utils/notifications';
+import {stylesPost} from './stylePost';
 const NewPost = ({navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, post},
     } = useContext(MobXProviderContext);
-    const {setPosts, posts} = user;
+    const {posts, setPosts} = user;
+    const {general, setGeneral} = post;
     const [name, setName] = useState({
       value: '',
       error: '',
@@ -46,7 +45,7 @@ const NewPost = ({navigation}) => {
     });
 
     const [bookWanna, setBookWanna] = useState({
-      value: [],
+      value: '',
       error: '',
     });
 
@@ -63,7 +62,7 @@ const NewPost = ({navigation}) => {
       error: '',
     });
     const [categori, setCategori] = useState({
-      value: '',
+      value: category.categories[0].id,
       error: '',
     });
     const [numberOfReprint, setNumberOfReprint] = useState({
@@ -120,9 +119,9 @@ const NewPost = ({navigation}) => {
       setImageUpload(imagesUpload.filter((ig, i) => index !== i));
     };
     const onChange = (value) => {
-      console.log(value);
       setCategori({
         value: value,
+        error: '',
       });
     };
 
@@ -130,7 +129,10 @@ const NewPost = ({navigation}) => {
       CREATE_POST,
       {
         onCompleted: async (data) => {
-          setPosts([data.createPost, ...posts]);
+          if (posts) {
+            setPosts([data.createPost, ...posts]);
+          }
+          post.setGeneral([data.createPost, ...general]);
           Toast.show(Notification(NOTIFI.success, 'Tạo bài viết thành công'));
           setName({
             ...name,
@@ -144,6 +146,8 @@ const NewPost = ({navigation}) => {
             ...numberOfReprint,
             value: '0',
           });
+          setImageUpload([]);
+          setImages([]);
           setDescription({
             ...description,
             value: '',
@@ -164,6 +168,7 @@ const NewPost = ({navigation}) => {
             ...price,
             value: '0',
           });
+          navigation.goBack();
         },
         onError: (err) => {
           console.log(err);
@@ -173,6 +178,7 @@ const NewPost = ({navigation}) => {
         },
       },
     );
+    const [errImg, setErrImg] = useState('');
     const validateCreate = () => {
       if (title.value.length < 3) {
         setTitle({
@@ -188,12 +194,48 @@ const NewPost = ({navigation}) => {
         });
         return 'Tên sách phải dài hơn 3 ký tự';
       }
-      if (price.value === 0) {
+      if (imagesUpload.length === 0) {
+        setErrImg('Vui lòng upload ít nhất 1 ảnh');
+        return 'Vui lòng upload ít nhất 1 ảnh';
+      }
+      if(imagesUpload.length > 0)
+        setErrImg('');
+      if (publisher.value.length < 3) {
+        setPublisher({
+          ...publisher,
+          error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+        });
+        return 'Nhà xuất bản phải dài hơn 3 ký tự';
+      }
+      if (numberOfReprint.value <= 0) {
+        setNumberOfReprint({
+          ...numberOfReprint,
+          error: 'Vui lòng nhập đúng số lần xuất bản',
+        });
+        return 'Vui lòng nhập đúng số lần xuất bản';
+      }
+      if (year.value.length !== 4 || Number(year.value) <= 0) {
+        setYear({
+          ...year,
+          error: 'Vui lòng nhập đúng năm xuất bản',
+        });
+        return 'Vui lòng nhập đúng năm xuất bản';
+      }
+
+      if (Number(price.value) <= 0) {
         setPrice({
           ...price,
-          error: 'Vui lòng nhập giá sách',
+          error: 'Vui lòng nhập đúng giá sách',
         });
-        return 'Vui lòng nhập giá sách';
+        return 'Vui lòng nhập đúng giá sách';
+      }
+
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
+        });
+        return 'Mô tả phải dài hơn 10 ký tự';
       }
       return true;
     };
@@ -206,28 +248,33 @@ const NewPost = ({navigation}) => {
     };
     const onCreate = () => {
       if (validateCreate() === true) {
-      let dataPost = {
-        title: title.value,
-        name: name.value,
-        // author: author.value,
-        description: description.value,
-        bookWanna: bookWanna.value,
-        images: imagesUpload,
-        publisher: publisher.value,
-        numberOfReprint: numberOfReprint.value,
-        category: categori.value,
-        year: year.value,
-        price: price.value,
-      };
-      createPost({
-        variables: {
-          dataPost,
-        },
-      });
-    }
-    else {
-      Toast.show(Notification(NOTIFI.error, validateCreate()));
-    }
+        let dataPost = {
+          title: title.value,
+          name: name.value,
+          // author: author.value,
+          description: description.value,
+          bookWanna: [bookWanna.value],
+          images: imagesUpload,
+          // images: [
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          //   'https://picsum.photos/300/200',
+          // ],
+          publisher: publisher.value,
+          numberOfReprint: numberOfReprint.value,
+          category: categori.value,
+          year: year.value,
+          price: price.value,
+        };
+        createPost({
+          variables: {
+            dataPost,
+          },
+        });
+      } else {
+        Toast.show(Notification(NOTIFI.error, validateCreate()));
+      }
     };
 
     return (
@@ -235,6 +282,11 @@ const NewPost = ({navigation}) => {
         <View style={stylesPost.addpost}>
           <View style={stylesPost.content}>
             <View style={stylesPost.text}>
+              <Text
+                style={{fontSize: 12, marginBottom: 20, fontWeight: 'bold'}}>
+                (Nội dung có dấu '*' : bắt buộc)
+              </Text>
+
               <View style={stylesPost.vertical}>
                 <Text>Tiêu đề *</Text>
                 <TextInput
@@ -254,6 +306,7 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{title.error}</Text>
               </View>
               <View>
                 <Text>Tên sách * </Text>
@@ -274,9 +327,10 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{name.error}</Text>
               </View>
               <View style={stylesPost.vertical}>
-                <Text>Danh mục sách</Text>
+                <Text>Danh mục sách *</Text>
                 <Form>
                   <Item picker>
                     <Picker
@@ -287,7 +341,7 @@ const NewPost = ({navigation}) => {
                       placeholder="Chọn danh mục"
                       placeholderStyle={{color: '#bfc6ea'}}
                       placeholderIconColor="#007aff"
-                      selectedValue={categori}
+                      selectedValue={categori.value}
                       onValueChange={onChange}>
                       {category.categories.map((ct, i) => (
                         <Picker.Item label={ct.name} value={ct.id} />
@@ -357,14 +411,17 @@ const NewPost = ({navigation}) => {
                         name="plus"
                         style={{
                           fontSize: 50,
-                          color: '#f44f4f',
+                          color: COLORS.primary,
                         }}></Icon>
                     </TouchableOpacity>
                   )}
                 </ScrollView>
               </View>
+              <Text style={stylesPost.err}>{errImg}</Text>
+
+             
               <View>
-                <Text>Nhà xuất bản </Text>
+                <Text>Nhà xuất bản * </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
@@ -382,13 +439,15 @@ const NewPost = ({navigation}) => {
                     });
                   }}
                 />
+                <Text style={stylesPost.err}>{publisher.error}</Text>
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Số lần xuất bản"
                   value={numberOfReprint.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setNumberOfReprint({
                       ...numberOfReprint,
@@ -403,11 +462,13 @@ const NewPost = ({navigation}) => {
                   }}
                 />
               </View>
+              <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
               <View style={stylesPost.horizontal}>
-                <Text>Năm xuất bản </Text>
+                <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
                   placeholder="Năm xuất bản"
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -423,6 +484,7 @@ const NewPost = ({navigation}) => {
                   value={year.value}
                 />
               </View>
+              <Text style={stylesPost.err}>{year.error}</Text>
               <View style={stylesPost.horizontal}>
                 <Text>Giá sách *</Text>
                 <View
@@ -434,6 +496,7 @@ const NewPost = ({navigation}) => {
                     style={stylesPost.txtVND}
                     placeholder="Giá sách"
                     value={price.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setPrice({
                         ...price,
@@ -458,8 +521,10 @@ const NewPost = ({navigation}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={stylesPost.err}>{price.error}</Text>
+
               <View style={stylesPost.vertical}>
-                <Text>Sách muốn đổi: </Text>
+                <Text>Sách muốn đổi : </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập sách muốn đổi"
@@ -479,7 +544,7 @@ const NewPost = ({navigation}) => {
                 />
               </View>
               <View style={stylesPost.vertical}>
-                <Text style={stylesPost.textContent}>Mô tả</Text>
+                <Text style={stylesPost.textContent}>Mô tả *</Text>
                 <Textarea
                   containerStyle={stylesPost.textareacont}
                   style={stylesPost.textarea}
@@ -503,11 +568,12 @@ const NewPost = ({navigation}) => {
                   value={description.value}
                   placeholder="Nhập mô tả"
                 />
+                <Text style={stylesPost.err}>{description.error}</Text>
               </View>
               <TouchableOpacity
                 style={{
-                  marginTop: 10,
-                  paddingTop: 10,
+                  // marginTop: 10,
+                  // paddingTop: 10,
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -515,7 +581,7 @@ const NewPost = ({navigation}) => {
                 onPress={onAlert}>
                 <Text
                   style={{
-                    marginTop: 10,
+                    // marginTop: 10,
                     alignItems: 'center',
                     borderRadius: 6,
                     width: SIZES.acceptBtn,

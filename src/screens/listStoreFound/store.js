@@ -2,15 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {Text, View} from 'native-base';
 import React, {memo} from 'react';
 import {Dimensions, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import { COLORS } from '../../constants';
+import {COLORS} from '../../constants';
 const {width, height} = Dimensions.get('screen');
 const StoreCart = ({data}) => {
   const navigation = useNavigation();
   const {store, distance} = data;
   return (
     <TouchableOpacity
-      // key={id}
-
       style={styles.storeContainer}
       onPress={() => {
         navigation.navigate('StoreDetail', {

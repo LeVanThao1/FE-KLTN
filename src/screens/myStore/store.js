@@ -1,33 +1,23 @@
-import React, {useState, memo, useContext, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {
+  Collapse,
+  CollapseBody,
+  CollapseHeader,
+} from 'accordion-collapse-react-native';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {ListItem, Separator} from 'native-base';
+import React, {memo, useContext, useState} from 'react';
 import {
   Image,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button} from 'native-base';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
 import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery} from '@apollo/client';
-import {GET_STORE} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
-import {Notification} from '../../utils/notifications';
-import Toast from 'react-native-toast-message';
-import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
 
 const Store = ({navigation}) => {
@@ -40,8 +30,6 @@ const Store = ({navigation}) => {
     const [listInfo, setListInfo] = useState(undefined);
     const [text, setText] = useState('');
 
-    console.log('shopppp', shop);
-
     if (shop.info === null)
       return (
         <View style={styles.createStore}>
@@ -53,31 +41,6 @@ const Store = ({navigation}) => {
           </TouchableOpacity>
         </View>
       );
-    // else {
-    //   const [store, {called, loading, data, error}] = useLazyQuery(GET_STORE, {
-    //     onCompleted: async (data) => {
-    //       console.log(data);
-    //       setListInfo({
-    //         id: data?.store.id,
-    //         name: data?.store.name,
-    //         description: data?.store.description,
-    //         address: data?.store.address,
-    //       });
-    //     },
-    //     onError: (err) => {
-    //       Toast.show(Notification(NOTIFI.error, err.message));
-    //       console.log('get store', err);
-    //     },
-    //   });
-    //   useEffect(() => {
-    //     store({
-    //       variables: {
-    //         id: shop.info.id,
-    //       },
-    //     });
-    //   }, [info]);
-    // }
-    // useEffect(() => {}, [info]);
 
     return (
       <ScrollView>
@@ -125,36 +88,23 @@ const Store = ({navigation}) => {
             </View>
             <View style={styles.des}>
               <Text>Mô tả shop: </Text>
-              <Text
-                // containerStyle={styles.textareacont}
-                style={styles.textarea}
-                // onChangeText={this.onChange}
-                // defaultValue={this.state.text}
-                // maxLength={120}
-                // placeholder={'Description'}
-                // placeholderTextColor={'#c7c7c7'}
-                // underlineColorAndroid={'transparent'}>
-              >
-                {info?.description}
-              </Text>
+              <Text style={styles.textarea}>{info?.description}</Text>
             </View>
           </View>
-          {/* <View style={styles.product}></View> */}
           <View style={styles.product}>
             <View>
               <Collapse>
                 <CollapseHeader>
                   <Separator bordered style={{backgroundColor: COLORS.primary}}>
-                    <Text style={{color: '#fff'}}>+ Quản lý sản phẩm</Text>
-                    {/* <Icon name="keyboard-arrow-down" type="MaterialIcons" /> */}
+                    <Text style={{color: '#fff'}}>+ Quản lý sách</Text>
                   </Separator>
                 </CollapseHeader>
                 <CollapseBody style={{backgroundColor: COLORS.grayLight}}>
                   <ListItem onPress={() => navigation.navigate('CreateBook')}>
-                    <Text>Thêm sản phẩm</Text>
+                    <Text>Thêm sách</Text>
                   </ListItem>
                   <ListItem onPress={() => navigation.navigate('BooksStore')}>
-                    <Text>Quản lý sản phẩm</Text>
+                    <Text>Quản lý sách</Text>
                   </ListItem>
                 </CollapseBody>
               </Collapse>
@@ -178,11 +128,6 @@ const Store = ({navigation}) => {
                     onPress={() => navigation.navigate('OrdersByStore')}>
                     <Text>Quản lý đơn hàng</Text>
                   </ListItem>
-                  {/* <ListItem>
-                  <Text onPress={() => navigation.navigate('ViewAllProduct')}>
-                    Tất cả sản phẩm
-                  </Text>
-                </ListItem> */}
                 </CollapseBody>
               </Collapse>
             </View>

@@ -1,30 +1,22 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
+import {Icon, Spinner} from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
   Image,
-  ScrollView,
   ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {UPDATE_USER_INFO, GET_PROFILE_USER} from '../../query/user';
-import ImagePicker from 'react-native-image-crop-picker';
-import {Icon, Spinner} from 'native-base';
-import {ReactNativeFile} from 'apollo-upload-client';
-import {UPLOAD_SINGLE_FILE} from '../../query/upload';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
-import PostOfUser from '../post/postOfUser';
-import BG from '../../assets/images/bg.jpg';
-import Toast from 'react-native-toast-message';
-import {queryData} from '../../common';
 import ImageView from 'react-native-image-viewing';
+import BG from '../../assets/images/bg.jpg';
+import {queryData} from '../../common';
+import {COLORS} from '../../constants';
+import {GET_PROFILE_USER} from '../../query/user';
+import PostOfUser from '../post/postOfUser';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const Profile = ({navigation, route}) => {
@@ -43,15 +35,12 @@ const Profile = ({navigation, route}) => {
     useEffect(() => {
       queryData(GET_PROFILE_USER, {id: id})
         .then(({data}) => {
+          console.log(data.profileUserOther)
           setUserProfile(data.profileUserOther);
           setLoading(false);
         })
         .catch((err) => console.log(err));
     }, [id]);
-
-    console.log(userProfile);
-
-    useEffect(() => {}, [loading]);
 
     return (
       <View style={styles.container}>
@@ -102,7 +91,8 @@ const Profile = ({navigation, route}) => {
                 <View style={{marginTop: 60}}>
                   <Text style={styles.name}>{userProfile.profile.name}</Text>
                 </View>
-                <TouchableOpacity
+                {info.id !== userProfile.profile.id ? (
+                  <TouchableOpacity
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -120,7 +110,6 @@ const Profile = ({navigation, route}) => {
                       userIdTo: userProfile.profile.id,
                     });
                   }}>
-                  {/* <View style={{paddingVertical: 20, paddingHorizontal: 30}}> */}
                   <Icon
                     name="messenger"
                     type="Fontisto"
@@ -128,7 +117,8 @@ const Profile = ({navigation, route}) => {
                   />
                   <Text style={{padding: 0, margin: 0}}>Nhắn tin</Text>
                   {/* </View> */}
-                </TouchableOpacity>
+                </TouchableOpacity>) : <></>
+                }
               </View>
             </View>
 
@@ -151,7 +141,6 @@ const Profile = ({navigation, route}) => {
                   {userProfile.profile.email}
                 </Text>
               </View>
-              {/* <Hr /> */}
               <View style={styles.row}>
                 <Icon
                   name="map-marker-alt"
@@ -163,9 +152,6 @@ const Profile = ({navigation, route}) => {
                   {userProfile.profile.address}
                 </Text>
               </View>
-              {/* <Hr /> */}
-
-              {/* <Hr /> */}
               {info.id === userProfile.profile.id ? (
                 <TouchableOpacity
                   style={styles.button}
@@ -175,16 +161,7 @@ const Profile = ({navigation, route}) => {
               ) : null}
             </View>
             <View style={{marginTop: 5}}>
-              {/* <View style={styles.infoBg}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 18,
-                    color: COLORS.white,
-                  }}></Text>
-              </View> */}
-              {/* <Hr /> */}
-              <PostOfUser posts={userProfile.post} />
+              <PostOfUser posts={userProfile.post.reverse()} />
             </View>
           </ScrollView>
         ) : (

@@ -1,23 +1,22 @@
-import React, {useContext, useRef, useState} from 'react';
-
-import {Accordion, Icon, Row} from 'native-base';
-import {
-  TextInput,
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {SEARCH_BOOK} from '../query/book';
 import {useLazyQuery} from '@apollo/client';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../utils/notifications';
-import {COLORS, NOTIFI} from '../constants';
 import {useNavigation} from '@react-navigation/native';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon} from 'native-base';
+import React, {useContext, useRef} from 'react';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {COLORS, NOTIFI} from '../constants';
+import {SEARCH_BOOK} from '../query/book';
+import {Notification} from '../utils/notifications';
 
 const HeaderStack = () => {
   return useObserver(() => {

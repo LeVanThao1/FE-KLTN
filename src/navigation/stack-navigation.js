@@ -1,72 +1,55 @@
-import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {StyleSheet} from 'react-native';
-import Home from '../screens/home';
-import About from '../screens/about';
-import DetailProduct from '../screens/detail-product';
-import Contact from '../screens/contact';
-import Payment from '../screens/payment/payment';
-import Login from '../screens/login';
-import Register from '../screens/register';
-import ForgotPassword from '../screens/forgot-password';
-import HeaderStack, {HeaderLogo, HeaderMessage} from '../header';
-import Store from '../screens/myStore/store';
-import SreateStore from '../screens/myStore/store';
-import {NavigationContainer} from '@react-navigation/native';
-import ViewAll from '../screens/myStore/viewAll';
-import Statistics from '../screens/myStore/finance/statistics';
-import Revenue from '../screens/myStore/finance/revenue';
-import CreateBook from '../screens/myStore/book/createBook';
-import Address from '../screens/payment/address';
-import BottomTabNavigator from './tab-navigation';
-import VerifyCode from '../screens/verifyCode';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useLazyQuery, useQuery} from '@apollo/client';
-import {GET_USER, REFRESH_TOKEN} from '../query/user';
-import {Spinner, View} from 'native-base';
-import Post from '../screens/post';
-import NewPost from '../screens/post/newPost';
-import AccountManager from '../screens/account-manager';
-import Profile from '../screens/profile';
-import Cart from '../screens/cart';
-import Feed from '../screens/feed';
-import ChangePassword from '../screens/change-password';
-import ManageOrder from '../screens/manage-order';
-import OrderDetail from '../screens/order-detail';
+import React from 'react';
+import {COLORS} from '../constants/themes';
+import HeaderStack, {HeaderLogo} from '../header';
 import {useNotification} from '../hooks';
-import BookDetail from '../screens/myStore/bookDetail';
-import UpdateBook from '../screens/myStore/book/updateBook';
-import PostDetail from '../screens/post/postDetail';
-import PostOne from '../screens/post/post';
-import ViewSearch from '../screens/viewSearch';
-import WishList from '../screens/wishlist';
-import ResetPassword from '../screens/reset-password';
-import VerifyForgot from '../screens/verifyFogot';
-import Notification from '../screens/notification';
+import AccountManager from '../screens/account-manager';
+import Cart from '../screens/cart';
+import ChangePassword from '../screens/change-password';
+import Chatting from '../screens/chatting/chats';
+import ImagesView from '../screens/chatting/imagesView';
+import Room from '../screens/chatting/room';
+import Contact from '../screens/contact';
+import DetailProduct from '../screens/detail-product';
+import Feed from '../screens/feed';
+import ForgotPassword from '../screens/forgot-password';
+import Home from '../screens/home';
+import ListStoreFound from '../screens/listStoreFound';
+import Login from '../screens/login';
+import ManageOrder from '../screens/manage-order';
 import BooksStore from '../screens/myStore/book/booksStore';
-import UpdatePost from '../screens/post/updatePost';
-import Products from '../screens/products';
+import CreateBook from '../screens/myStore/book/createBook';
+import UpdateBook from '../screens/myStore/book/updateBook';
+import BookDetail from '../screens/myStore/bookDetail';
 import CreateStore from '../screens/myStore/createStore';
-import UserInfo from '../screens/profile/infoUser';
+import Revenue from '../screens/myStore/finance/revenue';
+import Statistics from '../screens/myStore/finance/statistics';
 import OrdersByStore from '../screens/myStore/order';
 import OrderDetailStore from '../screens/myStore/order/order_detail';
-import UpdateStore from '../screens/myStore/updateStore';
-import ListStoreFound from '../screens/listStoreFound';
+import Store from '../screens/myStore/store';
 import StoreDetail from '../screens/myStore/storeDetail';
-import Chatting from '../screens/chatting/chats';
-import * as Notifi from '../utils/notifications';
-import PostFb from '../screens/post/posts';
+import UpdateStore from '../screens/myStore/updateStore';
+import ViewAll from '../screens/myStore/viewAll';
+import Notification from '../screens/notification';
+import OrderDetail from '../screens/order-detail';
+import Address from '../screens/payment/address';
+import Payment from '../screens/payment/payment';
+import Post from '../screens/post';
+import NewPost from '../screens/post/newPost';
+import PostOne from '../screens/post/post';
+import PostDetail from '../screens/post/postDetail';
 import PostOfFeed from '../screens/post/postOfFeed';
-import Toast from 'react-native-toast-message';
-import {NOTIFI} from '../constants';
-import {COLORS} from '../constants/themes';
-import Room from '../screens/chatting/room';
-import ImagesView from '../screens/chatting/imagesView';
-import App from '../screens/app';
-import {createCompatNavigatorFactory} from '@react-navigation/compat';
+import UpdatePost from '../screens/post/updatePost';
+import Products from '../screens/products';
+import Profile from '../screens/profile';
+import UserInfo from '../screens/profile/infoUser';
 import UpdateProfile from '../screens/profile/updateProfile';
+import Register from '../screens/register';
+import ResetPassword from '../screens/reset-password';
+import VerifyCode from '../screens/verifyCode';
+import VerifyForgot from '../screens/verifyFogot';
+import ViewSearch from '../screens/viewSearch';
+import WishList from '../screens/wishlist';
 const Stack = createStackNavigator();
 
 const HomeStack = ({navigation, initialRoute}) => {
@@ -268,7 +251,7 @@ const routes = [
 
   {
     name: 'UpdateProfile',
-    title: 'Cập nhật thông tin cá nhân',
+    title: 'Cập nhật thông tin',
     header: false,
     show: true,
     component: UpdateProfile,
@@ -415,75 +398,6 @@ const routes = [
   },
 ];
 const AuthStack = () => {
-  // return useObserver(() => {
-  //   const {
-  //     stores: {auth, user, shop, notification},
-  //   } = useContext(MobXProviderContext);
-  //   const [loading, setLoading] = useState(true);
-  //   const [refreshToken, {dt, err}] = useLazyQuery(REFRESH_TOKEN, {
-  //     onCompleted: async (data) => {
-  //       shop.setInfo(data.refreshToken.user.store);
-  //       user.setCart(data.refreshToken.user.cart);
-  //       notification.setAllNotification(data.refreshToken.user.notifications);
-  //       user.setLikes(data.refreshToken.user.likes);
-  //       delete data.refreshToken.user.likes;
-  //       delete data.refreshToken.user.notifications;
-  //       delete data.refreshToken.user.store;
-  //       delete data.refreshToken.user.cart;
-  //       user.setInfo(data.refreshToken.user);
-  //       auth.setLogin(data.refreshToken.token, data.refreshToken.refreshToken);
-  //       await AsyncStorage.setItem('token', data.refreshToken.token);
-  //       await AsyncStorage.setItem(
-  //         'refreshToken',
-  //         data.refreshToken.refreshToken,
-  //       );
-  //     },
-  //     onError: (err) => {
-  //       setLoading(false);
-  //       // Toast.show(Notifi.Notification(NOTIFI.error, err.message));
-  //     },
-  //   });
-  //   const [getProfile, {called, load, data, error}] = useLazyQuery(GET_USER, {
-  //     onCompleted: async (data) => {
-  //       shop.setInfo(data.profile.store);
-  //       user.setCart(data.profile.cart);
-  //       notification.setAllNotification(data.profile.notifications);
-  //       user.setLikes(data.profile.likes);
-  //       delete data.profile.likes;
-  //       delete data.profile.notifications;
-  //       delete data.profile.store;
-  //       delete data.profile.cart;
-  //       user.setInfo(data.profile);
-  //       auth.setIsAuth(true);
-  //       setLoading(false);
-  //     },
-  //     onError: (err) => {
-  //       refreshToken();
-  //       // AsyncStorage.clear().then(() => {
-  //       //   auth.setLogout();
-  //       //   setLoading(false);
-  //       // });
-  //     },
-  //   });
-
-  //   useEffect(() => {
-  //     AsyncStorage.getItem('token').then((data) => {
-  //       AsyncStorage.getItem('refreshToken').then((dt) => {
-  //         if (data && dt) {
-  //           // auth.setLogin(data,dt)
-  //           auth.setToken(data);
-  //           auth.setRefreshToken(dt);
-  //         } else {
-  //           setLoading(false);
-  //         }
-  //       });
-  //     });
-  //   }, []);
-  //   useEffect(() => {
-  //     if (auth) {
-  //       getProfile();
-  //     }
-  //   }, [auth]);
   return (
     <>
       <Stack.Navigator
@@ -499,66 +413,6 @@ const AuthStack = () => {
       </Stack.Navigator>
     </>
   );
-  // });
 };
 
-// const AppStack = () => {
-//   // return useObserver(() => {
-//   //   const {
-//   //     stores: {auth},
-//   //   } = useContext(MobXProviderContext);
-//   return (
-//     <Stack.Navigator
-//       initialRouteName="Loading"
-//       screenOptions={{
-//         headerShown: false,
-//       }}>
-//       <Stack.Screen name="Loading" component={Loading} />
-//       <Stack.Screen name="App" component={BottomTabNavigator} />
-//       <Stack.Screen name="Auth" component={AuthStack} />
-//     </Stack.Navigator>
-//   );
-//   // });
-// };
-
-// () => {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//         // headerLeft: null,
-//         headerLeft: false,
-//       }}
-//       initialRouteName="Loading">
-//       <Stack.Screen name="Loading" component={Loading} />
-//       <Stack.Screen
-//         name="App"
-//         component={BottomTabNavigator}
-//         options={{headerLeft: null}}
-//       />
-//       <Stack.Screen
-//         name="Auth"
-//         component={AuthStack}
-//         options={{headerLeft: null}}
-//       />
-//     </Stack.Navigator>
-//   );
-// };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-export {
-  HomeStack,
-  // AppStack,
-  // ContactStack,
-  AuthStack,
-  // PaymentStack,
-  // StoreStack,
-  // PostStack,
-  // ProductStack,
-};
+export {HomeStack, AuthStack};

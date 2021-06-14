@@ -7,6 +7,7 @@ import {Notification} from './notification';
 import {Order} from './order';
 import {Comment} from './comment';
 import {Group} from './group';
+import {Post} from './post';
 export const stores = {
   auth: new Auth(false, '', ''),
   user: new User(undefined, undefined, undefined, [], [], undefined),
@@ -17,6 +18,7 @@ export const stores = {
   order: new Order(undefined),
   comment: new Comment(undefined, undefined),
   group: new Group(undefined, undefined, undefined, undefined),
+  post: new Post(undefined),
 };
 
 export const storeInstance = stores;

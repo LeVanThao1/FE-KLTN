@@ -1,7 +1,8 @@
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Icon, Spinner} from 'native-base';
-import React, {useState, useEffect, useContext} from 'react';
+import moment from 'moment';
+import {Spinner} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -16,12 +17,8 @@ import Toast from 'react-native-toast-message';
 import {queryData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {GET_GROUP} from '../../query/group';
+import {SEEN_MESSAGE} from '../../query/message';
 import {Notification} from '../../utils/notifications';
-import NewMessageButton from './components/NewMessageButton';
-import moment from 'moment';
-import {RECEIVE_MESSAGE, SEEN_MESSAGE, SEND_MESSAGE} from '../../query/message';
-import {useSubscription} from '@apollo/client';
-import RNReactNativeSoundToast from 'react-native-sound-toast';
 const {width, height} = Dimensions.get('screen');
 const Chats = ({navigation}) => {
   return useObserver(() => {
@@ -45,42 +42,6 @@ const Chats = ({navigation}) => {
       page: 1,
     });
     const [stop, setStop] = useState(false);
-    // const {data} = useSubscription(RECEIVE_MESSAGE, {
-    //   variables: {
-    //     userId: user.info.id,
-    //   },
-    // });
-    // useEffect(() => {
-    //   if (data) {
-    //     if (groupCurrent) {
-    //       setMessages(data.receiveMessage);
-    //       queryData(SEEN_MESSAGE, {id: data.receiveMessage.id})
-    //         .then((dt) => {
-    //           console.log(dt.data);
-    //           setSeenMessage(dt.data.seenMessage, groupCurrent);
-    //         })
-    //         .catch((err) => {
-    //           console.log(err);
-    //         });
-    //     } else {
-    //       if (
-    //         groups.find((it) => it.id + '' === data.receiveMessage.to.id + '')
-    //       ) {
-    //         const tamp = [...groups].filter(
-    //           (it) => it.id + '' !== data.receiveMessage.to.id + '',
-    //         );
-    //         setGroups([data.receiveMessage.to, ...tamp]);
-    //       } else {
-    //         setGroups([data.receiveMessage.to, ...groups]);
-    //       }
-    //       RNReactNativeSoundToast.playSound('message', 'wav');
-    //     }
-    //   }
-
-    //   return () => {
-    //     // cleanup;
-    //   };
-    // }, [data]);
     useEffect(() => {
       setIsActive(true);
       setLoading(true);
@@ -130,9 +91,11 @@ const Chats = ({navigation}) => {
     useEffect(() => {
       if (refresh) {
         setOption({limit: 20, page: 1});
+        setStop(false);
         queryData(GET_GROUP)
           .then(({data}) => {
             setGroups(data.groups);
+            if (data.groups.length < 20) setStop(true);
             setRefresh(false);
           })
           .catch((err) => {
@@ -149,14 +112,9 @@ const Chats = ({navigation}) => {
       )[0];
 
       const formatTime = (date) => {
-        if (
-          moment().format('L') ===
-          moment(date).format('L')
-        ) {
+        if (moment().format('L') === moment(date).format('L')) {
           return moment(date).format('hh:mm a');
-        } else if (
-          moment().year() !== moment(date).year()
-        ) {
+        } else if (moment().year() !== moment(date).year()) {
           return moment(date).format('DD/MM/YY');
         } else {
           return moment(date).format('DD/MM');
@@ -173,7 +131,6 @@ const Chats = ({navigation}) => {
             if (!item.lastMassage.seen) {
               queryData(SEEN_MESSAGE, {id: item.lastMassage.id})
                 .then(({data}) => {
-                  console.log(data);
                   setSeenMessage(data.seenMessage, item.id);
                 })
                 .catch((err) => {
@@ -284,7 +241,6 @@ const Chats = ({navigation}) => {
                 Chưa có cuộc trò chuyện
               </Text>
             )}
-            {/* <NewMessageButton /> */}
           </>
         ) : (
           <Spinner color={COLORS.primary} size="small" />
@@ -315,7 +271,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     width: width - 24 - 65,
     flexDirection: 'column',
-    // alignItems: 'center',
     justifyContent: 'space-around',
   },
   name: {

@@ -1,23 +1,24 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Alert,
-} from 'react-native';
-import {Icon} from 'native-base';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
 import {useMutation} from '@apollo/client';
-import {UPDATE_CART} from '../../query/user';
+import {useNavigation} from '@react-navigation/native';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon} from 'native-base';
+import React, {useContext, useEffect, useRef} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
+import {UPDATE_CART} from '../../query/user';
 import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 const imageURL =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 export default function CartDetail({data}) {
@@ -26,26 +27,11 @@ export default function CartDetail({data}) {
       stores: {user},
     } = useContext(MobXProviderContext);
     const {cart, setCart} = user;
+    const navigation = useNavigation();
     const typeRef = useRef(null);
     const [amount, setAmount] = React.useState(0);
     const [updateCart, {loading}] = useMutation(UPDATE_CART, {
-      onCompleted: async (dt) => {
-        // if(typeRef.current) {
-        //   const datat = [...cart].map((ct) => {
-        //     let tamp = {...ct}
-        //     if(ct.book.id === data.book.id) {
-        //       tamp.amount = typeRef.current === "i" ? ct.amount + 1 :  ct.amount - 1
-        //     }
-        //     return tamp;
-        //   })
-        //   setCart(datat)
-        // }
-        // else {
-        //   const datat = [...cart].filter(ct => ct.book.id !== data.book.id)
-        //   setCart(datat)
-        //   setAmount(0)
-        // }
-      },
+      onCompleted: async (dt) => {},
       onError: (err) => {
         console.log(err);
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -59,8 +45,9 @@ export default function CartDetail({data}) {
         let tamp = {
           book: ct.book.id,
           price: ct.price,
+          amount: ct.amount,
         };
-        if (ct.book.id === data.book.id) {
+        if (ct.book.id + '' === data.book.id + '') {
           tamp.amount = type ? ct.amount + 1 : ct.amount - 1;
         }
         return tamp;
@@ -68,6 +55,7 @@ export default function CartDetail({data}) {
       if (type) {
         if (amount < data.book.amount) {
           typeRef.current = 'i';
+          // console.log(dataCart);
           updateCart({
             variables: {
               dataCart,
@@ -76,7 +64,7 @@ export default function CartDetail({data}) {
           setAmount((cur) => cur + 1);
           const datat = [...cart].map((ct) => {
             let tamp = {...ct};
-            if (ct.book.id === data.book.id) {
+            if (ct.book.id + '' === data.book.id + '') {
               tamp.amount =
                 typeRef.current === 'i' ? ct.amount + 1 : ct.amount - 1;
             }
@@ -87,6 +75,7 @@ export default function CartDetail({data}) {
       } else {
         if (amount > 1) {
           typeRef.current = 'd';
+          console.log('adadadsads --- >', dataCart);
           updateCart({
             variables: {
               dataCart,
@@ -95,7 +84,7 @@ export default function CartDetail({data}) {
           setAmount((cur) => cur - 1);
           const datat = [...cart].map((ct) => {
             let tamp = {...ct};
-            if (ct.book.id === data.book.id) {
+            if (ct.book.id + '' === data.book.id + '') {
               tamp.amount =
                 typeRef.current === 'i' ? ct.amount + 1 : ct.amount - 1;
             }
@@ -105,7 +94,7 @@ export default function CartDetail({data}) {
         } else {
           typeRef.current = false;
           const cartStore = [...cart].filter(
-            (ct) => ct.book.id !== data.book.id,
+            (ct) => ct.book.id + '' !== data.book.id + '',
           );
           const dataCart = [...cartStore].map((ct) => {
             return {
@@ -114,12 +103,15 @@ export default function CartDetail({data}) {
               amount: ct.amount,
             };
           });
+          console.log(dataCart);
           updateCart({
             variables: {
               dataCart,
             },
           });
-          const datat = [...cart].filter((ct) => ct.book.id !== data.book.id);
+          const datat = [...cart].filter(
+            (ct) => ct.book.id + '' !== data.book.id + '',
+          );
           setCart([...datat]);
         }
       }
@@ -129,7 +121,10 @@ export default function CartDetail({data}) {
       <>
         {cart.length > 0 && (
           <View style={styles.container}>
-            <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Detail-Product', {productId: data.book.id})
+              }>
               <Image
                 style={styles.image}
                 source={{
@@ -138,23 +133,26 @@ export default function CartDetail({data}) {
                     : data.book.images[0],
                 }}
               />
-            </View>
-            <View
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Detail-Product', {productId: data.book.id})
+              }
               style={{
                 flex: 1,
                 justifyContent: 'space-between',
                 paddingHorizontal: 16,
                 height: '100%',
               }}>
-              <TouchableOpacity>
-                <Text style={{fontSize: 16, color: '#000000'}}>
-                  {data.book.name ? data.book.name : data.book.book.name}
-                </Text>
-              </TouchableOpacity>
+              {/* <TouchableOpacity> */}
+              <Text style={{fontSize: 16, color: '#000000'}}>
+                {data.book.name ? data.book.name : data.book.book.name}
+              </Text>
+              {/* </TouchableOpacity> */}
               <Text style={{fontSize: 14, color: COLORS.primary}}>
                 {formatMoney(data.book.price)} VNĐ
               </Text>
-            </View>
+            </TouchableOpacity>
             <View
               style={{
                 width: '20%',
@@ -164,7 +162,6 @@ export default function CartDetail({data}) {
               }}>
               <View
                 style={{
-                  // height: '50%',
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
@@ -211,7 +208,7 @@ export default function CartDetail({data}) {
                             },
                           });
                           const datat = [...cart].filter(
-                            (ct) => ct.book.id !== data.book.id,
+                            (ct) => ct.book.id + '' !== data.book.id + '',
                           );
                           setCart([...datat]);
                         },

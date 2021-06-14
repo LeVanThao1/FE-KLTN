@@ -1,22 +1,20 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import React, {useContext, useState, useEffect} from 'react';
 import {Icon, Spinner} from 'native-base';
-
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
-  ScrollView,
-  Image,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {ORDERS_BY_STORE} from '../../../query/order';
 import {queryData} from '../../../common';
 import {COLORS} from '../../../constants/themes';
+import {ORDERS_BY_STORE} from '../../../query/order';
 import formatMoney from '../../../utils/format';
+
 const OrdersByStore = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -39,18 +37,14 @@ const OrdersByStore = ({navigation}) => {
         .catch((err) => console.log(err));
     }, [refreshing]);
 
-    useEffect(() => {}, [infoOrder]);
-
-
-    useEffect(() => {}, [selectedStatus]);
-
-    const renderSubOrders = () => {
+    const RenderSubOrders = ({selectedStatus}) => {
       return (
         <View>
           {!loading ? (
-            infoOrder
-              ?.filter((so) => so.status === selectedStatus)
-              .map((so) => <SubOrder {...so} order={so} key={so.id} />)
+            infoOrder.length > 0
+              ? infoOrder.filter((so) => so.status === selectedStatus)
+              .map((so) => <SubOrder {...so} order={so} key={so.id} /> ) : 
+              ((<Text style={{textAlign: 'center', color: COLORS.primary,fontWeight: 'bold', paddingTop: 20}}>Không có dữ liệu</Text>))
           ) : (
             <Spinner color={COLORS.primary} />
           )}
@@ -131,17 +125,7 @@ const OrdersByStore = ({navigation}) => {
                   Phí vận chuyển: {formatMoney(order.ship || 0)} VNĐ
                 </Text>
               </View>
-              <View
-                style={
-                  {
-                    // flexDirection: 'row',
-                    // justifyContent: 'space-between',
-                    // alignItems: 'center',
-                  }
-                }>
-                {/* <Text style={{fontSize: 14, color: '#333333'}}>
-                  Ngày đặt hàng {order.createdAt.slice(0, 10)}
-                </Text> */}
+              <View>
                 <Text
                   style={{
                     fontSize: 16,
@@ -163,16 +147,7 @@ const OrdersByStore = ({navigation}) => {
     }
 
     return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <View style={styles.searchGroup}>
-            <Icon name="search" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Nhập mã đơn hàng"
-            />
-          </View>
-        </View>
+      <View style={styles.container}>       
         <View style={{height: 46, backgroundColor: '#ffffff'}}>
           <ScrollView horizontal>
             <Tab name="Đang chờ" status="WAITING" />
@@ -183,7 +158,9 @@ const OrdersByStore = ({navigation}) => {
           </ScrollView>
         </View>
         <View style={styles.orderContainer}>
-          <ScrollView>{renderSubOrders()}</ScrollView>
+          <ScrollView>
+            {<RenderSubOrders selectedStatus={selectedStatus} />}
+          </ScrollView>
         </View>
       </View>
     );

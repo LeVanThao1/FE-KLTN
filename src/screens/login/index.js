@@ -1,32 +1,25 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useLazyQuery} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Button, Spinner} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 import React, {useContext, useState} from 'react';
-import {Icon} from 'native-base';
-import {COLORS} from '../../constants/themes';
 import {
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {LOGIN, REGISTER} from '../../query/user';
-import {
-  emailValidator,
-  passwordValidator,
-  phoneNumberValidator,
-} from '../../utils/validations';
-import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+import {LOGIN} from '../../query/user';
 import {Notification} from '../../utils/notifications';
-import {StackActions} from '@react-navigation/compat';
-import {useNavigation} from '@react-navigation/native';
-
-const Login = ({navigation}) => {
-  // const navigation = useNavigation();
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import {emailValidator, phoneNumberValidator} from '../../utils/validations';
+const Login = ({}) => {
+  const navigation = useNavigation();
   const [userID, setUserID] = React.useState({
     value: '',
     error: '',
@@ -44,27 +37,33 @@ const Login = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [loading, setLoading] = useState(false);
     const [login, {called, data, error}] = useLazyQuery(LOGIN, {
+      fetchPolicy: 'no-cache',
       onCompleted: async (data) => {
+        console.log(data.login.user.store)
         const {token, refreshToken} = data?.login;
         shop.setInfo(data.login.user.store);
         user.setCart(data.login.user.cart);
         user.setLikes(data.login.user.likes);
         notification.setAllNotification(data.login.user.notifications);
         const tamp = {...data};
-        // delete tamp.login.user.notifications;
-        // delete tamp.login.user.store;
-        // delete tamp.login.user.cart;
-        // delete tamp.login.user.likes;
         user.setInfo(data?.login.user);
         await AsyncStorage.setItem('token', token);
         await AsyncStorage.setItem('refreshToken', refreshToken);
         auth.setLogin(token, refreshToken);
         setLoading(false);
-        navigation.navigate({routeName: 'App'});
+        // navigation.navigate({routeName: 'App'});
+        navigation.reset({routeName: 'App'});
       },
       onError: (err) => {
         setLoading(false);
-        Toast.show(Notification(NOTIFI.error, err.message));
+        let message = 'Đăng nhập không thành công';
+        if (err.message === 'User not found') {
+          message = 'Tài khoản không tồn tại';
+        }
+        if (err.message === 'Password is incorrect.') {
+          message = 'Mật khẩu không đúng';
+        }
+        Toast.show(Notification(NOTIFI.error, message));
       },
     });
     const validateUserId = () => {
@@ -99,14 +98,6 @@ const Login = ({navigation}) => {
         setPassword((cur) => ({...cur, error: 'Enter password'}));
         return false;
       }
-      // if (!passwordValidator(password.value) && password.value) {
-      //   setPassword((cur) => ({
-      //     ...cur,
-      //     error:
-      //       'The password must contain at least 1 digit, 1 uppercase character, 1 lowercase character and at least 8 characters',
-      //   }));
-      //   return false;
-      // }
       return true;
     };
     const onPress = () => {
@@ -214,7 +205,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    // alignItems: 'center',
   },
   title: {
     fontSize: 32,
@@ -273,3 +263,108 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     paddingHorizontal: 12,
+//     paddingVertical: 4,
+//     marginVertical: 6,
+//     borderRadius: 5,
+//   },
+//   postHeader: {
+//     height: 50,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//     marginTop: 6,
+//     paddingVertical: 0,
+//     paddingHorizontal: 11,
+//   },
+//   row: {
+//     alignItems: 'center',
+//     flexDirection: 'row',
+//   },
+//   UserName: {
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     color: '#222121',
+//   },
+//   PostTime: {
+//     fontSize: 12,
+//     color: '#747476',
+//   },
+//   PostTitle: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#000000',
+//     paddingHorizontal: 11,
+//     paddingVertical: 0,
+//   },
+//   PostDescription: {
+//     fontSize: 14,
+//     color: '#222121',
+//     paddingHorizontal: 11,
+//     paddingVertical: 0,
+//   },
+//   PhotoGroup: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     flexWrap: 'wrap',
+//   },
+//   PhotoContainer: {
+//     width: '50%',
+//     padding: 10,
+//   },
+//   PostPhoto: {
+//     width: '100%',
+//     height: 210
+//   },
+//   PostFooter: {
+//     padding: 10,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//   },
+//   TextCount: {
+//     fontSize: 11,
+//     color: '#424040'
+//   },
+//   Button: {
+//     alignItems: 'center',
+//     flexDirection: 'row',
+//   },
+//   txt: {
+//     fontSize: 12,
+//     color: '#424040'
+//   },
+//   BreakLine: {
+//     width: '100%',
+//     height: 0.5,
+//     backgroundColor: '#000',
+//   },
+//   OverlayGroup: {
+//     width: '100%',
+//     position: 'relative',
+//   },
+//   Overlay: {
+//     position: 'absolute',
+//     width: '100%',
+//     height: '100%',
+//     top: 0,
+//     left: 0,
+//     alignItems: 'center',
+//     justifyContent: 'space-between',
+//     // backgroundColor: 
+//   },
+//   User: {
+//     width: 40,
+//     height: 40,
+//     borderRadius: 20,
+//     borderColor: '#1777f2',
+//     borderWidth: 3
+//     // borderWidth: ${(props) => (props.story ? '3px' : 0)};
+//   }
+// });

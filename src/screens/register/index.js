@@ -1,25 +1,24 @@
 import {useMutation} from '@apollo/client';
+import {Icon} from 'native-base';
 import React, {useState} from 'react';
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-import {REGISTER} from '../../query/user';
+import Toast from 'react-native-toast-message';
+import {NOTIFI} from '../../constants';
 import {COLORS} from '../../constants/themes';
+import {REGISTER} from '../../query/user';
+import {Notification} from '../../utils/notifications';
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
 import {
   emailValidator,
-  nameValidator,
   passwordValidator,
   phoneNumberValidator,
 } from '../../utils/validations';
-import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
-import {NOTIFI} from '../../constants';
-import {Notification} from '../../utils/notifications';
-import Toast from 'react-native-toast-message'
 
 export default function Register({navigation}) {
   const [register, {called, loading, data, error}] = useMutation(REGISTER, {

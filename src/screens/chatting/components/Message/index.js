@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import moment from 'moment';
-import styles from './styles';
-import {COLORS} from '../../../../constants';
+import React, {useState} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import {COLORS} from '../../../../constants';
 import ImageFooter from '../ImageFooter';
+import styles from './styles';
 const ChatMessage = (props) => {
   const {message, roomId, userId} = props;
 
@@ -22,7 +22,6 @@ const ChatMessage = (props) => {
       return moment(date).format('hh:mm a DD/MM');
     }
   };
-  console.log(message.from?.store?.avatar);
   return (
     <View
       style={{

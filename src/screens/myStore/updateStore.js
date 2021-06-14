@@ -1,50 +1,37 @@
-import React, {useState, memo, useContext, useEffect} from 'react';
+import {useMutation} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
+import {ReactNativeFile} from 'apollo-upload-client';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon, Picker, Spinner} from 'native-base';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
-  ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
-  Alert,
+  View,
 } from 'react-native';
-import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Spinner, Button} from 'native-base';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {UPDATE_STORE} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
-import {Picker} from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS} from '../../constants/themes';
-import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
 import ImagePicker from 'react-native-image-crop-picker';
-import {ReactNativeFile} from 'apollo-upload-client';
-
-import sub, {
-  getProvinces,
+import Textarea from 'react-native-textarea';
+import Toast from 'react-native-toast-message';
+import {
   getDistricts,
-  getWards,
   getDistrictsByProvinceCode,
+  getProvinces,
+  getWards,
   getWardsByDistrictCode,
 } from 'sub-vn';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
+import {COLORS} from '../../constants/themes';
+import {UPDATE_STORE} from '../../query/store';
 import {UPLOAD_SINGLE_FILE} from '../../query/upload';
-
+import {UPDATE_AVATAR} from '../../query/user';
+import {Notification} from '../../utils/notifications';
+import {mutateData} from '../../common';
 const UpdateStore = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -53,7 +40,7 @@ const UpdateStore = ({navigation}) => {
     const {info, setInfo} = shop;
     const navigation = useNavigation();
     const add = info.address.split(',');
-
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState({
       value: info ? info.name : '',
       error: '',
@@ -109,36 +96,33 @@ const UpdateStore = ({navigation}) => {
       value: info && add.length == 4 ? add[add.length - 4].trim() : '',
       error: '',
     });
-    useEffect(() => {}, [provinces]);
 
-    const [updateStore, {called, loading, data, error}] = useMutation(
-      UPDATE_STORE,
-      {
-        onCompleted: async (data) => {
-          setInfo({
-            ...info,
-            name: name.value,
-            description: description.value,
-            address: `${address.value}, ${ward.value.split('-')[1]}, ${
-              districts.value.split('-')[1]
-            }, ${provinces.value.split('-')[1]}`,
-          });
-          Toast.show(
-            Notification(NOTIFI.error, 'Cập nhật cửa hàng thành công'),
-          );
-        },
-        onError: (err) => {
-          Toast.show(Notification(NOTIFI.error, err.message));
-          console.log('error update store', err);
-        },
+    const [updateStore, {called, data, error}] = useMutation(UPDATE_STORE, {
+      onCompleted: async (data) => {
+        setInfo({
+          ...info,
+          name: name.value,
+          description: description.value,
+          address: `${address.value}, ${ward.value.split('-')[1]}, ${
+            districts.value.split('-')[1]
+          }, ${provinces.value.split('-')[1]}`,
+        });
+        Toast.show(
+          Notification(NOTIFI.success, 'Cập nhật cửa hàng thành công'),
+        );
+        navigation.goBack();
       },
-    );
+      onError: (err) => {
+        Toast.show(Notification(NOTIFI.error, err.message));
+        console.log('error update store', err);
+      },
+    });
     const validateSubmit = () => {
       let count = 0;
       if (!name.value) {
         setName({
           ...name,
-          error: 'Vui lòng nhập họ tên',
+          error: 'Vui lòng nhập tên shop',
         });
         count++;
       }
@@ -166,7 +150,14 @@ const UpdateStore = ({navigation}) => {
       if (!address.value) {
         setAddress({
           ...address,
-          error: 'Vui lòng nhập địa chỉ cụ thể',
+          error: 'Vui lòng nhập địa chỉ',
+        });
+        count++;
+      }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
         });
         count++;
       }
@@ -191,8 +182,10 @@ const UpdateStore = ({navigation}) => {
     });
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
 
+    console.log(shop.info.id)
+
     const onPress = () => {
-      if (validateSubmit === true) {
+      if (validateSubmit() === true) {
         let dataStore = {
           avatar: avatarUpload,
           // // background: 'https://picsum.photos/id/237/200/300',
@@ -209,17 +202,10 @@ const UpdateStore = ({navigation}) => {
             id: shop.info.id,
           },
         });
-      }
-      else {
-        Toast.show({
-          text: 'Vui lòng nhập đủ thông tin',
-          type: 'error',
-          position: 'top',
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 30,
-          bottomOffset: 40,
-        });
+      } else {
+        Toast.show(
+          Notification(NOTIFI.error, 'Vui lòng nhập đầy đủ thông tin.'),
+        );
       }
       // }
     };
@@ -434,7 +420,6 @@ const UpdateStore = ({navigation}) => {
                 selectedValue={ward.value}
                 placeholder="Chọn xã / thôn"
                 onValueChange={(value) => {
-                  console.log('ward change', value);
                   setWard({value: value, error: ''});
                 }}>
                 {districts.value &&
@@ -481,6 +466,8 @@ const UpdateStore = ({navigation}) => {
                 });
               }}
             />
+            <Text style={styles.err}>{description.error}</Text>
+
           </View>
           <TouchableOpacity style={styles.btnCreate} onPress={onAlert}>
             <Text style={styles.txtCreate}>Cập nhật cửa hàng</Text>

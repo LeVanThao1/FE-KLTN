@@ -56,6 +56,7 @@ export const GET_COMMENT_POST = gql`
       author {
         id
         avatar
+        name
       }
       post {
         id
@@ -121,6 +122,11 @@ export const CREATE_COMMENT_BOOK = gql`
         id
         avatar
         name
+        store {
+          id
+          name
+          avatar
+        }
       }
       type
       createdAt
@@ -150,6 +156,7 @@ export const CREATE_COMMENT_POST = gql`
       author {
         id
         name
+        avatar
       }
       type
       reply {

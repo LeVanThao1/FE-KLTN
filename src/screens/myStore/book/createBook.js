@@ -1,37 +1,22 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Icon, Text, View} from 'native-base';
+import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useRef, useState} from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ToastAndroid,
-  Dimensions,
-  Alert,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import ImageView from 'react-native-image-viewing';
+import {Alert, Image, TextInput, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import Textarea from 'react-native-textarea';
-import {Form, Item, Picker, Button} from 'native-base';
-import {CREATE_BOOK, GET_RECOMMENT_BY_NAME} from '../../../query/book';
+import SpeechToText from 'react-native-google-speech-to-text';
 // import * as ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
-import {UPLOAD_MULTI_FILE} from '../../../query/upload';
-import {ReactNativeFile} from 'extract-files';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import Modal from 'react-native-modal';
-import {queryData} from '../../../common';
-import Menu, {MenuItem} from 'react-native-material-menu';
-import {styles} from './styles';
+import Textarea from 'react-native-textarea';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
+import {queryData} from '../../../common';
 import {NOTIFI} from '../../../constants';
 import {COLORS} from '../../../constants/themes';
-import { useScrollToTop } from '@react-navigation/native';
-import SpeechToText from 'react-native-google-speech-to-text';
+import {CREATE_BOOK, GET_RECOMMENT_BY_NAME} from '../../../query/book';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
+import {Notification} from '../../../utils/notifications';
+import {styles} from './styles';
 const CreateBook = ({navigation}) => {
   return useObserver(() => {
     const {
@@ -154,36 +139,40 @@ const CreateBook = ({navigation}) => {
       {
         onCompleted: async (data) => {
           Toast.show(Notification(NOTIFI.success, 'Thêm sách mới thành công'));
-          // setBookStore([data.createBook, ...bookStore]);
           setName({
-            ...name,
             value: '',
+            error: '',
           });
           setAuthor({
-            ...author,
             value: '',
+            error: '',
           });
           setNumPrint({
-            ...numPrint,
-            value: 0,
+            value: '',
+            error: '',
           });
           setDescription({
-            ...description,
             value: '',
+            error: '',
           });
           setPublisher({
-            ...publisher,
             value: '',
+            error: '',
           });
           setAmount({
-            ...amount,
             value: 0,
+            error: '',
           });
           setPrice({
-            ...price,
             value: 0,
+            error: '',
           });
-          ref.current.scrollTop(0);
+          setCategori({value: category.categories[0].id, error: ''});
+          setImages([]);
+          setImageUpload([]);
+          setYear({value: '', error: ''});
+          setBook(null);
+          ref.current.scrollTo({x: 0, y: 0, animated: true});
         },
         onError: (err) => {
           console.log(err);
@@ -227,54 +216,92 @@ const CreateBook = ({navigation}) => {
       ]);
     };
 
-    console.log('ádfasdfasdfsdf',description.value)
     const validateCreate = () => {
-      console.log('vvv', name.value.length)
+      if (book) {
+        if (!amount.value || amount.value === 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập số lượng sách',
+          });
+          return 'Vui lòng nhập số lượng sách';
+        }
+        if (!price.value || price.value === 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập giá sách',
+          });
+          return 'Vui lòng nhập giá sách';
+        }
+      } else {
+        if (name.value === '' || name.value.length < 3) {
+          setName({
+            ...name,
+            error: 'Tên sách phải dài hơn 3 ký tự',
+          });
+          return 'Tên sách phải dài hơn 3 ký tự';
+        }
+        if (!author.value || author.value.length < 3) {
+          setAuthor({
+            ...author,
+            error: 'Tên tác giả phải dài hơn 3 ký tự',
+          });
+          return 'Tên tác giả phải dài hơn 3 ký tự';
+        }
+        // if (numPrint.value.length <= 0) {
+        //   setNumPrint({
+        //     ...numPrint,
+        //     error: 'Vui lòng nhập đúng số lần xuất bản',
+        //   });
+        //   return 'Vui lòng nhập đúng số lần xuất bản';
+        // }
+        if (year.value.length !== 4 || Number(year.value) <= 0) {
+          setYear({
+            ...year,
+            error: 'Vui lòng nhập đúng năm xuất bản',
+          });
+          return 'Vui lòng nhập đúng năm xuất bản';
+        }
+        if (publisher.value.length < 3) {
+          setPublisher({
+            ...publisher,
+            error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+          });
+          return 'Nhà xuất bản phải dài hơn 3 ký tự';
+        }
+        if (numPrint.value <= 0) {
+          setNumPrint({
+            ...numPrint,
+            error: 'Vui lòng nhập đúng số lần xuất bản',
+          });
+          return 'Vui lòng nhập đúng số lần xuất bản';
+        }
+        if (imagesUpload.length === 0) {
+          return 'Vui lòng thêm ảnh cho sách';
+        }
 
-      if (name.value==='' || name.value.length < 3) {
-        console.log('vvv', name)
-        setName({
-          ...name,
-          error: 'Tên sách phải dài hơn 3 ký tự',
-        });
-        return 'Tên sách phải dài hơn 3 ký tự';
+        if (description.value.length < 10) {
+          setDescription({
+            ...description,
+            error: 'Mô tả phải dài hơn 10 ký tự',
+          });
+          return 'Mô tả phải dài hơn 10 ký tự';
+        }
+        if (!amount.value || amount.value <= 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập số lượng sách',
+          });
+          return 'Vui lòng nhập số lượng sách';
+        }
+        if (!price.value || price.value <= 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập giá sách',
+          });
+          return 'Vui lòng nhập giá sách';
+        }
       }
-      if (!name.value || author.value.length < 3) {
-        setAuthor({
-          ...author,
-          error: 'Tên tác giả phải dài hơn 3 ký tự',
-        });
-        return 'Tên tác giả phải dài hơn 3 ký tự';
-      }
-      if (numPrint.value.length === 0) {
-        setNumPrint({
-          ...numPrint,
-          error: 'Vui lòng nhập số lần xuất bản',
-        });
-        return 'Vui lòng nhập số lần xuất bản';
-      }
-      console.log(description.value)
-      // if (description.value.length < 5) {
-      //   setDescription({
-      //     ...description,
-      //     error: 'Mô tả phải dài hơn 5 ký tự',
-      //   });
-      //   return 'Mô tả phải dài hơn 5 ký tự';
-      // }
-      if (!amount.value || amount.value === 0) {
-        setAmount({
-          ...amount,
-          error: 'Vui lòng nhập số lượng sách',
-        });
-        return 'Vui lòng nhập số lượng sách';
-      }
-      if (!price.value || price.value === 0) {
-        setPrice({
-          ...price,
-          error: 'Vui lòng nhập giá sách',
-        });
-        return 'Vui lòng nhập giá sách';
-      }
+
       return true;
     };
 
@@ -438,6 +465,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{name.error}</Text>
               {type === 'unsignedName' &&
                 isModalVisible &&
                 booksRecomment &&
@@ -503,6 +531,7 @@ const CreateBook = ({navigation}) => {
                   </ScrollView>
                 )}
             </View>
+
             <View>
               <Text>Danh mục sách *</Text>
               <Form>
@@ -636,16 +665,19 @@ const CreateBook = ({navigation}) => {
                     ))}
                   </ScrollView>
                 )}
+              <Text style={styles.err}>{author.error}</Text>
             </View>
+
             {/* year */}
             <View style={styles.name}>
-              <Text>Năm xuất bản</Text>
+              <Text>Năm xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
                   style={styles.txtMaxWidth}
-                  placeholder="Nhập năm phát hành"
+                  placeholder="Nhập năm xuất bản"
                   value={book ? book.year : year.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -681,10 +713,12 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{year.error}</Text>
             </View>
             {/* pulisher */}
+
             <View style={styles.name}>
-              <Text>Nhà xuất bản</Text>
+              <Text>Nhà xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
@@ -726,14 +760,17 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{publisher.error}</Text>
             </View>
+
             {/* number of printed lines */}
             <View style={styles.name}>
-              <Text>Số lần xuất bản</Text>
+              <Text>Số lần xuất bản *</Text>
               <View>
                 <TextInput
                   editable={book ? false : true}
                   style={styles.txtMaxWidth}
+                  keyboardType="numeric"
                   placeholder="Nhập số lần xuất bản"
                   value={book ? book.numberOfReprint + '' : numPrint.value + ''}
                   onFocus={() => {
@@ -771,7 +808,9 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{numPrint.error}</Text>
             </View>
+
             {/* Image */}
             <View style={styles.name}>
               <Text>Hình ảnh *</Text>
@@ -863,8 +902,6 @@ const CreateBook = ({navigation}) => {
                   editable={book ? false : true}
                   containerStyle={styles.textareacont}
                   style={styles.textarea}
-                  // onChangeText={this.onChange}
-                  // defaultValue={this.state.text}
                   maxLength={200}
                   placeholder={'Nhập mô tả sách'}
                   placeholderTextColor={'#c7c7c7'}
@@ -891,8 +928,6 @@ const CreateBook = ({navigation}) => {
                     height: '100%',
                     width: 30,
                     top: 10,
-                    // justifyContent: 'center',
-                    // alignItems: 'center',
                   }}
                   onPress={() => {
                     speechToTextHandler('description');
@@ -906,6 +941,7 @@ const CreateBook = ({navigation}) => {
                     }}></Icon>
                 </TouchableOpacity>
               </View>
+              <Text style={styles.err}>{description.error}</Text>
             </View>
 
             <View style={styles.name}>
@@ -918,6 +954,7 @@ const CreateBook = ({navigation}) => {
                   style={styles.txtMaxWidth}
                   placeholder="Nhập số lượng"
                   value={amount.value + ''}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setAmount({
                       ...amount,
@@ -961,8 +998,10 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
+              <Text style={styles.err}>{amount.error}</Text>
             </View>
             {/*  */}
+
             <View style={styles.name}>
               <Text>Giá sách *</Text>
               <View>
@@ -970,6 +1009,7 @@ const CreateBook = ({navigation}) => {
                   style={styles.txtMaxWidth}
                   placeholder="Nhập giá sách"
                   value={price.value + ''}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setPrice({
                       ...price,
@@ -1013,6 +1053,7 @@ const CreateBook = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               </View>
+              <Text style={styles.err}>{price.error}</Text>
             </View>
             <View
               style={{
@@ -1033,9 +1074,5 @@ const CreateBook = ({navigation}) => {
     );
   });
 };
-
-// const styles = StyleSheet.create({
-
-// });
 
 export default memo(CreateBook);

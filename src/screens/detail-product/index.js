@@ -1,34 +1,29 @@
+import {useMutation} from '@apollo/client';
+import {MobXProviderContext, useObserver} from 'mobx-react';
+import {Icon} from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  View,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
-  ScrollView,
-  FlatList,
-  Image,
+  TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {SliderBox} from 'react-native-image-slider-box';
-import Images from '../../assets/images/images';
-import {Button, Icon, Text as TextNT} from 'native-base';
-import {TextInput} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {GET_BOOK, GET_BOOKS, GET_BOOKS_STORE} from '../../query/book';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {MobXProviderContext, useObserver} from 'mobx-react';
-import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
+import ImageView from 'react-native-image-viewing';
+import Toast from 'react-native-toast-message';
 import styled from 'styled-components';
 import {mutateData, queryData} from '../../common';
-import {CREATE_COMMENT_BOOK} from '../../query/comment';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {COLORS, NOTIFI} from '../../constants';
-import moment from 'moment';
+import {GET_BOOK} from '../../query/book';
+import {CREATE_COMMENT_BOOK} from '../../query/comment';
+import {ADD_TO_LIKE, REMOVE_TO_LIKE, UPDATE_CART} from '../../query/user';
 import formatMoney from '../../utils/format/index';
-import {stylesPost} from '../post/stylePost';
-import Comment from '../post/comment';
-import ImageView from 'react-native-image-viewing';
+import {Notification} from '../../utils/notifications';
 import ImageFooter from '../chatting/components/ImageFooter';
+import Comment from '../post/comment';
+import {stylesPost} from '../post/stylePost';
 const Row = styled.View`
   align-items: center;
   flex-direction: row;
@@ -54,7 +49,7 @@ const User = styled.Image`
 const DetailProduct = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user},
+      stores: {user, shop},
     } = useContext(MobXProviderContext);
     const {cart, setCart, likes, addToLike, removeToLike, info} = user;
     const {productId} = route.params;
@@ -169,6 +164,7 @@ const DetailProduct = ({navigation, route}) => {
             ...cur,
             comment: [data.createCommentBook, ...cur.comment],
           }));
+          onChangeComment('');
         })
         .catch((err) => {
           console.log(err);
@@ -181,7 +177,7 @@ const DetailProduct = ({navigation, route}) => {
       if (found) {
         const dataCart = [...cart].map((ct) => {
           let tamp = {
-            book: productId,
+            book: ct.book.id,
             price: book.price,
             amount: ct.amount,
           };
@@ -222,12 +218,6 @@ const DetailProduct = ({navigation, route}) => {
         {!loading && book && (
           <ScrollView>
             <View style={styles.slide__image_wrap}>
-              {/* <SliderBox
-                style={styles.slide__image}
-                images={book?.images}
-                autoplay={true}
-                circleLoop={true}
-              /> */}
               <ImageView
                 images={images.map((t) => ({uri: t}))}
                 imageIndex={index}
@@ -240,33 +230,9 @@ const DetailProduct = ({navigation, route}) => {
                   />
                 )}
               />
-               {images.length > 3 ? (
-                  <View style={styles.imgBookDetail}>
-                    <ScrollView horizontal={true}>
-                      {/* <Text>{postCurrent.images[0]}</Text> */}
-                      {/* <Image source={{uri: postCurrent.images[0]}} style={{width: 100, height: 150}}/> */}
-                      {images.map((img, i) => (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setIndex(i);
-                            setIsVisible(true);
-                          }}>
-                          <Image
-                            key={i}
-                            source={{uri: img}}
-                            style={styles.imgBook}
-                          />
-                        </TouchableOpacity>
-                      ))}
-                    </ScrollView>
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}>
+              {images.length > 2 ? (
+                <View style={styles.imgBookDetail}>
+                  <ScrollView horizontal={true}>
                     {images.map((img, i) => (
                       <TouchableOpacity
                         onPress={() => {
@@ -280,16 +246,38 @@ const DetailProduct = ({navigation, route}) => {
                         />
                       </TouchableOpacity>
                     ))}
-                  </View>
-                )}
+                  </ScrollView>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
+                  {images.map((img, i) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIndex(i);
+                        setIsVisible(true);
+                      }}>
+                      <Image
+                        key={i}
+                        source={{uri: img}}
+                        style={styles.imgBook}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
             </View>
             <View style={styles.detail__content}>
               <View style={styles.detail__information}>
                 <Text style={styles.detail__content_name}>
-                  {book.name ? book.name : 'Tên sách'}
+                  {book.book ? book?.book?.name : book.name}
                 </Text>
                 <Text style={{...styles.detail__content_name, fontSize: 16}}>
-                  {book.publisher}đ
+                  {book.book ? book?.book?.publisher : book.publisher}
                 </Text>
                 <Text style={styles.current__price}>
                   Giá bán: {formatMoney(book.price)}đ
@@ -466,7 +454,7 @@ const DetailProduct = ({navigation, route}) => {
                 <View style={stylesPost.addCmt}>
                   <View style={stylesPost.person}>
                     <Image
-                      source={{uri: info.avatar}}
+                      source={{uri: shop.info ? shop.info.avatar : info.avatar}}
                       style={stylesPost.avtcmt}
                     />
                     <TextInput
@@ -494,7 +482,6 @@ const DetailProduct = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
-  
   imgBookDetail: {
     width: '100%',
     margin: 'auto',

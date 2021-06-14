@@ -1,44 +1,23 @@
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {
-  Button,
-  Form,
-  Icon,
-  Item,
-  Picker,
-  Spinner,
-  Text,
-  View,
-} from 'native-base';
+import {Icon, Spinner, Text, View} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import Textarea from 'react-native-textarea';
-import Images from '../../assets/images/images';
-import {GET_POST, UPDATE_POST} from '../../query/post';
+import {Image, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import ImageView from 'react-native-image-viewing';
+import Toast from 'react-native-toast-message';
+import {COLORS, NOTIFI} from '../../constants';
 import {CREATE_COMMENT_POST} from '../../query/comment';
+import {GET_POST} from '../../query/post';
+import ImageFooter from '../../screens/chatting/components/ImageFooter';
+import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
 import Comment from './comment';
 import {stylesPost} from './stylePost';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
-import formatMoney from '../../utils/format';
-import {queryData} from '../../common';
-
-import ImageView from 'react-native-image-viewing';
-import ImageFooter from '../../screens/chatting/components/ImageFooter';
-
 const PostDetail = ({navigation, route}) => {
   return useObserver(() => {
     const {
-      stores: {user, category, comment},
+      stores: {user, category, comment, post},
     } = useContext(MobXProviderContext);
     const {info, postCurrent, setPostCurrent} = user;
     const {postComment, setPostComment} = comment;
@@ -47,12 +26,15 @@ const PostDetail = ({navigation, route}) => {
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [refreshing, setRefreshing] = React.useState(false);
+    const {general, setGeneral} = post;
 
     const postID = route?.params?.postID;
     const [loading, setLoading] = useState(true);
 
-    const [post, {aa, s, c, d}] = useLazyQuery(GET_POST, {
+    const [postDetail, {aa, s, c, d}] = useLazyQuery(GET_POST, {
+      fetchPolicy: "no-cache",
       onCompleted: async (data) => {
+        console.log('post comment',data.post.comment);
         setLoading(false);
         setPostCurrent(data.post);
         setRefreshing(true);
@@ -62,14 +44,13 @@ const PostDetail = ({navigation, route}) => {
       },
     });
     useEffect(() => {
-      post({
+      postDetail({
         variables: {
           id: postID,
         },
       });
     }, [refreshing]);
-    useEffect(() => {}, [loading]);
-    useEffect(() => {}, [postCurrent]);
+
     const [createComment] = useMutation(CREATE_COMMENT_POST, {
       onCompleted: (data) => {
         setPostCurrent({
@@ -77,6 +58,21 @@ const PostDetail = ({navigation, route}) => {
           comment: [data.createCommentPost, ...postCurrent.comment],
         });
         setPostComment([data.createCommentPost, ...postComment]);
+        setCmts('');
+        if (general) {
+          const findIndex = [...general].findIndex(
+            (dt) => dt.id + '' == postID + '',
+          );
+          const newComment = [data.createCommentPost, ...general[findIndex].comment];
+          setGeneral([
+            ...general.slice(0, findIndex),
+            {
+              ...general[findIndex],
+              comment: newComment,
+            },
+            ...general.slice(findIndex + 1),
+          ]);
+        }
       },
       onError: (err) => {
         Toast.show(Notification(NOTIFI.error, err.message));
@@ -89,6 +85,8 @@ const PostDetail = ({navigation, route}) => {
         content: cmts,
         type: 'TEXT',
       };
+
+      // à hiểu rồi. nó lưu cache roi
       createComment({
         variables: {
           dataComment,
@@ -96,6 +94,7 @@ const PostDetail = ({navigation, route}) => {
         },
       });
     };
+
 
     return (
       <ScrollView horizontal={false}>
@@ -119,7 +118,7 @@ const PostDetail = ({navigation, route}) => {
                     />
                   )}
                 />
-                {postCurrent?.images.length > 3 ? (
+                {postCurrent?.images.length > 2 ? (
                   <View style={stylesPost.imgBookDetail}>
                     <ScrollView horizontal={true}>
                       {postCurrent?.images.map((img, i) => (
@@ -188,6 +187,16 @@ const PostDetail = ({navigation, route}) => {
                     <Text style={stylesPost.txtBold}>Thông tin sách</Text>
                   </View>
                   <View style={stylesPost.horizontal}>
+                    <Text>Tên sách </Text>
+                    <Text style={stylesPost.detail}>{postCurrent?.name}</Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
+                    <Text>Thể loại sách </Text>
+                    <Text style={stylesPost.detail}>
+                      {postCurrent?.category?.name || ''}
+                    </Text>
+                  </View>
+                  <View style={stylesPost.horizontal}>
                     <Text>Nhà xuất bản </Text>
                     <Text style={stylesPost.detail}>
                       {postCurrent?.publisher}
@@ -233,34 +242,6 @@ const PostDetail = ({navigation, route}) => {
                     <Text>{postCurrent?.description}</Text>
                   </View>
                 </View>
-                {/* {postCurrent.comment?.map((cmt, i) => (
-                  <Comment key={i} cmt={cmt} />
-                ))}
-                <View style={stylesPost.addCmt}>
-                  <View style={stylesPost.cmtInfo}>
-                    <Image
-                      source={{uri: info.avatar}}
-                      style={stylesPost.avtcmt}
-                    />
-                    <View style={stylesPost.addComment}>
-                      <TextInput
-                        style={stylesPost.comment}
-                        placeholder="Thêm bình luận"
-                        value={cmts}
-                        onFocus={() => {}}
-                        onChangeText={(value) => {
-                          setCmts(value);
-                        }}
-                      />
-                      <Icon
-                        name="ios-arrow-forward-circle-outline"
-                        type="Ionicons"
-                        style={stylesPost.iconEnter}
-                        onPress={onPress}
-                      />
-                    </View>
-                  </View>
-                </View> */}
                 <View
                   style={{
                     backgroundColor: '#fff',
@@ -310,22 +291,22 @@ const PostDetail = ({navigation, route}) => {
                 {info.id !== postCurrent?.author.id ? (
                   <></>
                 ) : (
-                  <View style={{flexDirection: 'row',
-                  justifyContent:'center'}}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: COLORS.primary,
-                      paddingVertical: 10,
-                      borderRadius: 10,
-                      width: 130
-                    }}
-                    onPress={() =>
-                      navigation.navigate('UpdatePost', {
-                        postId: postCurrent?.id,
-                      })
-                    }>
-                    <Text style={stylesPost.btn}>Cập nhật</Text>
-                  </TouchableOpacity>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: COLORS.primary,
+                        paddingVertical: 10,
+                        borderRadius: 10,
+                        width: 130,
+                      }}
+                      onPress={() =>
+                        navigation.navigate('UpdatePost', {
+                          postId: postCurrent?.id,
+                        })
+                      }>
+                      <Text style={stylesPost.btn}>Cập nhật</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>

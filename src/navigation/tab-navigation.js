@@ -1,14 +1,8 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-// import Feed from '../screens/feed';
-// import Cart from '../screens/cart';
-import Notification from '../screens/notification';
-import {HomeStack} from './stack-navigation';
-// import Profile from '../screens/profile';
-// import AccountManager from '../screens/account-manager';
-import {COLORS} from '../constants/themes';
-
 import {Icon} from 'native-base';
+import React from 'react';
+import {COLORS} from '../constants/themes';
+import {HomeStack} from './stack-navigation';
 
 const Tab = createBottomTabNavigator();
 

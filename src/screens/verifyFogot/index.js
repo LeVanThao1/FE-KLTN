@@ -33,7 +33,6 @@ export default function VerifyForgot({route, navigation}) {
     error: '',
   });
   const {type, account} = route.params;
-  console.log(type);
   const validationCode = () => {
     if (!code.value.trim()) {
       setCode((cur) => ({...cur, error: 'Enter code'}));

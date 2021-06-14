@@ -1,17 +1,17 @@
-import {useLazyQuery, useSubscription} from '@apollo/client';
+import {useSubscription} from '@apollo/client';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect} from 'react';
+import RNReactNativeSoundToast from 'react-native-sound-toast';
 import Toast from 'react-native-toast-message';
+import {queryData} from '../common';
+import {NOTIFI} from '../constants';
+import {RECEIVE_MESSAGE, SEEN_MESSAGE} from '../query/message';
 import {
   COMMENTS_BOOK_NOTIFICATION,
   COMMENTS_ORDER_NOTIFICATION,
   COMMENTS_POST_NOTIFICATION,
 } from '../query/notification';
-import {NOTIFI} from '../constants';
 import {Notification} from '../utils/notifications';
-import RNReactNativeSoundToast from 'react-native-sound-toast';
-import {RECEIVE_MESSAGE, SEEN_MESSAGE} from '../query/message';
-import {queryData} from '../common';
 
 export const useNotification = () => {
   return useObserver(() => {

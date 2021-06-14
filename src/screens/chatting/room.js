@@ -30,7 +30,6 @@ const ChatRoomScreen = ({navigation, route}) => {
 
     useEffect(() => {
       if (groupCurrent) {
-        console.log(1);
         setLoading(true);
         queryData(GET_MESSAGE_GROUP, {groupId: groupCurrent, ...option})
           .then(({data}) => {
@@ -48,7 +47,6 @@ const ChatRoomScreen = ({navigation, route}) => {
       } else {
         queryData(GET_MESSAGE_USERID, {userId: userIdTo})
           .then(({data}) => {
-            console.log(data.messagesByUserID);
             setMessagesBegin(data.messagesByUserID);
             if (data.messagesByUserID.length < 20) {
               setStop(true);
@@ -60,8 +58,6 @@ const ChatRoomScreen = ({navigation, route}) => {
           .catch((err) => {
             console.log(err);
             setLoading(false);
-            // console.log(err, 'room');
-            // Toast.show(Notification(NOTIFI.error, err.message));
           });
       }
       return () => {

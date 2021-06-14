@@ -1,29 +1,23 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {MobXProviderContext, useObserver} from 'mobx-react';
-import {Text, Icon, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  Image,
-  Button,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import ImageView from 'react-native-image-viewing';
-import {ScrollView} from 'react-native-gesture-handler';
-import Textarea from 'react-native-textarea';
-import {Form, Item, Picker} from 'native-base';
-import {CREATE_BOOK, UPDATE_BOOK} from '../../../query/book';
-// import {button} from '../style';
-import ImagePicker from 'react-native-image-crop-picker';
-
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
-import {COLORS, NOTIFI} from '../../../constants';
-import {UPLOAD_MULTI_FILE} from '../../../query/upload';
-import {mutateData} from '../../../common';
 import {ReactNativeFile} from 'extract-files';
+import {MobXProviderContext, useObserver} from 'mobx-react';
+import {Form, Icon, Item, Picker, Text, View} from 'native-base';
+import React, {memo, useContext, useState} from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import ImagePicker from 'react-native-image-crop-picker';
+import Textarea from 'react-native-textarea';
+import Toast from 'react-native-toast-message';
+import {mutateData} from '../../../common';
+import {COLORS, NOTIFI} from '../../../constants';
+import {UPDATE_BOOK} from '../../../query/book';
+import {UPLOAD_MULTI_FILE} from '../../../query/upload';
+import {Notification} from '../../../utils/notifications';
 
 const UpdateBook = ({navigation, route}) => {
   return useObserver(() => {
@@ -93,33 +87,111 @@ const UpdateBook = ({navigation, route}) => {
         {text: 'Hủy'},
       ]);
     };
+
+    const validateCreate = () => {
+      if (bookCurrent.book) {
+        if (!amount.value || amount.value === 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập số lượng sách',
+          });
+          return 'Vui lòng nhập số lượng sách';
+        }
+        if (!price.value || price.value === 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập giá sách',
+          });
+          return 'Vui lòng nhập giá sách';
+        }
+      } else {
+        if (name.value === '' || name.value.length < 3) {
+          setName({
+            ...name,
+            error: 'Tên sách phải dài hơn 3 ký tự',
+          });
+          return 'Tên sách phải dài hơn 3 ký tự';
+        }
+        if (!author.value || author.value.length < 3) {
+          setAuthor({
+            ...author,
+            error: 'Tên tác giả phải dài hơn 3 ký tự',
+          });
+          return 'Tên tác giả phải dài hơn 3 ký tự';
+        }
+        if (numPrint.value.length === 0) {
+          setNumPrint({
+            ...numPrint,
+            error: 'Vui lòng nhập số lần xuất bản',
+          });
+          return 'Vui lòng nhập số lần xuất bản';
+        }
+        if (year.value.length !== 4 || Number(year.value) <= 0) {
+          setYear({
+            ...year,
+            error: 'Vui lòng nhập đúng năm xuất bản',
+          });
+          return 'Vui lòng nhập đúng năm xuất bản';
+        }
+        if (publisher.value.length === 0) {
+          setPublisher({
+            ...publisher,
+            error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+          });
+          return 'Nhà xuất bản phải dài hơn 3 ký tự';
+        }
+        if (numPrint.value <= 0) {
+          setNumPrint({
+            ...numPrint,
+            error: 'Vui lòng nhập đúng số lần xuất bản',
+          });
+          return 'Vui lòng nhập đúng số lần xuất bản';
+        }
+        if (imagesUpload.length === 0) {
+          // setPublisher({
+          //   ...publisher,
+          //   error: 'Vui lòng nhập năm xuất bản',
+          // });
+          return 'Vui lòng thêm ảnh cho sách';
+        }
+
+        if (description.value.length < 10) {
+          setDescription({
+            ...description,
+            error: 'Vui lòng nhập mô tả',
+          });
+          return 'Vui lòng nhập mô tả';
+        }
+        if (!amount.value || amount.value <= 0) {
+          setAmount({
+            ...amount,
+            error: 'Vui lòng nhập đúng số lượng sách',
+          });
+          return 'Vui lòng nhập đúng số lượng sách';
+        }
+        if (!price.value || price.value <= 0) {
+          setPrice({
+            ...price,
+            error: 'Vui lòng nhập đúng giá sách',
+          });
+          return 'Vui lòng nhập đúng giá sách';
+        }
+      }
+
+      return true;
+    };
+
     const onPress = () => {
-      let dataBook = {
-        name: name.value,
-        description: description.value,
-        year: year.value,
-        numberOfReprint: Number(numPrint.value),
-        publisher: publisher.value,
-        category: categori.value ? categori.value : bookCurrent.categoryId,
-        images: imagesUpload,
-        amount: Number(amount.value),
-        price: Number(price.value),
-        author: author.value,
-      };
-      // updateBook({
-      //   variables: {
-      //     dataBook,
-      //     id: bookCurrent.id,
-      //   },
-      // });
-      mutateData(UPDATE_BOOK, {
-        dataBook,
-        id: bookCurrent.id,
-      })
-        .then(({data}) => {
-          const dataUpdate = {
-            categoryId: bookCurrent.categoryId,
-            categoryName: bookCurrent.categoryName,
+      const validate = validateCreate();
+      if (validateCreate() === true) {
+        let dataBook;
+        if (bookCurrent.book) {
+          dataBook = {
+            amount: Number(amount.value),
+            price: Number(price.value),
+          };
+        } else {
+          dataBook = {
             name: name.value,
             description: description.value,
             year: year.value,
@@ -131,25 +203,51 @@ const UpdateBook = ({navigation, route}) => {
             price: Number(price.value),
             author: author.value,
           };
-          const findIndex = [...bookStore].findIndex(
-            (dt) => dt.id + '' == bookCurrent.id + '',
-          );
-          shop.setBookStore([
-            ...[...bookStore].slice(0, findIndex),
-            {...bookStore[findIndex], ...dataUpdate},
-            ...[...bookStore].slice(findIndex + 1),
-          ]);
-          setBookCurrent({
-            ...bookStore[findIndex],
-            ...dataUpdate,
-          });
-          Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
-          navigation.goBack();
+        }
+        mutateData(UPDATE_BOOK, {
+          dataBook,
+          id: bookCurrent.id,
         })
-        .catch((err) => {
-          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
-          console.log(err);
-        });
+          .then(({data}) => {
+            const dataUpdate = {
+              categoryId: bookCurrent.categoryId,
+              categoryName: bookCurrent.categoryName,
+              name: name.value,
+              description: description.value,
+              year: year.value,
+              numberOfReprint: Number(numPrint.value),
+              publisher: publisher.value,
+              category: categori.value
+                ? categori.value
+                : bookCurrent.categoryId,
+              images: imagesUpload,
+              amount: Number(amount.value),
+              price: Number(price.value),
+              author: author.value,
+              book: bookCurrent.book,
+            };
+            const findIndex = [...bookStore].findIndex(
+              (dt) => dt.id + '' == bookCurrent.id + '',
+            );
+            shop.setBookStore([
+              ...[...bookStore].slice(0, findIndex),
+              {...bookStore[findIndex], ...dataUpdate},
+              ...[...bookStore].slice(findIndex + 1),
+            ]);
+            setBookCurrent({
+              ...bookStore[findIndex],
+              ...dataUpdate,
+            });
+            Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
+            navigation.goBack();
+          })
+          .catch((err) => {
+            Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
+            console.log(err);
+          });
+      } else {
+        Toast.show(Notification(NOTIFI.error, validate));
+      }
     };
 
     const removeImages = (index) => {
@@ -217,26 +315,28 @@ const UpdateBook = ({navigation, route}) => {
                       }}
                       source={{uri: r}}
                     />
-                    <TouchableOpacity
-                      onPress={() => removeImages(i)}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 10,
-                        backgroundColor: '#fff',
-                        borderRadius: 50,
-                      }}>
-                      <Icon
-                        type="AntDesign"
-                        name="closecircleo"
+                    {!bookCurrent.book && (
+                      <TouchableOpacity
+                        onPress={() => removeImages(i)}
                         style={{
-                          fontSize: 22,
-                          color: COLORS.primary,
-                        }}></Icon>
-                    </TouchableOpacity>
+                          position: 'absolute',
+                          top: 0,
+                          right: 10,
+                          backgroundColor: '#fff',
+                          borderRadius: 50,
+                        }}>
+                        <Icon
+                          type="AntDesign"
+                          name="closecircleo"
+                          style={{
+                            fontSize: 22,
+                            color: COLORS.primary,
+                          }}></Icon>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 ))}
-              {bookCurrent.images.length < 10 && (
+              {bookCurrent.images.length < 10 && !bookCurrent.book && (
                 <TouchableOpacity
                   onPress={handleChoosePhoto}
                   style={{
@@ -271,8 +371,9 @@ const UpdateBook = ({navigation, route}) => {
             </ScrollView>
             <View style={styles.content}>
               <View style={styles.ct}>
-                <Text>Tên sách</Text>
+                <Text>Tên sách *</Text>
                 <TextInput
+                  editable={!bookCurrent.book}
                   style={styles.txtInput}
                   placeholder="Nhập tên sản phẩm"
                   autoFocus={true}
@@ -292,11 +393,14 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{name.error}</Text>
+
               <View>
-                <Text>Danh mục sách</Text>
+                <Text>Danh mục sách *</Text>
                 <Form>
                   <Item picker>
                     <Picker
+                      enabled={!bookCurrent.book}
                       style={styles.picker}
                       mode="dropdown"
                       // iosIcon={<Icon name="arrow-down" />}
@@ -316,8 +420,9 @@ const UpdateBook = ({navigation, route}) => {
 
               {/* author */}
               <View style={styles.ct}>
-                <Text>Tác giả</Text>
+                <Text>Tác giả *</Text>
                 <TextInput
+                  editable={!bookCurrent.book}
                   style={styles.txtInput}
                   placeholder="Nhập tên tác giả"
                   value={author.value}
@@ -335,11 +440,13 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{author.error}</Text>
 
               {/* pulisher */}
               <View style={styles.ct}>
-                <Text>Nhà xuất bản</Text>
+                <Text>Nhà xuất bản *</Text>
                 <TextInput
+                  editable={!bookCurrent.book}
                   style={styles.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
                   value={publisher.value}
@@ -357,12 +464,15 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{publisher.error}</Text>
               {/* number of printed lines */}
               <View style={styles.horizontal}>
-                <Text>Số lần xuất bản</Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
+                  editable={!bookCurrent.book}
                   style={styles.txtPrice}
-                  placeholder="Nhập số lần xuất bản"
+                  placeholder="Số lần xuất bản"
+                  keyboardType="numeric"
                   value={numPrint.value}
                   onFocus={() => {
                     setNumPrint({
@@ -378,17 +488,20 @@ const UpdateBook = ({navigation, route}) => {
                   }}
                 />
               </View>
+              <Text style={styles.err}>{numPrint.error}</Text>
               <View style={styles.horizontal}>
-                <Text>Năm phát hành</Text>
+                <Text>Năm xuất bản *</Text>
                 <View
                   style={{
                     position: 'relative',
                     width: '50%',
                   }}>
                   <TextInput
+                    editable={!bookCurrent.book}
                     style={styles.txtVND}
-                    placeholder="Nhập năm phát hành"
+                    placeholder="Năm xuất bản"
                     value={year.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setYear({
                         ...year,
@@ -404,9 +517,11 @@ const UpdateBook = ({navigation, route}) => {
                   />
                 </View>
               </View>
+              <Text style={styles.err}>{year.error}</Text>
+
               {/* Image */}
               <View style={styles.horizontal}>
-                <Text>Số lượng</Text>
+                <Text>Số lượng *</Text>
                 <View
                   style={{
                     position: 'relative',
@@ -414,8 +529,9 @@ const UpdateBook = ({navigation, route}) => {
                   }}>
                   <TextInput
                     style={styles.txtVND}
-                    placeholder="Nhập số lượng sách"
+                    placeholder="Số lượng"
                     value={amount.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setAmount({
                         ...amount,
@@ -440,8 +556,10 @@ const UpdateBook = ({navigation, route}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={styles.err}>{amount.error}</Text>
+
               <View style={styles.horizontal}>
-                <Text>Giá sách</Text>
+                <Text>Giá sách *</Text>
                 <View
                   style={{
                     position: 'relative',
@@ -449,8 +567,9 @@ const UpdateBook = ({navigation, route}) => {
                   }}>
                   <TextInput
                     style={styles.txtVND}
-                    placeholder="Nhập giá sách"
+                    placeholder="Giá sách"
                     value={price.value}
+                    keyboardType="numeric"
                     onFocus={() => {
                       setPrice({
                         ...price,
@@ -475,10 +594,13 @@ const UpdateBook = ({navigation, route}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={styles.err}>{price.error}</Text>
+
               <View style={styles.container}></View>
               <View style={styles.des}>
-                <Text style={styles.textContent}>Mô tả</Text>
+                <Text style={styles.textContent}>Mô tả *</Text>
                 <Textarea
+                  editable={!bookCurrent.book}
                   containerStyle={styles.textareacont}
                   style={styles.textarea}
                   maxLength={200}
@@ -501,6 +623,7 @@ const UpdateBook = ({navigation, route}) => {
                 />
               </View>
               {/* price */}
+              <Text style={styles.err}>{description.error}</Text>
 
               <TouchableOpacity
                 style={{
@@ -521,6 +644,11 @@ const UpdateBook = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container_product: {
     margin: 5,
+  },
+  err: {
+    fontSize: 10,
+    color: 'red',
+    textAlign: 'left',
   },
   header: {
     fontSize: 18,

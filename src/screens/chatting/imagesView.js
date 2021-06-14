@@ -10,12 +10,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ImageView from 'react-native-image-viewing';
 import Toast from 'react-native-toast-message';
 import {queryData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {GET_IMAGES_GROUP} from '../../query/group';
 import {Notification} from '../../utils/notifications';
-import ImageView from 'react-native-image-viewing';
 import ImageFooter from './components/ImageFooter';
 
 const {width, height} = Dimensions.get('screen');
@@ -91,27 +91,6 @@ const ImagesView = () => {
               />
             </>
           ) : (
-            // <>
-            //   {images.map((ig, i) => (
-            //     <TouchableOpacity
-            //       key={i}
-            //       onPress={() => {
-            //         setIndex(i);
-            //         setIsVisible(true);
-            //       }}>
-            //       <Image
-            //         source={{uri: ig}}
-            //         style={{width: 70, height: 70, borderRadius: 10, margin: 5}}
-            //       />
-            //     </TouchableOpacity>
-            //   ))}
-            //   <ImageView
-            //     images={images.map((t) => ({uri: t}))}
-            //     imageIndex={index}
-            //     visible={visible}
-            //     onRequestClose={() => setIsVisible(false)}
-            //   />
-            // </>
             <Text
               style={{
                 textAlign: 'center',

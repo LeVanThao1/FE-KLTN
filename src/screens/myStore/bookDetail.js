@@ -1,49 +1,45 @@
 import {useMutation} from '@apollo/client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
-import React, {memo, useContext, useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import {
-  TextInput,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import Textarea from 'react-native-textarea';
-import {COLORS} from '../../constants/themes';
-import Images from '../../assets/images/images';
-import {UPDATE_POST} from '../../query/post';
-import {CREATE_COMMENT_BOOK, CREATE_COMMENT_POST} from '../../query/comment';
-import Comment from '../post/comment';
-import {stylesPost} from './styles';
-import {Notification} from '../../utils/notifications';
+import {Icon, Text, View} from 'native-base';
+import React, {memo, useContext, useState} from 'react';
+import {Image, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import ImageView from 'react-native-image-viewing';
 import Toast from 'react-native-toast-message';
 import {NOTIFI} from '../../constants';
-import formatMoney from '../../utils/format';
-
-import ImageView from 'react-native-image-viewing';
+import {CREATE_COMMENT_BOOK} from '../../query/comment';
 import ImageFooter from '../../screens/chatting/components/ImageFooter';
+import formatMoney from '../../utils/format';
+import {Notification} from '../../utils/notifications';
+import Comment from '../post/comment';
+import {stylesPost} from './styles';
 
 const BookDetail = ({navigation, book}) => {
   return useObserver(() => {
     const {
-      stores: {user, category, comment},
+      stores: {user, category, comment, shop},
     } = useContext(MobXProviderContext);
     const {info, bookCurrent, setBookCurrent} = user;
     const {bookComment, setBookComment} = comment;
+    const {bookStore, setBookStore} = shop;
     const [cmts, setCmts] = useState('');
     const [addCmt, setAddCmt] = useState('');
     const [visible, setIsVisible] = useState(false);
     const [index, setIndex] = useState(0);
-
+    // console.log(bookCurrent); doi ti test noto, a ben user nua
+    console.log('this',bookStore[1]);
     const [createComment] = useMutation(CREATE_COMMENT_BOOK, {
       onCompleted: (data) => {
         setBookCurrent({
           ...bookCurrent,
           comment: [data.createCommentBook, ...bookCurrent.comment],
         });
+        const findIndex = bookStore.findIndex((p) => p.id+ '' === bookCurrent.id + '');
+        setBookStore([
+          ...bookStore.slice(0, findIndex),
+          {...bookCurrent.current, comment: [data.createCommentBook,...bookCurrent.comment]},
+          ...bookStore.slice(findIndex + 1)
+        ])
         setBookComment([data.createCommentBook, ...bookComment]);
       },
       onError: (err) => {
@@ -51,7 +47,9 @@ const BookDetail = ({navigation, book}) => {
         console.log('gaga', err);
       },
     });
-
+    // m thaays co chuyen gi k
+    // chuyen  j tn ms been, kia qua ddau thay j dau,
+    // luc nay t comment no hien la cacbonStore, la ten cua hang cua t, ma h no thanh ten t roi
     const onPress = () => {
       let dataComment = {
         content: cmts,
@@ -86,16 +84,8 @@ const BookDetail = ({navigation, book}) => {
                   />
                 )}
               />
-              {/* <ScrollView>
-                {bookCurrent.images?.map((img, i) => (
-                  <Image
-                    key={i}
-                    source={{uri: img}}
-                    style={stylesPost.imgBook}
-                  />
-                ))}
-              </ScrollView> */}
-              <View style={stylesPost.imgBookDetail}>
+
+              {/* <View style={stylesPost.imgBookDetail}>
                 <ScrollView horizontal={true}>
                   {bookCurrent.images.map((img, i) => (
                     <TouchableOpacity
@@ -111,7 +101,49 @@ const BookDetail = ({navigation, book}) => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-              </View>
+              </View> */}
+              {/*  */}
+              {bookCurrent?.images.length > 2 ? (
+                <View style={stylesPost.imgBookDetail}>
+                  <ScrollView horizontal={true}>
+                    {bookCurrent?.images.map((img, i) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIndex(i);
+                          setIsVisible(true);
+                        }}>
+                        <Image
+                          key={i}
+                          source={{uri: img}}
+                          style={stylesPost.imgBook}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  }}>
+                  {bookCurrent?.images.map((img, i) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIndex(i);
+                        setIsVisible(true);
+                      }}>
+                      <Image
+                        key={i}
+                        source={{uri: img}}
+                        style={stylesPost.imgBook}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+              {/*  */}
             </View>
           </ScrollView>
           <View style={stylesPost.content}>
@@ -121,9 +153,6 @@ const BookDetail = ({navigation, book}) => {
                   <Text style={stylesPost.txtBold}>Tên sách</Text>
                   <Text style={stylesPost.titlePost}>{bookCurrent.name}</Text>
                 </View>
-                {/* <View style={stylesPost.titleCenter}>
-                <Text style={stylesPost.txtBold}>Thông tin sách</Text>
-              </View> */}
                 <View style={stylesPost.horizontal}>
                   <Text>Danh mục </Text>
                   <Text style={stylesPost.detail}>
@@ -165,10 +194,11 @@ const BookDetail = ({navigation, book}) => {
                   </Text> */}
                   </View>
                 </View>
-                <View style={stylesPost.elment}>
+                {/* <View style={stylesPost.elment}>
                   <Text>Sách muốn đổi </Text>
                   <Text style={stylesPost.detail}>asdas</Text>
-                </View>
+                </View> */}
+                {/* doi t xi t hop cia da o k */}
 
                 <Text style={stylesPost.textContent}>Mô tả</Text>
                 <View style={stylesPost.textDes}>
@@ -200,7 +230,7 @@ const BookDetail = ({navigation, book}) => {
                 <View style={stylesPost.addCmt}>
                   <View style={stylesPost.person}>
                     <Image
-                      source={{uri: info.avatar}}
+                      source={{uri: shop.info ? shop.info.avatar : info.avatar}}
                       style={stylesPost.avtcmt}
                     />
                     <TextInput
@@ -228,7 +258,7 @@ const BookDetail = ({navigation, book}) => {
                   // setBookCurrent(book);
                   navigation.navigate('UpdateBook');
                 }}>
-                <Text style={stylesPost.btn}>Cập nhật sách</Text>
+                <Text style={stylesPost.btn}>Cập nhật</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -1,24 +1,16 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NavigationContainer} from '@react-navigation/native';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import React, {FunctionComponent, useContext, useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, Text, ImageBackground} from 'react-native';
-import FastImage from 'react-native-fast-image';
-import {_navigator} from '../../navigation/constants';
-import BG from '../../assets/images/bg.jpg';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  useNavigation,
-  StackActions,
-  NavigationContainer,
-} from '@react-navigation/native';
-import {GET_USER, REFRESH_TOKEN} from '../../query/user';
-import {useLazyQuery} from '@apollo/client';
+import React, {useContext, useEffect, useState} from 'react';
+import {ImageBackground, StyleSheet} from 'react-native';
 import Toast from 'react-native-toast-message';
-import BottomTabNavigator from '../../navigation/tab-navigation';
-import {AuthStack} from '../../navigation/stack-navigation';
+import BG from '../../assets/images/bg.jpg';
 import {queryData} from '../../common';
+import {AuthStack} from '../../navigation/stack-navigation';
+import BottomTabNavigator from '../../navigation/tab-navigation';
+import {REFRESH_TOKEN} from '../../query/user';
 const Loading = (props) => {
-  // const navigation = useNavigation();
   return useObserver(() => {
     const {
       stores: {auth, user, shop, notification},
@@ -32,7 +24,6 @@ const Loading = (props) => {
         AsyncStorage.getItem('token').then((data) => {
           AsyncStorage.getItem('refreshToken').then((dt) => {
             if (data && dt) {
-              // auth.setLogin(data,dt)
               queryData(REFRESH_TOKEN)
                 .then(({data}) => {
                   shop.setInfo(data.refreshToken.user.store);

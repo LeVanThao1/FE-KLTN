@@ -62,10 +62,6 @@ export const ORDERS_BY_STORE = gql`
   query subOrdersByStore {
     subOrdersByStore {
       id
-      user {
-        id
-        name
-      }
       detail {
         book {
           id
@@ -82,6 +78,7 @@ export const ORDERS_BY_STORE = gql`
       store {
         id
       }
+      name
       ship
       statusPayment
       dateOfPayment
@@ -96,10 +93,6 @@ export const ORDER_BY_STORE = gql`
   query subOrderByStore($id: ID!) {
     subOrderByStore(id: $id) {
       id
-      user {
-        id
-        name
-      }
       detail {
         book {
           id
@@ -116,6 +109,7 @@ export const ORDER_BY_STORE = gql`
       store {
         id
       }
+      name
       statusPayment
       dateOfPayment
       receivedDate
@@ -133,10 +127,10 @@ export const UPDATE_STATUS_ORDER = gql`
   }
 `;
 
-export const CANCEL_ORDER_BY_USER = gql `
+export const CANCEL_ORDER_BY_USER = gql`
   mutation cancleOrderByUser($id: ID!) {
     cancleOrderByUser(id: $id) {
       message
     }
   }
-`
+`;

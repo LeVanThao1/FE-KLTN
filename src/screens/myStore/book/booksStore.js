@@ -1,26 +1,21 @@
-import {useLazyQuery, useMutation} from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MobXProviderContext, useObserver} from 'mobx-react';
-import React, {useContext, useState, useEffect, memo} from 'react';
 import {Icon, Spinner} from 'native-base';
-
+import React, {memo, useContext, useEffect, useState} from 'react';
 import {
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
-  ScrollView,
-  Image,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {DELETE_BOOK, GET_BOOKS_STORE} from '../../../query/book';
-
-import Book from './book';
-import {queryData} from '../../../common';
 import Toast from 'react-native-toast-message';
-import {Notification} from '../../../utils/notifications';
+import {queryData} from '../../../common';
 import {COLORS, NOTIFI} from '../../../constants';
+import {GET_BOOKS_STORE} from '../../../query/book';
+import {Notification} from '../../../utils/notifications';
 import book from './book';
+import Book from './book';
 
 const BooksStore = ({navigation}) => {
   return useObserver(() => {
@@ -49,25 +44,29 @@ const BooksStore = ({navigation}) => {
         setListBook(
           bookStore.map((ct, i) => ({
             id: ct.id ? ct.id : '',
-            name: ct.name ? ct.name : '',
-            categoryId: ct.category ? ct.category.id : '',
-            categoryName: ct.category ? ct.category.name : '',
-            author: ct.author ? ct.author : '',
+            name: ct.book ? ct.book.name : ct.name,
+            categoryId: ct.book ? ct.book.category?.id : ct.category?.id,
+            categoryName: ct.book ? ct.book.category?.name : ct.category?.name,
+            author: ct.book ? ct.book.author : ct.author,
             price: ct.price ? ct.price : '',
-            publisher: ct.publisher ? ct.publisher : '',
-            numberOfReprint: ct.numberOfReprint ? ct.numberOfReprint : '',
-            year: ct.year ? ct.year : '',
+            publisher: ct.book ? ct.book.publisher : ct.publisher,
+            numberOfReprint: ct.book
+              ? ct.book.numberOfReprint
+              : ct.numberOfReprint,
+            year: ct.book ? ct.book.year : ct.year,
             amount: ct.amount ? ct.amount : '',
             sold: ct.sold ? ct.sold : '',
-            description: ct.description ? ct.description : '',
-            images: ct.images ? ct.images : [],
-            comment: ct.comment ? ct.comment : '',
+            description: ct.book ? ct.book.description : ct.description,
+            images: ct.book ? ct.book.images : ct.images,
+            comment: ct.comment ? ct.comment :[],
+            book: ct.book ? ct.book.id : null,
+            current: ct
           })),
         );
       }
       // setLoading(false);
     }, [bookStore]);
-
+// loi j nua, cai bi mat comment day', vl ben duoi no cua t
     const [categori, setCategori] = useState(undefined);
 
     useEffect(() => {
@@ -80,6 +79,7 @@ const BooksStore = ({navigation}) => {
 
     const onPressTab = (name, status) => {
       setSelectedStatus(status);
+      setCategoryName(name);
       setCategori(
         status === 'ALL'
           ? listBook
@@ -90,13 +90,10 @@ const BooksStore = ({navigation}) => {
       <>
         {!loading ? (
           categori?.length > 0 ? (
-            categori?.map((book, i) => (
-              <Book key={i} book={book} />
-              // delete={onPress(book.id)}
-            ))
+            categori?.map((book, i) => <Book key={i} book={book} />)
           ) : (
             <View style={{padding: 20}}>
-              <Text style={{textAlign: 'center'}}>Không có dữ liệu</Text>
+              <Text style={{textAlign: 'center', color: COLORS.primary, fontWeight: 'bold'}}>Không có dữ liệu</Text>
             </View>
           )
         ) : (
@@ -116,10 +113,35 @@ const BooksStore = ({navigation}) => {
       );
     }
 
-    const [search, setSearch] = useState('');
+    const [categoryName, setCategoryName] = useState([]);
+    const [booksSearch, setBooksSearch] = useState([]);
 
-    const onChangeSearch = (value) => {
-      console.log('target');
+    const convertText = (text) => {
+      return text.replace(/[àáâãăạảấầẩẫậắằẳẵặ]/g, 'a')
+        .replace(/[ÀÁÂÃĂẠẢẤẦẨẪẬẮẰẲẴẶ]/g, 'A')
+        .replace(/[òóôõơọỏốồổỗộớờởỡợ]/g, 'o')
+        .replace(/[ÒÓÔÕƠỌỎỐỒỔỖỘỚỜỞỠỢ]/g, 'O')
+        .replace(/[èéêẹẻẽếềểễệ]/g, 'e')
+        .replace(/[ÈÉÊẸẺẼẾỀỂỄỆ]/g, 'E')
+        .replace(/[ùúũưụủứừửữự]/g, 'u')
+        .replace(/[ÙÚŨƯỤỦỨỪỬỮỰ]/g, 'U')
+        .replace(/[ìíĩỉị]/g, 'i')
+        .replace(/[ÌÍĨỈỊ]/g, 'I')
+        .replace(/[ýỳỵỷỹ]/g, 'y')
+        .replace(/[ÝỲỴỶỸ]/g, 'Y')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, '')
+        .replace(/\u02C6|\u0306|\u031B/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    const onChangeSearch = (e) => {
+      const books = listBook?.filter(b => convertText(b.name).toLowerCase().includes(convertText(e).toLowerCase()));
+      categoryName === 'Tất cả' ? setCategori(books) : 
+      setCategori(books.filter(b => b.categoryName === categoryName));
     };
 
     return (
@@ -129,9 +151,9 @@ const BooksStore = ({navigation}) => {
             <Icon name="search" style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              value={search}
+              value={booksSearch}
               placeholder="Nhập tên sách"
-              onChange={(value) => onChangeSearch(value)}
+              onChangeText={(e) => onChangeSearch(e)}
             />
           </View>
         </View>

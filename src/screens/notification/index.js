@@ -1,17 +1,17 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {useObserver} from 'mobx-react-lite';
 import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Icon} from 'native-base';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  StyleSheet,
-  View,
-  StatusBar,
   FlatList,
+  StatusBar,
+  StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {Icon} from 'native-base';
-import {COLORS} from '../../constants/themes';
 import {mutateData} from '../../common';
+import {COLORS} from '../../constants/themes';
 import {
   SEEN_NOTIFICATION_BOOK,
   SEEN_NOTIFICATION_ORDER,
@@ -59,11 +59,7 @@ const NotificationScreen = ({navigation}) => {
         mutate: SEEN_NOTIFICATION_ORDER,
       },
     };
-    useEffect(() => {
-      console.log(
-        notification[selected].map((item) => item[route[selected].linkID]),
-      );
-    }, [selected]);
+
     const SideBarIcon = ({name}) => (
       <TouchableOpacity onPress={() => setSelected(name)}>
         <View
@@ -196,17 +192,17 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e5e5e5',
   },
   activeMark: {
-    backgroundColor: '#1e88e5',
+    backgroundColor: COLORS.primary,
     width: 4,
   },
   icon: {
-    color: '#949494',
+    color: COLORS.primary,
     fontSize: 22,
   },
   activeIcon: {
     padding: 12,
     marginLeft: -4,
-    color: '#949494',
+    color: COLORS.primary,
     fontSize: 22,
   },
   listContainer: {

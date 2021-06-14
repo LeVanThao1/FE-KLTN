@@ -3,24 +3,21 @@ import {useObserver} from 'mobx-react-lite';
 import {Picker} from 'native-base';
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {
-  View,
+  Button,
+  ScrollView,
   StyleSheet,
   Text,
-  ScrollView,
-  SafeAreaView,
   TextInput,
-  Image,
-  Button,
+  View,
 } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import sub, {
-  getProvinces,
+import {
   getDistrictsByProvinceCode,
+  getProvinces,
   getWardsByDistrictCode,
 } from 'sub-vn';
-import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
-import {isNotEmpty, phoneNumberValidator} from '../../utils/validations';
 import {COLORS} from '../../constants/themes';
+import {deFormatPhone, formatPhone} from '../../utils/support/phoneFormat';
+import {phoneNumberValidator} from '../../utils/validations';
 
 const Address = ({navigation}) => {
   return useObserver(() => {
@@ -209,13 +206,6 @@ const Address = ({navigation}) => {
                 const ward = getWardsByDistrictCode(districts.code)[0];
                 setWard({value: ward.code + '-' + ward.name, error: ''});
               }}>
-              {/* {!provinces.value && (
-                <Picker.Item
-                  key={'tt'}
-                  label="Chọn tỉnh / thành phố"
-                  value={undefined}
-                />
-              )} */}
               {getProvinces().map((pr) => (
                 <Picker.Item
                   key={pr.code}
@@ -245,13 +235,6 @@ const Address = ({navigation}) => {
                 const ward = getWardsByDistrictCode(value.split('-')[0])[0];
                 setWard({value: ward.code + '-' + ward.name, error: ''});
               }}>
-              {/* {!districts.value && (
-                <Picker.Item
-                  key={'qh'}
-                  label="Chọn quận / huyện"
-                  value={undefined}
-                />
-              )} */}
               {provinces.value &&
                 getDistrictsByProvinceCode(
                   provinces.value.split('-')[0],
@@ -336,12 +319,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: '#f0f0f0',
     width: '100%',
-    // padding: 10,
-    // paddingHorizontal: 16,
     borderRadius: 5,
     borderWidth: 0.2,
     borderColor: '#696969',
-    // letterSpacing: 0.75,
   },
   err: {
     fontSize: 10,

@@ -1,37 +1,40 @@
-import {useMutation} from '@apollo/client';
+import {ReactNativeFile} from 'extract-files';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Button, Form, Icon, Item, Picker, Text, View} from 'native-base';
+import {Icon, Text, View, Form, Item, Picker} from 'native-base';
 import React, {memo, useContext, useState} from 'react';
-import {Image, Alert} from 'react-native';
 import {
-  TextInput,
-  StyleSheet,
-  FlatList,
+  Alert,
+  Image,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
 import Toast from 'react-native-toast-message';
-import ImagePicker from 'react-native-image-crop-picker';
-import Images from '../../assets/images/images';
+import {mutateData} from '../../common';
 import {COLORS, NOTIFI} from '../../constants';
 import {UPDATE_POST} from '../../query/post';
+import {UPLOAD_MULTI_FILE} from '../../query/upload';
 import {Notification} from '../../utils/notifications';
 import {stylesPost} from './stylePost';
-import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {mutateData} from '../../common';
-import {ReactNativeFile} from 'extract-files';
 
 const UpdatePost = ({route, navigation}) => {
   return useObserver(() => {
     const {
-      stores: {user, category},
+      stores: {user, category, post},
     } = useContext(MobXProviderContext);
     const {posts, postCurrent, setPostCurrent} = user;
     const {postId} = route.params;
+    const {general, setGeneral} = post;
+
     const [title, setTitle] = useState({
       value: postCurrent.title ? postCurrent.title : '',
+      error: '',
+    });
+    const [name, setName] = useState({
+      value: postCurrent.name ? postCurrent.name : '',
       error: '',
     });
     const [description, setDescription] = useState({
@@ -57,7 +60,7 @@ const UpdatePost = ({route, navigation}) => {
       error: '',
     });
     const [categori, setCategori] = useState({
-      value: '',
+      value: postCurrent?.category ? postCurrent.category?.id : '',
       error: '',
     });
     const [numberOfReprint, setNumberOfReprint] = useState({
@@ -135,60 +138,129 @@ const UpdatePost = ({route, navigation}) => {
         });
         return 'Tiêu đề phải dài hơn 3 ký tự';
       }
-      if (description.value.length < 10) {
+      if (name.value.length < 3) {
         setName({
           ...name,
           error: 'Tên sách phải dài hơn 3 ký tự',
         });
         return 'Tên sách phải dài hơn 3 ký tự';
       }
-      if (price.value === 0) {
+      if (publisher.value.length < 3) {
+        setPublisher({
+          ...publisher,
+          error: 'Nhà xuất bản phải dài hơn 3 ký tự',
+        });
+        return 'Nhà xuất bản phải dài hơn 3 ký tự';
+      }
+      if (Number(numberOfReprint.value) < 1) {
+        setNumberOfReprint({
+          ...numberOfReprint,
+          error: 'Vui lòng nhập đúng số lần xuất bản',
+        });
+        return 'Vui lòng nhập đúng số lần xuất bản';
+      }
+      // if (year.value.length !== 4) {
+      //   setYear({
+      //     ...year,
+      //     error: 'Nhập năm xuất bản',
+      //   });
+      //   return 'Vui lòng nhập đúng năm xuất bản';
+      // }
+      if (year.value.length !== 4 || Number(year.value) <= 0) {
+        setYear({
+          ...year,
+          error: 'Vui lòng nhập đúng năm xuất bản',
+        });
+        return 'Vui lòng nhập đúng năm xuất bản';
+      }
+
+      if (price.value <= 0) {
         setPrice({
           ...price,
-          error: 'Vui lòng nhập giá sách',
+          error: 'Vui lòng nhập đúng giá sách',
         });
-        return 'Vui lòng nhập giá sách';
+        return 'Vui lòng nhập đúng giá sách';
+      }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Mô tả phải dài hơn 10 ký tự',
+        });
+        return 'Mô tả phải dài hơn 10 ký tự';
       }
       return true;
     };
 
+    console.log(general[0]);
+
     const onUpdate = () => {
-      if(validateCreate() === true) {
-      let dataPost = {
-        title: title.value,
-        description: description.value,
-        bookWanna: [bookWanna.value],
-        images: imagesUpload,
-        publisher: publisher.value,
-        numberOfReprint: Number(numberOfReprint.value),
-        // category: categori.value,
-        year: year.value,
-        price: Number(price.value),
-      };
-      mutateData(UPDATE_POST, {
-        dataPost,
-        id: postId,
-      })
-        .then(({data}) => {
-          const findIndex = [...posts].findIndex(
-            (dt) => dt.id + '' == postId + '',
-          );
-          console.log(findIndex);
-          user.setPosts([
-            ...[...posts].slice(0, findIndex),
-            {...posts[findIndex], ...dataPost},
-            ...[...posts].slice(findIndex + 1),
-          ]);
-          setPostCurrent({...posts[findIndex], ...dataPost});
-          Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
-          navigation.goBack();
+      if (validateCreate() === true) {
+        let dataPost = {
+          title: title.value,
+          description: description.value,
+          bookWanna: [bookWanna.value],
+          name: name.value,
+          images: imagesUpload,
+          publisher: publisher.value,
+          numberOfReprint: Number(numberOfReprint.value),
+          category: categori.value,
+          year: year.value,
+          price: Number(price.value),
+        };
+        mutateData(UPDATE_POST, {
+          dataPost,
+          id: postId,
         })
-        .catch((err) => {
-          Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
-          console.log(err);
-        });
-      }
-      else {
+          .then(({data}) => {
+            console.log(user.posts, postCurrent);
+            const findIndex = [...general].findIndex(
+              (dt) => dt.id + '' == postId + '',
+            );
+            setGeneral([
+              ...general.slice(0, findIndex),
+              {
+                ...general[findIndex],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              },
+              ...general.slice(findIndex + 1),
+            ]);
+            if (posts) {
+              const findIndexx = [...posts].findIndex(
+                (dt) => dt.id + '' == postId + '',
+              );
+              user.setPosts([
+                ...[...posts].slice(0, findIndexx),
+                {...posts[findIndexx], ...dataPost},
+                ...[...posts].slice(findIndexx + 1),
+              ]);
+              setPostCurrent({
+                ...posts[findIndexx],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              });
+            } else {
+              setPostCurrent({
+                ...general[findIndex],
+                ...dataPost,
+                category: category.categories.find(
+                  (p) => p.id + '' === categori.value + '',
+                ),
+              });
+            }
+
+            Toast.show(Notification(NOTIFI.success, 'Cập nhật thành công'));
+            navigation.goBack();
+          })
+          .catch((err) => {
+            Toast.show(Notification(NOTIFI.error, 'Cập nhật không thành công'));
+            console.log(err);
+          });
+      } else {
         Toast.show(Notification(NOTIFI.error, validateCreate()));
       }
     };
@@ -198,7 +270,7 @@ const UpdatePost = ({route, navigation}) => {
         <View style={stylesPost.addpost}>
           <ScrollView showsVerticalScrollIndicator>
             <View style={stylesPost.textImg}>
-              <Text>Hình ảnh</Text>
+              <Text>Hình ảnh *</Text>
 
               <ScrollView
                 style={{flexDirection: 'row', marginVertical: 10}}
@@ -227,7 +299,7 @@ const UpdatePost = ({route, navigation}) => {
                           name="closecircleo"
                           style={{
                             fontSize: 22,
-                            color: 'red',
+                            color: COLORS.primary,
                           }}></Icon>
                       </TouchableOpacity>
                     </View>
@@ -264,16 +336,6 @@ const UpdatePost = ({route, navigation}) => {
                   </TouchableOpacity>
                 )}
               </ScrollView>
-
-              {/* <View style={stylesPost.imgBookDetail}>
-                {postCurrent.images?.map((img, i) => (
-                  <Image
-                    key={i}
-                    source={{uri: img}}
-                    style={stylesPost.imgBook}
-                  />
-                ))}
-              </View> */}
             </View>
             {/*  */}
 
@@ -281,7 +343,7 @@ const UpdatePost = ({route, navigation}) => {
           </ScrollView>
           <View style={stylesPost.content}>
             <View style={stylesPost.ct}>
-              <Text>Tiêu đề </Text>
+              <Text>Tiêu đề *</Text>
               <TextInput
                 style={stylesPost.txtInput}
                 placeholder="Nhập tiêu đề"
@@ -301,7 +363,49 @@ const UpdatePost = ({route, navigation}) => {
                 }}
               />
               <View style={stylesPost.ct}>
-                <Text>Nhà xuất bản </Text>
+                <Text>Tên sách *</Text>
+                <TextInput
+                  style={stylesPost.txtInput}
+                  placeholder="Nhập tên sách"
+                  autoFocus={true}
+                  value={name.value}
+                  onFocus={() => {
+                    setName({
+                      ...name,
+                      error: '',
+                    });
+                  }}
+                  onChangeText={(value) => {
+                    setName({
+                      ...name,
+                      value: value,
+                    });
+                  }}
+                />
+              </View>
+              <View style={stylesPost.vertical}>
+                <Text>Danh mục sách *</Text>
+                <Form>
+                  <Item picker>
+                    <Picker
+                      style={stylesPost.picker}
+                      mode="dropdown"
+                      // iosIcon={<Icon name="arrow-down" />}
+                      style={{width: undefined}}
+                      placeholder="Chọn danh mục"
+                      placeholderStyle={{color: '#bfc6ea'}}
+                      placeholderIconColor="#007aff"
+                      selectedValue={categori.value}
+                      onValueChange={onChange}>
+                      {category.categories.map((ct, i) => (
+                        <Picker.Item label={ct.name} value={ct.id} />
+                      ))}
+                    </Picker>
+                  </Item>
+                </Form>
+              </View>
+              <View style={stylesPost.ct}>
+                <Text>Nhà xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   placeholder="Nhập tên nhà xuất bản"
@@ -321,11 +425,12 @@ const UpdatePost = ({route, navigation}) => {
                 />
               </View>
               <View style={stylesPost.horizontal}>
-                <Text>Số lần xuất bản </Text>
+                <Text>Số lần xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập số lần xuất bản"
+                  placeholder="Số lần xuất bản"
                   value={numberOfReprint.value}
+                  keyboardType="numeric"
                   onFocus={() => {
                     setNumberOfReprint({
                       ...numberOfReprint,
@@ -340,11 +445,14 @@ const UpdatePost = ({route, navigation}) => {
                   }}
                 />
               </View>
+              <Text style={stylesPost.err}>{numberOfReprint.error}</Text>
+
               <View style={stylesPost.horizontal}>
-                <Text>Năm phát hành</Text>
+                <Text>Năm xuất bản *</Text>
                 <TextInput
                   style={stylesPost.txtPrice}
-                  placeholder="Nhập năm phát hành"
+                  placeholder="Năm xuất bản"
+                  keyboardType="numeric"
                   onFocus={() => {
                     setYear({
                       ...year,
@@ -360,8 +468,10 @@ const UpdatePost = ({route, navigation}) => {
                   value={year.value}
                 />
               </View>
+              <Text style={stylesPost.err}>{year.error}</Text>
+
               <View style={stylesPost.horizontal}>
-                <Text>Giá sách</Text>
+                <Text>Giá sách *</Text>
                 <View
                   style={{
                     position: 'relative',
@@ -370,7 +480,8 @@ const UpdatePost = ({route, navigation}) => {
                   <TextInput
                     style={stylesPost.txtVND}
                     // style={stylesPost.input}
-                    placeholder="Nhập giá sách"
+                    placeholder="Giá sách"
+                    keyboardType="numeric"
                     value={price.value}
                     onFocus={() => {
                       setPrice({
@@ -396,8 +507,10 @@ const UpdatePost = ({route, navigation}) => {
                   </Text>
                 </View>
               </View>
+              <Text style={stylesPost.err}>{price.error}</Text>
+
               <View style={stylesPost.ct}>
-                <Text>Sách muốn đổi: </Text>
+                <Text>Sách muốn đổi </Text>
                 <TextInput
                   style={stylesPost.txtInput}
                   // style={{fontWeight: 'bold'}}
@@ -417,7 +530,7 @@ const UpdatePost = ({route, navigation}) => {
                   value={bookWanna.value}
                 />
               </View>
-              <Text style={stylesPost.textContent}>Mô tả</Text>
+              <Text style={stylesPost.textContent}>Mô tả *</Text>
               <Textarea
                 containerStyle={stylesPost.textareacont}
                 style={stylesPost.textarea}
@@ -437,19 +550,19 @@ const UpdatePost = ({route, navigation}) => {
                 underlineColorAndroid={'transparent'}
                 placeholder="Nhập mô tả"
               />
-              <View style={{ flexDirection: 'row',
-                  justifyContent:'center',}}>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: COLORS.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
-                  width: 130,
-                 
-                }}
-                onPress={onAlert}>
-                <Text style={stylesPost.btn}>Cập nhật</Text>
-              </TouchableOpacity>
+              <Text style={stylesPost.err}>{description.error}</Text>
+
+              <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: COLORS.primary,
+                    paddingVertical: 10,
+                    borderRadius: 10,
+                    width: 130,
+                  }}
+                  onPress={onAlert}>
+                  <Text style={stylesPost.btn}>Cập nhật</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

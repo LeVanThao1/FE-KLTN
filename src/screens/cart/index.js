@@ -1,6 +1,5 @@
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import {Icon} from 'native-base';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ScrollView,
@@ -33,13 +32,6 @@ export default function Cart({navigation}) {
 
     return (
       <View style={styles.container}>
-        {/* <View style={styles.header}>
-          <TouchableOpacity>
-            <Icon name="arrow-back" type="Ionicons" style={styles.headerIcon} />
-          </TouchableOpacity>
-
-          <Text style={styles.headerTitle}>Giỏ Hàng</Text>
-        </View> */}
         {cart && cart.length > 0 ? (
           <ScrollView style={styles.body}>
             {cart.map((ct, i) => (

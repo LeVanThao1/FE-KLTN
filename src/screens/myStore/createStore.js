@@ -1,46 +1,32 @@
-import React, {useState, memo, useContext, useEffect, useRef} from 'react';
+import {useMutation} from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {ReactNativeFile} from 'extract-files';
+import {MobXProviderContext} from 'mobx-react';
+import {useObserver} from 'mobx-react-lite';
+import {Picker} from 'native-base';
+import React, {memo, useContext, useRef, useState} from 'react';
 import {
-  Image,
-  ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  View,
-  ScrollView,
-  SafeAreaView,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import Textarea from 'react-native-textarea';
-import {Icon, ListItem, Separator, Button} from 'native-base';
+import Toast from 'react-native-toast-message';
 import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import Images from '../../assets/images/images';
-import {useObserver} from 'mobx-react-lite';
-import {MobXProviderContext} from 'mobx-react';
-import {useNavigation} from '@react-navigation/native';
-import {useLazyQuery, useMutation} from '@apollo/client';
-import {CREATE_STORE, GET_STORE} from '../../query/store';
-import {introspectionFromSchema} from 'graphql';
-import {transaction} from 'mobx';
-import {Picker} from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS} from '../../constants/themes';
-
-import sub, {
-  getProvinces,
   getDistrictsByProvinceCode,
+  getProvinces,
   getWardsByDistrictCode,
 } from 'sub-vn';
-import Toast from 'react-native-toast-message';
-import {Notification} from '../../utils/notifications';
 import {NOTIFI} from '../../constants';
-
-import ImagePicker from 'react-native-image-crop-picker';
+import {COLORS} from '../../constants/themes';
+import {CREATE_STORE} from '../../query/store';
 import {UPLOAD_MULTI_FILE} from '../../query/upload';
-import {ReactNativeFile} from 'extract-files';
+import {Notification} from '../../utils/notifications';
 
 const CreateStore = ({navigation}) => {
   return useObserver(() => {
@@ -53,7 +39,10 @@ const CreateStore = ({navigation}) => {
       value: '',
       error: '',
     });
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState({
+      value: '',
+      error: '',
+    });
     const [provinces, setProvinces] = useState({
       value: undefined,
       error: '',
@@ -75,15 +64,16 @@ const CreateStore = ({navigation}) => {
       CREATE_STORE,
       {
         onCompleted: async (data) => {
-          Toast.show({
-            text: `Tạo cửa hàng thành công`,
-            type: 'success',
-            position: 'top',
-            style: {backgroundColor: COLORS.primary, color: '#ffffff'},
-          });
+          Toast.show(Notification(NOTIFI.success, 'Tạo cửa hàng thành công'));
           AsyncStorage.clear().then(() => {
             auth.setLogout();
           });
+          // {
+          //   text: `Tạo cửa hàng thành công`,
+          //   type: 'success',
+          //   position: 'top',
+          //   style: {backgroundColor: COLORS.primary, color: '#ffffff'},
+          // }
         },
         onError: (err) => {
           Toast.show(Notification(NOTIFI.error, err.message));
@@ -131,6 +121,14 @@ const CreateStore = ({navigation}) => {
         });
         count++;
         return address.error;
+      }
+      if (description.value.length < 10) {
+        setDescription({
+          ...description,
+          error: 'Vui lòng nhập mô tả hơn 10 ký tự',
+        });
+        count++;
+        return description.error;
       }
       return count === 0;
     };
@@ -201,11 +199,11 @@ const CreateStore = ({navigation}) => {
     };
 
     const onPress = () => {
-      if (validateSubmit === true) {
+      if (validateSubmit() === true) {
         let dataStore = {
           // avatar: 'https://picsum.photos/200',
-          name: name,
-          description: description,
+          name: name.value,
+          description: description.value,
           address: `${address.value}, ${ward.value.split('-')[1]}, ${
             districts.value.split('-')[1]
           }, ${provinces.value.split('-')[1]}`,
@@ -216,17 +214,18 @@ const CreateStore = ({navigation}) => {
             dataStore,
           },
         });
-        setInfo(dataStore);
+        // setInfo(dataStore);
       } else {
-        Toast.show({
-          text: 'Vui lòng nhập đủ thông tin',
-          type: 'error',
-          position: 'top',
-          visibilityTime: 4000,
-          autoHide: true,
-          topOffset: 30,
-          bottomOffset: 40,
-        });
+        Toast.show(Notification(NOTIFI.error, 'Vui lòng nhập đủ thông tin'));
+        // Toast.show({
+        //   text: 'Vui lòng nhập đủ thông tin',
+        //   type: 'error',
+        //   position: 'top',
+        //   visibilityTime: 4000,
+        //   autoHide: true,
+        //   topOffset: 30,
+        //   bottomOffset: 40,
+        // });
       }
     };
     return (
@@ -375,6 +374,7 @@ const CreateStore = ({navigation}) => {
                 })
               }
             />
+            <Text style={styles.err}>{description.error}</Text>
           </View>
           <TouchableOpacity style={styles.btnCreate} onPress={onPress}>
             <Text style={styles.txtCreate}>Tạo cửa hàng</Text>
@@ -411,6 +411,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   btnCreate: {
+    marginTop: 10,
     alignSelf: 'center',
     padding: 15,
     borderRadius: 4,

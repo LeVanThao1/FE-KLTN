@@ -1,30 +1,24 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ReactNativeFile} from 'apollo-upload-client';
 import {MobXProviderContext} from 'mobx-react';
 import {useObserver} from 'mobx-react-lite';
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  ImageBackground,
-} from 'react-native';
-import BG from '../../assets/images/bg.jpg';
-import {useMutation} from '@apollo/client';
-import {UPDATE_AVATAR, UPDATE_USER_INFO} from '../../query/user';
-import ImagePicker from 'react-native-image-crop-picker';
 import {Icon, Spinner} from 'native-base';
-import {ReactNativeFile} from 'apollo-upload-client';
-import {UPLOAD_SINGLE_FILE} from '../../query/upload';
-import {Notification} from '../../utils/notifications';
-import {COLORS, NOTIFI} from '../../constants';
+import React, {useContext, useState} from 'react';
+import {
+  Image,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import ImageView from 'react-native-image-viewing';
-import Toast from 'react-native-toast-message';
-import Post from '../post';
+import BG from '../../assets/images/bg.jpg';
 import {mutateData} from '../../common';
+import {COLORS} from '../../constants';
+import {UPDATE_AVATAR} from '../../query/user';
+import Post from '../post';
 const defaultAvatar =
   'https://static.scientificamerican.com/sciam/cache/file/32665E6F-8D90-4567-9769D59E11DB7F26_source.jpg?w=590&h=800&7E4B4CAD-CAE1-4726-93D6A160C2B068B2';
 const Profile = ({navigation}) => {
@@ -37,7 +31,6 @@ const Profile = ({navigation}) => {
     } = useContext(MobXProviderContext);
     const [visible, setIsVisible] = useState(false);
     const [avatarUpload, setAvatarUpload] = useState(info.avatar);
-    // const [userAvatar, setUserAvatar] = useState(info.avatar || defaultAvatar);
     const [userName, setUserName] = useState(info.name);
     const [userEmail, setUserEmail] = useState(info.email);
     const [userAddress, setUserAddress] = useState(info.address);
@@ -51,9 +44,6 @@ const Profile = ({navigation}) => {
         info.address != userAddress
       );
     };
-    // useEffect(() => {
-    //   setUserAvatar(info.avatar);
-    // }, [info.avatar]);
     const handleChoosePhoto = (type) => {
       if (type) {
         ImagePicker.openPicker({
